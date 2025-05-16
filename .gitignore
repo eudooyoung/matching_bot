@@ -66,10 +66,10 @@ Thumbs.db
 #########################
 # ✅ 사용자 첨부파일 / 업로드 경로
 #########################
-/uploads/
-/files/
-/static/uploads/
-/src/main/resources/static/uploads/
+#/uploads/
+#/files/
+#/static/uploads/
+#/src/main/resources/static/uploads/
 
 #########################
 # ✅ 자동 생성 문서 / 출력물
