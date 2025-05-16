@@ -1,0 +1,79 @@
+#########################
+# ✅ Java / Spring Boot
+#########################
+*.class
+*.jar
+*.war
+*.ear
+*.log
+*.out
+
+#########################
+# ✅ Gradle
+#########################
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+.gradle/daemon/
+.gradle/caches/
+.gradle/notifications/
+
+#########################
+# ✅ IDE 설정 (개인 환경 무시)
+#########################
+# IntelliJ
+.idea/
+*.iml
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# VSCode
+.vscode/
+
+#########################
+# ✅ 로컬 환경설정 / 민감 정보
+#########################
+*.env
+*.local
+*.properties.local
+application-*.yml
+application-*.properties
+
+.secret/
+*.key
+*.pem
+*.crt
+token.txt
+api_keys.json
+
+#########################
+# ✅ OS/시스템 파일
+#########################
+.DS_Store
+Thumbs.db
+
+#########################
+# ✅ 데이터베이스 파일 (로컬)
+#########################
+*.mv.db
+*.h2.db
+*.sqlite
+*.db
+
+#########################
+# ✅ 사용자 첨부파일 / 업로드 경로
+#########################
+/uploads/
+/files/
+/static/uploads/
+/src/main/resources/static/uploads/
+
+#########################
+# ✅ 자동 생성 문서 / 출력물
+#########################
+*.tmp
+*.bak
+*.pdf
