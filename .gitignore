@@ -39,8 +39,8 @@ build/
 *.env
 *.local
 *.properties.local
-application-*.yml
-application-*.properties
+#application-*.yml
+#application-*.properties
 
 .secret/
 *.key
