@@ -14,4 +14,8 @@ public class PageController {
         return "main/main";
     }
 
+    @GetMapping("/admin/login")
+    public String adminLogin(Model model) {
+        return "admin/login";
+    }
 }
