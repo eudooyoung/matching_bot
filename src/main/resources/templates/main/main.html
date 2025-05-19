@@ -1,34 +1,16 @@
+<!-- templates/main/main.html -->
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
-  <title>MatchingBot | 공통 메인</title>
-  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <title>MatchingBot</title>
+  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <link rel="stylesheet" th:href="@{/css/user_main.css}">
 </head>
 <body>
 
-  <header class="header">
-    <div class="logo">MatchingBot</div>
-    <nav class="nav">
-      <ul>
-        <li><a href="/auth/login">로그인</a></li>
-        <li class="dropdown">
-          <button>계정 생성하기</button>
-          <ul class="dropdown-menu">
-            <li><a href="#">개인 회원</a></li>
-            <li><a href="#">기업 회원</a></li>
-          </ul>
-        </li>
-        <li class="dropdown">
-          <button>Menu</button>
-          <ul class="dropdown-menu">
-            <li><a href="#">채용 공고</a></li>
-            <li><a href="#">커뮤니티</a></li>
-          </ul>
-        </li>
-      </ul>
-    </nav>
-  </header>
+  <!-- Header Fragment -->
+  <div th:replace="fragments/header :: header"></div>
 
   <main class="main-content">
     <section class="search-bar">
@@ -57,9 +39,8 @@
     </section>
   </main>
 
-  <footer class="footer">
-    &copy; 2025 MatchingBot Inc. All rights reserved.
-  </footer>
+  <!-- Footer Fragment -->
+  <div th:replace="fragments/footer :: footer"></div>
 
 </body>
 </html>

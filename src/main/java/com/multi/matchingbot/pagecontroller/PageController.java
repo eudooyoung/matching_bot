@@ -10,9 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class PageController {
 
     @GetMapping({"/", "/main"})
-    public String main(Model model) {
-
+    public String mainPage(Model model) {
         return "main/main";
     }
 
+    @GetMapping("/admin/login")
+    public String adminLogin(Model model) {
+        return "admin/login";
+    }
 }
