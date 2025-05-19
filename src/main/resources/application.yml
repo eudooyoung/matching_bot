@@ -3,13 +3,17 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/final_db
+    url: jdbc:mysql://localhost:3306/matching_bot
     username: scott
     password: tiger
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-    jwt:
-      secret: ${JWT_SECRET} // 비밀 키는 공개하면 안 되므로 IntelliJ 환경변수로 빼서 사용하자.
-      token:
-        access_expiration: 7200000 // 2시간 = 1000 * 60 * 60 * 2
-        refresh_expiration: 2592000000 // 30일 = 1000 * 60 * 60 * 24 * 30
+  jpa:
+    defer-datasource-initialization: true #data.sql이 JPA 초기화 이후에 실행되도록 설정
+    hibernate:
+      ddl-auto: update # 테이블이 있다면  update 로 변경,
+    properties:
+      hibernate:
+        #show-sql: true
+        format_sql: true
+        highlight_sql: true

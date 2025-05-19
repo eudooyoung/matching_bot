@@ -15,7 +15,10 @@ public class PageController {
     }
 
     @GetMapping("/admin/login")
-    public String adminLogin(Model model) {
-        return "admin/login";
+    public void adminLogin(Model model) {
+    }
+
+    @GetMapping("/auth/register")
+    public void Login(Model model) {
     }
 }
