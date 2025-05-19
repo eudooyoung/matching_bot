@@ -8,8 +8,3 @@ spring:
     password: tiger
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-    jwt:
-      secret: ${JWT_SECRET} // 비밀 키는 공개하면 안 되므로 IntelliJ 환경변수로 빼서 사용하자.
-      token:
-        access_expiration: 7200000 // 2시간 = 1000 * 60 * 60 * 2
-        refresh_expiration: 2592000000 // 30일 = 1000 * 60 * 60 * 24 * 30
