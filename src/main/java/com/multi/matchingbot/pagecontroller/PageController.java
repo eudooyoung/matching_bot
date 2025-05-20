@@ -19,6 +19,10 @@ public class PageController {
     }
 
     @GetMapping("/auth/register")
-    public void Login(Model model) {
+    public void register(Model model) {
+    }
+
+    @GetMapping("/auth/login")
+    public void login(Model model) {
     }
 }

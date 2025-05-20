@@ -31,13 +31,16 @@ public class Company {
     private String email;
 
     @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
     private String name;
 
     @Column
     private String phone;
 
     @Column(nullable = false, unique = true)
-    private Long businessNo;
+    private long businessNo;
 
     @Column(nullable = false)
     private String industry;
@@ -48,28 +51,28 @@ public class Company {
     @Column(nullable = false)
     private int headCount;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private int annualRevenue;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private int operatingIncome;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private int jobsLastYear;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private Yn agreeTerms;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private Yn agreePrivacy;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private Yn agreeFinance;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private Yn agreeMarketing;
 
-    @Column(nullable = true)
-    private Yn agreeThirdparty;
+    @Column(nullable = false)
+    private Yn agreeThirdParty;
 
 }

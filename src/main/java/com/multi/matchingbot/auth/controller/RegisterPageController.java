@@ -1,4 +1,4 @@
-package com.multi.matchingbot.auth.member;
+package com.multi.matchingbot.auth.controller;
 
 
 import org.springframework.stereotype.Controller;

@@ -17,3 +17,7 @@ spring:
         #show-sql: true
         format_sql: true
         highlight_sql: true
+
+jwt:
+#  issuer: ${JWT_ISSUER}
+  secret: ${JWT_SECRET}
