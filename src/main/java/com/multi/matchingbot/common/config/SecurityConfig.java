@@ -1,5 +1,7 @@
 package com.multi.matchingbot.common.config;
 
+import com.multi.matchingbot.auth.service.AuthenticationService;
+import com.multi.matchingbot.common.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,9 +10,10 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
@@ -20,7 +23,17 @@ public class SecurityConfig {
     private final CorsConfigurationSource corsConfigurationSource;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public JwtAuthenticationFilter jwtAuthenticationFilter(AuthenticationService authenticationService) {
+        return new JwtAuthenticationFilter(authenticationService);
+    }
+
+//    @Bean
+//    public UserDetailsService userDetailsService() {
+//        return new MBotUserDetailsService()
+//    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
         http
 //                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
@@ -36,7 +49,8 @@ public class SecurityConfig {
                                 .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                                 .anyRequest().authenticated()
 
-                );
+                ).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
 
@@ -49,7 +63,8 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+//        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        return NoOpPasswordEncoder.getInstance();
     }
 
     @Bean

@@ -7,17 +7,25 @@ spring:
     username: scott
     password: tiger
     driver-class-name: com.mysql.cj.jdbc.Driver
+  application:
+    admin:
+      enabled: false
 
   jpa:
     defer-datasource-initialization: true #data.sql이 JPA 초기화 이후에 실행되도록 설정
     hibernate:
-      ddl-auto: update # 테이블이 있다면  update 로 변경,
+      ddl-auto: none # 테이블이 있다면  update 로 변경,
     properties:
       hibernate:
-        #show-sql: true
+        show-sql: true
         format_sql: true
         highlight_sql: true
 
 jwt:
 #  issuer: ${JWT_ISSUER}
   secret: ${JWT_SECRET}
+
+logging:
+  level:
+#    root: DEBUG
+    org.hibernate.SQL: DEBUG

@@ -34,6 +34,9 @@ public class Company {
     private String password;
 
     @Column(nullable = false)
+    private String address;
+
+    @Column(nullable = false)
     private String name;
 
     @Column
@@ -49,7 +52,7 @@ public class Company {
     private int yearFound;
 
     @Column(nullable = false)
-    private int headCount;
+    private int headcount;
 
     @Column(nullable = false)
     private int annualRevenue;
@@ -61,18 +64,23 @@ public class Company {
     private int jobsLastYear;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Yn agreeTerms;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Yn agreePrivacy;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Yn agreeFinance;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Yn agreeMarketing;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Yn agreeThirdParty;
 
 }
