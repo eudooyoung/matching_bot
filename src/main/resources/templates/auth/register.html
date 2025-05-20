@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입 - MatchingBot</title>
+    <link rel="stylesheet" th:href="@{/css/register.css}" href="/css/register.css">
+</head>
+<body>
+<div class="container">
+    <h2>회원가입 (일반)</h2>
+    <form action="/register" method="post">
+
+        <label for="email">이메일</label>
+        <input type="email" id="email" name="email" placeholder="email@matchingbot.co.kr" required>
+
+        <label for="password">PW</label>
+        <input type="password" id="password" name="password" placeholder="8~16자 / 영문, 숫자, 특수문자 조합" required>
+
+        <label for="name">이름</label>
+        <input type="text" id="name" name="name" placeholder="이름을 입력해주세요" required>
+
+        <label>생년월일 / 성별</label>
+        <div class="birth-gender">
+            <select name="year" required>
+                <option>0000년</option>
+            </select>
+            <select name="month" required>
+                <option>00월</option>
+            </select>
+            <select name="day" required>
+                <option>00일</option>
+            </select>
+            <label><input type="radio" name="gender" value="M"> 남</label>
+            <label><input type="radio" name="gender" value="F"> 여</label>
+        </div>
+
+        <label for="phone">휴대전화번호</label>
+        <div class="phone-input">
+            <input type="text" id="phone" name="phone1" maxlength="3" placeholder="010" required>
+            <input type="text" name="phone2" maxlength="4" placeholder="0000" required>
+            <input type="text" name="phone3" maxlength="4" placeholder="0000" required>
+        </div>
+
+        <div class="checkbox-group">
+            <label><input type="checkbox" name="agree_all"> 전체 동의</label>
+            <label><input type="checkbox" name="terms_required"> (필수) 서비스 이용약관 동의</label>
+            <label><input type="checkbox" name="privacy_required"> (필수) 개인정보 수집 및 이용 동의</label>
+            <label><input type="checkbox" name="location_required"> (필수) 위치기반 서비스 이용약관 동의</label>
+            <label><input type="checkbox" name="marketing_email"> (선택) 마케팅 정보 수신 동의 - 이메일</label>
+            <label><input type="checkbox" name="marketing_sms"> (선택) 마케팅 정보 수신 동의 - SMS/MMS</label>
+        </div>
+
+        <button type="submit">가입하기</button>
+    </form>
+</div>
+</body>
+</html>
