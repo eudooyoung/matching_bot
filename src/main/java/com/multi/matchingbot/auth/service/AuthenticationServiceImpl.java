@@ -1,5 +1,7 @@
 package com.multi.matchingbot.auth.service;
 
+
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -51,13 +53,20 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public UserDetails validateToken(String token) {
-        return null;
+        String username = extractUsername(token);
+        return userDetailsService.loadUserByUsername(username);
     }
 
-//    private String extractUsername(String token) {
-//        Jwts.parserBuilder()
-//
-//    }
+    private String extractUsername(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.getSubject();
+
+    }
 
     private Key getSigningKey() {
         byte[] keyBytes = secretKey.getBytes();
