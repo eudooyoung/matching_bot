@@ -1,4 +1,4 @@
-package com.multi.matchingbot.pagecontroller;
+package com.multi.matchingbot.common.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/")
-public class PageController {
+public class MainController {
 
     @GetMapping({"/", "/main"})
     public String mainPage(Model model) {
@@ -18,11 +18,4 @@ public class PageController {
     public void adminLogin(Model model) {
     }
 
-    @GetMapping("/auth/register")
-    public void register(Model model) {
-    }
-
-    @GetMapping("/auth/login")
-    public void login(Model model) {
-    }
 }

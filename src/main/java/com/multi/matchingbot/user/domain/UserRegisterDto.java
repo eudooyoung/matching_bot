@@ -1,23 +1,16 @@
-package com.multi.matchingbot.auth.member.DAO;
+package com.multi.matchingbot.user.domain;
 
-import jakarta.persistence.*;
-import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.time.LocalDate;
-
-@Entity
-@Table(name = "member")
-public class Member{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class UserRegisterDto {
     private String email;
     private String password;
     private String name;
-    private LocalDate birthDate;
+    private int year;
+    private int month;
+    private int day;
     private String gender;
-    private String phone;
+    private String phone1;
+    private String phone2;
+    private String phone3;
 
     private boolean termsRequired;
     private boolean privacyRequired;
@@ -25,29 +18,12 @@ public class Member{
     private boolean marketingEmail;
     private boolean marketingSms;
 
-    public Member() {}
-
-    public Member(LocalDate birthDate, String email, String gender, Long id, boolean locationRequired, boolean marketingEmail, boolean marketingSms, String name, String password, String phone, boolean privacyRequired, boolean termsRequired) {
-        this.birthDate = birthDate;
-        this.email = email;
-        this.gender = gender;
-        this.id = id;
-        this.locationRequired = locationRequired;
-        this.marketingEmail = marketingEmail;
-        this.marketingSms = marketingSms;
-        this.name = name;
-        this.password = password;
-        this.phone = phone;
-        this.privacyRequired = privacyRequired;
-        this.termsRequired = termsRequired;
+    public int getDay() {
+        return day;
     }
 
-    public LocalDate getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
+    public void setDay(int day) {
+        this.day = day;
     }
 
     public String getEmail() {
@@ -64,14 +40,6 @@ public class Member{
 
     public void setGender(String gender) {
         this.gender = gender;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public boolean isLocationRequired() {
@@ -98,6 +66,14 @@ public class Member{
         this.marketingSms = marketingSms;
     }
 
+    public int getMonth() {
+        return month;
+    }
+
+    public void setMonth(int month) {
+        this.month = month;
+    }
+
     public String getName() {
         return name;
     }
@@ -114,12 +90,28 @@ public class Member{
         this.password = password;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getPhone1() {
+        return phone1;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setPhone1(String phone1) {
+        this.phone1 = phone1;
+    }
+
+    public String getPhone2() {
+        return phone2;
+    }
+
+    public void setPhone2(String phone2) {
+        this.phone2 = phone2;
+    }
+
+    public String getPhone3() {
+        return phone3;
+    }
+
+    public void setPhone3(String phone3) {
+        this.phone3 = phone3;
     }
 
     public boolean isPrivacyRequired() {
@@ -138,5 +130,11 @@ public class Member{
         this.termsRequired = termsRequired;
     }
 
+    public int getYear() {
+        return year;
+    }
 
+    public void setYear(int year) {
+        this.year = year;
+    }
 }

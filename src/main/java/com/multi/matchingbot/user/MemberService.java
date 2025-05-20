@@ -1,8 +1,8 @@
-package com.multi.matchingbot.auth.member;
+package com.multi.matchingbot.user;
 
 import com.multi.matchingbot.auth.member.DAO.Member;
 import com.multi.matchingbot.auth.member.DAO.MemberRepository;
-import com.multi.matchingbot.auth.member.DTO.MemberRegisterDto;
+import com.multi.matchingbot.user.domain.UserRegisterDto;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,7 @@ public class MemberService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void register(MemberRegisterDto dto) {
+    public void register(UserRegisterDto dto) {
         if (memberRepository.existsByEmail(dto.getEmail())) {
             throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
         }
