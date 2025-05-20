@@ -1,46 +1,73 @@
-<!-- templates/main/main.html -->
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
   <title>MatchingBot</title>
-  <link rel="stylesheet" th:href="@{/css/common.css}">
-  <link rel="stylesheet" th:href="@{/css/user_main.css}">
+  <link rel="stylesheet" th:href="@{/css/common.css}" />
+  <link rel="stylesheet" th:href="@{/css/user_main.css}" />
+
+  <!-- 테스트용 스타일 -->
+  <style>
+    #openMapButton {
+      background-color: yellow; /* 시각적 확인 */
+      position: relative;
+      z-index: 9999;
+      pointer-events: auto; /* 클릭 가능하도록 설정 */
+      border: 2px solid red;
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Header Fragment -->
-  <div th:replace="fragments/header :: header"></div>
+<!-- Header Fragment -->
+<div th:insert="fragments/header :: header"></div>
 
-  <main class="main-content">
-    <section class="search-bar">
-      <select>
-        <option>유사도 필터</option>
-      </select>
-      <input type="text" placeholder="채용 공고 검색" />
-      <button>🔍</button>
-    </section>
+<main class="main-content">
+  <section class="search-bar">
+    <select>
+      <option>유사도 필터</option>
+    </select>
+    <input type="text" placeholder="채용 공고 검색" />
+    <button>🔍</button>
+  </section>
 
-    <section class="filter-buttons">
-      <button>📍 내 주변 채용 공고 보기</button>
-      <button>📅 채용 공고 달력 보기</button>
-    </section>
+  <section class="filter-buttons">
+    <button type="button" id="openMapButton">
+      📍 내 주변 채용 공고 보기
+    </button>
+    <button>📅 채용 공고 달력 보기</button>
+  </section>
 
-    <section class="job-section">
-      <h2>실시간 채용정보</h2>
-      <div class="job-list">
-        <div class="job-card"></div>
-        <div class="job-card"></div>
-        <div class="job-card"></div>
-        <div class="job-card"></div>
-        <div class="job-card"></div>
-        <div class="job-card"></div>
-      </div>
-    </section>
-  </main>
+  <section class="job-section">
+    <h2>실시간 채용정보</h2>
+    <div class="job-list">
+      <div class="job-card"></div>
+      <div class="job-card"></div>
+      <div class="job-card"></div>
+    </div>
+  </section>
+</main>
 
-  <!-- Footer Fragment -->
-  <div th:replace="fragments/footer :: footer"></div>
+<!-- Footer Fragment -->
+<div th:insert="fragments/footer :: footer"></div>
+
+<!-- 팝업 오픈 스크립트 -->
+<script>
+  window.onload = function () {
+    const mapBtn = document.getElementById("openMapButton");
+    console.log("버튼 찾기 결과:", mapBtn);
+
+    if (mapBtn) {
+      mapBtn.addEventListener("click", function () {
+        console.log("✅ 팝업 열기 시도");
+        alert("팝업 열기 시도됨!");
+        window.open('/map_popup', 'mapPopup', 'width=800,height=600');
+      });
+    } else {
+      console.log("❌ 버튼을 찾을 수 없습니다.");
+    }
+  };
+</script>
 
 </body>
 </html>
