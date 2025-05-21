@@ -3,8 +3,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/final_db
+    url: jdbc:mysql://localhost:3307/matching_bot
     username: scott
     password: tiger
     driver-class-name: com.mysql.cj.jdbc.Driver
-
