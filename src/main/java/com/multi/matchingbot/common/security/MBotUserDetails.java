@@ -27,18 +27,18 @@ public class MBotUserDetails implements UserDetails {
         this.role = role;
         this.userType = userType;
         this.id = id;
-        log.warn("✅ MBotUserDetails 생성 완료 - email: {}, role: {}, type: {}, id: {}", email, role, userType, id);
+        log.warn("MBotUserDetails 생성 완료 - email: {}, role: {}, type: {}, id: {}", email, role, userType, id);
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        log.warn("✅ 권한 반환 - ROLE_{}", role);
+        log.warn("권한 반환 - ROLE_{}", role);
         return List.of(new SimpleGrantedAuthority("ROLE_" + role));
     }
 
     @Override
     public String getPassword() {
-        log.warn("\uD83D\uDD10 getPassword() 호출됨: {}", password);
+        log.warn("getPassword() 호출됨: {}", password);
         return this.password;
     }
 

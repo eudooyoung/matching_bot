@@ -41,11 +41,13 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                //예외 처리
+                //예외 처리 하기
                 .authorizeHttpRequests(auth -> auth
 //                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers("/", "/main", "/css/**").permitAll()
-                                .requestMatchers("/api/v1/auth/login").permitAll()
+                                .requestMatchers("/api/v1/auth/**").permitAll()
+                                .requestMatchers("/api/v1/user/**").hasAnyRole("USER", "ADMIN")
+                                .requestMatchers("/api/v1/company/**").hasAnyRole("COMPANY", "ADMIN")
                                 .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                                 .anyRequest().authenticated()
 

@@ -1,8 +1,8 @@
 -- create database matching_bot;
-use hr;
--- use matching_bot;
+-- use hr;
+use matching_bot;
 
-
+-- 1. 외래키 제약 조건 해제
 -- SET FOREIGN_KEY_CHECKS = 0;
 -- DROP TABLE IF EXISTS `attached_items`;
 -- DROP TABLE IF EXISTS `career`;
@@ -20,6 +20,7 @@ use hr;
 -- DROP TABLE IF EXISTS `resume_bookmark`;
 -- DROP TABLE IF EXISTS `user`;
 -- DROP TABLE IF EXISTS `attached_items`;
+-- -- 3. 외래키 제약 조건 다시 활성화
 -- SET FOREIGN_KEY_CHECKS = 1;
 
 DROP TABLE IF EXISTS attached_items;
@@ -44,17 +45,17 @@ CREATE TABLE user (
     name VARCHAR(10) NOT NULL COMMENT '이름',
     address VARCHAR(200) NOT NULL COMMENT '주소',
     email VARCHAR(50) NOT NULL UNIQUE COMMENT '이메일 (이메일형식)',
-    password VARCHAR(20) NOT NULL COMMENT '비밀번호 (암호화저장)',
-    gender CHAR(1) NOT NULL COMMENT '성별 (m/f)',
+    password VARCHAR(100) NOT NULL COMMENT '비밀번호 (암호화저장)',
+    gender enum('M', 'F') NOT NULL COMMENT '성별 (m/f)',
     birth DATE COMMENT '생년월일',
     phone varchar(11) COMMENT '연락처',
-    agree_service CHAR(1) COMMENT '서비스이용약관동의 (y/n)',
-    agree_privacy CHAR(1) COMMENT '정보수집및이용동의 (y/n)',
-    agree_marketing CHAR(1) COMMENT '마케팅정보수신동의 (y/n)',
-    agree_location CHAR(1) COMMENT '위치기반서비스동의 (y/n)',
-    alert_bookmark CHAR(1) COMMENT '관심기업채용공고알림 (y/n)',
-    alert_resume CHAR(1) COMMENT '이력서열람알림 (y/n)',
-    status CHAR(1) COMMENT '상태 (y/n)',
+    agree_service enum('Y', 'N') COMMENT '서비스이용약관동의 (Y/N)',
+    agree_privacy enum('Y', 'N') COMMENT '정보수집및이용동의 (Y/N)',
+    agree_marketing enum('Y', 'N') COMMENT '마케팅정보수신동의 (Y/N)',
+    agree_location enum('Y', 'N') COMMENT '위치기반서비스동의 (Y/N)',
+    alert_bookmark enum('Y', 'N') COMMENT '관심기업채용공고알림 (Y/N)',
+    alert_resume enum('Y', 'N') COMMENT '이력서열람알림 (Y/N)',
+    status enum('Y', 'N') COMMENT '상태 (Y/N)',
     created_by VARCHAR(50) COMMENT '생성자',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '생성일시',
     updated_by VARCHAR(50) COMMENT '수정자',
@@ -77,7 +78,8 @@ CREATE TABLE occupation (
 create table company(
 	id bigint not null auto_increment,
 	email varchar(50) not null unique,
-	password varchar(20) not null,
+	password varchar(100) not null,
+	role enum('COMPANY') not null,
 	name varchar(50) not null,
 	phone varchar(11),
 	business_no bigint not null unique,
@@ -88,11 +90,11 @@ create table company(
 	annual_revenue bigint not null,
 	operating_income bigint not null,
 	jobs_last_year int not null,
-	agree_terms char(1) not null,
-	agree_privacy char(1) not null,
-	agree_finance char(1) not null,
-	agree_marketing char(1) not null,
-	agree_thirdparty char(1) not null,
+	agree_terms enum('Y', 'N') not null,
+	agree_privacy enum('Y', 'N') not null,
+	agree_finance enum('Y', 'N') not null,
+	agree_marketing enum('Y', 'N') not null,
+	agree_third_party enum('Y', 'N') not null,
 	created_by varchar(50) not null,
 	created_at datetime not null,
 	updated_by varchar(50),
@@ -111,8 +113,8 @@ create table job(
 	main_task varchar(255) not null,
 	required_skills varchar(255) not null,
 	required_traits varchar(255) not null,
-	skill_keywords varchar(100) not null,
-	trait_keywords varchar(100) not null,
+	skill_keywords varchar(100),
+	trait_keywords varchar(100),
 	start_date date not null,
 	end_date date not null,
 	enroll_email varchar(50) not null,
@@ -183,7 +185,7 @@ create table attached_items (
 	original_name varchar(255) not null comment '실제이름',
 	system_name varchar(255) not null comment '시스템이름',
 	path varchar(255) not null comment '경로',
-	status char(1) not null comment '상태',
+	status enum('Y', 'N') not null comment '상태',
 	created_by varchar(50) not null comment '생성장',
 	created_at datetime default current_timestamp not null comment '생성일',
 	updated_by varchar(50) comment '수정자',

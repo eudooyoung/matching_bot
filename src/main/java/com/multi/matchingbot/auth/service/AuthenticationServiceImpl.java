@@ -58,22 +58,22 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return userDetailsService.loadUserByUsername(email);*/
 
 
-        log.warn("✅ 요청 password: [{}]", password);
+        log.warn("요청 password: [{}]", password);
 
         try {
             var authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(email, password)
             );
-            log.warn("✅ AuthenticationManager 통과 - principal: {}", authentication.getPrincipal());
+            log.warn("AuthenticationManager 통과 - principal: {}", authentication.getPrincipal());
 
             var userDetails = (MBotUserDetails) authentication.getPrincipal();
-            log.warn("✅ 권한: {}", userDetails.getAuthorities());
+            log.warn("권한: {}", userDetails.getAuthorities());
 
-            log.warn("✅ password.equals(): {}", password.equals(userDetails.getPassword()));
+            log.warn("password.equals(): {}", password.equals(userDetails.getPassword()));
 
             return userDetails;
         } catch (Exception e) {
-            log.error("❌ 인증 중 예외 발생", e);
+            log.error("인증 중 예외 발생", e);
             throw e;
         }
     }
@@ -86,14 +86,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 
             MBotUserDetails matchingBotUserDetails = (MBotUserDetails) userdetails;
-            log.warn("🟢 userDetails 캐스팅 성공: {}", matchingBotUserDetails.getUsername());
+            log.warn("userDetails 캐스팅 성공: {}", matchingBotUserDetails.getUsername());
 
             Map<String, Object> claims = new HashMap<>();
 
             claims.put("userType", matchingBotUserDetails.getUserType());
             claims.put("userId", matchingBotUserDetails.getId());
 
-            log.warn("🟢 클레임 설정 완료: userType={}, userId={}");
+            log.warn("클레임 설정 완료: userType={}, userId={}", matchingBotUserDetails.getUserType(), matchingBotUserDetails.getId());
 
             String token = Jwts.builder()
                     .setClaims(claims)
@@ -103,10 +103,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                     .compact();
 
-            log.warn("✅ JWT 생성 성공");
-
+            log.warn("JWT 생성 성공");
 
             return token;
+
         } catch (Exception ex) {
             log.error("JWT 생성 중 예외 발생", ex);
             throw new RuntimeException("JWT 생성 실패");

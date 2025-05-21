@@ -21,23 +21,12 @@ public class MBotUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-//        System.out.println("✅ DB password: [" + company.getPassword() + "]");
-
-        /*log.warn("loadUserByUsername 확인");
-        return userRepository.findByEmail(email)
-                .map(user -> new MBotUserDetails(user.getEmail(), user.getPassword(), user.getRole(), "USER", user.getId()))
-                .orElseGet(() -> companyRepository.findByEmail(email)
-                        .map(company -> new MBotUserDetails(company.getEmail(), company.getPassword(), company.getRole(), "COMPANY", company.getId()))
-                        .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email))
-                );*/
-
         log.warn("loadUserByUsername 확인");
 
         return userRepository.findByEmail(email)
                 .map(user -> {
-                    log.warn("✅ DB password (user): [{}]", user.getPassword());
-                    return new MBotUserDetails(
-                            user.getEmail(),
+                    log.warn("DB password (user): [{}]", user.getPassword());
+                    return new MBotUserDetails(user.getEmail(),
                             user.getPassword(),
                             user.getRole(),
                             "USER",
@@ -46,9 +35,8 @@ public class MBotUserDetailsService implements UserDetailsService {
                 })
                 .orElseGet(() -> companyRepository.findByEmail(email)
                         .map(company -> {
-                            log.warn("✅ DB password (company): [{}]", company.getPassword());
-                            return new MBotUserDetails(
-                                    company.getEmail(),
+                            log.warn("DB password (company): [{}]", company.getPassword());
+                            return new MBotUserDetails(company.getEmail(),
                                     company.getPassword(),
                                     company.getRole(),
                                     "COMPANY",

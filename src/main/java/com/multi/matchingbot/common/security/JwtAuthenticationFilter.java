@@ -28,6 +28,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
 
             String token = extractToken(request);
+
             if (token != null) {
                 UserDetails userDetails = authenticationService.validateToken(token);
 
