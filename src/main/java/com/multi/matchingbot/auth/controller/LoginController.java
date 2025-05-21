@@ -24,19 +24,24 @@ public class LoginController {
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
 
         log.warn("컨트롤러 진입");
-        UserDetails userdetails = authenticationService.authenticate(
-                loginRequest.getEmail(),
+
+        log.warn("authenticate 시도...");
+
+        UserDetails userdetails = authenticationService.authenticate(                   // authenticate 시도
+                loginRequest.getEmail(),                                                // loginRequest에서 이메일과 비밀번호를 가져다 넘김
                 loginRequest.getPassword()
         );
-        log.warn("jwt 생성 시도..");
 
-        String tokenValue = authenticationService.generateToken(userdetails);
-        AuthResponse authResponse = AuthResponse.builder()
+        log.warn("jwt 생성 시도...");
+
+        String tokenValue = authenticationService.generateToken(userdetails);           // authenticationServicedp authenticate된 userdetails를 넘겨서 토큰을 생성
+
+        AuthResponse authResponse = AuthResponse.builder()                              // AuthResponse 빌드
                 .token(tokenValue)
                 .expiresIn(86400)
                 .build();
 
-        log.warn("🎉 최종 응답 반환");
+        log.warn("*성공* 최종 응답 반환");
 
         return ResponseEntity.ok(authResponse);
     }

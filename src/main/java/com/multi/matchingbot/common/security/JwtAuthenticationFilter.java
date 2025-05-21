@@ -30,8 +30,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String token = extractToken(request);
 
             if (token != null) {
-                UserDetails userDetails = authenticationService.validateToken(token);
-
+                UserDetails userDetails = authenticationService.validateToken(token);                       // authenticationService의 validateToken 메소드 호출
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
@@ -43,6 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 if (userDetails instanceof MBotUserDetails mBotUserDetails) {
                     request.setAttribute("userId", mBotUserDetails.getId());
                     request.setAttribute("userType", mBotUserDetails.getUserType());
+
                     log.warn("JWT 인증 필터 통과 - 유저: {}, 권한: {}", userDetails.getUsername(), userDetails.getAuthorities());
                 }
             }
@@ -55,7 +55,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private String extractToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
+        String bearerToken = request.getHeader("Authorization");                // request에서 authroization에 해당하는 헤더만 가져옴
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }

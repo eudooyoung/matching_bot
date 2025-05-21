@@ -1,5 +1,6 @@
 package com.multi.matchingbot.company.domain;
 
+import com.multi.matchingbot.common.domain.entities.BaseEntity;
 import com.multi.matchingbot.common.domain.enums.Role;
 import com.multi.matchingbot.common.domain.enums.Yn;
 import jakarta.persistence.*;
@@ -12,7 +13,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class Company {
+public class Company extends BaseEntity {
 
     // 할일
     // validation 처리

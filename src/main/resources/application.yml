@@ -14,7 +14,7 @@ spring:
   jpa:
     defer-datasource-initialization: true #data.sql이 JPA 초기화 이후에 실행되도록 설정
     hibernate:
-      ddl-auto: none # 테이블이 있다면  update 로 변경,
+      ddl-auto: update # 테이블이 있다면  update 로 변경,
     properties:
       hibernate:
         show-sql: true
