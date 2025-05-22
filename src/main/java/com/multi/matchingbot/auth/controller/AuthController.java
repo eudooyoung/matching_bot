@@ -39,7 +39,7 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<TokenDto> refresh(@RequestHeader("Authorization") String accessToken) {
+    public ResponseEntity<TokenDto> refresh(@RequestHeader("Authorization") String refreshToken) {
 //        TokenDto tokenDto = authenticationService.generateToken(accessToken);
         return null;
     }
