@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>공고 등록하기</title>
+    <link rel="stylesheet" th:href="@{/css/job_register.css}" />
+</head>
+<body>
+<div class="container">
+    <h2>공고 등록하기</h2>
+    <p class="subtitle">관심 직무</p>
+
+    <div class="category-box">
+        <div class="category">1차분류</div>
+        <div class="category">2차분류</div>
+        <div class="category">3차분류</div>
+    </div>
+
+    <form th:action="@{/job-postings}" method="post" class="form-box">
+        <input type="text" name="title" placeholder="제목" required />
+        <textarea name="description" placeholder="공고 정보" required></textarea>
+        <input type="text" name="location" placeholder="근무지" required />
+        <input type="text" name="mainTask" placeholder="주요 업무" />
+        <input type="text" name="requiredTraits" placeholder="자격 요건" />
+        <input type="text" name="preferredTraits" placeholder="우대 사항" />
+        <input type="text" name="recruitPeriod" placeholder="채용 일정 (예: 2025.05.12 ~ 06.02)" />
+        <input type="email" name="email" placeholder="지원 이메일" />
+        <input type="text" name="etc" placeholder="유의 사항" />
+        <textarea name="extra" placeholder="함께할 팀 소개"></textarea>
+
+        <div class="button-group">
+            <button type="submit" class="btn primary">등록</button>
+            <button type="button" class="btn">지금공개보기</button>
+            <button type="button" class="btn">초안저장</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

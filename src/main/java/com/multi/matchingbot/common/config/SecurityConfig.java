@@ -45,13 +45,21 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
 //                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers("/", "/main", "/css/**").permitAll()
+                                .requestMatchers("/auth/**").permitAll() // 테스트용 나중에 버리기
+                                .requestMatchers("/auth/register", "/auth/login").permitAll()
                                 .requestMatchers("/api/v1/auth/**").permitAll()
                                 .requestMatchers("/api/v1/user/**").hasAnyRole("USER", "ADMIN")
                                 .requestMatchers("/api/v1/company/**").hasAnyRole("COMPANY", "ADMIN")
                                 .requestMatchers("/admin/**").hasAnyRole("ADMIN")
+                                .requestMatchers("/", "/main", "/css/**", "/map_popup").permitAll() // ✅ 이 줄 추가
+                                .requestMatchers("/api/jobs/**").permitAll() // 지도용 채용공고 API 허용
+
+
+
                                 .anyRequest().authenticated()
 
                 ).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
 
         return http.build();
     }

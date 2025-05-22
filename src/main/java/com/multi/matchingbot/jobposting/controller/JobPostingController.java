@@ -3,25 +3,39 @@ package com.multi.matchingbot.jobposting.controller;
 import com.multi.matchingbot.jobposting.model.dto.JobPostingDto;
 import com.multi.matchingbot.jobposting.service.JobPostingService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Controller
-@RequestMapping("/company")
+@RestController
+@RequestMapping("/api/jobs")
+@RequiredArgsConstructor
 public class JobPostingController {
 
     @Autowired
-    private JobPostingService jobPostingService;
+    private final JobPostingService jobPostingService;
 
     @GetMapping("/manage_jobs")
     public String showManageJobsPage(Model model) {
         List<JobPostingDto> jobList = jobPostingService.getAll();
         model.addAttribute("jobList", jobList);
         return "job/manage_jobs";
+    }
+
+    @GetMapping("/nearby")
+    public ResponseEntity<List<JobPostingDto>> getNearbyJobs(
+            @RequestParam(name = "lat") double lat,
+            @RequestParam(name = "lng") double lng,
+            @RequestParam(name = "radiusKm", defaultValue = "5.0") double radiusKm) {
+
+        List<JobPostingDto> jobs = jobPostingService.getNearbyPostings(lat, lng, radiusKm);
+        return ResponseEntity.ok(jobs);
     }
 
     @GetMapping("/resume_list")
