@@ -1,7 +1,8 @@
 package com.multi.matchingbot.jobposting;
 
-import com.multi.matchingbot.common.domain.domain.entities.BaseEntity;
-import com.multi.matchingbot.company.Company;
+
+import com.multi.matchingbot.common.domain.entities.BaseEntity;
+import com.multi.matchingbot.company.domain.Company;
 import jakarta.persistence.*;
 import lombok.*;
 
