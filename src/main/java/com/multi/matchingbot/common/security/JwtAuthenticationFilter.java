@@ -1,6 +1,6 @@
 package com.multi.matchingbot.common.security;
 
-import com.multi.matchingbot.auth.service.AuthenticationService;
+import com.multi.matchingbot.auth.TokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -18,7 +19,8 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final AuthenticationService authenticationService;
+    private final UserDetailsService userDetailsService;
+    private final TokenProvider tokenProvider;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -29,8 +31,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             String token = extractToken(request);
 
-            if (token != null) {
-                UserDetails userDetails = authenticationService.validateToken(token);                       // authenticationService의 validateToken 메소드 호출
+            if (token != null && tokenProvider.validateToken(token)) {
+
+                String username = tokenProvider.extractUsername(token);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);                      // authenticationService의 validateToken 메소드 호출
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,

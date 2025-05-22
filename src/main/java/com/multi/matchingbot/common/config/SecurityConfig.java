@@ -1,6 +1,6 @@
 package com.multi.matchingbot.common.config;
 
-import com.multi.matchingbot.auth.service.AuthenticationService;
+import com.multi.matchingbot.auth.TokenProvider;
 import com.multi.matchingbot.common.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -23,8 +24,8 @@ public class SecurityConfig {
     private final CorsConfigurationSource corsConfigurationSource;
 
     @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter(AuthenticationService authenticationService) {
-        return new JwtAuthenticationFilter(authenticationService);
+    public JwtAuthenticationFilter jwtAuthenticationFilter(UserDetailsService userDetailsService, TokenProvider tokenProvider) {
+        return new JwtAuthenticationFilter(userDetailsService, tokenProvider);
     }
 
 //    @Bean

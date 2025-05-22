@@ -1,4 +1,4 @@
-package com.multi.matchingbot.auth.controller;
+package com.multi.matchingbot.user.controller;
 
 
 import org.springframework.stereotype.Controller;
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/auth")
-public class AuthPageController {
+public class RegisterPageController {
 
     @GetMapping("/register-user")
     public String showRegisterPage() {
