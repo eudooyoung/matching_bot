@@ -21,15 +21,15 @@ public class JobPostingService {
                 .collect(Collectors.toList());
     }
 
-    public JobPostingDto getById(Long id) {
-        JobPosting job = repository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("Invalid job posting ID: " + id));
-        return convertToDto(job);
-    }
-
-    public void delete(Long id) {
-        repository.deleteById(id);
-    }
+//    public JobPostingDto getById(Long id) {
+//        JobPosting job = repository.findById(id).orElseThrow(() ->
+//                new IllegalArgumentException("Invalid job posting ID: " + id));
+//        return convertToDto(job);
+//    }
+//
+//    public void delete(Long id) {
+//        repository.deleteById(id);
+//    }
 
     // DTO ↔ Entity 변환 메서드
     private JobPostingDto convertToDto(JobPosting job) {
