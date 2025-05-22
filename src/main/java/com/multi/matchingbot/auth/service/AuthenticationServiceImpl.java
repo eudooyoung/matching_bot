@@ -15,6 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -44,6 +45,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 
     @Override
+    @Transactional
     public TokenDto generateToken(UserDetails userDetails) {
 
         log.warn("AuthenticationService - generateToken 호출됨");
@@ -58,7 +60,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         LocalDateTime issuedAt = tokenProvider.getRefreshTokenIssuedDate();
         LocalDateTime expiredAt = tokenProvider.getRefreshTokenExpireDate();
 
-        RefreshToken tokenEntity = refreshTokenRepository.findByEmailAndType(email, userType)
+        RefreshToken tokenEntity = refreshTokenRepository.findByEmailAndUserType(email, userType)
                 .map(existing -> {
                     existing.update(refreshToken, issuedAt, expiredAt);
                     return existing;
@@ -76,25 +78,38 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .build();
     }
 
+    @Transactional
     @Override
-    public String generateToken(String refreshToken) {
+    public TokenDto refreshToken(String bearerToken) {
         // 1. 토큰에서 userId, userType 추출
-        String email = tokenProvider.extractUsername(refreshToken);
-        String userType = tokenProvider.parseClaims(refreshToken).get("userType", String.class);
+        String email = tokenProvider.extractUsername(bearerToken);
+        String userType = tokenProvider.parseClaims(bearerToken).get("userType", String.class);
 
         // 2. DB에서 저장된 RefreshToken 조회
-        RefreshToken savedToken = refreshTokenRepository.findByEmailAndType(email, userType)
+        RefreshToken savedToken = refreshTokenRepository.findByEmailAndUserType(email, userType)
                 .orElseThrow(() -> new TokenException("저장된 리프레시 토큰이 없습니다."));
 
         // 3. 일치 여부 확인
-        if (!savedToken.getRefreshToken().equals(refreshToken)) {
+        if (!savedToken.getRefreshToken().equals(bearerToken)) {
             throw new TokenException("리프레시 토큰이 일치하지 않습니다.");
         }
 
         // 4. UserDetails 로드 후 AccessToken 재발급
         UserDetails userDetails = mBotUserDetailsService.loadUserByUsername(email);
 
-        return tokenProvider.generateAccessToken(userDetails);
+        String newAccessToken = tokenProvider.generateAccessToken(userDetails);
+
+        return TokenDto.builder()
+                .accessToken(newAccessToken)
+                .refreshToken(bearerToken) // 기존 것 그대로
+                .expiresIn(tokenProvider.getAccessTokenExpireTime())
+                .build();
+    }
+
+    @Override
+    @Transactional
+    public void logout(String refreshToken) {
+        refreshTokenRepository.deleteByRefreshToken(refreshToken);
     }
 
 }

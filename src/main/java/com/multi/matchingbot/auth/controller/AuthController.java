@@ -39,8 +39,29 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<TokenDto> refresh(@RequestHeader("Authorization") String refreshToken) {
-//        TokenDto tokenDto = authenticationService.generateToken(accessToken);
-        return null;
+    public ResponseEntity<TokenDto> refresh(@RequestHeader("Authorization") String bearerToken) {
+
+        log.warn("리프레시 요청 수신");
+
+        if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
+            throw new IllegalArgumentException("Authorization 헤더가 올바르지 않습니다.");
+        }
+
+        TokenDto tokenDto = authenticationService.refreshToken(bearerToken.substring(7)); // Bearer 제거 후 위임
+        log.warn("AccessToken 재발급 완료");
+
+        return ResponseEntity.ok(tokenDto);
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(@RequestHeader("Authorization") String bearerToken) {
+        if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
+            throw new IllegalArgumentException("Authorization 헤더가 잘못되었습니다.");
+        }
+        String refreshToken = bearerToken.substring(7);
+        authenticationService.logout(refreshToken);
+        return ResponseEntity.ok().build();
+    }
+
+
 }

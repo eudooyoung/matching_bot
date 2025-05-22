@@ -9,7 +9,7 @@ public interface AuthenticationService {
 
     TokenDto generateToken(UserDetails userdetails);                          // userDetails를 받아서 토큰 반환(현재는 accessToken)
 
-    String generateToken(String accessToken);                          // userDetails를 받아서 토큰 반환(현재는 accessToken)
+    TokenDto refreshToken(String bearerToken);                          // userDetails를 받아서 토큰 반환(현재는 accessToken)
 
-//    UserDetails validateToken(String token);                                // 토큰을 받아서
+    void logout(String refreshToken);
 }
