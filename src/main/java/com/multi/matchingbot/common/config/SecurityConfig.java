@@ -45,6 +45,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
 //                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers("/", "/main", "/css/**").permitAll()
+                                .requestMatchers("/auth/**").permitAll() // 테스트용 나중에 버리기
+                                .requestMatchers("/auth/register", "/auth/login").permitAll()
                                 .requestMatchers("/api/v1/auth/**").permitAll()
                                 .requestMatchers("/api/v1/user/**").hasAnyRole("USER", "ADMIN")
                                 .requestMatchers("/api/v1/company/**").hasAnyRole("COMPANY", "ADMIN")
@@ -52,6 +54,7 @@ public class SecurityConfig {
                                 .anyRequest().authenticated()
 
                 ).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
 
         return http.build();
     }
