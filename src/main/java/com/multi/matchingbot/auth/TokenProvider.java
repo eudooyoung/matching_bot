@@ -6,6 +6,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -52,11 +53,10 @@ public class TokenProvider {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(",")));*/
 
-        /*
-        화면 출력 확인
+//        화면 출력 확인
         claims.put("auth", userDetails.getAuthorities().stream()
             .map(GrantedAuthority::getAuthority)
-            .toList());*/
+            .toList());
 
         log.warn("클레임 설정 완료: userType={}, userId={}, userAuth={}",
                 mBotUserDetails.getUserType(), mBotUserDetails.getId(), mBotUserDetails.getAuthorities());

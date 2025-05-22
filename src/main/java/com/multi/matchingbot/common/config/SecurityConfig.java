@@ -1,6 +1,5 @@
 package com.multi.matchingbot.common.config;
 
-import com.multi.matchingbot.auth.TokenProvider;
 import com.multi.matchingbot.common.security.JwtAuthenticationFilter;
 import com.multi.matchingbot.common.security.MBotAccessDeniedHandler;
 import com.multi.matchingbot.common.security.MBotAuthenticationEntryPoint;
@@ -12,8 +11,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -26,20 +24,18 @@ public class SecurityConfig {
     private final CorsConfigurationSource corsConfigurationSource;
     private final MBotAuthenticationEntryPoint mBotAuthenticationEntryPoint;
     private final MBotAccessDeniedHandler mBotAccessDeniedHandler;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
 
-    @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter(UserDetailsService userDetailsService, TokenProvider tokenProvider) {
-        return new JwtAuthenticationFilter(userDetailsService, tokenProvider);
-    }
-
+//    component 등록. 문제 없으면 삭제할 것
 //    @Bean
-//    public UserDetailsService userDetailsService() {
-//        return new MBotUserDetailsService()
+//    public JwtAuthenticationFilter jwtAuthenticationFilter(UserDetailsService userDetailsService, TokenProvider tokenProvider) {
+//        return new JwtAuthenticationFilter(userDetailsService, tokenProvider);
 //    }
 
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
 //                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
@@ -54,15 +50,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
 //                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers("/", "/main", "/css/**", "/map_popup").permitAll()
-//                                .requestMatchers("/auth/**").permitAll() // 테스트용 나중에 버리기
                                 .requestMatchers("/auth/register", "/auth/login").permitAll()
                                 .requestMatchers("/api/v1/auth/**", "/api/maps/**").permitAll()
                                 .requestMatchers("/api/v1/user/**").hasAnyRole("USER", "ADMIN")
                                 .requestMatchers("/api/v1/company/**").hasAnyRole("COMPANY", "ADMIN")
                                 .requestMatchers("/admin/**").hasAnyRole("ADMIN")
-//                                .requestMatchers("/", "/main", "/css/**", "/map_popup").permitAll() // ✅ 이 줄 추가
-//                                .requestMatchers("/api/maps/**").permitAll() // 지도용 채용공고 API 허용
-
 
                                 .anyRequest().authenticated()
 
@@ -90,8 +82,8 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-//        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        return new BCryptPasswordEncoder();
+        return NoOpPasswordEncoder.getInstance();  // 테스트용 주의!!!
+//        return new BCryptPasswordEncoder();
     }
 
     @Bean

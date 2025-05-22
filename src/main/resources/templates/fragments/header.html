@@ -1,8 +1,50 @@
 <!-- templates/fragments/header-logo-only.html -->
-<div th:fragment="header-logo-only">
+<!--<div th:fragment="header-logo-only">
+      <header class="header">
+        <div class="logo">
+          <a th:href="@{/}" style="color: white; text-decoration: none;">MatchingBot</a>
+        </div>
+      </header>
+    <div class="header">
+        <div class="logo">
+            <a href="/" style="color: white; text-decoration: none;">MatchingBot</a>
+        </div>
+        <nav class="nav">
+            <ul>
+                <li class="dropdown">
+                    <button>채용공고</button>
+                    <ul class="dropdown-menu">
+                        <li><a href="/job/list">전체 공고</a></li>
+                    </ul>
+                </li>
+                <li><a href="/member/mypage">마이페이지</a></li>
+                <li><a href="/logout">로그아웃</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>-->
+
+<div th:fragment="header(userType)">
   <header class="header">
     <div class="logo">
       <a th:href="@{/}" style="color: white; text-decoration: none;">MatchingBot</a>
     </div>
+
+    <nav class="nav" th:if="${userType != null}">
+      <ul>
+        <!-- 개인회원 메뉴 -->
+        <li th:if="${userType == 'USER'}"><a th:href="@{/job/list}">채용공고</a></li>
+        <li th:if="${userType == 'USER'}"><a th:href="@{/member/mypage}">마이페이지</a></li>
+
+        <!-- 기업회원 메뉴 -->
+        <li th:if="${userType == 'COMPANY'}"><a th:href="@{/applicants}">지원자 관리</a></li>
+        <li th:if="${userType == 'COMPANY'}"><a th:href="@{/company/home}">기업 홈</a></li>
+
+        <!-- 공통 -->
+        <li><a th:href="@{/logout}">로그아웃</a></li>
+      </ul>
+    </nav>
   </header>
 </div>
+
+

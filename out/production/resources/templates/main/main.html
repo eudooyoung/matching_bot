@@ -1,45 +1,45 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8" />
-  <title>MatchingBot</title>
-  <link rel="stylesheet" th:href="@{/css/common.css}" />
-  <link rel="stylesheet" th:href="@{/css/user_main.css}" />
+    <meta charset="UTF-8"/>
+    <title>MatchingBot</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}"/>
+    <link rel="stylesheet" th:href="@{/css/user_main.css}"/>
 </head>
 <body>
 
 <!-- Header Fragment -->
-<div th:insert="fragments/header :: header"></div>
+<div th:replace="~{fragments/header :: header(${userType})}"></div>
 
 <main class="main-content">
-  <!-- 검색 바 -->
-  <section class="search-bar">
-    <select>
-      <option>유사도 필터</option>
-    </select>
-    <input type="text" placeholder="채용 공고 검색" />
-    <button type="button">🔍</button>
-  </section>
+    <!-- 검색 바 -->
+    <section class="search-bar">
+        <select>
+            <option>유사도 필터</option>
+        </select>
+        <input type="text" placeholder="채용 공고 검색"/>
+        <button type="button">🔍</button>
+    </section>
 
-  <!-- 필터 버튼 영역 -->
-  <section class="filter-buttons">
-    <button type="button" id="openMapButton">
-      📍 내 주변 채용 공고 보기
-    </button>
-    <button type="button">
-      📅 채용 공고 달력 보기
-    </button>
-  </section>
+    <!-- 필터 버튼 영역 -->
+    <section class="filter-buttons">
+        <button type="button" id="openMapButton">
+            📍 내 주변 채용 공고 보기
+        </button>
+        <button type="button">
+            📅 채용 공고 달력 보기
+        </button>
+    </section>
 
-  <!-- 채용공고 목록 -->
-  <section class="job-section">
-    <h2>실시간 채용정보</h2>
-    <div class="job-list">
-      <div class="job-card"></div>
-      <div class="job-card"></div>
-      <div class="job-card"></div>
-    </div>
-  </section>
+    <!-- 채용공고 목록 -->
+    <section class="job-section">
+        <h2>실시간 채용정보</h2>
+        <div class="job-list">
+            <div class="job-card"></div>
+            <div class="job-card"></div>
+            <div class="job-card"></div>
+        </div>
+    </section>
 </main>
 
 <!-- Footer Fragment -->
@@ -47,14 +47,14 @@
 
 <!-- 팝업 오픈 스크립트 -->
 <script>
-  window.onload = function () {
-    const mapBtn = document.getElementById("openMapButton");
-    if (mapBtn) {
-      mapBtn.addEventListener("click", function () {
-        window.open('/map_popup', 'mapPopup', 'width=800,height=600');
-      });
-    }
-  };
+    window.onload = function () {
+        const mapBtn = document.getElementById("openMapButton");
+        if (mapBtn) {
+            mapBtn.addEventListener("click", function () {
+                window.open('/map_popup', 'mapPopup', 'width=800,height=600');
+            });
+        }
+    };
 </script>
 
 </body>
