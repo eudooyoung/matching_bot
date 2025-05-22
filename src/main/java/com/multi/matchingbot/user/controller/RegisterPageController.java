@@ -18,4 +18,9 @@ public class RegisterPageController {
     @GetMapping("/login")
     public void login(Model model) {
     }
+
+    @GetMapping("/register-company")
+    public String showCompanyRegisterPage() {
+        return "auth/register-company";
+    }
 }
