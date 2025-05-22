@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,21 +42,5 @@ public class JobPostingService {
                 * Math.sin(dLng / 2) * Math.sin(dLng / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return R * c;
-    }
-
-    public List<com.multi.matchingbot.jobposting.model.dto.JobPostingDto> getAll() {
-        return jobPostingRepository.findAll().stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-    }
-
-    // DTO ↔ Entity 변환 메서드
-    private JobPostingDto convertToDto(JobPosting job) {
-        return JobPostingDto.builder()
-                .id(job.getId())
-                .title(job.getTitle())
-                .description(job.getDescription())
-                .companyId(job.getCompany().getId())
-                .build();
     }
 }
