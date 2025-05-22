@@ -1,13 +1,15 @@
-package com.multi.matchingbot.jobposting;
+package com.multi.matchingbot.jobposting.model.dto;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class JobPostingDto {
 
     private Long id;
@@ -34,7 +36,6 @@ public class JobPostingDto {
 
     private String createdBy;
     private LocalDateTime createdAt;
-
     private String updatedBy;
     private LocalDateTime updatedAt;
 }
