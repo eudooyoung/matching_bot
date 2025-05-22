@@ -6,7 +6,6 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +15,6 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -48,9 +46,17 @@ public class TokenProvider {
         // 클레임 요소 추가
         claims.put("userType", mBotUserDetails.getUserType());
         claims.put("userId", mBotUserDetails.getId());
+
+        /*
         claims.put("auth", userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(",")));
+                .collect(Collectors.joining(",")));*/
+
+        /*
+        화면 출력 확인
+        claims.put("auth", userDetails.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .toList());*/
 
         log.warn("클레임 설정 완료: userType={}, userId={}, userAuth={}",
                 mBotUserDetails.getUserType(), mBotUserDetails.getId(), mBotUserDetails.getAuthorities());
