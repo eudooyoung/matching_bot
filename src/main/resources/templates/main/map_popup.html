@@ -37,11 +37,12 @@
     let currentInfowindow = null;
 
     function initMap() {
-        const DEFAULT_LAT = 35.170833;
-        const DEFAULT_LNG = 129.130556;
+        const DEFAULT_LAT = 37.554722;
+        const DEFAULT_LNG = 126.970833;
 
         navigator.geolocation.getCurrentPosition(
             position => {
+                console.log("✅ 위치 좌표:", position.coords);
                 loadMap(position.coords.latitude, position.coords.longitude);
             },
             error => {
@@ -65,55 +66,43 @@
         };
         map = new kakao.maps.Map(container, options);
 
-        // 내 위치 마커 (초록색)
-        const myMarkerImage = new kakao.maps.MarkerImage(
-            'http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png',
-            new kakao.maps.Size(24, 35)
-        );
+        const myPos = new kakao.maps.LatLng(lat, lng);
         const myMarker = new kakao.maps.Marker({
             map: map,
-            position: new kakao.maps.LatLng(lat, lng),
-            image: myMarkerImage
+            position: myPos
         });
+        console.log("✅ 내 위치 마커 생성됨:", myMarker);
 
+        // 기존 마커들 제거
         clearJobMarkers();
 
         fetch(`/api/jobs/nearby?lat=${lat}&lng=${lng}`)
             .then(res => res.json())
             .then(jobs => {
+                const geocoder = new kakao.maps.services.Geocoder();
                 jobs.forEach(job => {
-                    if (job.latitude && job.longitude) {
-                        const coords = new kakao.maps.LatLng(job.latitude, job.longitude);
+                    geocoder.addressSearch(job.address, function (result, status) {
+                        if (status === kakao.maps.services.Status.OK) {
+                            const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                            const marker = new kakao.maps.Marker({ map, position: coords });
+                            jobMarkers.push(marker);
 
-                        // 채용공고 마커 (기본 붉은색 마커)
-                        const jobMarker = new kakao.maps.Marker({
-                            map,
-                            position: coords
-                        });
-                        jobMarkers.push(jobMarker);
+                            const content = `
+                                <div style="padding:5px;">
+                                  <strong>${job.companyName}</strong><br/>
+                                  ${job.title}<br/>
+                                  마감일: ${job.deadline}
+                                </div>
+                            `;
+                            const infowindow = new kakao.maps.InfoWindow({ content });
 
-                        const content = `
-  <div style="padding:5px; font-size:14px;">
-    <strong>회사명: ${job.companyName || "미정"}</strong><br/>
-    직무: ${job.title}<br/>
-    언어: ${job.requiredSkills || "정보 없음"}<br/>
-    연봉: ${job.salary || "협의"}<br/>
-    <button onclick="window.location.href='/jobs/${job.id}'"
-            style="margin-top:5px; padding:3px 6px; font-size:13px;">
-      상세보기
-    </button>
-  </div>
-`;
-
-
-                        const infowindow = new kakao.maps.InfoWindow({ content });
-
-                        kakao.maps.event.addListener(jobMarker, 'click', () => {
-                            if (currentInfowindow) currentInfowindow.close();
-                            currentInfowindow = infowindow;
-                            infowindow.open(map, jobMarker);
-                        });
-                    }
+                            kakao.maps.event.addListener(marker, 'click', () => {
+                                if (currentInfowindow) currentInfowindow.close();
+                                currentInfowindow = infowindow;
+                                infowindow.open(map, marker);
+                            });
+                        }
+                    });
                 });
             })
             .catch(err => console.error("❌ 채용공고 마커 오류:", err));
@@ -138,9 +127,6 @@
 
                 // 새 검색 마커 추가
                 searchMarker = new kakao.maps.Marker({ map, position: coords });
-
-                // ✅ 검색된 좌표 기준으로 채용공고 마커 다시 로드
-                loadMap(result[0].y, result[0].x);
             } else {
                 alert("장소를 찾을 수 없습니다.");
             }
@@ -165,7 +151,6 @@
         });
     };
 </script>
-
 
 </body>
 </html>
