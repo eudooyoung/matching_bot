@@ -4,6 +4,7 @@ public class UserRegisterDto {
     private String email;
     private String password;
     private String name;
+    private String address;
     private int year;
     private int month;
     private int day;
@@ -18,6 +19,13 @@ public class UserRegisterDto {
     private boolean marketingEmail;
     private boolean marketingSms;
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
     public int getDay() {
         return day;
     }
