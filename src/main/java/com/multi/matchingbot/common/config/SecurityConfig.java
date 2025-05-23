@@ -52,7 +52,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/v1/company/**").hasAnyRole("COMPANY", "ADMIN")
                                 .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                                 .requestMatchers("/", "/main", "/css/**", "/map_popup").permitAll() // ✅ 이 줄 추가
-                                .requestMatchers("/api/jobs/**").permitAll() // 지도용 채용공고 API 허용
+                                .requestMatchers("/api/maps/**").permitAll() // 지도용 채용공고 API 허용
 
 
 

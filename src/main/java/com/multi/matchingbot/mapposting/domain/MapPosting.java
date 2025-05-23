@@ -24,6 +24,7 @@ public class MapPosting extends BaseEntity {
 
     private String address;
 
+    @Column(name = "end_date")
     private java.time.LocalDate endDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
