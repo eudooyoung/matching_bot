@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>기업 마이페이지</title>
+    <link rel="stylesheet" th:href="@{/css/mypage.css}" />
+</head>
+<body>
+<div class="navbar">
+    <a href="/main" class="logo">MatchingBot</a>
+    <button class="nav-button">커뮤니티</button>
+    <button class="nav-button" onclick="goToMyPage()">마이페이지</button>
+    <span class="user-name" th:text="${company_name}"></span>
+</div>
+
+<div class="container">
+    <h2>기업 마이페이지</h2>
+
+    <!-- 프로필 정보 -->
+    <div class="user-info-box">
+        <div class="profile-circle">F</div>
+        <span class="user-name" th:text="${company_name}"> 님</span>
+    </div>
+
+    <!-- 소개 텍스트 -->
+    <div class="intro-box">
+        <textarea disabled>평가 보고서 소개</textarea>
+    </div>
+
+    <!-- 기능 아코디언 목록 -->
+    <div class="accordion-box">
+
+        <div class="accordion-item">
+            <div class="accordion-left">
+                <span class="accordion-title">공고 관리</span>
+                <span class="star">☆</span>
+            </div>
+            <button class="nav-button" onclick="location.href='/job/manage_jobs'">이동</button>
+        </div>
+
+        <div class="accordion-item">
+            <div class="accordion-left">
+                <span class="accordion-title">관심 이력서 목록</span>
+                <span class="star">☆</span>
+            </div>
+            <button class="nav-button" onclick="location.href='/job/resume_list'">이동</button>
+        </div>
+
+        <div class="accordion-item">
+            <div class="accordion-left">
+                <span class="accordion-title">개인 정보 수정</span>
+                <span class="star">☆</span>
+            </div>
+            <button class="nav-button" onclick="location.href='/job/profile_edit'">이동</button>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

@@ -1,86 +1,94 @@
 package com.multi.matchingbot.company.domain;
 
-import com.multi.matchingbot.common.domain.enums.Role;
-import com.multi.matchingbot.common.domain.enums.Yn;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "company")
+@Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
-@Builder
 public class Company {
-
-    // 할일
-    // validation 처리
-    // default 값 처리
-    // 테이블 연관 관계 처리
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Role role;
-
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 50)
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String password;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String address;
+    private Role role;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String name;
 
-    @Column
+    @Column(length = 11)
     private String phone;
 
     @Column(nullable = false, unique = true)
-    private long businessNo;
+    private Long businessNo;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 200)
+    private String address;
+
+    @Column(nullable = false, length = 50)
     private String industry;
 
     @Column(nullable = false)
-    private int yearFound;
+    private Integer yearFound;
 
     @Column(nullable = false)
-    private int headcount;
+    private Integer headcount;
 
     @Column(nullable = false)
-    private int annualRevenue;
+    private Long annualRevenue;
 
     @Column(nullable = false)
-    private int operatingIncome;
+    private Long operatingIncome;
 
     @Column(nullable = false)
-    private int jobsLastYear;
+    private Integer jobsLastYear;
 
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Yn agreeTerms;
+    @Column(nullable = false)
+    private YesNo agreeTerms;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private YesNo agreePrivacy;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private YesNo agreeFinance;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private YesNo agreeMarketing;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private YesNo agreeThirdParty;
+
+    @Column(nullable = false, length = 50)
+    private String createdBy;
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Yn agreePrivacy;
+    private LocalDateTime createdAt;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Yn agreeFinance;
+    private String updatedBy;
+    private LocalDateTime updatedAt;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Yn agreeMarketing;
+    public enum Role {
+        COMPANY
+    }
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Yn agreeThirdParty;
-
+    public enum YesNo {
+        Y, N
+    }
 }
