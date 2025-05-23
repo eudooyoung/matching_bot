@@ -19,6 +19,7 @@ public class MainPageController {
             log.info("userType: {}", user.getUserType());
             model.addAttribute("userType", user.getUserType());
         } else {
+            model.addAttribute("userType", null);
             log.info("비회원 접근");
         }
         return "main/main";

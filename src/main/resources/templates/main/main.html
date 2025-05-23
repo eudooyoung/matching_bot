@@ -1,15 +1,18 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8"/>
     <title>MatchingBot</title>
-    <link rel="stylesheet" th:href="@{/css/common.css}"/>
-    <link rel="stylesheet" th:href="@{/css/user_main.css}"/>
+<!--    <link rel="stylesheet" href="/css/header.css"/>-->
+<!--    <link rel="stylesheet" href="/css/footer.css"/>-->
+    <link rel="stylesheet" href="/css/header.css"/>
 </head>
 <body>
-
+<!--확인용-->
+<p th:text="'현재 userType: ' + ${userType}"></p>
 <!-- Header Fragment -->
-<div th:replace="~{fragments/header :: header(${userType})}"></div>
+<div th:replace="~{fragments/header :: header(userType)}"></div>
 
 <main class="main-content">
     <!-- 검색 바 -->
@@ -56,6 +59,6 @@
         }
     };
 </script>
-
+<script th:src="@{/js/dropdown.js}"></script>
 </body>
 </html>

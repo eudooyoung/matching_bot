@@ -1,0 +1,109 @@
+body {
+    margin: 0;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #f9f9f9;
+}
+
+/* 공통 Header 스타일 */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #103254;
+    padding: 1rem 2rem;
+    color: white;
+    width: 100%;
+    box-sizing: border-box; /* padding 포함 너비 안정화 */
+    overflow-x: hidden; /* 너무 긴 요소가 흘러넘치지 않도록 */
+}
+
+/* 네비게이션 바 */
+.nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+}
+
+/* 메뉴 항목 */
+.nav a,
+.nav button {
+    color: white;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    padding: 0;
+    margin: 0;
+}
+
+/* 로고 링크 */
+.logo-link {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+/* 드롭다운 래퍼 */
+.dropdown-wrapper {
+    position: relative;
+    flex-shrink: 0;
+}
+
+/* 버튼 스타일 */
+.menu-button {
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+/* 초록색 버튼 */
+.menu-button.green {
+    background-color: #b2fd83;
+    color: #103254;
+}
+
+/* 드롭다운 공통 */
+.dropdown {
+    display: none;
+    position: absolute;
+    top: 120%;
+    right: 0;
+    background-color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    z-index: 999;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown li {
+    list-style: none;
+}
+
+.dropdown li a {
+    display: block;
+    white-space: nowrap;
+    color: #103254;
+    padding: 0.5rem 0;
+    text-decoration: none;
+}
+
+/* 초록 드롭다운 */
+.dropdown.green {
+    background-color: #b2fd83;
+}
+
+.dropdown.green li a {
+    color: #103254;
+}
+
+/* 활성화 시 드롭다운 표시 */
+.dropdown-wrapper.active .dropdown {
+    display: block;
+}

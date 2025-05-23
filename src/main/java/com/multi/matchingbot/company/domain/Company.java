@@ -44,7 +44,7 @@ public class Company extends BaseEntity {
     private String phone;
 
     @Column(nullable = false, unique = true)
-    private long businessNo;
+    private String businessNo;
 
     @Column(nullable = false)
     private String industry;

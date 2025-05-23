@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,13 +35,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     // 필터링 제외할 요청
     private static final String[] EXACT_PATHS = {
             "/health-check",
-//            "/"
+            "/favicon.ico"
     };
 
     private static final String[] WILDCARD_PATHS = {
-            "/auth/**",
-            "/public/**",
-            "/swagger-ui/**"
+        "/auth/**",
+        "/swagger-ui/**",
+        "/js/**",
+        "/css/**",
+        "/images/**",
+//        "/favicon.ico"
     };
 
     @Override
@@ -53,7 +57,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         for (String exactPath : EXACT_PATHS) {
             if (requestURI.equals(exactPath)) {
                 filterChain.doFilter(request, response);
-                log.info("[JwtFilter] 요청 URI가 제외 경로에 해당하여 필터를 건너뜁니다.");
+//                log.info("[JwtFilter] 요청 URI가 제외 경로에 해당하여 필터를 건너뜁니다.");
 
                 return;
             }
@@ -62,7 +66,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // 와일드카드 경로 매칭
         for (String wildcardPath : WILDCARD_PATHS) {
             if (pathMatcher.match(wildcardPath, requestURI)) {
-                log.info("[JwtFilter] 요청 URI가 와일드카드 제외 경로에 해당 → {}", wildcardPath);
+//                log.info("[JwtFilter] 요청 URI가 와일드카드 제외 경로에 해당 → {}", wildcardPath);
                 filterChain.doFilter(request, response);
                 return;
             }
@@ -92,6 +96,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             );
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            log.info("Principal: {}", auth.getPrincipal());
+            log.info("Authorities: {}", auth.getAuthorities());
 
             if (userDetails instanceof MBotUserDetails mBotUserDetails) {
                 request.setAttribute("userId", mBotUserDetails.getId());

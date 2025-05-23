@@ -1,0 +1,38 @@
+<!-- templates/fragments/header_guest.html -->
+
+<div th:fragment="header(userType)">
+    <header class="header">
+        <div class="logo">
+            <a th:href="@{/}" class="logo-link">MatchingBot</a>
+        </div>
+
+        <div class="nav">
+            <!-- 로그인 -->
+            <a th:href="@{/auth/login}" class="nav-link">로그인</a>
+
+            <!-- 커뮤니티 -->
+            <a th:href="@{/job/list}" class="nav-link">커뮤니티</a>
+
+            <!-- 회원가입 드롭다운 -->
+            <div class="dropdown-wrapper">
+                <button class="menu-button green" onclick="toggleDropdown(this)">계정 생성하기</button>
+                <ul class="dropdown green">
+                    <li><a th:href="@{/auth/register-user}">개인 회원</a></li>
+                    <li><a th:href="@{/auth/register-company}">기업 회원</a></li>
+                </ul>
+            </div>
+
+
+            <!--<div class="dropdown-wrapper">
+                <button class="menu-button" onclick="toggleDropdown(this)">Menu</button>
+                <ul class="dropdown">
+                    <li><a th:href="@{/job/list}">채용 공고</a></li>
+                    <li><a th:href="@{/community}">커뮤니티</a></li>
+                </ul>
+            </div>-->
+        </div>
+    </header>
+</div>
+
+
+
