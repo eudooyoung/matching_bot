@@ -7,19 +7,18 @@
         </div>
 
         <div class="nav">
-            <!-- USER 전용 -->
-<!--            <div sec:authorize="isAnonymous()">-->
-<!--                <a th:href="@{/auth/logout}" class="nav-link">로그아웃</a>-->
-<!--                <a th:href="@{/community/list}" class="nav-link">커뮤니티</a>-->
-<!--            </div>-->
 
-            <!-- COMPANY 전용 -->
+            <!-- 회원 -->
             <div sec:authorize="isAuthenticated()">
-                <a th:href="@{/auth/logout}" class="nav-link">로그아웃</a>
+                <a href="javascript:void(0)" class="nav-link" onclick="logout()">로그아웃</a>
                 <a th:href="@{/community/list}" class="nav-link">커뮤니티</a>
+                <!-- 개인회원 전용 마이페이지 -->
+                <a th:href="@{/mypage/user}" class="nav-link" sec:authorize="hasRole('USER')">개인페이지</a>
+                <!-- 기업회원 전용 마이페이지 -->
+                <a th:href="@{/mypage/company}" class="nav-link" sec:authorize="hasRole('COMPANY')">기업페이지</a>
             </div>
 
-            <!-- 비회원 (GUEST) 전용 -->
+            <!-- 비회원  -->
             <div sec:authorize="isAnonymous()">
                 <a th:href="@{/auth/login}" class="nav-link">로그인</a>
                 <a th:href="@{/job/list}" class="nav-link">커뮤니티</a>
