@@ -5,5 +5,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
-    // List<JobPosting> findByCompanyId(Long companyId);
 }
