@@ -13,7 +13,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class CompanyTY extends BaseEntity{
+public class Company extends BaseEntity {
 
     // 할일
     // validation 처리
@@ -87,7 +87,5 @@ public class CompanyTY extends BaseEntity{
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Yn agreeThirdParty;
-
-
 
 }

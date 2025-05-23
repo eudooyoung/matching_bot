@@ -2,8 +2,8 @@ package com.multi.matchingbot.auth.service;
 
 
 import com.multi.matchingbot.common.security.MBotUserDetails;
-import com.multi.matchingbot.company.CompanyRepositoryTY;
-import com.multi.matchingbot.company.domain.CompanyTY;
+import com.multi.matchingbot.company.CompanyRepository;
+import com.multi.matchingbot.company.domain.Company;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -27,7 +27,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
-    private final CompanyRepositoryTY companyRepository;
+    private final CompanyRepository companyRepository;
 
     @Value("${jwt.secret}")
     private String secretKey;
@@ -39,7 +39,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public UserDetails authenticate(String email, String password) {
 
         try {
-            Optional<CompanyTY> company = companyRepository.findByEmail(email);
+            Optional<Company> company = companyRepository.findByEmail(email);
             log.warn("회사 조회 성공: {}", company.isPresent());
         } catch (Exception e) {
             log.error("회사 조회 중 예외 발생", e);  // ← 이거로 실제 원인 로그 확인

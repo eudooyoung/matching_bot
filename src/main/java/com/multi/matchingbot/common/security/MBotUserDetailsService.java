@@ -1,6 +1,6 @@
 package com.multi.matchingbot.common.security;
 
-import com.multi.matchingbot.company.CompanyRepositoryTY;
+import com.multi.matchingbot.company.CompanyRepository;
 import com.multi.matchingbot.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 public class MBotUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
-    private final CompanyRepositoryTY companyRepositoryTY;
+    private final CompanyRepository companyRepository;
 
 
     @Override
@@ -33,7 +33,7 @@ public class MBotUserDetailsService implements UserDetailsService {
                             user.getId()
                     );
                 })
-                .orElseGet(() -> companyRepositoryTY.findByEmail(email)
+                .orElseGet(() -> companyRepository.findByEmail(email)
                         .map(company -> {
                             log.warn("DB password (company): [{}]", company.getPassword());
                             return new MBotUserDetails(company.getEmail(),
