@@ -12,9 +12,8 @@ body {
     background-color: #103254;
     padding: 1rem 2rem;
     color: white;
-    width: 100%;
-    box-sizing: border-box; /* padding 포함 너비 안정화 */
-    overflow-x: hidden; /* 너무 긴 요소가 흘러넘치지 않도록 */
+    width: 100%; /* 혹시 제한된 경우 대비 */
+    overflow-x: auto; /* 넘칠 때 깨짐 방지 */
 }
 
 /* 네비게이션 바 */
@@ -25,10 +24,9 @@ body {
     justify-content: flex-end;
     gap: 1rem;
     flex-wrap: nowrap;
-    white-space: nowrap;
+    white-space: nowrap; /* 줄바꿈 방지 */
 }
 
-/* 메뉴 항목 */
 .nav a,
 .nav button {
     color: white;
@@ -38,8 +36,7 @@ body {
     cursor: pointer;
     text-decoration: none;
     white-space: nowrap;
-    padding: 0;
-    margin: 0;
+    max-width: 100%;
 }
 
 /* 로고 링크 */
@@ -50,26 +47,23 @@ body {
     font-size: 1.5rem;
 }
 
-/* 드롭다운 래퍼 */
+/* 드롭다운 */
 .dropdown-wrapper {
     position: relative;
     flex-shrink: 0;
 }
 
-/* 버튼 스타일 */
 .menu-button {
     padding: 0.5rem 0.75rem;
     border-radius: 4px;
     font-weight: bold;
 }
 
-/* 초록색 버튼 */
 .menu-button.green {
     background-color: #b2fd83;
     color: #103254;
 }
 
-/* 드롭다운 공통 */
 .dropdown {
     display: none;
     position: absolute;
@@ -94,7 +88,6 @@ body {
     text-decoration: none;
 }
 
-/* 초록 드롭다운 */
 .dropdown.green {
     background-color: #b2fd83;
 }
@@ -103,7 +96,6 @@ body {
     color: #103254;
 }
 
-/* 활성화 시 드롭다운 표시 */
 .dropdown-wrapper.active .dropdown {
     display: block;
 }
