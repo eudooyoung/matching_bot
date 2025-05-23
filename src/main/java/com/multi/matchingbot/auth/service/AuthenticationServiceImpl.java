@@ -2,7 +2,7 @@ package com.multi.matchingbot.auth.service;
 
 
 import com.multi.matchingbot.common.security.MBotUserDetails;
-import com.multi.matchingbot.company.CompanyRepository;
+import com.multi.matchingbot.company.CompanyRepositoryTY;
 import com.multi.matchingbot.company.domain.CompanyTY;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -27,7 +27,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
-    private final CompanyRepository companyRepository;
+    private final CompanyRepositoryTY companyRepository;
 
     @Value("${jwt.secret}")
     private String secretKey;
