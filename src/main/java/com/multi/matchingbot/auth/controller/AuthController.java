@@ -3,8 +3,11 @@ package com.multi.matchingbot.auth.controller;
 import com.multi.matchingbot.auth.domain.dtos.LoginRequest;
 import com.multi.matchingbot.auth.domain.dtos.TokenDto;
 import com.multi.matchingbot.auth.service.AuthenticationService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -18,49 +21,65 @@ public class AuthController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/login")
-    public ResponseEntity<TokenDto> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
 
         log.warn("컨트롤러 진입");
         log.warn("authenticate 시도...");
 
         UserDetails userdetails = authenticationService.authenticate(                   // authenticate 시도
                 loginRequest.getEmail(),                                                // loginRequest에서 이메일과 비밀번호를 가져다 넘김
-                loginRequest.getPassword()
+                loginRequest.getPassword(),
+                loginRequest.getUserType()
         );
 
-        log.warn("jwt 생성 시도...");
-
-        TokenDto tokenDto = authenticationService.generateToken(userdetails);           // authenticationServicedp authenticate된 userdetails를 넘겨서 토큰을 생성
-
-
-        log.warn("*성공* 최종 응답 반환");
-
-        return ResponseEntity.ok(tokenDto);
+        log.warn("쿠키 포함 응답 생성 시도...");
+        return authenticationService.generateLoginResponse(userdetails);
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<TokenDto> refresh(@RequestHeader("Authorization") String bearerToken) {
+    public ResponseEntity<TokenDto> refresh(@CookieValue(value = "refreshToken", required = false) String refreshToken,
+                                            HttpServletResponse response) {
 
-        log.warn("리프레시 요청 수신");
+        log.warn("리프레시 요청 수신 (쿠키 기반)");
 
-        if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
-            throw new IllegalArgumentException("Authorization 헤더가 올바르지 않습니다.");
+        // 예외처리
+        if (refreshToken == null || refreshToken.isBlank()) {
+            throw new IllegalArgumentException("refreshToken 쿠키가 존재하지 않습니다.");
         }
 
-        TokenDto tokenDto = authenticationService.refreshToken(bearerToken.substring(7)); // Bearer 제거 후 위임
-        log.warn("AccessToken 재발급 완료");
+        if (refreshToken == null || refreshToken.isBlank()) {
+            throw new IllegalArgumentException("refreshToken 쿠키가 존재하지 않습니다.");
+        }
 
-        return ResponseEntity.ok(tokenDto);
+        authenticationService.refreshTokenAndSetCookie(refreshToken, response);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(@RequestHeader("Authorization") String bearerToken) {
-        if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
-            throw new IllegalArgumentException("Authorization 헤더가 잘못되었습니다.");
+    public ResponseEntity<Void> logout(@CookieValue(value = "refreshToken", required = false) String refreshToken) {
+
+        if (refreshToken != null) {
+            authenticationService.logout(refreshToken);
         }
-        String refreshToken = bearerToken.substring(7);
-        authenticationService.logout(refreshToken);
-        return ResponseEntity.ok().build();
+
+        // accessToken, refreshToken 쿠키 제거
+        ResponseCookie clearAccess = ResponseCookie.from("accessToken", "")
+                .path("/")
+                .maxAge(0)
+                .build();
+
+        ResponseCookie clearRefresh = ResponseCookie.from("refreshToken", "")
+                .path("/")
+                .maxAge(0)
+                .build();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Set-Cookie", clearAccess.toString());
+        headers.add("Set-Cookie", clearRefresh.toString());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .build();
     }
 
 

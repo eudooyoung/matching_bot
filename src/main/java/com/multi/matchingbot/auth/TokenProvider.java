@@ -134,6 +134,10 @@ public class TokenProvider {
         return ACCESS_TOKEN_EXPIRE_TIME / 1000;
     }
 
+    public long getRefreshTokenExpireTime() {
+        return REFRESH_TOKEN_EXPIRE_TIME / 1000;
+    }
+
     public LocalDateTime getRefreshTokenExpireDate() {
         return LocalDateTime.now().plusSeconds(REFRESH_TOKEN_EXPIRE_TIME / 1000);
     }

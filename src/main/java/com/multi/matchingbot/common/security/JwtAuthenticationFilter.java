@@ -4,6 +4,7 @@ import com.multi.matchingbot.auth.TokenProvider;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -39,11 +40,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     };
 
     private static final String[] WILDCARD_PATHS = {
-        "/auth/**",
-        "/swagger-ui/**",
-        "/js/**",
-        "/css/**",
-        "/images/**",
+            "/auth/**",
+            "/swagger-ui/**",
+            "/js/**",
+            "/css/**",
+            "/images/**",
 //        "/favicon.ico"
     };
 
@@ -84,15 +85,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     // 응답 인가 처리
     private void authenticateRequest(String token, HttpServletRequest request) {
         try {
-            String username = tokenProvider.extractUsername(token);
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);        // authenticationService의 validateToken 메소드 호출
+            String email = tokenProvider.extractUsername(token);
+            String userType = tokenProvider.parseClaims(token).get("userType", String.class);
 
-            List<GrantedAuthority> authorities = extractAuthoritiesFromToken(token);
+            UserDetails userDetails = ((MBotUserDetailsService) userDetailsService)
+                    .loadByType(email, userType);       // authenticationService의 validateToken 메소드 호출
+
+//            List<GrantedAuthority> authorities = extractAuthoritiesFromToken(token);
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     userDetails,
                     null,
-                    authorities
+                    userDetails.getAuthorities()
             );
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -127,9 +131,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     // 토큰 추출
     private String extractToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");                // request에서 authroization에 해당하는 헤더만 가져옴
-        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
+        if (request.getCookies() == null) return null;
+
+        for (Cookie cookie : request.getCookies()) {
+            if ("accessToken".equals(cookie.getName())) {
+                return cookie.getValue();
+            }
         }
         return null;
     }

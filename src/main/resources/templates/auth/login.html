@@ -120,8 +120,8 @@
         }
     }
 
-    // 로그인 처리 로직 (두 폼 동일 endpoint, 같은 구조로 처리)
-    async function handleLogin(emailId, passwordId) {
+    // ✅ userType 추가됨
+    async function handleLogin(emailId, passwordId, userType) {
         const email = document.getElementById(emailId).value;
         const password = document.getElementById(passwordId).value;
 
@@ -131,29 +131,11 @@
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({email, password})
+                body: JSON.stringify({email, password, userType}) // ✅ 포함됨
             });
 
             if (response.ok) {
-                const data = await response.json();
-                localStorage.setItem("accessToken", data.accessToken);
-                localStorage.setItem("refreshToken", data.refreshToken);
-
-                const mainPageRes = await fetch("/main", {
-                    method: "GET",
-                    headers: {
-                        "Authorization": `Bearer ${data.accessToken}`
-                    }
-                });
-
-                if (mainPageRes.ok) {
-                    const html = await mainPageRes.text();
-                    document.open();
-                    document.write(html);
-                    document.close();
-                } else {
-                    alert("서버 인증 실패: 메인 페이지 접근 거부됨");
-                }
+                window.location.href = "/main"; // ✅ 쿠키 인증 유지됨
             } else {
                 const errorText = await response.text();
                 alert("로그인 실패: " + errorText);
@@ -164,16 +146,18 @@
         }
     }
 
+    // ✅ userType 명시
     document.getElementById("member-form").addEventListener("submit", function (e) {
         e.preventDefault();
-        handleLogin("email", "password");
+        handleLogin("email", "password", "USER");
     });
 
     document.getElementById("company-form").addEventListener("submit", function (e) {
         e.preventDefault();
-        handleLogin("email2", "password2");
+        handleLogin("email2", "password2", "COMPANY");
     });
 </script>
+
 <script th:src="@{/js/dropdown.js}"></script>
 </body>
 </html>
