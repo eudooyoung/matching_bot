@@ -1,6 +1,7 @@
-//package com.multi.matchingbot.searchposting;
+//package com.multi.matchingbot.searchposting.repository;
 //
-//import com.multi.matchingbot.searchposting.entity.JobPosting;
+//
+//import com.multi.matchingbot.jobposting.JobPosting;
 //
 //import java.util.List;
 //
