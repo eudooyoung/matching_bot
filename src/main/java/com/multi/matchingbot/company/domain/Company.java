@@ -1,17 +1,22 @@
 package com.multi.matchingbot.company.domain;
 
-import com.multi.matchingbot.common.domain.entities.BaseEntity;
 import com.multi.matchingbot.common.domain.enums.Role;
 import com.multi.matchingbot.common.domain.enums.Yn;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "company")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Company extends BaseEntity {
+
+    // 할일
+    // validation 처리
+    // default 값 처리
+    // 테이블 연관 관계 처리
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,23 +62,28 @@ public class Company extends BaseEntity {
     @Column(nullable = false)
     private int jobsLastYear;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Yn agreeTerms;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Yn agreePrivacy;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Yn agreeFinance;
+    @Enumerated(EnumType.STRING)
+    private Yn agreeProvide;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Yn agreeOpenApi;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Yn agreeMarketing;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Yn agreeThirdParty;
+
 }

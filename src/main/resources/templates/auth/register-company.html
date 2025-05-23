@@ -10,23 +10,44 @@
 <div class="container">
     <h2>기업 회원가입</h2>
 
-    <form id="companyForm">
+    <div th:if="${error}" class="error">
+        <p th:text="${error}"></p>
+    </div>
+
+    <form id="companyForm" action="/auth/register-company" method="post">
         <!-- 1. 기본 정보 입력 -->
         <div>
-            <label>* Email</label><br>
-            <input type="email" name="email" required><br>
+            <label for="email">* 이메일</label>
+            <input type="email" id="email" name="email" placeholder="email@matchingbot.co.kr" required>
+            <br>
 
-            <label>* 비밀번호</label><br>
-            <input type="password" name="password" required><br>
+            <label for="password">* PW </label>
+            <input type="password"
+                   id="password"
+                   name="password"
+                   placeholder="8~16자 / 영문, 숫자, 특수문자 조합"
+                   required
+                   minlength="8"
+                   maxlength="16"
+                   pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+=-]).{8,16}$"
+                   title="8~16자, 영문/숫자/특수문자를 모두 포함해야 합니다.">
+            <br>
 
-            <label>* 회사명</label><br>
-            <input type="text" name="companyName" required><br>
+            <label>* 회사명</label>
+            <input type="text"
+                   id="name"
+                   name="name"
+                   placeholder="회사명을 입력해주세요"
+                   required
+                   minlength="2"
+                   maxlength="15">
+            <br>
         </div>
 
         <!-- 2. 사업자등록번호 -->
         <div>
             <label>* 사업자등록번호</label><br>
-            <input type="text" id="license" name="license" required>
+            <input type="text" id="businessNo" name="businessNo" required>
             <button type="button" onclick="businessNumber()">인증</button>
             <div id="regimessage" style="color: green;"></div>
         </div>
@@ -37,34 +58,76 @@
             <input type="text" name="address" required>
         </div>
 
+        <label>* 업종</label><br>
+        <input type="text" name="industry" required><br>
+
         <!-- 5. 추가 기업 정보 -->
         <div>
-            <label>설립연도</label><br>
-            <input type="number" name="establishedYear"><br>
+            <label>* 설립일</label>
+            <div class="birth-gender">
+                <select name="establishedYear" id="establishedYear" required></select>
+                <select name="establishedMonth" id="establishedMonth" required></select>
+                <select name="establishedDay" id="establishedDay" required></select>
+            </div>
+
+            <script>
+                const currentYear = new Date().getFullYear();
+
+                const establishedYearEl = document.getElementById("establishedYear");
+                for (let i = currentYear; i >= 1900; i--) {
+                    establishedYearEl.innerHTML += `<option value="${i}">${i}년</option>`;
+                }
+
+                const establishedMonthEl = document.getElementById("establishedMonth");
+                for (let i = 1; i <= 12; i++) {
+                    establishedMonthEl.innerHTML += `<option value="${i}">${i}월</option>`;
+                }
+
+                const establishedDayEl = document.getElementById("establishedDay");
+                for (let i = 1; i <= 31; i++) {
+                    establishedDayEl.innerHTML += `<option value="${i}">${i}일</option>`;
+                }
+            </script>
 
             <label>직원수</label><br>
-            <input type="number" name="employeeCount"><br>
+            <input type="text" name="employeeCount"><br>
 
             <label>연매출 (원)</label><br>
-            <input type="number" name="annualSales"><br>
+            <input type="text" name="annualSales"><br>
 
             <label>영업이익 (원)</label><br>
-            <input type="number" name="operatingProfit"><br>
+            <input type="text" name="operatingProfit"><br>
 
             <label>최근 1년 채용공고 수</label><br>
-            <input type="number" name="recentJobPosts"><br>
+            <input type="text" name="recentJobPosts"><br>
         </div>
 
+
+
+
         <!-- 6. 약관동의 체크박스 -->
-        <div>
-            <h4>* 약관 동의</h4>
-            <label><input type="checkbox" required> [필수] 서비스 이용약관 동의</label><br>
-            <label><input type="checkbox" required> [필수] 정보 수집 및 이용 동의</label><br>
-            <label><input type="checkbox" required> [필수] 정보 제공 동의</label><br>
-            <label><input type="checkbox"> [선택] 추가 정보 동의 (OPEN API 포함)</label><br>
-            <label><input type="checkbox"> [선택] 마케팅 정보 수신 동의</label><br>
-            <label><input type="checkbox"> [선택] 제3자 정보 제공 동의</label><br>
+        <label class="agreement-title">* 약관동의</label>
+        <div class="checkbox-group">
+            <label><input type="checkbox" name="agree_all"> 전체 동의</label><br>
+            <!-- 필수 동의 항목 -->
+            <label><input type="checkbox" name="agree_terms" required>[필수] 서비스 이용약관 동의</label><br>
+            <label><input type="checkbox" name="agree_privacy" required>[필수] 정보 수집 및 이용 동의</label><br>
+            <label><input type="checkbox" name="agree_provide" required>[필수] 정보 제공 동의</label><br>
+            <!-- 선택 동의 항목 -->
+            <label><input type="checkbox" name="agree_openApi" value="true">[선택] 추가 정보 동의 (OPEN API 포함)</label><br>
+            <label><input type="checkbox" name="agree_marketing" >[선택] 마케팅 정보 수신 동의</label><br>
+            <label><input type="checkbox" name="agree_thirdParty" >[선택] 제3자 정보 제공 동의</label><br>
         </div>
+
+        <script>
+            document.querySelector("input[name='agree_all']").addEventListener('change', function () {
+                const checked = this.checked;
+                document.querySelectorAll(".checkbox-group input[type='checkbox']")
+                    .forEach(chk => {
+                        if (chk !== this) chk.checked = checked;
+                    });
+            });
+        </script>
 
         <button type="button" onclick="businessRegi()">다음으로</button>
     </form>
@@ -72,7 +135,16 @@
 
 <script>
     function businessNumber() {
-        let num = document.getElementById('license').value;
+        let num = document.getElementById('businessNo').value;
+
+        // 1. 테스트용 번호 지정
+        if (num === '1234567890') {
+            document.getElementById('regimessage').innerHTML = "<br>사업자 회원가입이 가능합니다. (테스트)";
+
+            return;
+        }
+
+
         const data = { "b_no": [num] };
         $.ajax({
             url: "https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=twO9sqDfhrgll63lHHuzhS7YQD9w%2BmsuiEtGs81kTg21FgTKxr9FIcdLwxFosSoawgSA5TFpr0qSy1Ike9IZdg%3D%3D",
@@ -92,7 +164,16 @@
     }
 
     function businessRegi() {
-        let num = document.getElementById('license').value;
+        let num = document.getElementById('businessNo').value;
+
+        // 테스트 번호 우회 (Mock 인증 성공 처리)
+        if (num === '1234567890') {
+            alert("사업자 인증에 성공했습니다. (테스트)");
+
+            // 실제 form 데이터 서버로 전송
+            document.getElementById("companyForm").submit();
+            return;
+        }
         const data = { "b_no": [num] };
         $.ajax({
             url: "https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=twO9sqDfhrgll63lHHuzhS7YQD9w%2BmsuiEtGs81kTg21FgTKxr9FIcdLwxFosSoawgSA5TFpr0qSy1Ike9IZdg%3D%3D",
