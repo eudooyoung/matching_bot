@@ -1,8 +1,8 @@
 //package com.multi.matchingbot.searchposting.controller;
 //
 //
-//import com.multi.matchingbot.searchposting.SearchPostingDto;
-//import com.multi.matchingbot.searchposting.SearchPostingService;
+//import com.multi.matchingbot.searchposting.domain.SearchPostingDto;
+//import com.multi.matchingbot.searchposting.service.SearchPostingService;
 //import lombok.RequiredArgsConstructor;
 //import org.springframework.http.ResponseEntity;
 //import org.springframework.web.bind.annotation.GetMapping;
