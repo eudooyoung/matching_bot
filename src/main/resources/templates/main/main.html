@@ -9,6 +9,22 @@
     <link rel="stylesheet" href="/css/common.css"/>
     <link rel="stylesheet" href="/css/guest.css"/>
 
+  <meta charset="UTF-8" />
+  <title>MatchingBot</title>
+  <link rel="stylesheet" th:href="@{/css/common.css}" />
+  <link rel="stylesheet" th:href="@{/css/user_main.css}" />
+  <style>
+    .search-filters {
+      display: none;
+      margin-top: 10px;
+      padding: 10px;
+      background-color: #f2f2f2;
+      border-radius: 8px;
+    }
+    .search-filters label {
+      margin-right: 20px;
+    }
+  </style>
 </head>
 <body>
 <!--확인용-->
@@ -17,24 +33,72 @@
 <div th:replace="~{fragments/header :: header(userType=${userType})}"></div>
 
 <main class="main-content">
-    <!-- 검색 바 -->
-    <section class="search-bar">
-        <select>
-            <option>유사도 필터</option>
-        </select>
-        <input type="text" placeholder="채용 공고 검색"/>
-        <button type="button">🔍</button>
-    </section>
 
-    <!-- 필터 버튼 영역 -->
-    <section class="filter-buttons">
-        <button type="button" id="openMapButton">
-            📍 내 주변 채용 공고 보기
-        </button>
-        <button type="button">
-            📅 채용 공고 달력 보기
-        </button>
-    </section>
+  <!-- 검색 바 -->
+  <section class="search-bar">
+    <input type="text" id="search-input" placeholder="채용 공고 검색" />
+    <button type="button" id="search-button">🔍</button>
+  </section>
+
+  <!-- ✅ 필터 영역 -->
+  <section class="search-filters" id="search-filters">
+    <label>
+      직무:
+      <select id="filter-title">
+        <option value="">전체</option>
+        <option value="백엔드 개발자">백엔드 개발자</option>
+        <option value="프론트엔드 개발자">프론트엔드 개발자</option>
+        <option value="QA 엔지니어">QA 엔지니어</option>
+        <option value="소프트웨어 엔지니어">소프트웨어 엔지니어</option>
+        <option value="시스템 관리자">시스템 관리자</option>
+        <option value="UX 디자이너">UX 디자이너</option>
+        <option value="IT 기획자">IT 기획자</option>
+        <option value="데이터 분석가">데이터 분석가</option>
+      </select>
+    </label>
+
+    <label>
+      개발 언어:
+      <select id="filter-skill">
+        <option value="">전체</option>
+        <option value="Java">Java</option>
+        <option value="Python">Python</option>
+        <option value="React">React</option>
+        <option value="HTML">HTML</option>
+        <option value="CSS">CSS</option>
+        <option value="Linux">Linux</option>
+        <option value="Docker">Docker</option>
+        <option value="Node.js">Node.js</option>
+        <option value="Excel">Excel</option>
+        <option value="PowerPoint">PowerPoint</option>
+        <option value="JUnit">JUnit</option>
+        <option value="Selenium">Selenium</option>
+        <option value="Figma">Figma</option>
+        <option value="Adobe XD">Adobe XD</option>
+      </select>
+    </label>
+
+    <label>
+      사는 지역:
+      <select id="filter-region">
+        <option value="">전체</option>
+        <option value="부산">부산</option>
+        <option value="서울">서울</option>
+        <option value="강남">강남</option>
+        <option value="판교">판교</option>
+      </select>
+    </label>
+  </section>
+
+  <!-- 필터 버튼 영역 -->
+  <section class="filter-buttons">
+    <button type="button" id="openMapButton">
+      📍 내 주변 채용 공고 보기
+    </button>
+    <button type="button">
+      📅 채용 공고 달력 보기
+    </button>
+  </section>
 
     <!-- 채용공고 목록 -->
     <section class="job-section">
@@ -50,16 +114,42 @@
 <!-- Footer Fragment -->
 <div th:insert="fragments/footer :: footer"></div>
 
-<!-- 팝업 오픈 스크립트 -->
+<!-- 팝업 및 필터 스크립트 -->
 <script>
-    window.onload = function () {
-        const mapBtn = document.getElementById("openMapButton");
-        if (mapBtn) {
-            mapBtn.addEventListener("click", function () {
-                window.open('/map_popup', 'mapPopup', 'width=800,height=600');
-            });
-        }
-    };
+  window.onload = function () {
+    // 지도 팝업 버튼
+    const mapBtn = document.getElementById("openMapButton");
+    if (mapBtn) {
+      mapBtn.addEventListener("click", function () {
+        window.open('/map_popup', 'mapPopup', 'width=800,height=600');
+      });
+    }
+
+    // 필터 영역 열기
+    const searchInput = document.getElementById("search-input");
+    const filterSection = document.getElementById("search-filters");
+    searchInput.addEventListener("focus", () => {
+      filterSection.style.display = "block";
+    });
+
+    // 검색 버튼 클릭 시 필터 수집
+    document.getElementById("search-button").addEventListener("click", () => {
+      const keyword = document.getElementById("search-input").value;
+      const title = document.getElementById("filter-title").value;
+      const skill = document.getElementById("filter-skill").value;
+      const region = document.getElementById("filter-region").value;
+
+      console.log("검색 조건:", {
+        keyword,
+        title,
+        skill,
+        region
+      });
+
+      // TODO: 서버에 요청 또는 페이지 이동
+      // window.location.href = `/search?keyword=${keyword}&title=${title}&skill=${skill}&region=${region}`;
+    });
+  };
 </script>
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>

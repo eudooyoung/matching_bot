@@ -4,14 +4,16 @@ import com.multi.matchingbot.common.domain.entities.BaseEntity;
 import com.multi.matchingbot.common.domain.enums.Role;
 import com.multi.matchingbot.common.domain.enums.Yn;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "company")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 @Builder
 public class Company extends BaseEntity {
 
@@ -24,29 +26,29 @@ public class Company extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Role role;
-
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 50)
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String password;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String address;
+    private Role role;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String name;
 
-    @Column
+    @Column(length = 20)
     private String phone;
 
     @Column(nullable = false, unique = true)
     private String businessNo;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 200)
+    private String address;
+
+    @Column(nullable = false, length = 50)
     private String industry;
 
     @Column(nullable = false)
@@ -74,7 +76,11 @@ public class Company extends BaseEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Yn agreeFinance;
+    private Yn agreeProvide;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Yn agreeOpenApi;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
