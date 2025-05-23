@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <title>내 주변 채용 공고</title>
     <style>
         #map {
@@ -9,6 +9,7 @@
             height: 500px;
             margin-bottom: 10px;
         }
+
         #search-container {
             display: flex;
             gap: 10px;
@@ -21,7 +22,7 @@
 <h2>내 주변 채용 공고</h2>
 
 <div id="search-container">
-    <input type="text" id="address-input" placeholder="주소나 장소명을 입력하세요" style="flex: 1;" />
+    <input type="text" id="address-input" placeholder="주소나 장소명을 입력하세요" style="flex: 1;"/>
     <button id="search-button">주소 검색</button>
 </div>
 
@@ -99,6 +100,7 @@
                     if (job.latitude && job.longitude) {
                         const coords = new kakao.maps.LatLng(job.latitude, job.longitude);
 
+                        // 채용공고 마커 (기본 붉은색 마커)
                         const jobMarker = new kakao.maps.Marker({
                             map,
                             position: coords
@@ -175,6 +177,7 @@
         });
     };
 </script>
+
 
 </body>
 </html>

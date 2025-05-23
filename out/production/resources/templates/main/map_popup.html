@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <title>내 주변 채용 공고</title>
     <style>
         #map {
@@ -9,6 +9,7 @@
             height: 500px;
             margin-bottom: 10px;
         }
+
         #search-container {
             display: flex;
             gap: 10px;
@@ -21,7 +22,7 @@
 <h2>내 주변 채용 공고</h2>
 
 <div id="search-container">
-    <input type="text" id="address-input" placeholder="주소나 장소명을 입력하세요" style="flex: 1;" />
+    <input type="text" id="address-input" placeholder="주소나 장소명을 입력하세요" style="flex: 1;"/>
     <button id="search-button">주소 검색</button>
 </div>
 
@@ -39,6 +40,12 @@
     function initMap() {
         const DEFAULT_LAT = 35.170833;
         const DEFAULT_LNG = 129.130556;
+
+        if (!navigator.geolocation) {
+            alert("브라우저가 위치 정보를 지원하지 않습니다. 기본 위치로 지도를 표시합니다.");
+            loadMap(DEFAULT_LAT, DEFAULT_LNG);
+            return;
+        }
 
         navigator.geolocation.getCurrentPosition(
             position => {
@@ -78,9 +85,17 @@
 
         clearJobMarkers();
 
-        fetch(`/api/jobs/nearby?lat=${lat}&lng=${lng}`)
-            .then(res => res.json())
+        fetch(`/api/maps/nearby?lat=${lat}&lng=${lng}`)
+            .then(async res => {
+                if (!res.ok) {
+                    const errorText = await res.text();
+                    throw new Error(`서버 오류 (${res.status}): ${errorText}`);
+                }
+                return res.json();
+            })
             .then(jobs => {
+                if (!Array.isArray(jobs)) throw new Error("잘못된 데이터 형식입니다.");
+
                 jobs.forEach(job => {
                     if (job.latitude && job.longitude) {
                         const coords = new kakao.maps.LatLng(job.latitude, job.longitude);
@@ -93,21 +108,18 @@
                         jobMarkers.push(jobMarker);
 
                         const content = `
-  <div style="padding:5px; font-size:14px;">
-    <strong>회사명: ${job.companyName || "미정"}</strong><br/>
-    직무: ${job.title}<br/>
-    언어: ${job.requiredSkills || "정보 없음"}<br/>
-    연봉: ${job.salary || "협의"}<br/>
-    <button onclick="window.location.href='/jobs/${job.id}'"
-            style="margin-top:5px; padding:3px 6px; font-size:13px;">
-      상세보기
-    </button>
-  </div>
-`;
-
-
+                          <div style="padding:5px; font-size:14px;">
+                            <strong>회사명: ${job.companyName || "미정"}</strong><br/>
+                            직무: ${job.title}<br/>
+                            언어: ${job.requiredSkills || "정보 없음"}<br/>
+                            연봉: ${job.salary || "협의"}<br/>
+                            <button onclick="window.location.href='/jobs/${job.id}'"
+                                    style="margin-top:5px; padding:3px 6px; font-size:13px;">
+                              상세보기
+                            </button>
+                          </div>
+                        `;
                         const infowindow = new kakao.maps.InfoWindow({ content });
-
                         kakao.maps.event.addListener(jobMarker, 'click', () => {
                             if (currentInfowindow) currentInfowindow.close();
                             currentInfowindow = infowindow;
@@ -116,7 +128,10 @@
                     }
                 });
             })
-            .catch(err => console.error("❌ 채용공고 마커 오류:", err));
+            .catch(err => {
+                console.error("❌ 채용공고 마커 오류:", err.message);
+                alert("채용공고 데이터를 불러오는 데 실패했습니다.");
+            });
     }
 
     function searchAddress() {
@@ -133,13 +148,10 @@
                 const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
                 map.setCenter(coords);
 
-                // 기존 검색 마커 제거
                 if (searchMarker) searchMarker.setMap(null);
 
-                // 새 검색 마커 추가
                 searchMarker = new kakao.maps.Marker({ map, position: coords });
 
-                // ✅ 검색된 좌표 기준으로 채용공고 마커 다시 로드
                 loadMap(result[0].y, result[0].x);
             } else {
                 alert("장소를 찾을 수 없습니다.");

@@ -10,6 +10,8 @@ spring:
   application:
     admin:
       enabled: false
+  thymeleaf:
+    cache: false
 
   jpa:
     defer-datasource-initialization: true #data.sql이 JPA 초기화 이후에 실행되도록 설정
@@ -22,7 +24,7 @@ spring:
         highlight_sql: true
 
 jwt:
-#  issuer: ${JWT_ISSUER}
+  issuer: ${JWT_ISSUER}
   secret: ${JWT_SECRET}
 
 logging:

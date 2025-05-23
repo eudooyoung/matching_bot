@@ -1,4 +1,4 @@
-package com.multi.matchingbot.auth.controller;
+package com.multi.matchingbot.user.controller;
 
 import com.multi.matchingbot.user.MemberService;
 import com.multi.matchingbot.user.domain.UserRegisterDto;

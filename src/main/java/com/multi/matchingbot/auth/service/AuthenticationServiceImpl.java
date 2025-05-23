@@ -1,138 +1,133 @@
 package com.multi.matchingbot.auth.service;
 
 
+import com.multi.matchingbot.auth.TokenProvider;
+import com.multi.matchingbot.auth.domain.RefreshTokenRepository;
+import com.multi.matchingbot.auth.domain.entities.RefreshToken;
+import com.multi.matchingbot.common.error.TokenException;
 import com.multi.matchingbot.common.security.MBotUserDetails;
-import com.multi.matchingbot.company.CompanyRepository;
-import com.multi.matchingbot.company.domain.Company;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
+import com.multi.matchingbot.common.security.MBotUserDetailsService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.security.Key;
-import java.util.*;
+import java.time.LocalDateTime;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
 
-    private final AuthenticationManager authenticationManager;
-    private final UserDetailsService userDetailsService;
-    private final CompanyRepository companyRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
+    private final MBotUserDetailsService mBotUserDetailsService;
+    private final PasswordEncoder passwordEncoder;
+    private final TokenProvider tokenProvider;
 
-    @Value("${jwt.secret}")
-    private String secretKey;
+    public UserDetails authenticate(String email, String password, String userType) {
+        UserDetails userDetails = mBotUserDetailsService.loadByType(email, userType);
 
-    private final Long jwtExpiryMs = 8640000L;
+        if (!passwordEncoder.matches(password, userDetails.getPassword())) {
+            throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
+        }
+
+        return userDetails;
+    }
 
 
     @Override
-    public UserDetails authenticate(String email, String password) {
+    @Transactional
+    public ResponseEntity<?> generateLoginResponse(UserDetails userDetails) {
 
-        try {
-            Optional<Company> company = companyRepository.findByEmail(email);
-            log.warn("회사 조회 성공: {}", company.isPresent());
-        } catch (Exception e) {
-            log.error("회사 조회 중 예외 발생", e);  // ← 이거로 실제 원인 로그 확인
+        log.warn("AuthenticationService - generateToken 호출됨");
+
+        String accessToken = tokenProvider.generateAccessToken(userDetails);
+        String refreshToken = tokenProvider.generateRefreshToken(userDetails);
+        MBotUserDetails mBotUserDetails = (MBotUserDetails) userDetails;
+        String email = mBotUserDetails.getUsername();      // email 기준
+        String userType = mBotUserDetails.getUserType();
+        LocalDateTime issuedAt = tokenProvider.getRefreshTokenIssuedDate();
+        LocalDateTime expiredAt = tokenProvider.getRefreshTokenExpireDate();
+
+
+        // refresh token 저장
+        RefreshToken tokenEntity = refreshTokenRepository.findByEmailAndUserType(email, userType)
+                .map(existing -> {
+                    existing.update(refreshToken, issuedAt, expiredAt);
+                    return existing;
+                })
+                .orElse(new RefreshToken(null, email, userType, refreshToken, expiredAt, issuedAt));
+
+        refreshTokenRepository.save(tokenEntity);
+
+        log.warn("Access, Refresh 토큰 생성 성공");
+
+        //쿠키 생성
+        ResponseCookie accessCookie = ResponseCookie.from("accessToken", accessToken)
+                .httpOnly(true)
+                .secure(false) // HTTPS 시 true
+                .path("/")
+                .maxAge(tokenProvider.getAccessTokenExpireTime())
+                .build();
+
+        ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", refreshToken)
+                .httpOnly(true)
+                .secure(false)
+                .path("/")
+                .maxAge(tokenProvider.getRefreshTokenExpireTime())
+                .build();
+
+        log.warn("쿠키 생성 완료");
+
+        //쿠키 포함 응답 반환
+        return ResponseEntity.ok()
+                .header("Set-Cookie", accessCookie.toString())
+                .header("Set-Cookie", refreshCookie.toString())
+                .body("OK"); // 또는 return ResponseEntity.noContent().build();
+    }
+
+    @Transactional
+    @Override
+    public void refreshTokenAndSetCookie(String refreshToken, HttpServletResponse response) {
+        // 토큰에서 userId, userType 추출
+        String email = tokenProvider.extractUsername(refreshToken);
+        String userType = tokenProvider.parseClaims(refreshToken).get("userType", String.class);
+
+        // DB조회
+        RefreshToken savedToken = refreshTokenRepository.findByEmailAndUserType(email, userType)
+                .orElseThrow(() -> new TokenException("저장된 리프레시 토큰이 없습니다."));
+
+        // 일치확인
+        if (!savedToken.getRefreshToken().equals(refreshToken)) {
+            throw new TokenException("리프레시 토큰이 일치하지 않습니다.");
         }
 
-        log.warn("authenticate 확인 1");
-        /*Authentication authentication =  authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(email, password)
-        );
-        // 인증 성공 여부 로그
-        log.warn("✅ AuthenticationManager 통과 - principal: {}", authentication.getPrincipal());
-
-        log.warn("authenticate 확인 2");
+        // access 토큰 재발급
+        UserDetails userDetails = mBotUserDetailsService.loadUserByUsername(email);
+        String newAccessToken = tokenProvider.generateAccessToken(userDetails);
 
 
-        return userDetailsService.loadUserByUsername(email);*/
+        ResponseCookie accessCookie = ResponseCookie.from("accessToken", newAccessToken)
+                .httpOnly(true)
+                .secure(false)
+                .path("/")
+                .maxAge(tokenProvider.getAccessTokenExpireTime())
+                .build();
 
-
-        log.warn("요청 password: [{}]", password);
-
-        try {
-            var authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(email, password)
-            );
-            log.warn("AuthenticationManager 통과 - principal: {}", authentication.getPrincipal());
-
-            var userDetails = (MBotUserDetails) authentication.getPrincipal();
-            log.warn("권한: {}", userDetails.getAuthorities());
-
-            log.warn("password.equals(): {}", password.equals(userDetails.getPassword()));
-
-            return userDetails;
-        } catch (Exception e) {
-            log.error("인증 중 예외 발생", e);
-            throw e;
-        }
+        response.addHeader("Set-Cookie", accessCookie.toString());
     }
 
     @Override
-    public String generateToken(UserDetails userdetails) {
-
-        log.warn("JWT 시작");
-        try {
-
-
-            MBotUserDetails matchingBotUserDetails = (MBotUserDetails) userdetails;
-            log.warn("userDetails 캐스팅 성공: {}", matchingBotUserDetails.getUsername());
-
-            Map<String, Object> claims = new HashMap<>();
-
-            claims.put("userType", matchingBotUserDetails.getUserType());
-            claims.put("userId", matchingBotUserDetails.getId());
-
-            log.warn("클레임 설정 완료: userType={}, userId={}", matchingBotUserDetails.getUserType(), matchingBotUserDetails.getId());
-
-            String token = Jwts.builder()
-                    .setClaims(claims)
-                    .setSubject(userdetails.getUsername())
-                    .setIssuedAt(new Date(System.currentTimeMillis()))
-                    .setExpiration(new Date(System.currentTimeMillis() + jwtExpiryMs))
-                    .signWith(getSigningKey(), SignatureAlgorithm.HS256)
-                    .compact();
-
-            log.warn("JWT 생성 성공");
-
-            return token;
-
-        } catch (Exception ex) {
-            log.error("JWT 생성 중 예외 발생", ex);
-            throw new RuntimeException("JWT 생성 실패");
-        }
+    @Transactional
+    public void logout(String refreshToken) {
+        refreshTokenRepository.deleteByRefreshToken(refreshToken);
     }
 
-    @Override
-    public UserDetails validateToken(String token) {
-        String username = extractUsername(token);
-        return userDetailsService.loadUserByUsername(username);
-    }
 
-    private String extractUsername(String token) {
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-
-        return claims.getSubject();
-
-    }
-
-    private Key getSigningKey() {
-        byte[] keyBytes = Base64.getDecoder().decode(secretKey);
-        log.warn("secretKey 길이 (bytes): {}", keyBytes.length);
-        return Keys.hmacShaKeyFor(keyBytes);
-    }
 }

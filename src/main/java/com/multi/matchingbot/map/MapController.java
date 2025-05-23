@@ -11,8 +11,8 @@ public class MapController {
         return "main/map_popup";
     }
 
-    @GetMapping("/main")
-    public String mainPage() {
-        return "main/main";
-    }
+//    @GetMapping("/main")
+//    public String mainPage() {
+//        return "main/main";
+//    }
 }

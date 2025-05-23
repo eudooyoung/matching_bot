@@ -10,6 +10,7 @@ public class MatchingBotApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(MatchingBotApplication.class, args);
+
     }
 
 }

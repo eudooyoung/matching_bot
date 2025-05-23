@@ -20,31 +20,50 @@ public class MBotUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        throw new UnsupportedOperationException("이 서비스는 loadByType(...)만 지원합니다.");
+    }
 
-        log.warn("loadUserByUsername 확인");
+    public UserDetails loadByType(String email, String userType) {
+        log.warn("▶ loadByType 호출 - email: {}, userType: {}", email, userType);
 
-        return userRepository.findByEmail(email)
-                .map(user -> {
-                    log.warn("DB password (user): [{}]", user.getPassword());
-                    return new MBotUserDetails(user.getEmail(),
-                            user.getPassword(),
-                            user.getRole(),
-                            "USER",
-                            user.getId()
-                    );
-                })
-                .orElseGet(() -> companyRepository.findByEmail(email)
+        switch (userType.toUpperCase()) {
+            case "USER":
+                return userRepository.findByEmail(email)
+                        .map(user -> {
+                            log.warn("✔ 개인회원 로그인 성공 - {}", email);
+                            return new MBotUserDetails(
+                                    user.getEmail(),
+                                    user.getPassword(),
+                                    user.getRole(),
+                                    "USER",
+                                    user.getId()
+                            );
+                        })
+                        .orElseThrow(() -> {
+                            log.warn("✖ 개인회원 조회 실패 - {}", email);
+                            return new UsernameNotFoundException("개인회원 없음: " + email);
+                        });
+
+            case "COMPANY":
+                return companyRepository.findByEmail(email)
                         .map(company -> {
-                            log.warn("DB password (company): [{}]", company.getPassword());
-                            return new MBotUserDetails(company.getEmail(),
+                            log.warn("✔ 기업회원 로그인 성공 - {}", email);
+                            return new MBotUserDetails(
+                                    company.getEmail(),
                                     company.getPassword(),
                                     company.getRole(),
                                     "COMPANY",
                                     company.getId()
                             );
                         })
-                        .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email))
-                );
+                        .orElseThrow(() -> {
+                            log.warn("✖ 기업회원 조회 실패 - {}", email);
+                            return new UsernameNotFoundException("기업회원 없음: " + email);
+                        });
 
+            default:
+                log.error("❌ 알 수 없는 userType: {}", userType);
+                throw new IllegalArgumentException("지원하지 않는 userType: " + userType);
+        }
     }
 }

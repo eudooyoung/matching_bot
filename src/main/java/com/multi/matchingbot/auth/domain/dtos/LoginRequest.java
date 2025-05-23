@@ -1,4 +1,4 @@
-package com.multi.matchingbot.auth.domain;
+package com.multi.matchingbot.auth.domain.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AuthResponse {
-    private String token;
-    private long expiresIn;
+public class LoginRequest {
+    private String email;
+    private String password;
+    private String userType;
 }
