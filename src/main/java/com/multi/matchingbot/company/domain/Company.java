@@ -1,5 +1,6 @@
 package com.multi.matchingbot.company.domain;
 
+import com.multi.matchingbot.common.domain.entities.BaseEntity;
 import com.multi.matchingbot.common.domain.enums.Role;
 import com.multi.matchingbot.common.domain.enums.Yn;
 import jakarta.persistence.*;
@@ -12,7 +13,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class Company {
+public class Company extends BaseEntity{
 
     // 할일
     // validation 처리
@@ -43,7 +44,7 @@ public class Company {
     private String phone;
 
     @Column(nullable = false, unique = true)
-    private long businessNo;
+    private String businessNo;
 
     @Column(nullable = false)
     private String industry;
@@ -73,7 +74,11 @@ public class Company {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Yn agreeFinance;
+    private Yn agreeProvide;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Yn agreeOpenApi;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -82,5 +87,7 @@ public class Company {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Yn agreeThirdParty;
+
+
 
 }

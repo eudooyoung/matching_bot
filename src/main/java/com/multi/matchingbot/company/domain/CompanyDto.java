@@ -15,7 +15,7 @@ public class CompanyDto {
     private String email;
     private String name;
     private String phone;
-    private Long businessNo;
+    private String businessNo;
     private String address;
     private String industry;
     private int yearFound;
