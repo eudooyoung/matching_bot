@@ -53,7 +53,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/v1/company/**").hasAnyRole("COMPANY", "ADMIN")
                                 .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                                 .requestMatchers("/", "/main", "/css/**", "/map_popup").permitAll() // ✅ 이 줄 추가
-                                .requestMatchers("/api/jobs/**").permitAll() // 지도용 채용공고 API 허용
+                                .requestMatchers("/api/maps/**").permitAll() // 지도용 채용공고 API 허용
 
 
 
@@ -81,6 +81,17 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf().disable()
+                .authorizeHttpRequests(auth -> auth
+                        .anyRequest().permitAll()
+                );
+
+        return http.build();
     }
 
 }

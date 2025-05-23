@@ -24,8 +24,6 @@ public class MapPosting extends BaseEntity {
 
     private String address;
 
-//    private java.time.LocalDate endDate;
-
     @Column(name = "end_date")
     private java.time.LocalDate endDate;
 
