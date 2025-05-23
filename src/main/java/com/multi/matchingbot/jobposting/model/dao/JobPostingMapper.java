@@ -1,6 +1,6 @@
 package com.multi.matchingbot.jobposting.model.dao;
 
-import com.multi.matchingbot.company.Company;
+import com.multi.matchingbot.company.domain.Company;
 import com.multi.matchingbot.jobposting.JobPosting;
 import com.multi.matchingbot.jobposting.model.dto.JobPostingDto;
 import org.springframework.beans.BeanUtils;
@@ -8,9 +8,6 @@ import org.springframework.beans.BeanUtils;
 public class JobPostingMapper {
 
     public static JobPostingDto toDto(JobPosting entity) {
-
-        System.out.println("🟡 [Mapper] entity.getStartDate() = " + entity.getStartDate());
-        System.out.println("🟡 [Mapper] entity.getEndDate() = " + entity.getEndDate());
 
         JobPostingDto dto = new JobPostingDto();
         dto.setId(entity.getId());

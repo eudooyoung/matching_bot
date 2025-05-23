@@ -1,15 +1,17 @@
 package com.multi.matchingbot.company.domain;
 
+import com.multi.matchingbot.common.domain.entities.BaseEntity;
+import com.multi.matchingbot.common.domain.enums.Role;
+import com.multi.matchingbot.common.domain.enums.Yn;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "company")
 @Data
 @NoArgsConstructor
-public class Company {
+public class Company extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,11 +30,11 @@ public class Company {
     @Column(nullable = false, length = 50)
     private String name;
 
-    @Column(length = 11)
+    @Column(length = 20)
     private String phone;
 
     @Column(nullable = false, unique = true)
-    private Long businessNo;
+    private String businessNo;
 
     @Column(nullable = false, length = 200)
     private String address;
@@ -41,54 +43,37 @@ public class Company {
     private String industry;
 
     @Column(nullable = false)
-    private Integer yearFound;
+    private int yearFound;
 
     @Column(nullable = false)
-    private Integer headcount;
+    private int headcount;
 
     @Column(nullable = false)
-    private Long annualRevenue;
+    private int annualRevenue;
 
     @Column(nullable = false)
-    private Long operatingIncome;
+    private int operatingIncome;
 
     @Column(nullable = false)
-    private Integer jobsLastYear;
+    private int jobsLastYear;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private YesNo agreeTerms;
+    private Yn agreeTerms;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private YesNo agreePrivacy;
+    private Yn agreePrivacy;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private YesNo agreeFinance;
+    private Yn agreeFinance;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private YesNo agreeMarketing;
+    private Yn agreeMarketing;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private YesNo agreeThirdParty;
-
-    @Column(nullable = false, length = 50)
-    private String createdBy;
-
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
-    private String updatedBy;
-    private LocalDateTime updatedAt;
-
-    public enum Role {
-        COMPANY
-    }
-
-    public enum YesNo {
-        Y, N
-    }
+    private Yn agreeThirdParty;
 }
