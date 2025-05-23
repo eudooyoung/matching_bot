@@ -3,15 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <title>MatchingBot 기업 홈</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+<!--    <link rel="stylesheet" th:href="@{/css/style.css}">-->
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+
 </head>
 <body>
-<div class="navbar">
-    <a href="/main" class="logo">MatchingBot</a>
-    <button class="nav-button">커뮤니티</button>
-    <button class="nav-button" onclick="goToMyPage()">마이페이지</button>
-    <span class="user-name" th:text="${company_name}"></span>
-</div>
+<!--확인용-->
+<p th:text="'현재 userType: ' + ${userType}"></p>
+<!-- Header Fragment -->
+<div th:replace="~{fragments/header :: header(userType=${userType})}"></div>
+<!--<div class="navbar">-->
+<!--    <a href="/main" class="logo">MatchingBot</a>-->
+<!--    <button class="nav-button">커뮤니티</button>-->
+<!--    <button class="nav-button" onclick="goToMyPage()">마이페이지</button>-->
+<!--    <span class="user-name" th:text="${company_name}"></span>-->
+<!--</div>-->
 
 <div class="container">
     <h2>기업 홈</h2>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>공고 수정하기</title>
+    <link rel="stylesheet" th:href="@{/css/mypage.css}" />
+    <style>
+        .form-box {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 8px rgba(0,0,0,0.05);
+        }
+
+        .form-box label {
+            display: block;
+            font-weight: bold;
+            margin-top: 16px;
+        }
+
+        .form-box input[type="text"],
+        .form-box input[type="email"],
+        .form-box input[type="date"],
+        .form-box textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 4px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .form-box button {
+            margin-top: 24px;
+            padding: 10px 18px;
+            background-color: #1a2b49;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .form-box button:hover {
+            background-color: #2e4064;
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <a href="/main" class="logo">MatchingBot</a>
+    <button class="nav-button">커뮤니티</button>
+    <button class="nav-button" onclick="goToMyPage()">마이페이지</button>
+    <span class="user-name" th:text="${company_name}"></span>
+</div>
+
+<div class="form-box">
+    <h2>공고 수정하기</h2>
+
+    <form th:action="@{'/job/' + ${job.id} + '/edit'}" method="post">
+        <input type="hidden" name="id" th:value="${job.id}" />
+
+        <label>제목</label>
+        <input type="text" name="title" th:value="${job.title}" required />
+
+        <label>설명</label>
+        <textarea name="description" rows="3" th:text="${job.description}"></textarea>
+
+        <label>근무지</label>
+        <input type="text" name="address" th:value="${job.address}" />
+
+        <label>주요 업무</label>
+        <textarea name="mainTask" rows="2" th:text="${job.mainTask}"></textarea>
+
+        <label>필요 기술</label>
+        <textarea name="requiredSkills" rows="2" th:text="${job.requiredSkills}"></textarea>
+
+        <label>필요 성향</label>
+        <textarea name="requiredTraits" rows="2" th:text="${job.requiredTraits}"></textarea>
+
+        <label>기술 키워드</label>
+        <input type="text" name="skillKeywords" th:value="${job.skillKeywords}" />
+
+        <label>성향 키워드</label>
+        <input type="text" name="traitKeywords" th:value="${job.traitKeywords}" />
+
+        <label>채용 시작일</label>
+        <input type="date" name="startDate" th:value="${job.startDate}" />
+
+        <label>채용 마감일</label>
+        <input type="date" name="endDate" th:value="${job.endDate}" />
+
+        <label>지원 이메일</label>
+        <input type="email" name="enrollEmail" th:value="${job.enrollEmail}" />
+
+        <label>유의사항</label>
+        <textarea name="notice" rows="2" th:text="${job.notice}"></textarea>
+
+        <div style="margin-top: 24px;">
+            <button type="submit">수정</button>
+            <button type="button" onclick="location.href='/job/manage_jobs'">목록으로</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

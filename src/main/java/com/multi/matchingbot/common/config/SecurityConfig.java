@@ -50,12 +50,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
 //                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers("/", "/main", "/css/**", "/map_popup", "/js/**", "/favicon.ico").permitAll()
-                                .requestMatchers("/auth/register", "/auth/login").permitAll()
+                                .requestMatchers("/auth/register", "/auth/login", "/company").permitAll()
                                 .requestMatchers("/api/v1/auth/**", "/api/maps/**").permitAll()
                                 .requestMatchers("/auth/register-company").permitAll()
                                 .requestMatchers("/api/v1/auth/**").permitAll()
                                 .requestMatchers("/api/v1/user/**").hasAnyRole("USER", "ADMIN")
-                                .requestMatchers("/api/v1/company/**").hasAnyRole("COMPANY", "ADMIN")
+                                .requestMatchers("/company/**").hasAnyRole("COMPANY", "ADMIN")
                                 .requestMatchers("/admin/**").hasAnyRole("ADMIN")
 
                                 .anyRequest().authenticated()
