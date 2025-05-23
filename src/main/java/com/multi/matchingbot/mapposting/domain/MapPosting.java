@@ -1,7 +1,7 @@
 package com.multi.matchingbot.mapposting.domain;
 
 import com.multi.matchingbot.common.domain.entities.BaseEntity;
-import com.multi.matchingbot.company.domain.Company;
+import com.multi.matchingbot.company.domain.CompanyTY;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,7 +31,7 @@ public class MapPosting extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
-    private Company company;
+    private CompanyTY company;
 
     @Column
     private Double latitude;

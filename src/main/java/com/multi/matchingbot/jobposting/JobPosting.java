@@ -2,7 +2,7 @@ package com.multi.matchingbot.jobposting;
 
 
 import com.multi.matchingbot.common.domain.entities.BaseEntity;
-import com.multi.matchingbot.company.domain.Company;
+import com.multi.matchingbot.company.domain.CompanyTY;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,7 +23,7 @@ public class JobPosting extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id", nullable = false)
-    private Company company;
+    private CompanyTY company;
 
     @Column(name = "occupation_id", nullable = false)
     private Long occupationId;

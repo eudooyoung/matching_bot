@@ -13,7 +13,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class Company extends BaseEntity{
+public class CompanyTY extends BaseEntity{
 
     // 할일
     // validation 처리

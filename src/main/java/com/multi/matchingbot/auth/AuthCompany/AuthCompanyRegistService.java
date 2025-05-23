@@ -2,7 +2,7 @@ package com.multi.matchingbot.auth.AuthCompany;
 
 import com.multi.matchingbot.common.domain.enums.Role;
 import com.multi.matchingbot.common.domain.enums.Yn;
-import com.multi.matchingbot.company.domain.Company;
+import com.multi.matchingbot.company.domain.CompanyTY;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ public class AuthCompanyRegistService {
             throw new IllegalArgumentException("이미 등록된 이메일입니다.");
         }
 
-        Company company = Company.builder()
+        CompanyTY company = CompanyTY.builder()
                 .email(dto.getEmail())
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .name(dto.getName())
