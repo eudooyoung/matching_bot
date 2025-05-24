@@ -35,7 +35,7 @@ public class MBotUserDetailsService implements UserDetailsService {
                                     user.getEmail(),
                                     user.getPassword(),
                                     user.getRole(),
-                                    "USER",
+//                                    "USER",
                                     user.getId()
                             );
                         })
@@ -52,13 +52,30 @@ public class MBotUserDetailsService implements UserDetailsService {
                                     company.getEmail(),
                                     company.getPassword(),
                                     company.getRole(),
-                                    "COMPANY",
+//                                    "COMPANY",
                                     company.getId()
                             );
                         })
                         .orElseThrow(() -> {
                             log.warn("✖ 기업회원 조회 실패 - {}", email);
                             return new UsernameNotFoundException("기업회원 없음: " + email);
+                        });
+
+            case "ADMIN":
+                return userRepository.findByEmail(email)
+                        .map(user -> {
+                            log.warn("✔ 관리자 로그인 성공 - {}", email);
+                            return new MBotUserDetails(
+                                    user.getEmail(),
+                                    user.getPassword(),
+                                    user.getRole(),
+//                                    "ADMIN",
+                                    user.getId()
+                            );
+                        })
+                        .orElseThrow(() -> {
+                            log.warn("✖ 관리자 조회 실패 - {}", email);
+                            return new UsernameNotFoundException("관리자 없음: " + email);
                         });
 
             default:

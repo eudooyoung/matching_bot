@@ -51,7 +51,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String refreshToken = tokenProvider.generateRefreshToken(userDetails);
         MBotUserDetails mBotUserDetails = (MBotUserDetails) userDetails;
         String email = mBotUserDetails.getUsername();      // email 기준
-        String userType = mBotUserDetails.getUserType();
+        String userType = mBotUserDetails.getRole().name();
         LocalDateTime issuedAt = tokenProvider.getRefreshTokenIssuedDate();
         LocalDateTime expiredAt = tokenProvider.getRefreshTokenExpireDate();
 

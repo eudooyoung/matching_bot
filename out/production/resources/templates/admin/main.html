@@ -5,13 +5,13 @@
     <meta charset="UTF-8"/>
     <title>관리자 로그인</title>
     <link rel="stylesheet" th:href="@{/css/common_plain.css}"/>
-    <link rel="stylesheet" th:href="@{/css/admin_login.css}"/>
+<!--    <link rel="stylesheet" th:href="@{/css/admin_login.css}"/>-->
 </head>
 <body>
 <!-- Header -->
-<div th:replace="fragments/header_plain :: header"></div>
+<div th:replace="~{fragments/header :: header(userType=${userType})}"></div>
 
-<div class="login-container" method="post">
+<div class="login-container">
     <h2>관리자 로그인</h2>
     <form id="admin-form" class="login-form">
         <label for="email">이메일</label>
@@ -53,7 +53,7 @@
     }
 
     // ✅ userType 명시
-    document.getElementById("admin-form").addEventListener("submit", function (e) {
+    document.getElementById("member-form").addEventListener("submit", function (e) {
         e.preventDefault();
         handleLogin("email", "password", "ADMIN");
     });

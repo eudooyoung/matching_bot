@@ -1,7 +1,6 @@
 package com.multi.matchingbot.auth.controller;
 
 import com.multi.matchingbot.auth.domain.dtos.LoginRequest;
-import com.multi.matchingbot.auth.domain.dtos.TokenDto;
 import com.multi.matchingbot.auth.service.AuthenticationService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +36,7 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<TokenDto> refresh(@CookieValue(value = "refreshToken", required = false) String refreshToken,
+    public ResponseEntity<Void> refresh(@CookieValue(value = "refreshToken", required = false) String refreshToken,
                                             HttpServletResponse response) {
 
         log.warn("리프레시 요청 수신 (쿠키 기반)");

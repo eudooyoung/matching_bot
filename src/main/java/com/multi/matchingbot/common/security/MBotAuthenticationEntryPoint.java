@@ -15,6 +15,12 @@ import java.io.IOException;
 public class MBotAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+
+        if (request.getRequestURI().startsWith("/.well-known/")) {
+            response.setStatus(HttpServletResponse.SC_NO_CONTENT); // 204 No Content
+            return;
+        }
+
         log.warn("인증 실패: 인증되지 않은 사용자가 {} 경로에 접근하려고 했습니다. 401 Unauthorized 반환.", request.getRequestURI());
 
         // 401 Unauthorized 상태 코드와 JSON 메시지 직접 작성

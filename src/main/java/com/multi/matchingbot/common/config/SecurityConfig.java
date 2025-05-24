@@ -49,8 +49,8 @@ public class SecurityConfig {
                         .accessDeniedHandler(mBotAccessDeniedHandler))
                 .authorizeHttpRequests(auth -> auth
 //                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                                .requestMatchers("/", "/main", "/css/**", "/map_popup", "/js/**", "/favicon.ico").permitAll()
-                                .requestMatchers("/auth/register", "/auth/login", "/company").permitAll()
+                                .requestMatchers("/", "/main", "/css/**", "/map_popup", "/js/**", "/favicon.ico", ".well-known/").permitAll()
+                                .requestMatchers("/auth/register", "/auth/login", "/company", "/admin/login").permitAll()
                                 .requestMatchers("/api/v1/auth/**", "/api/maps/**").permitAll()
                                 .requestMatchers("/auth/register-company").permitAll()
                                 .requestMatchers("/api/v1/auth/**").permitAll()

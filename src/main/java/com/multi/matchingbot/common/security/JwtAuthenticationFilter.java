@@ -45,7 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             "/js/**",
             "/css/**",
             "/images/**",
-//        "/favicon.ico"
+            "/.well-known/**"
     };
 
     @Override
@@ -106,7 +106,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             if (userDetails instanceof MBotUserDetails mBotUserDetails) {
                 request.setAttribute("userId", mBotUserDetails.getId());
-                request.setAttribute("userType", mBotUserDetails.getUserType());
+                request.setAttribute("userType", mBotUserDetails.getRole());
                 log.warn("JWT 인증 필터 통과 - 유저: {}, 권한: {}", userDetails.getUsername(), userDetails.getAuthorities());
             }
         } catch (Exception ex) {

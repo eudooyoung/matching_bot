@@ -2,8 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>로그인</title>
-    <link rel="stylesheet" href="/css/common1.css"/>
-    <link rel="stylesheet" th:if="${userType == null}" href="/css/common.css"/>
+    <link rel="stylesheet" href="/css/common.css"/>
     <style>
         .login-container {
             max-width: 400px;
@@ -62,6 +61,7 @@
             color: white;
             padding: 0.75rem;
             border: none;
+            font-size: 1rem;
             border-radius: 4px;
             cursor: pointer;
         }
@@ -70,7 +70,8 @@
 <body>
 
 <!-- 공통 헤더 -->
-<div th:replace="~{fragments/header_plain :: header}"></div>
+<div th:replace="~{fragments/header :: header(userType=${userType})}"></div>
+
 
 <div class="login-container">
     <div class="tab-buttons">
@@ -88,7 +89,7 @@
     </form>
 
     <!-- 기업 회원 로그인 폼 -->
-    <form th:action="@{/auth/login}" method="post" class="login-form" id="company-form">
+    <form  method="post" class="login-form" id="company-form">
         <label for="email2">이메일</label>
         <input type="email" id="email2" name="email" required/>
         <label for="password2">비밀번호</label>

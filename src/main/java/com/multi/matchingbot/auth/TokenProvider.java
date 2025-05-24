@@ -27,7 +27,7 @@ public class TokenProvider {
     @Value("${jwt.issuer}")
     private String issuer;
 
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 3;
+    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 1;
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000L * 60 * 5;
 
     public String generateAccessToken(UserDetails userDetails) {
@@ -45,7 +45,7 @@ public class TokenProvider {
         Map<String, Object> claims = new HashMap<>();
 
         // 클레임 요소 추가
-        claims.put("userType", mBotUserDetails.getUserType());
+        claims.put("userType", mBotUserDetails.getRole());
         claims.put("userId", mBotUserDetails.getId());
 
         /*
@@ -59,7 +59,7 @@ public class TokenProvider {
             .toList());
 
         log.warn("클레임 설정 완료: userType={}, userId={}, userAuth={}",
-                mBotUserDetails.getUserType(), mBotUserDetails.getId(), mBotUserDetails.getAuthorities());
+                mBotUserDetails.getRole(), mBotUserDetails.getId(), mBotUserDetails.getAuthorities());
 
 
         return Jwts.builder()
@@ -75,7 +75,7 @@ public class TokenProvider {
 
     private Key getSigningKey() {
         byte[] keyBytes = Base64.getDecoder().decode(secretKey);                        // JWT키 디코드
-        log.warn("secretKey 길이 (bytes): {}", keyBytes.length);
+//        log.warn("secretKey 길이 (bytes): {}", keyBytes.length);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
