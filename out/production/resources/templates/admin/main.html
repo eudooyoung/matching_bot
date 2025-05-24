@@ -4,60 +4,23 @@
 <head>
     <meta charset="UTF-8"/>
     <title>관리자 로그인</title>
-    <link rel="stylesheet" th:href="@{/css/common_plain.css}"/>
-<!--    <link rel="stylesheet" th:href="@{/css/admin_login.css}"/>-->
+    <link rel="stylesheet" th:href="@{/css/layout.css}"/>
 </head>
 <body>
-<!-- Header -->
-<div th:replace="~{fragments/header :: header(userType=${userType})}"></div>
+<div class="wrapper">
+    <!-- Header -->
+    <div th:replace="~{fragments/header :: header(role=${role})}"></div>
 
-<div class="login-container">
-    <h2>관리자 로그인</h2>
-    <form id="admin-form" class="login-form">
-        <label for="email">이메일</label>
-        <input type="email" id="email" name="email" required/>
-        <label for="password">비밀번호</label>
-        <input type="password" id="password" name="password" required/>
-        <button type="submit">로그인</button>
-        <div class="error-msg" th:if="${param.error}" th:text="'로그인 정보가 올바르지 않습니다.'"></div>
-    </form>
+    <div class="main-content">
+
+        <h2 style="text-align: center">환영합니다 관리자님</h2>
+
+    </div>
+
+    <!-- Footer -->
+    <div th:replace="fragments/footer :: footer"></div>
+
 </div>
-
-<!-- Footer -->
-<div th:replace="fragments/footer :: footer"></div>
-
-<script>
-    async function handleLogin(emailId, passwordId, userType) {
-        const email = document.getElementById(emailId).value;
-        const password = document.getElementById(passwordId).value;
-
-        try {
-            const response = await fetch("/api/v1/auth/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({email, password, userType}) // ✅ 포함됨
-            });
-
-            if (response.ok) {
-                window.location.href = "admin/main"; // ✅ 쿠키 인증 유지됨
-            } else {
-                const errorText = await response.text();
-                alert("로그인 실패: " + errorText);
-            }
-        } catch (err) {
-            console.error("로그인 중 오류:", err);
-            alert("로그인 중 오류가 발생했습니다.");
-        }
-    }
-
-    // ✅ userType 명시
-    document.getElementById("member-form").addEventListener("submit", function (e) {
-        e.preventDefault();
-        handleLogin("email", "password", "ADMIN");
-    });
-</script>
 </body>
 </html>
 

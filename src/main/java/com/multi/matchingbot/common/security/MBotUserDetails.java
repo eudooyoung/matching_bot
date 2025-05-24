@@ -30,13 +30,13 @@ public class MBotUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        log.warn("권한 반환 - ROLE_{}", role);
+//        log.warn("권한 반환 - ROLE_{}", role);
         return List.of(new SimpleGrantedAuthority("ROLE_" + role));
     }
 
     @Override
     public String getPassword() {
-        log.warn("getPassword() 호출됨: {}", password);
+//        log.warn("getPassword() 호출됨: {}", password);
         return this.password;
     }
 

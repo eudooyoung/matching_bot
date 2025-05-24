@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>접근 거부</title>
+    <link rel="stylesheet" th:href="@{/css/layout.css}"/>
+</head>
+<body>
+<div class="wrapper">
+    <header class="header">
+        <div class="logo">
+            <a th:href="@{/}" class="logo-link">MatchingBot</a>
+        </div>
+    </header>
+
+    <main class="main-content" style="text-align: center; padding: 3rem;">
+        <h1>403 - 접근이 거부되었습니다</h1>
+        <p>이 페이지에 접근할 수 있는 권한이 없습니다.</p>
+        <a th:href="@{/}" class="menu-button green" style="margin-top: 2rem;">홈으로 가기</a>
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</div>
+</body>
+</html>

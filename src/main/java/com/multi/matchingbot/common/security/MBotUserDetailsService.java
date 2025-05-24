@@ -33,7 +33,7 @@ public class MBotUserDetailsService implements UserDetailsService {
         switch (role) {
             case USER:
                 return userRepository.findByEmail(email)
-                        .map(user -> validateType(email, role, user, "개인 회원"))
+                        .map(user -> validateType(email, role, user, "개인 회원이"))
                         .orElseThrow(() -> {
                             log.warn("개인회원 조회 실패 - {}", email);
                             return new UsernameNotFoundException("해당 이메일의 개인 회원이 존재하지 않습니다.");
@@ -41,7 +41,7 @@ public class MBotUserDetailsService implements UserDetailsService {
 
             case COMPANY:
                 return companyRepository.findByEmail(email)
-                        .map(company -> validateType(email, role, company, "기업 회원"))
+                        .map(company -> validateType(email, role, company, "기업 회원이"))
                         .orElseThrow(() -> {
                             log.warn("기업회원 조회 실패 - {}", email);
                             return new UsernameNotFoundException("해당 이메일의 기업 회원이 존재하지 않습니다.");
@@ -49,7 +49,7 @@ public class MBotUserDetailsService implements UserDetailsService {
 
             case ADMIN:
                 return userRepository.findByEmail(email)
-                        .map(user -> validateType(email, role, user, "관리자"))
+                        .map(user -> validateType(email, role, user, "관리자가"))
                         .orElseThrow(() -> {
                             log.warn("관리자 조회 실패 - {}", email);
                             return new UsernameNotFoundException("해당 이메일의 관리자가 존재하지 않습니다.");
@@ -64,7 +64,7 @@ public class MBotUserDetailsService implements UserDetailsService {
     private MBotUserDetails validateType(String email, Role role, User user, String label) {
         if (user.getRole() != role) {
             log.warn("{} 타입 불일치 -  email: {}, expectedRole: {}, frondInput: {}", label, user.getEmail(), user.getRole(), role);
-            throw new InvalidRoleException(label + "이 아닙니다.");
+            throw new InvalidRoleException(label + " 아닙니다.");
         }
         log.warn("{} 로그인 성공 - {}", label, email);
 
@@ -79,7 +79,7 @@ public class MBotUserDetailsService implements UserDetailsService {
     private MBotUserDetails validateType(String email, Role role, Company company, String label) {
         if (company.getRole() != role) {
             log.warn("{} 타입 불일치 -  email: {}, expectedRole: {}, frondInput: {}", label, company.getEmail(), company.getRole(), role);
-            throw new InvalidRoleException(label + "이 아닙니다.");
+            throw new InvalidRoleException(label + " 아닙니다.");
         }
         log.warn("{} 로그인 성공 - {}", label, email);
 

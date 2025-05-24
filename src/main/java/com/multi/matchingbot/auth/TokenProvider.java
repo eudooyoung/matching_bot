@@ -27,8 +27,8 @@ public class TokenProvider {
     @Value("${jwt.issuer}")
     private String issuer;
 
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 1;
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000L * 60 * 5;
+    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;
+    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000L * 60 * 100;
 
     public String generateAccessToken(UserDetails userDetails) {
         return generateToken(userDetails, ACCESS_TOKEN_EXPIRE_TIME);
@@ -45,7 +45,7 @@ public class TokenProvider {
         Map<String, Object> claims = new HashMap<>();
 
         // 클레임 요소 추가
-        claims.put("role", mBotUserDetails.getRole());
+        claims.put("role", mBotUserDetails.getRole().name());
         claims.put("userId", mBotUserDetails.getId());
 
 //        화면 출력 확인
@@ -74,12 +74,14 @@ public class TokenProvider {
 
     public Claims parseClaims(String token) {
         try {
+//            log.warn("클레임 파싱 시작");
             return Jwts.parserBuilder()
                     .setSigningKey(getSigningKey())
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
         } catch (ExpiredJwtException e) {           // 만료되어도 정보를 꺼내서 던짐
+//            log.warn("토큰 만료");
             return e.getClaims();
         }
     }

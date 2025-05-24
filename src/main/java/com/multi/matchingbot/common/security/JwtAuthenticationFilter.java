@@ -45,7 +45,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             "/js/**",
             "/css/**",
             "/images/**",
-            "/.well-known/**"
+            "/.well-known/**",
+            "/error/**"
     };
 
     @Override
@@ -85,10 +86,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     // 응답 인가 처리
     private void authenticateRequest(String token, HttpServletRequest request) {
         try {
+//            log.warn("인가 요청 진입");
             String email = tokenProvider.extractUsername(token);
-            Role userType = tokenProvider.parseClaims(token).get("userType", Role.class);
+//            log.warn("유저 이메일 복원: {}", email);
+            String roleStr = tokenProvider.parseClaims(token).get("role", String.class);
+            Role role = Role.valueOf(roleStr);
+//            log.warn("유저 정보 복원 완료 email: {}, role: {}", email, role);
 
-            UserDetails userDetails = mBotUserDetailsService.loadUserByType(email, userType);
+            UserDetails userDetails = mBotUserDetailsService.loadUserByType(email, role);
+//            log.warn("userDetail 생성");
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     userDetails,
@@ -128,6 +134,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     // 토큰 추출
     private String extractToken(HttpServletRequest request) {
+//        log.warn("토큰 추출 진입");
         if (request.getCookies() == null) return null;
 
         for (Cookie cookie : request.getCookies()) {

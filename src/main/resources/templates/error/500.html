@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>서버 오류</title>
+    <link rel="stylesheet" th:href="@{/css/layout.css}"/>
+</head>
+
+<body>
+<div class="wrapper">
+    <header class="header">
+        <div class="logo">
+            <a th:href="@{/}" class="logo-link">MatchingBot</a>
+        </div>
+    </header>
+
+    <main class="main-content" style="text-align: center; padding: 3rem;">
+        <h1>500 - 서버 내부 오류</h1>
+        <p>문제가 발생했습니다. 잠시 후 다시 시도해 주세요.</p>
+        <p><a th:href="@{/}">홈으로 이동</a></p>
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</div>
+</body>
+</html>
