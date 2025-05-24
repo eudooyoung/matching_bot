@@ -1,6 +1,7 @@
 package com.multi.matchingbot.common.security;
 
 import com.multi.matchingbot.auth.TokenProvider;
+import com.multi.matchingbot.common.domain.enums.Role;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -15,7 +16,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final UserDetailsService userDetailsService;
+    private final MBotUserDetailsService mBotUserDetailsService;
     private final TokenProvider tokenProvider;
     private final AntPathMatcher pathMatcher = new AntPathMatcher();
 
@@ -86,12 +86,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private void authenticateRequest(String token, HttpServletRequest request) {
         try {
             String email = tokenProvider.extractUsername(token);
-            String userType = tokenProvider.parseClaims(token).get("userType", String.class);
+            Role userType = tokenProvider.parseClaims(token).get("userType", Role.class);
 
-            UserDetails userDetails = ((MBotUserDetailsService) userDetailsService)
-                    .loadByType(email, userType);       // authenticationService의 validateToken 메소드 호출
-
-//            List<GrantedAuthority> authorities = extractAuthoritiesFromToken(token);
+            UserDetails userDetails = mBotUserDetailsService.loadUserByType(email, userType);
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     userDetails,

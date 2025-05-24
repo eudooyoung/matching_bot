@@ -16,10 +16,10 @@ public class MainPageController {
     @GetMapping({"/", "/main"})
     public String mainPage(Model model, @AuthenticationPrincipal MBotUserDetails user) {
         if(user != null) {
-            log.info("userType: {}", user.getRole());
-            model.addAttribute("userType", user.getRole());
+            log.info("role: {}", user.getRole());
+            model.addAttribute("role", user.getRole());
         } else {
-            model.addAttribute("userType", null);
+            model.addAttribute("role", null);
             log.info("비회원 접근");
         }
         return "main/main";

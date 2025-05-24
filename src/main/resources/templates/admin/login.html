@@ -19,7 +19,7 @@
         <label for="password">비밀번호</label>
         <input type="password" id="password" name="password" required/>
         <button type="submit">로그인</button>
-        <div class="error-msg" th:if="${param.error}" th:text="'로그인 정보가 올바르지 않습니다.'"></div>
+        <div class="error-msg" id="error-msg" style="color: red; margin-top: 1rem;"></div>
     </form>
 </div>
 
@@ -27,7 +27,7 @@
 <div th:replace="fragments/footer :: footer"></div>
 
 <script>
-    async function handleLogin(emailId, passwordId, userType) {
+    async function handleLogin(emailId, passwordId, errorMsgId, role) {
         const email = document.getElementById(emailId).value;
         const password = document.getElementById(passwordId).value;
 
@@ -37,25 +37,27 @@
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({email, password, userType}) // ✅ 포함됨
+                body: JSON.stringify({email, password, role}) // ✅ 포함됨
             });
 
             if (response.ok) {
-                window.location.href = "admin/main"; // ✅ 쿠키 인증 유지됨
+                window.location.href = "/admin/main";
             } else {
-                const errorText = await response.text();
-                alert("로그인 실패: " + errorText);
+                const errorJson = await response.json();
+                const msg = errorJson.message || "로그인 중 오류가 발생했습니다.";
+                document.getElementById("error-msg").innerText = "로그인 실패: " + msg;
+
             }
         } catch (err) {
             console.error("로그인 중 오류:", err);
-            alert("로그인 중 오류가 발생했습니다.");
+            document.getElementById("error-msg").innerText = "로그인 중 오류가 발생했습니다.";
         }
     }
 
     // ✅ userType 명시
     document.getElementById("admin-form").addEventListener("submit", function (e) {
         e.preventDefault();
-        handleLogin("email", "password", "ADMIN");
+        handleLogin("email", "password", "error-msg", "ADMIN");
     });
 </script>
 </body>

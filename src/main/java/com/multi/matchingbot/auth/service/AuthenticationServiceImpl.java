@@ -4,6 +4,7 @@ package com.multi.matchingbot.auth.service;
 import com.multi.matchingbot.auth.TokenProvider;
 import com.multi.matchingbot.auth.domain.RefreshTokenRepository;
 import com.multi.matchingbot.auth.domain.entities.RefreshToken;
+import com.multi.matchingbot.common.domain.enums.Role;
 import com.multi.matchingbot.common.error.TokenException;
 import com.multi.matchingbot.common.security.MBotUserDetails;
 import com.multi.matchingbot.common.security.MBotUserDetailsService;
@@ -30,8 +31,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
 
-    public UserDetails authenticate(String email, String password, String userType) {
-        UserDetails userDetails = mBotUserDetailsService.loadByType(email, userType);
+    public UserDetails authenticate(String email, String password, Role role) {
+        UserDetails userDetails = mBotUserDetailsService.loadUserByType(email, role);
 
         if (!passwordEncoder.matches(password, userDetails.getPassword())) {
             throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
@@ -47,22 +48,22 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         log.warn("AuthenticationService - generateToken 호출됨");
 
+        MBotUserDetails mBotUserDetails = (MBotUserDetails) userDetails;
+        String email = mBotUserDetails.getUsername();
+        Role role = mBotUserDetails.getRole();
         String accessToken = tokenProvider.generateAccessToken(userDetails);
         String refreshToken = tokenProvider.generateRefreshToken(userDetails);
-        MBotUserDetails mBotUserDetails = (MBotUserDetails) userDetails;
-        String email = mBotUserDetails.getUsername();      // email 기준
-        String userType = mBotUserDetails.getRole().name();
         LocalDateTime issuedAt = tokenProvider.getRefreshTokenIssuedDate();
         LocalDateTime expiredAt = tokenProvider.getRefreshTokenExpireDate();
 
 
         // refresh token 저장
-        RefreshToken tokenEntity = refreshTokenRepository.findByEmailAndUserType(email, userType)
+        RefreshToken tokenEntity = refreshTokenRepository.findByEmailAndRole(email, role)
                 .map(existing -> {
                     existing.update(refreshToken, issuedAt, expiredAt);
                     return existing;
                 })
-                .orElse(new RefreshToken(null, email, userType, refreshToken, expiredAt, issuedAt));
+                .orElse(new RefreshToken(null, email, role, refreshToken, expiredAt, issuedAt));
 
         refreshTokenRepository.save(tokenEntity);
 
@@ -97,10 +98,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public void refreshTokenAndSetCookie(String refreshToken, HttpServletResponse response) {
         // 토큰에서 userId, userType 추출
         String email = tokenProvider.extractUsername(refreshToken);
-        String userType = tokenProvider.parseClaims(refreshToken).get("userType", String.class);
+        Role role = tokenProvider.parseClaims(refreshToken).get("role", Role.class);
 
         // DB조회
-        RefreshToken savedToken = refreshTokenRepository.findByEmailAndUserType(email, userType)
+        RefreshToken savedToken = refreshTokenRepository.findByEmailAndRole(email, role)
                 .orElseThrow(() -> new TokenException("저장된 리프레시 토큰이 없습니다."));
 
         // 일치확인

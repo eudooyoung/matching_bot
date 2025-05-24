@@ -45,22 +45,16 @@ public class TokenProvider {
         Map<String, Object> claims = new HashMap<>();
 
         // 클레임 요소 추가
-        claims.put("userType", mBotUserDetails.getRole());
+        claims.put("role", mBotUserDetails.getRole());
         claims.put("userId", mBotUserDetails.getId());
-
-        /*
-        claims.put("auth", userDetails.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(",")));*/
 
 //        화면 출력 확인
         claims.put("auth", userDetails.getAuthorities().stream()
             .map(GrantedAuthority::getAuthority)
             .toList());
 
-        log.warn("클레임 설정 완료: userType={}, userId={}, userAuth={}",
+        log.warn("클레임 설정 완료: role={}, userId={}, userAuth={}",
                 mBotUserDetails.getRole(), mBotUserDetails.getId(), mBotUserDetails.getAuthorities());
-
 
         return Jwts.builder()
                 .setIssuer(issuer)
@@ -70,7 +64,6 @@ public class TokenProvider {
                 .setExpiration(new Date(System.currentTimeMillis() + expiresIn))                        //  만료 시간 설정
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)                                    // 시그니쳐 알고리즘 특정
                 .compact();
-
     }
 
     private Key getSigningKey() {

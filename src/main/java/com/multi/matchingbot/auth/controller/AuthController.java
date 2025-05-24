@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping(path = "api/v1/auth")
+@RequestMapping(path = "/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
@@ -28,7 +28,7 @@ public class AuthController {
         UserDetails userdetails = authenticationService.authenticate(                   // authenticate 시도
                 loginRequest.getEmail(),                                                // loginRequest에서 이메일과 비밀번호를 가져다 넘김
                 loginRequest.getPassword(),
-                loginRequest.getUserType()
+                loginRequest.getRole()
         );
 
         log.warn("쿠키 포함 응답 생성 시도...");
@@ -36,16 +36,11 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<Void> refresh(@CookieValue(value = "refreshToken", required = false) String refreshToken,
-                                            HttpServletResponse response) {
+    public ResponseEntity<Void> refresh(@CookieValue(value = "refreshToken", required = false) String refreshToken, HttpServletResponse response) {
 
         log.warn("리프레시 요청 수신 (쿠키 기반)");
 
         // 예외처리
-        if (refreshToken == null || refreshToken.isBlank()) {
-            throw new IllegalArgumentException("refreshToken 쿠키가 존재하지 않습니다.");
-        }
-
         if (refreshToken == null || refreshToken.isBlank()) {
             throw new IllegalArgumentException("refreshToken 쿠키가 존재하지 않습니다.");
         }
