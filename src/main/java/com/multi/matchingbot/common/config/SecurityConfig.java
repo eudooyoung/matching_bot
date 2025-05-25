@@ -1,9 +1,9 @@
 package com.multi.matchingbot.common.config;
 
 import com.multi.matchingbot.common.security.JwtAuthenticationFilter;
-import com.multi.matchingbot.common.security.MBotAccessDeniedHandler;
 import com.multi.matchingbot.common.security.MBotAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,21 +17,18 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+import java.util.List;
+
 @Configuration
+@EnableConfigurationProperties(RoleAccessProperties.class)
 @RequiredArgsConstructor
 public class SecurityConfig {
 
     private final CorsConfigurationSource corsConfigurationSource;
     private final MBotAuthenticationEntryPoint mBotAuthenticationEntryPoint;
-    private final MBotAccessDeniedHandler mBotAccessDeniedHandler;
+//    private final MBotAccessDeniedHandler mBotAccessDeniedHandler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-
-
-//    component 등록. 문제 없으면 삭제할 것
-//    @Bean
-//    public JwtAuthenticationFilter jwtAuthenticationFilter(UserDetailsService userDetailsService, TokenProvider tokenProvider) {
-//        return new JwtAuthenticationFilter(userDetailsService, tokenProvider);
-//    }
+    private final RoleAccessProperties roleAccessProperties;
 
 
     @Bean
@@ -45,21 +42,15 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 //예외 처리
                 .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint(mBotAuthenticationEntryPoint)
-                        .accessDeniedHandler(mBotAccessDeniedHandler))
+                        .authenticationEntryPoint(mBotAuthenticationEntryPoint))
+//                        .accessDeniedHandler(mBotAccessDeniedHandler)
                 .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                                .requestMatchers("/", "/main", "/css/**", "/map_popup", "/js/**", "/favicon.ico", "/.well-known/").permitAll()
-                                .requestMatchers("/auth/register", "/auth/login", "/company", "/admin/login", "/error/**").permitAll()
-                                .requestMatchers("/api/v1/auth/**", "/api/maps/**").permitAll()
-                                .requestMatchers("/auth/register-company").permitAll()
-                                .requestMatchers("/api/v1/auth/**").permitAll()
-                                .requestMatchers("/api/v1/user/**").hasAnyRole("USER", "ADMIN")
-                                .requestMatchers("/company/**").hasAnyRole("COMPANY", "ADMIN")
-                                .requestMatchers("/admin/**").hasAnyRole("ADMIN")
-
-                                .anyRequest().authenticated()
-
+                        .requestMatchers(toArray(roleAccessProperties.getPermitAll())).permitAll()
+                        .requestMatchers(toArray(roleAccessProperties.getAdminPaths())).hasRole("ADMIN")
+                        .requestMatchers(toArray(roleAccessProperties.getCompanyPaths())).hasRole("COMPANY")
+                        .requestMatchers(toArray(roleAccessProperties.getUserPaths())).hasRole("USER")
+                        .requestMatchers(toArray(roleAccessProperties.getApiPaths())).authenticated()
+                        .anyRequest().denyAll()
                 ).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
 
@@ -93,5 +84,8 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
+    private String[] toArray(List<String> list) {
+        return list == null ? new String[0] : list.toArray(new String[0]);
+    }
 
 }

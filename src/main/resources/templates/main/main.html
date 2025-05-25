@@ -30,7 +30,7 @@
             <h2 style="text-align: center">환영합니다 관리자님</h2>
         </div>
 
-        <div sec:authorize="isAnonymous()">
+        <div sec:authorize="!hasRole('ADMIN')">
             <!-- 검색 바 -->
             <section class="search-bar">
                 <input type="text" id="search-input" placeholder="채용 공고 검색"/>

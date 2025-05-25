@@ -19,8 +19,9 @@ public class CompanyRegisterDto {
 
     private boolean agreeTerms;
     private boolean agreePrivacy;
-    private boolean agreeProvide;
-    private boolean agreeOpenApi;
+    /*private boolean agreeProvide;
+    private boolean agreeOpenApi;*/
+    private boolean agreeFinance;
 
     private boolean agreeMarketing;
     private boolean agreeThirdParty;

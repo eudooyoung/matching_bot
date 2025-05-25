@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8"/>
+    <title>MatchingBot</title>
+    <link rel="stylesheet" th:href="@{/css/layout.css}"/>
+</head>
+<body>
+<!--확인용-->
+<!--<p th:text="'현재 userType: ' + ${userType}"></p>-->
+
+<!-- Header Fragment -->
+<div class="wrapper">
+    <div th:replace="~{fragments/header :: header(role=${role})}"></div>
+
+    <main class="main-content">
+        <section style="padding: 2rem;">
+            <h2 style="margin-bottom: 1.5rem;">👤 개인 회원 관리</h2>
+
+            <!-- 검색창 -->
+            <div style="margin-bottom: 1rem;">
+                <form method="get" th:action="@{/admin/users}">
+                    <input type="text" name="keyword" placeholder="이름, 이메일 검색…" style="padding: 0.5rem; width: 250px;">
+                    <button type="submit" style="padding: 0.5rem 1rem; background-color: #2196f3; color: white; border: none; border-radius: 4px;">검색</button>
+                </form>
+            </div>
+
+            <!-- 회원 테이블 -->
+            <table style="width: 100%; border-collapse: collapse; background: white;">
+                <thead style="background-color: #f0f0f0;">
+                    <tr>
+                        <th style="border: 1px solid #ddd;">회원 번호</th>
+                        <th style="border: 1px solid #ddd;">이름</th>
+                        <th style="border: 1px solid #ddd;">이메일</th>
+                        <th style="border: 1px solid #ddd;">성별</th>
+                        <th style="border: 1px solid #ddd;">연락처</th>
+                        <th style="border: 1px solid #ddd;">약관 동의</th>
+                        <th style="border: 1px solid #ddd;">개인정보 동의</th>
+                        <th style="border: 1px solid #ddd;">마케팅 동의</th>
+                        <th style="border: 1px solid #ddd;">가입일</th>
+                        <th style="border: 1px solid #ddd;">수정자</th>
+                        <th style="border: 1px solid #ddd;">수정일</th>
+                        <th style="border: 1px solid #ddd;">상태</th>
+                        <th style="border: 1px solid #ddd;">삭제</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="user : ${users}">
+                        <td th:text="${'U' + #strings.format('%05d', user.id)}">아이디</td>
+                        <td style="border: 1px solid #ddd;" th:text="${user.name}">이름</td>
+                        <td style="border: 1px solid #ddd;" th:text="${user.email}">이메일</td>
+                        <td style="border: 1px solid #ddd;" th:text="${user.gender == 'M' ? '남자' : '여자'}">성별</td>
+                        <td style="border: 1px solid #ddd;" th:text="${user.phone}">010-1234-5678</td>
+                        <td style="border: 1px solid #ddd;" th:text="${user.agreeTerms ? 'Y' : 'N'}">Y</td>
+                        <td style="border: 1px solid #ddd;" th:text="${user.agreePrivacy ? 'Y' : 'N'}">Y</td>
+                        <td style="border: 1px solid #ddd;" th:text="${user.agreeMarketing ? 'Y' : 'N'}">N</td>
+                        <td style="border: 1px solid #ddd;" th:text="${#temporals.format(user.createdAt, 'yyyy-MM-dd')}">가입일</td>
+                        <td style="border: 1px solid #ddd;" th:text="${user.updatedBy}">수정자</td>
+                        <td style="border: 1px solid #ddd;" th:text="${#temporals.format(user.updatedAt, 'yyyy-MM-dd')}">2025-04-10</td>
+                        <td style="border: 1px solid #ddd;" th:text="${user.status == 'Y' ? 'ACTIVE' : 'INACTIVE'}" th:style="${user.status == 'Y' ? 'color:green;' : 'color:gray;'}">상태</td>
+                        <td style="border: 1px solid #ddd;">
+                            <button type="button" style="background-color: #f44336; color: white; border: none; padding: 0.3rem 0.6rem; border-radius: 4px;">삭제</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- 페이지네이션 (예시) -->
+            <div style="margin-top: 1.5rem; text-align: center;">
+                <a th:href="@{/admin/users(page=${users.number - 1})}" th:if="${users.hasPrevious()}">이전</a>
+                <span th:text="${users.number + 1}">1</span> / <span th:text="${users.totalPages}">1</span>
+                <a th:href="@{/admin/users(page=${users.number + 1})}" th:if="${users.hasNext()}">다음</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Fragment -->
+    <div th:insert="fragments/footer :: footer"></div>
+</div>
+<!--헤더 추가할때 dropdown & logout.js추가-->
+<script th:src="@{/js/dropdown.js}"></script>
+<script th:src="@{/js/logout.js}"></script>
+</body>
+</html>

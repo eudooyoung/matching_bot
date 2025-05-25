@@ -103,8 +103,6 @@
         </div>
 
 
-
-
         <!-- 6. 약관동의 체크박스 -->
         <label class="agreement-title">* 약관동의</label>
         <div class="checkbox-group">
@@ -112,11 +110,11 @@
             <!-- 필수 동의 항목 -->
             <label><input type="checkbox" name="agree_terms" required>[필수] 서비스 이용약관 동의</label><br>
             <label><input type="checkbox" name="agree_privacy" required>[필수] 정보 수집 및 이용 동의</label><br>
-            <label><input type="checkbox" name="agree_provide" required>[필수] 정보 제공 동의</label><br>
+            <label><input type="checkbox" name="agree_finance" required>[필수] 정보 제공 동의</label><br>
             <!-- 선택 동의 항목 -->
-            <label><input type="checkbox" name="agree_openApi" value="true">[선택] 추가 정보 동의 (OPEN API 포함)</label><br>
-            <label><input type="checkbox" name="agree_marketing" >[선택] 마케팅 정보 수신 동의</label><br>
-            <label><input type="checkbox" name="agree_thirdParty" >[선택] 제3자 정보 제공 동의</label><br>
+            <!--            <label><input type="checkbox" name="agree_openApi" value="true">[선택] 추가 정보 동의 (OPEN API 포함)</label><br>-->
+            <label><input type="checkbox" name="agree_marketing">[선택] 마케팅 정보 수신 동의</label><br>
+            <label><input type="checkbox" name="agree_thirdParty">[선택] 제3자 정보 제공 동의</label><br>
         </div>
 
         <script>
@@ -129,7 +127,7 @@
             });
         </script>
 
-        <button type="button" onclick="businessRegi()">다음으로</button>
+        <button type="submit">다음으로</button>
     </form>
 </div>
 
@@ -145,19 +143,19 @@
         }
 
 
-        const data = { "b_no": [num] };
+        const data = {"b_no": [num]};
         $.ajax({
             url: "https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=twO9sqDfhrgll63lHHuzhS7YQD9w%2BmsuiEtGs81kTg21FgTKxr9FIcdLwxFosSoawgSA5TFpr0qSy1Ike9IZdg%3D%3D",
             type: "POST",
             data: JSON.stringify(data),
             dataType: "JSON",
             contentType: "application/json",
-            success: function(result) {
+            success: function (result) {
                 let valid = result.data[0]['b_stt_cd'];
                 let msg = document.getElementById('regimessage');
                 msg.innerHTML = valid === '01' ? "<br>사업자 회원가입이 가능합니다." : "<br>사업자 회원가입을 할 수 없습니다.";
             },
-            error: function(err) {
+            error: function (err) {
                 console.log(err.responseText);
             }
         });
@@ -174,14 +172,14 @@
             document.getElementById("companyForm").submit();
             return;
         }
-        const data = { "b_no": [num] };
+        const data = {"b_no": [num]};
         $.ajax({
             url: "https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=twO9sqDfhrgll63lHHuzhS7YQD9w%2BmsuiEtGs81kTg21FgTKxr9FIcdLwxFosSoawgSA5TFpr0qSy1Ike9IZdg%3D%3D",
             type: "POST",
             data: JSON.stringify(data),
             dataType: "JSON",
             contentType: "application/json",
-            success: function(result) {
+            success: function (result) {
                 let valid = result.data[0]['b_stt_cd'];
                 if (valid === '01') {
                     alert("사업자 인증에 성공했습니다.");
@@ -190,11 +188,24 @@
                     alert("사업자가 아닙니다.");
                 }
             },
-            error: function() {
+            error: function () {
                 alert("인증 처리 중 에러 발생");
             }
         });
     }
+
+    document.getElementById("companyForm").addEventListener("submit", function (e) {
+        e.preventDefault(); // 기본 제출 막기
+
+        const form = this;
+
+        if (!form.checkValidity()) {
+            form.reportValidity(); // 브라우저가 직접 유효성 메시지 표시
+            return;
+        }
+
+        businessRegi(); // 실제 비동기 로직 (API + form.submit() 포함)
+    });
 </script>
 
 </body>

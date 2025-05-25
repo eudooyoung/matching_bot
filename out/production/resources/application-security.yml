@@ -1,0 +1,24 @@
+jwt:
+  issuer: ${JWT_ISSUER}
+  secret: ${JWT_SECRET}
+
+security:
+  access:
+    permit-all:
+      - /css/**
+      - /js/**
+      - /favicon.ico
+      - /.well-known
+      - /error/**
+      - /auth/**
+      - /
+      - /main
+      - /admin/login
+      - /map_popup
+      - /api/v1/auth/login
+    user-paths:
+    company-paths:
+    admin-paths:
+      - /admin/**
+    api-paths:
+      - /api/**
