@@ -1,4 +1,4 @@
-package com.multi.matchingbot.jobposting;
+package com.multi.matchingbot.jobposting.domain;
 
 import com.multi.matchingbot.common.domain.entities.BaseEntity;
 import com.multi.matchingbot.company.domain.Company;

@@ -1,10 +1,8 @@
 package com.multi.matchingbot.company.controller;
 
-import com.multi.matchingbot.common.security.MBotUserDetails;
 import com.multi.matchingbot.company.domain.CompanyDto;
 import com.multi.matchingbot.company.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +14,7 @@ public class CompanyController {
     @Autowired
     private CompanyService companyService;
 
-    /*@GetMapping("/")
+    @GetMapping("/")
     public String showCompanyHome(Model model) {
         Long companyId = 1L;
 
@@ -24,15 +22,6 @@ public class CompanyController {
 
         model.addAttribute("company_name", companyDto.getName());
 
-        return "company/index";
-    }*/
-
-    @GetMapping("/")
-    public String showCompanyHome(Model model, @AuthenticationPrincipal MBotUserDetails userDetails) {
-        Long companyId = userDetails.getId(); // 로그인한 기업회원의 ID
-        CompanyDto companyDto = companyService.getCompanyById(companyId);
-
-        model.addAttribute("company_name", companyDto.getName());
         return "company/index";
     }
 

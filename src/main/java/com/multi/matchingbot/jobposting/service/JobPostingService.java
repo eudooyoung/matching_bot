@@ -1,9 +1,9 @@
 package com.multi.matchingbot.jobposting.service;
 
-import com.multi.matchingbot.jobposting.JobPosting;
 import com.multi.matchingbot.jobposting.JobPostingRepository;
+import com.multi.matchingbot.jobposting.domain.JobPosting;
+import com.multi.matchingbot.jobposting.domain.JobPostingDto;
 import com.multi.matchingbot.jobposting.model.dao.JobPostingMapper;
-import com.multi.matchingbot.jobposting.model.dto.JobPostingDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

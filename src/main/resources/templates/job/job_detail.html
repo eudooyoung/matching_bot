@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <title>공고 상세보기</title>
-    <link rel="stylesheet" th:href="@{/css/mypage.css}" />
+    <link rel="stylesheet" th:href="@{/css/mypage.css}"/>
+    <link rel="stylesheet" th:href="@{/css/common.css}"/>
     <style>
         .container {
             max-width: 900px;
@@ -37,20 +38,16 @@
         }
     </style>
 </head>
+
 <body>
-<div class="navbar">
-    <a href="/main" class="logo">MatchingBot</a>
-    <button class="nav-button">커뮤니티</button>
-    <button class="nav-button" onclick="goToMyPage()">마이페이지</button>
-    <span class="user-name" th:text="${company_name}"></span>
-</div>
+<p th:text="'현재 userType: ' + ${userType}"></p>
+<div th:replace="~{fragments/header :: header(userType=${userType})}"></div>
 
 <div class="container">
     <h2>공고 상세보기</h2>
 
     <div class="job-box">
         <div class="job-title" th:text="${job.title}">채용 제목</div>
-        <div class="job-sub">(정규직)</div>
 
         <div class="section">
             <h4>설명</h4>
@@ -107,5 +104,9 @@
         </div>
     </div>
 </div>
+
+<script th:src="@{/js/dropdown.js}"></script>
+<script th:src="@{/js/logout.js}"></script>
+
 </body>
 </html>

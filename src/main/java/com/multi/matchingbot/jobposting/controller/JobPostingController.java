@@ -1,10 +1,12 @@
 package com.multi.matchingbot.jobposting.controller;
 
-import com.multi.matchingbot.jobposting.model.dto.JobPostingDto;
+import com.multi.matchingbot.jobposting.domain.JobPostingDto;
 import com.multi.matchingbot.jobposting.service.JobPostingService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -49,8 +51,12 @@ public class JobPostingController {
 
     // 공고 등록 처리 (POST)
     @PostMapping("/new")
-    public String save(@ModelAttribute JobPostingDto dto) {
-        dto.setCompanyId(1L); // 테스트용 company ID
+    public String save(@Valid @ModelAttribute("job") JobPostingDto dto,
+                       BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "job/job_new";
+        }
+
         jobPostingService.save(dto);
         return "redirect:/job/manage_jobs";
     }
@@ -64,15 +70,21 @@ public class JobPostingController {
     }
 
     // 공고 수정 페이지
-    @GetMapping("/{id}/edit")
+    @GetMapping("/job/{id}/edit")
     public String editJobForm(@PathVariable Long id, Model model) {
         JobPostingDto dto = jobPostingService.getById(id);
         model.addAttribute("job", dto);
         return "job/job_edit";
     }
 
-    @PostMapping("/{id}/edit")
-    public String updateJob(@PathVariable Long id, @ModelAttribute JobPostingDto dto) {
+    // 공고 수정 처리 (POST)
+    @PostMapping("/job/{id}/edit")
+    public String updateJob(@PathVariable Long id,
+                            @Valid @ModelAttribute("job") JobPostingDto dto,
+                            BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "job/job_edit";
+        }
         jobPostingService.update(id, dto);
         return "redirect:/job/manage_jobs";
     }
