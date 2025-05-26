@@ -34,3 +34,8 @@ logging:
 
 kakao:
   rest-api-key: "KakaoAK 95f4cb7367a36e2e71328edc2c4b9b07"
+
+
+od:
+  cloud:
+    key: ${OD_CLOUD_KEY}
