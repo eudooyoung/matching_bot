@@ -70,7 +70,7 @@ public class JobPostingController {
     }
 
     // 공고 수정 페이지
-    @GetMapping("/job/{id}/edit")
+    @GetMapping("/{id}/edit")
     public String editJobForm(@PathVariable Long id, Model model) {
         JobPostingDto dto = jobPostingService.getById(id);
         model.addAttribute("job", dto);
@@ -78,7 +78,7 @@ public class JobPostingController {
     }
 
     // 공고 수정 처리 (POST)
-    @PostMapping("/job/{id}/edit")
+    @PostMapping("/{id}/edit")
     public String updateJob(@PathVariable Long id,
                             @Valid @ModelAttribute("job") JobPostingDto dto,
                             BindingResult bindingResult) {
