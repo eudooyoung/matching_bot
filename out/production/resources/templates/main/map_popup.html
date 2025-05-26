@@ -28,7 +28,7 @@
 <div id="map"></div>
 
 <!-- ✅ Kakao Maps SDK -->
-<script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=5387d38d345f44b99625ec93df1b8297&libraries=services"></script>
+<script src="https://d.kakao.com/v2/maps/sdk.js?appkey=5387d38d345f44b99625ec93df1b8297&libraries=services"></script>
 
 <script>
     let map;
@@ -67,7 +67,7 @@
 
         // 내 위치 마커 (초록색)
         const myMarkerImage = new kakao.maps.MarkerImage(
-            'http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png',
+            'http://t1.daumcdn.net/localimg/localimages/07/mapdoc/markerStar.png',
             new kakao.maps.Size(24, 35)
         );
         const myMarker = new kakao.maps.Marker({
@@ -78,7 +78,7 @@
 
         clearJobMarkers();
 
-        fetch(`/api/jobs/nearby?lat=${lat}&lng=${lng}`)
+        fetch(`//jobs/nearby?lat=${lat}&lng=${lng}`)
             .then(res => res.json())
             .then(jobs => {
                 jobs.forEach(job => {

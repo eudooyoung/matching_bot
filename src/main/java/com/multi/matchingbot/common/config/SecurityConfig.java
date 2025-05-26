@@ -54,7 +54,7 @@ public class SecurityConfig {
                                 .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                                 .requestMatchers("/", "/main", "/css/**", "/map_popup").permitAll() // ✅ 이 줄 추가
                                 .requestMatchers("/api/maps/**").permitAll() // 지도용 채용공고 API 허용
-
+                                .requestMatchers("/", "/main", "/search-page", "/search-page/**", "/css/**", "/js/**").permitAll()
 
 
                                 .anyRequest().authenticated()

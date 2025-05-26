@@ -114,7 +114,7 @@
             <label><input type="checkbox" name="agree_privacy" required>[필수] 정보 수집 및 이용 동의</label><br>
             <label><input type="checkbox" name="agree_provide" required>[필수] 정보 제공 동의</label><br>
             <!-- 선택 동의 항목 -->
-            <label><input type="checkbox" name="agree_openApi" value="true">[선택] 추가 정보 동의 (OPEN API 포함)</label><br>
+            <label><input type="checkbox" name="agree_open" value="true">[선택] 추가 정보 동의 (OPEN  포함)</label><br>
             <label><input type="checkbox" name="agree_marketing" >[선택] 마케팅 정보 수신 동의</label><br>
             <label><input type="checkbox" name="agree_thirdParty" >[선택] 제3자 정보 제공 동의</label><br>
         </div>
@@ -147,7 +147,7 @@
 
         const data = { "b_no": [num] };
         $.ajax({
-            url: "https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=twO9sqDfhrgll63lHHuzhS7YQD9w%2BmsuiEtGs81kTg21FgTKxr9FIcdLwxFosSoawgSA5TFpr0qSy1Ike9IZdg%3D%3D",
+            url: "https://.odcloud.kr//nts-businessman/v1/status?serviceKey=twO9sqDfhrgll63lHHuzhS7YQD9w%2BmsuiEtGs81kTg21FgTKxr9FIcdLwxFosSoawgSA5TFpr0qSy1Ike9IZdg%3D%3D",
             type: "POST",
             data: JSON.stringify(data),
             dataType: "JSON",
@@ -176,7 +176,7 @@
         }
         const data = { "b_no": [num] };
         $.ajax({
-            url: "https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=twO9sqDfhrgll63lHHuzhS7YQD9w%2BmsuiEtGs81kTg21FgTKxr9FIcdLwxFosSoawgSA5TFpr0qSy1Ike9IZdg%3D%3D",
+            url: "https://.odcloud.kr//nts-businessman/v1/status?serviceKey=twO9sqDfhrgll63lHHuzhS7YQD9w%2BmsuiEtGs81kTg21FgTKxr9FIcdLwxFosSoawgSA5TFpr0qSy1Ike9IZdg%3D%3D",
             type: "POST",
             data: JSON.stringify(data),
             dataType: "JSON",
