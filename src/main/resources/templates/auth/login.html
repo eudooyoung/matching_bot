@@ -1,23 +1,167 @@
-<!-- templates/main/main.html -->
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8" />
-  <title>MatchingBot</title>
-  <link rel="stylesheet" th:href="@{/css/common.css}">
-  <link rel="stylesheet" th:href="@{/css/user_main.css}">
+    <title>로그인</title>
+    <link rel="stylesheet" href="/css/layout.css"/>
+    <style>
+        .login-container {
+            max-width: 400px;
+            margin: 4rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .tab-buttons button {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            background-color: #e0e0e0;
+            color: #333;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .tab-buttons button.active {
+            background-color: #b2fd83;
+            font-weight: bold;
+        }
+
+        .login-form {
+            display: none;
+            flex-direction: column;
+        }
+
+        .login-form.active {
+            display: flex;
+        }
+
+        .login-form label {
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .login-form input {
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .login-form button[type="submit"] {
+            background-color: #103254;
+            color: white;
+            padding: 0.75rem;
+            border: none;
+            font-size: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 
-  <!-- Header Fragment -->
-  <div th:replace="fragments/header :: header"></div>
+<!-- 공통 헤더 -->
+<div th:replace="~{fragments/header :: header(role=${role})}"></div>
 
-  <main class="main-content">
-    <h3>login page</h3>
-  </main>
 
-  <!-- Footer Fragment -->
-  <div th:replace="fragments/footer :: footer"></div>
+<div class="login-container">
+    <div class="tab-buttons">
+        <button id="member-tab" class="active" onclick="showForm('member')">개인 회원</button>
+        <button id="company-tab" onclick="showForm('company')">기업 회원</button>
+    </div>
 
+    <!-- 개인 회원 로그인 폼 -->
+    <form id="member-form" class="login-form active">
+        <label for="email">이메일</label>
+        <input type="email" id="email" name="email" required/>
+        <label for="password">비밀번호</label>
+        <input type="password" id="password" name="password" required/>
+        <button type="submit">로그인</button>
+        <div class="error-msg" id="error-msg" style="color: red; margin-top: 1rem;"></div>
+    </form>
+
+    <!-- 기업 회원 로그인 폼 -->
+    <form method="post" class="login-form" id="company-form">
+        <label for="email2">이메일</label>
+        <input type="email" id="email2" name="email" required/>
+        <label for="password2">비밀번호</label>
+        <input type="password" id="password2" name="password" required/>
+        <button type="submit">로그인</button>
+        <div class="error-msg" id="error-msg2" style="color: red; margin-top: 1rem;"></div>
+    </form>
+</div>
+
+<!-- 공통 푸터 -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script>
+    function showForm(type) {
+        const memberTab = document.getElementById("member-tab");
+        const companyTab = document.getElementById("company-tab");
+        const memberForm = document.getElementById("member-form");
+        const companyForm = document.getElementById("company-form");
+
+        if (type === "member") {
+            memberTab.classList.add("active");
+            companyTab.classList.remove("active");
+            memberForm.classList.add("active");
+            companyForm.classList.remove("active");
+        } else {
+            companyTab.classList.add("active");
+            memberTab.classList.remove("active");
+            companyForm.classList.add("active");
+            memberForm.classList.remove("active");
+        }
+    }
+
+    // ✅ userType 추가됨
+    async function handleLogin(emailId, passwordId, errorMsgId, role) {
+        const email = document.getElementById(emailId).value;
+        const password = document.getElementById(passwordId).value;
+
+        try {
+            const response = await fetch("/api/v1/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({email, password, role}) // ✅ 포함됨
+            });
+
+            if (response.ok) {
+                window.location.href = "/main"; // ✅ 쿠키 인증 유지됨
+            } else {
+                const errorJson = await response.json();
+                const msg = errorJson.message || "로그인 중 오류가 발생했습니다.";
+                document.getElementById(errorMsgId).innerText = "로그인 실패: " + msg;
+            }
+        } catch (err) {
+            console.error("로그인 중 오류:", err);
+            alert("로그인 중 오류가 발생했습니다.");
+        }
+    }
+
+    // ✅ userType 명시
+    document.getElementById("member-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        handleLogin("email", "password", "error-msg", "MEMBER");
+    });
+
+    document.getElementById("company-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        handleLogin("email2", "password2", "error-msg2", "COMPANY");
+    });
+</script>
+
+<script th:src="@{/js/dropdown.js}"></script>
 </body>
 </html>

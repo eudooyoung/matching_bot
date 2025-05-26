@@ -18,27 +18,25 @@ public class MBotUserDetails implements UserDetails {
     private final String email;
     private final String password;
     private final Role role;
-    private final String userType;
     private final Long id;
 
-    public MBotUserDetails(String email, String password, Role role, String userType, Long id) {
+    public MBotUserDetails(String email, String password, Role role, Long id) {
         this.email = email;
         this.password = password;
         this.role = role;
-        this.userType = userType;
         this.id = id;
-        log.warn("MBotUserDetails 생성 완료 - email: {}, role: {}, type: {}, id: {}", email, role, userType, id);
+        log.warn("MBotUserDetails 생성 완료 - email: {}, role: {},  userId: {}", email, role, id);
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        log.warn("권한 반환 - ROLE_{}", role);
+//        log.warn("권한 반환 - ROLE_{}", role);
         return List.of(new SimpleGrantedAuthority("ROLE_" + role));
     }
 
     @Override
     public String getPassword() {
-        log.warn("getPassword() 호출됨: {}", password);
+//        log.warn("getPassword() 호출됨: {}", password);
         return this.password;
     }
 

@@ -19,6 +19,10 @@ public class AuthCompanyRegistService {
             throw new IllegalArgumentException("이미 등록된 이메일입니다.");
         }
 
+        if (dto.getAgreeTerms() != Yn.Y || dto.getAgreePrivacy() != Yn.Y || dto.getAgreeFinance() != Yn.Y) {
+            throw new IllegalArgumentException("필수 약관에 모두 동의해야 합니다.");
+        }
+
         Company company = Company.builder()
                 .email(dto.getEmail())
                 .password(passwordEncoder.encode(dto.getPassword()))
@@ -27,17 +31,16 @@ public class AuthCompanyRegistService {
                 .address(dto.getAddress())
                 .industry(dto.getIndustry())
                 .yearFound(dto.getEstablishedYear())
-                .headcount(dto.getEmployeeCount())
-                .annualRevenue(dto.getAnnualSales() != null ? dto.getAnnualSales().intValue() : 0)
-                .operatingIncome(dto.getOperatingProfit() != null ? dto.getOperatingProfit().intValue() : 0)
-                .jobsLastYear(dto.getRecentJobPosts() != null ? dto.getRecentJobPosts() : 0)
+                .headcount(dto.getHeadcount())
+                .annualRevenue(dto.getAnnualRevenue())
+                .operatingIncome(dto.getOperatingIncome())
+                .jobsLastYear(dto.getJobsLastYear())
                 .role(Role.COMPANY) // 필수 설정
-                .agreeTerms(dto.isAgreeTerms() ? Yn.Y : Yn.N)
-                .agreePrivacy(dto.isAgreePrivacy() ? Yn.Y : Yn.N)
-                .agreeProvide(dto.isAgreeProvide() ? Yn.Y : Yn.N)
-                .agreeOpenApi(dto.isAgreeOpenApi() ? Yn.Y : Yn.N)
-                .agreeMarketing(dto.isAgreeMarketing() ? Yn.Y : Yn.N)
-                .agreeThirdParty(dto.isAgreeThirdParty() ? Yn.Y : Yn.N)
+                .agreeTerms(dto.getAgreeTerms())
+                .agreePrivacy(dto.getAgreePrivacy())
+                .agreeFinance(dto.getAgreeFinance())
+                .agreeMarketing(dto.getAgreeMarketing())
+                .agreeThirdParty(dto.getAgreeThirdParty())
                 .build();
 
         authCompanyRepository.save(company);

@@ -2,6 +2,9 @@ server:
   port: 8091
 
 spring:
+  config:
+    import:
+      - classpath:application-security.yml
   datasource:
     url: jdbc:mysql://localhost:${JDBC_PORT}/${JDBC_DATABASE}
     username: scott
@@ -10,6 +13,8 @@ spring:
   application:
     admin:
       enabled: false
+  thymeleaf:
+    cache: false
 
   jpa:
     defer-datasource-initialization: true #data.sql이 JPA 초기화 이후에 실행되도록 설정
@@ -21,14 +26,16 @@ spring:
         format_sql: true
         highlight_sql: true
 
-jwt:
-#  issuer: ${JWT_ISSUER}
-  secret: ${JWT_SECRET}
-
 logging:
   level:
 #    root: DEBUG
     org.hibernate.SQL: DEBUG
 
+
 kakao:
-  rest--key: "KakaoAK 95f4cb7367a36e2e71328edc2c4b9b07"
+  rest-api-key: "KakaoAK 95f4cb7367a36e2e71328edc2c4b9b07"
+
+
+od:
+  cloud:
+    key: ${OD_CLOUD_KEY}

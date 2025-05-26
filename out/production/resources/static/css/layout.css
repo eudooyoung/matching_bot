@@ -1,0 +1,151 @@
+html, body {
+    height: 100%;
+}
+
+/* 전체 페이지를 세로로 정렬하는 wrapper */
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+
+body {
+    margin: 0;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #f9f9f9;
+}
+
+/* Header */
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #103254;
+    padding: 1rem 2rem;
+    color: white;
+    height: 65px; /* 예시 고정값 */
+    box-sizing: border-box; /* 패딩 포함 계산 */
+}
+
+.logo {
+    color: white;
+    text-decoration: none;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* 메인 콘텐츠는 늘어나게 */
+.main-content {
+    flex: 1;
+}
+
+/* Footer */
+.footer {
+    background: #eee;
+    padding: 1rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 3rem;
+}
+
+/* 공통 메뉴 레이아웃 */
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.nav a,
+.nav button {
+    display: flex;
+    color: white;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+/* 로고 링크 */
+.logo-link {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+/* 드롭다운 래퍼 (버튼 + 메뉴 묶음) */
+.dropdown-wrapper {
+    position: relative;
+}
+
+/* 메뉴 버튼 (기본) */
+.menu-button {
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+/* 초록색 회원가입 버튼 */
+.menu-button.green {
+    background-color: #b2fd83;
+    color: #103254;
+}
+
+/* 드롭다운 공통 */
+.dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: max-content; /* 내부 항목 중 가장 긴 텍스트 기준으로 폭 설정 */
+    min-width: 100%;
+    background-color: white;
+    padding: 0rem;
+    border-radius: 5px;
+    z-index: 999;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.dropdown li {
+    list-style: none;
+}
+
+.dropdown li a {
+    display: block; /* ✅ 블록 요소로 만들어야 전체 너비 차지 */
+    width: 100%; /* ✅ 부모(li) 기준 너비 100% */
+    padding: 0.5rem 1rem;
+    white-space: nowrap;
+    color: #103254;
+    text-decoration: none;
+    box-sizing: border-box; /* ✅ 패딩 포함해서 너비 계산 (안 밀리게) */
+}
+
+.dropdown li a:hover {
+    background-color: #f0f0f0; /* 연한 회색 */
+    color: #103254; /* 텍스트 컬러 유지 */
+}
+
+/* 초록 드롭다운 (회원가입) */
+.dropdown.green {
+    background-color: #b2fd83;
+}
+
+.dropdown.green li a {
+    color: #103254;
+}
+
+.dropdown.green li a:hover {
+    background-color: #b2fd83;
+    text-decoration: underline;
+    color: #103254;
+}
+
+/* 드롭다운 보여주기 (active) */
+.dropdown-wrapper.active .dropdown {
+    display: block;
+}
