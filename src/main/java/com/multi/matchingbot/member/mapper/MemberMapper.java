@@ -1,4 +1,4 @@
-package com.multi.matchingbot.member;
+package com.multi.matchingbot.member.mapper;
 
 import com.multi.matchingbot.member.domain.Member;
 import com.multi.matchingbot.member.domain.MemberAdminViewDto;

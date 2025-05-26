@@ -2,7 +2,7 @@ package com.multi.matchingbot.admin.controller;
 
 import com.multi.matchingbot.common.domain.enums.Role;
 import com.multi.matchingbot.common.security.MBotUserDetails;
-import com.multi.matchingbot.member.MemberMapper;
+import com.multi.matchingbot.member.mapper.MemberMapper;
 import com.multi.matchingbot.member.MemberRepository;
 import com.multi.matchingbot.member.domain.MemberAdminViewDto;
 import lombok.RequiredArgsConstructor;
@@ -49,6 +49,20 @@ public class AdminPageController {
     public void members(Model model, @RequestParam(name = "page", defaultValue = "0") int page) {
         Pageable pageable = PageRequest.of(page, 10);
         Page<MemberAdminViewDto> members = memberRepository.findByRoleNot(Role.ADMIN, pageable).map(memberMapper::toMemberAdminView);
+        int totalPages = members.getTotalPages();
+        int currentPage = members.getNumber();
+
+        List<Integer> pageNumbers = IntStream.range(0, totalPages).boxed().toList(); // 0부터 시작
+
+        model.addAttribute("members", members);
+        model.addAttribute("pageNumbers", pageNumbers);
+        model.addAttribute("currentPage", currentPage);
+    }
+
+    @GetMapping("/resumes")
+    public void resumes(Model model, @RequestParam(name = "page", defaultValue = "0") int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<MemberAdminViewDto> resumes = resumeRepository.findByRoleNot(Role.ADMIN, pageable).map(memberMapper::toMemberAdminView);
         int totalPages = members.getTotalPages();
         int currentPage = members.getNumber();
 

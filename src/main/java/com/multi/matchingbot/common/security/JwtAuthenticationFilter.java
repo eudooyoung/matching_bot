@@ -93,7 +93,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             Role role = Role.valueOf(roleStr);
 //            log.warn("유저 정보 복원 완료 email: {}, role: {}", email, role);
 
-            UserDetails userDetails = mBotUserDetailsService.loadUserByType(email, role);
+            UserDetails userDetails = mBotUserDetailsService.loadUserByTypeAndEmail(role, email);
 //            log.warn("userDetail 생성");
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(

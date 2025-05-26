@@ -1,5 +1,6 @@
 package com.multi.matchingbot.admin.controller;
 
+import com.multi.matchingbot.company.service.CompanyService;
 import com.multi.matchingbot.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class AdminController {
 
     private final MemberService memberService;
+    private final CompanyService companyService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("members/{id}")

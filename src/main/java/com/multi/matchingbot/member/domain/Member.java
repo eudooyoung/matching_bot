@@ -8,6 +8,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "member")
@@ -31,14 +33,17 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Role role;          // 역할
 
+    @Column(nullable = false, unique = true)
+    private String email;       // 이메일(로그인 아이디)
+
     @Column(nullable = false)
     private String name;        // 이름
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Resume> resumes = new ArrayList<>();
+
     @Column(nullable = false)
     private String address;     // 주소
-
-    @Column(nullable = false, unique = true)
-    private String email;       // 이메일(로그인 아이디)
 
     @Column(nullable = false)
     private String password;    // 비밀번호

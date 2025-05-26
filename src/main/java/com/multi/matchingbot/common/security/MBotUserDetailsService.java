@@ -27,7 +27,7 @@ public class MBotUserDetailsService implements UserDetailsService {
         throw new UnsupportedOperationException("이 서비스는 loadUserByType(...)만 지원합니다.");
     }
 
-    public UserDetails loadUserByType(String email, Role role) {
+    public UserDetails loadUserByTypeAndEmail(Role role, String email) {
         log.warn("▶ loadByType 호출 - email: {}, role: {}", email, role);
 
         switch (role) {

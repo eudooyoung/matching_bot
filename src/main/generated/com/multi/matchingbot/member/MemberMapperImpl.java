@@ -3,6 +3,8 @@ package com.multi.matchingbot.member;
 import com.multi.matchingbot.member.domain.Member;
 import com.multi.matchingbot.member.domain.MemberAdminViewDto;
 import javax.annotation.processing.Generated;
+
+import com.multi.matchingbot.member.mapper.MemberMapper;
 import org.springframework.stereotype.Component;
 
 @Generated(
