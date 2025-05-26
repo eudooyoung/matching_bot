@@ -14,7 +14,7 @@
         <input type="email" id="email" name="email" placeholder="email@matchingbot.co.kr" required>
         <br>
 
-        <label for="password">* PW</label>
+        <!--<label for="password">* PW</label>
         <input type="password"
                id="password"
                name="password"
@@ -24,7 +24,19 @@
                maxlength="16"
                pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+=-]).{8,16}$"
                title="8~16자, 영문/숫자/특수문자를 모두 포함해야 합니다.">
+        <br>-->
+        <label for="password">* PW</label>
+        <input type="password"
+               id="password"
+               name="password"
+               placeholder="8~16자 / 영문, 숫자, 특수문자 조합"
+               required
+               minlength="8"
+               maxlength="16"
+               title="8~16자, 영문/숫자/특수문자를 모두 포함해야 합니다.">
+        <span id="pw-error" style="color:red; font-size: 0.9em;"></span>
         <br>
+
 
         <!-- 이름 -->
         <label for="name">* 이름</label>
@@ -97,5 +109,25 @@
         <button type="submit">가입하기</button>
     </form>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector("form");
+        form.addEventListener("submit", function (e) {
+            const pwInput = document.getElementById("password");
+            const pwError = document.getElementById("pw-error");
+            const pwValue = pwInput.value;
+
+            const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+=\-]).{8,16}$/;
+
+            if (!regex.test(pwValue)) {
+                e.preventDefault();
+                pwError.textContent = "비밀번호는 영문, 숫자, 특수문자를 포함한 8~16자여야 합니다.";
+                pwInput.focus();
+            } else {
+                pwError.textContent = "";
+            }
+        });
+    });
+</script>
 </body>
 </html>

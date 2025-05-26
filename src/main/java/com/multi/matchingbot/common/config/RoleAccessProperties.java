@@ -11,7 +11,7 @@ import java.util.List;
 @ConfigurationProperties(prefix = "security.access")
 public class RoleAccessProperties {
     private List<String> permitAll;
-    private List<String> userPaths;
+    private List<String> memberPaths;
     private List<String> companyPaths;
     private List<String> adminPaths;
     private List<String> apiPaths;

@@ -17,6 +17,10 @@ public class MBotAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
 
         String uri = request.getRequestURI();
+
+        if (uri.startsWith("/.well-known")) {
+
+        }
         log.warn("인증 실패: {} 경로에 인증되지 않은 접근 시도", uri);
         if (uri.startsWith("/api")) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
@@ -26,7 +30,9 @@ public class MBotAuthenticationEntryPoint implements AuthenticationEntryPoint {
         // ✅ 보호된 경로가 아니라면 → 그냥 404 던짐
         if (!uri.startsWith("/admin") &&
                 !uri.startsWith("/company") &&
-                !uri.startsWith("/user")) {
+                !uri.startsWith("/user") &&
+                !uri.startsWith("/auth")) {
+
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }

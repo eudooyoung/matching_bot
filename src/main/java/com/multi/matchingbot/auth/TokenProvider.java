@@ -27,8 +27,8 @@ public class TokenProvider {
     @Value("${jwt.issuer}")
     private String issuer;
 
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000L * 60 * 100;
+    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000L * 30;
+    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000L * 60 * 5;
 
     public String generateAccessToken(UserDetails userDetails) {
         return generateToken(userDetails, ACCESS_TOKEN_EXPIRE_TIME);
@@ -47,6 +47,7 @@ public class TokenProvider {
         // 클레임 요소 추가
         claims.put("role", mBotUserDetails.getRole().name());
         claims.put("userId", mBotUserDetails.getId());
+        claims.put("email", mBotUserDetails.getEmail());
 
 //        화면 출력 확인
         claims.put("auth", userDetails.getAuthorities().stream()

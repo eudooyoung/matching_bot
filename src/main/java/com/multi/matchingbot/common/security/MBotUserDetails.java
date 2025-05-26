@@ -25,7 +25,7 @@ public class MBotUserDetails implements UserDetails {
         this.password = password;
         this.role = role;
         this.id = id;
-        log.warn("MBotUserDetails 생성 완료 - email: {}, role: {},  id: {}", email, role, id);
+        log.warn("MBotUserDetails 생성 완료 - email: {}, role: {},  userId: {}", email, role, id);
     }
 
     @Override

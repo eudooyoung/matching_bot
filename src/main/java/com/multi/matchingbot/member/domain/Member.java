@@ -1,4 +1,4 @@
-package com.multi.matchingbot.user.domain;
+package com.multi.matchingbot.member.domain;
 
 import com.multi.matchingbot.common.domain.entities.BaseEntity;
 import com.multi.matchingbot.common.domain.enums.Gender;
@@ -10,13 +10,13 @@ import lombok.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "user")
+@Table(name = "member")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Builder
-public class User extends BaseEntity {
+public class Member extends BaseEntity {
 
     // 해야할 일
     // validation 추가할 것

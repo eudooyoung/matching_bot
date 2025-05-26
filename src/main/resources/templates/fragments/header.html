@@ -12,7 +12,7 @@
             <div class="dropdown-wrapper">
                 <button class="menu-button" onclick="toggleDropdown(this)">Menu</button>
                 <ul class="dropdown">
-                    <li><a th:href="@{/admin/users}">개인 회원 관리</a></li>
+                    <li><a th:href="@{/admin/members(page=0)}">개인 회원 관리</a></li>
                     <li><a th:href="@{/admin/companies}">기업 회원 관리</a></li>
                     <li><a th:href="@{/admin/resumes}">이력서 관리</a></li>
                     <li><a th:href="@{/admin/jobs}">채용 공고 관리</a></li>
@@ -22,11 +22,11 @@
         </div>
 
         <!-- 회원 -->
-        <div sec:authorize="hasAnyRole('USER', 'COMPANY')" class="nav">
+        <div sec:authorize="hasAnyRole('MEMBER', 'COMPANY')" class="nav">
             <a href="javascript:void(0)" class="nav-link" onclick="logout()">로그아웃</a>
             <a th:href="@{/community/list}" class="nav-link">커뮤니티</a>
             <!-- 개인회원 전용 마이페이지 -->
-            <a th:href="@{/mypage/user}" class="nav-link" sec:authorize="hasRole('USER')">개인페이지</a>
+            <a th:href="@{/mypage/user}" class="nav-link" sec:authorize="hasRole('MEMBER')">개인페이지</a>
             <!-- 기업회원 전용 마이페이지 -->
             <a th:href="@{/company/}" class="nav-link" sec:authorize="hasRole('COMPANY')">기업페이지</a>
         </div>

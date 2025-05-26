@@ -4,8 +4,8 @@ import com.multi.matchingbot.common.domain.enums.Role;
 import com.multi.matchingbot.common.error.InvalidRoleException;
 import com.multi.matchingbot.company.CompanyRepository;
 import com.multi.matchingbot.company.domain.Company;
-import com.multi.matchingbot.user.UserRepository;
-import com.multi.matchingbot.user.domain.User;
+import com.multi.matchingbot.member.MemberRepository;
+import com.multi.matchingbot.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MBotUserDetailsService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
     private final CompanyRepository companyRepository;
 
 
@@ -31,9 +31,9 @@ public class MBotUserDetailsService implements UserDetailsService {
         log.warn("▶ loadByType 호출 - email: {}, role: {}", email, role);
 
         switch (role) {
-            case USER:
-                return userRepository.findByEmail(email)
-                        .map(user -> validateType(email, role, user, "개인 회원이"))
+            case MEMBER:
+                return memberRepository.findByEmail(email)
+                        .map(member -> validateType(email, role, member, "개인 회원이"))
                         .orElseThrow(() -> {
                             log.warn("개인회원 조회 실패 - {}", email);
                             return new UsernameNotFoundException("해당 이메일의 개인 회원이 존재하지 않습니다.");
@@ -48,8 +48,8 @@ public class MBotUserDetailsService implements UserDetailsService {
                         });
 
             case ADMIN:
-                return userRepository.findByEmail(email)
-                        .map(user -> validateType(email, role, user, "관리자가"))
+                return memberRepository.findByEmail(email)
+                        .map(member -> validateType(email, role, member, "관리자가"))
                         .orElseThrow(() -> {
                             log.warn("관리자 조회 실패 - {}", email);
                             return new UsernameNotFoundException("해당 이메일의 관리자가 존재하지 않습니다.");
@@ -61,18 +61,18 @@ public class MBotUserDetailsService implements UserDetailsService {
         }
     }
 
-    private MBotUserDetails validateType(String email, Role role, User user, String label) {
-        if (user.getRole() != role) {
-            log.warn("{} 타입 불일치 -  email: {}, expectedRole: {}, frondInput: {}", label, user.getEmail(), user.getRole(), role);
+    private MBotUserDetails validateType(String email, Role role, Member member, String label) {
+        if (member.getRole() != role) {
+            log.warn("{} 타입 불일치 -  email: {}, expectedRole: {}, frondInput: {}", label, member.getEmail(), member.getRole(), role);
             throw new InvalidRoleException(label + " 아닙니다.");
         }
         log.warn("{} 로그인 성공 - {}", label, email);
 
         return new MBotUserDetails(
-                user.getEmail(),
-                user.getPassword(),
-                user.getRole(),
-                user.getId()
+                member.getEmail(),
+                member.getPassword(),
+                member.getRole(),
+                member.getId()
         );
     }
 

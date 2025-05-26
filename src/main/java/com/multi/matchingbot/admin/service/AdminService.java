@@ -1,6 +1,6 @@
 package com.multi.matchingbot.admin.service;
 
-import com.multi.matchingbot.user.UserRepository;
+import com.multi.matchingbot.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AdminService {
 
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
 
 
 }
