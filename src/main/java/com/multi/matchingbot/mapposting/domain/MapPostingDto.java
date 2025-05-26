@@ -1,6 +1,5 @@
 package com.multi.matchingbot.mapposting.domain;
 
-import com.multi.matchingbot.company.domain.Company;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,7 +16,8 @@ public class MapPostingDto {
     private double longitude;
     private LocalDateTime createdAt;
     private String requiredSkills;
-    private String companyName; // ✅ 회사명 추가
+
+
 
     public static MapPostingDto fromEntity(MapPosting job) {
         MapPostingDto dto = new MapPostingDto();
@@ -28,9 +28,6 @@ public class MapPostingDto {
         dto.setLongitude(job.getLongitude() != null ? job.getLongitude() : 0.0);
         dto.setCreatedAt(job.getCreatedAt());
         dto.setRequiredSkills(job.getRequiredSkills());
-
-        Company company = job.getCompany();
-        dto.setCompanyName(company != null ? company.getName() : ""); // ✅ null 방지
 
         return dto;
     }
