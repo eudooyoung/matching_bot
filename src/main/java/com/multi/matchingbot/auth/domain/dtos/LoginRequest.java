@@ -1,5 +1,6 @@
 package com.multi.matchingbot.auth.domain.dtos;
 
+import com.multi.matchingbot.common.domain.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,5 +13,5 @@ import lombok.NoArgsConstructor;
 public class LoginRequest {
     private String email;
     private String password;
-    private String userType;
+    private Role role;
 }

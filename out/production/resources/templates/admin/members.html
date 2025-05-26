@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8"/>
+    <title>MatchingBot</title>
+    <link rel="stylesheet" th:href="@{/css/layout.css}"/>
+    <link rel="stylesheet" th:href="@{/css/admin-members.css}"/>
+</head>
+<body>
+
+<div class="wrapper">
+    <div th:replace="~{fragments/header :: header(role=${role})}"></div>
+
+    <main class="main-content">
+        <section style="padding: 2rem;">
+            <h2 style="margin-bottom: 1.5rem;">👤 개인 회원 관리</h2>
+
+            <!-- 검색창 -->
+            <div style="margin-bottom: 1rem;">
+                <form method="get" th:action="@{/admin/users}">
+                    <input type="text" name="keyword" placeholder="이름, 이메일 검색…" style="padding: 0.5rem; width: 250px;">
+                    <button type="submit"
+                            style="padding: 0.5rem 1rem; background-color: #2196f3; color: white; border: none; border-radius: 4px;">
+                        검색
+                    </button>
+                </form>
+            </div>
+
+            <!-- 회원 테이블 -->
+            <table class="table">
+                <thead style="background-color: #f0f0f0;">
+                <tr>
+                    <th>회원 번호</th>
+                    <th>이름</th>
+                    <th>이메일</th>
+                    <th>성별</th>
+                    <th>연락처</th>
+                    <th>약관 동의</th>
+                    <th>개인정보 동의</th>
+                    <th>가입일</th>
+                    <th>수정자</th>
+                    <th>수정일</th>
+                    <th>상태</th>
+                    <th>삭제</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="member : ${members}">
+                    <td th:text="${member.formattedId}">아이디</td>
+                    <td th:text="${member.name}">이름</td>
+                    <td th:text="${member.email}">이메일</td>
+                    <td th:text="${member.getGenderLabel()}">성별</td>
+                    <td th:text="${member.phone}">010-1234-5678</td>
+                    <td th:text="${member.getPrivacyLabel()}">동의</td>
+                    <td th:text="${member.getServiceLabel()}">동의</td>
+                    <td th:text="${#temporals.format(member.createdAt, 'yyyy-MM-dd HH:mm:ss')}">가입일</td>
+                    <td th:text="${member.updatedBy}">수정자</td>
+                    <td th:text="${#temporals.format(member.updatedAt, 'yyyy-MM-dd HH:mm:ss')}">2025-04-10</td>
+                    <td th:class="${member.getStatusClass()}"
+                        th:text="${member.getStatusText()}">
+                        상태
+                    </td>
+                    <td>
+                        <button type="button"
+                                class="btn-delete"
+                                th:if="${member.status.name() == 'Y'}"
+                                th:onclick="'deleteItem({ id: ' + ${member.id}
+                                + ', url: \'/api/v1/admin/members\', onSuccess: () => location.reload() })'">
+                            삭제
+                        </button>
+
+                        <button type="button"
+                                class="btn-restore"
+                                th:if="${member.status.name() == 'N'}"
+                                th:onclick="'reactivateItem({ id: ' + ${member.id}
+                                + ', url: \'/api/v1/admin/members\', onSuccess: () => location.reload() })'">
+                            복구
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <!-- 페이지네이션 (예시) -->
+            <div class="table-pagination" style="margin-top: 1.5rem; text-align: center;">
+                <a th:if="${members.hasPrevious()}" th:href="@{/admin/members(page=${currentPage - 1})}">이전</a>
+                <span th:unless="${members.hasPrevious()}" style="visibility: hidden;">이전</span>
+
+                <span th:each="pageNum : ${pageNumbers}" style="margin: 0 5px;">
+                    <a th:href="@{/admin/members(page=${pageNum})}"
+                       th:text="${pageNum + 1}"
+                       th:classappend="${pageNum == currentPage} ? 'active-page' : ''"></a>
+                </span>
+
+                <a th:if="${members.hasNext()}" th:href="@{/admin/members(page=${currentPage + 1})}">다음</a>
+                <span th:unless="${members.hasNext()}" style="visibility: hidden;">다음</span>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Fragment -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</div>
+<script th:src="@{/js/dropdown.js}"></script>
+<script th:src="@{/js/logout.js}"></script>
+<script th:src="@{/js/adminDelete.js}"></script>
+<script th:src="@{/js/adminReactivate.js}"></script>
+<script th:src="@{/js/fetchWithAuth.js}"></script>
+</body>
+</html>

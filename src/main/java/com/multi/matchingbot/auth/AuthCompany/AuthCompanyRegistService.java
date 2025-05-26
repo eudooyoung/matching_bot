@@ -34,8 +34,8 @@ public class AuthCompanyRegistService {
                 .role(Role.COMPANY) // 필수 설정
                 .agreeTerms(dto.isAgreeTerms() ? Yn.Y : Yn.N)
                 .agreePrivacy(dto.isAgreePrivacy() ? Yn.Y : Yn.N)
-                .agreeProvide(dto.isAgreeProvide() ? Yn.Y : Yn.N)
-                .agreeOpenApi(dto.isAgreeOpenApi() ? Yn.Y : Yn.N)
+                /*.agreeProvide(dto.isAgreeProvide() ? Yn.Y : Yn.N)*/
+                .agreeFinance(dto.isAgreeFinance() ? Yn.Y : Yn.N)
                 .agreeMarketing(dto.isAgreeMarketing() ? Yn.Y : Yn.N)
                 .agreeThirdParty(dto.isAgreeThirdParty() ? Yn.Y : Yn.N)
                 .build();

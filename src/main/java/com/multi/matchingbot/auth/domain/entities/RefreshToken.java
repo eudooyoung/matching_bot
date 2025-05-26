@@ -1,5 +1,6 @@
 package com.multi.matchingbot.auth.domain.entities;
 
+import com.multi.matchingbot.common.domain.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,7 +23,8 @@ public class RefreshToken {
     private String email;
 
     @Column(nullable = false)
-    private String userType;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @Column(nullable = false)
     private String refreshToken;

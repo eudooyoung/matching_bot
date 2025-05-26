@@ -1,6 +1,6 @@
-package com.multi.matchingbot.user.domain;
+package com.multi.matchingbot.member.domain;
 
-public class UserRegisterDto {
+public class MemberRegisterDto {
     private String email;
     private String password;
     private String name;
