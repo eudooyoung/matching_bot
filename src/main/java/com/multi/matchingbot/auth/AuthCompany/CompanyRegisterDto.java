@@ -1,5 +1,6 @@
 package com.multi.matchingbot.auth.AuthCompany;
 
+import com.multi.matchingbot.common.domain.enums.Yn;
 import lombok.Data;
 
 @Data
@@ -11,18 +12,15 @@ public class CompanyRegisterDto {
     private String address;
     private String industry;
 
-    private Integer establishedYear;
-    private Integer employeeCount;
-    private Long annualSales;
-    private Long operatingProfit;
-    private Integer recentJobPosts;
+    private int establishedYear;
+    private int headcount;
+    private int annualRevenue;
+    private int operatingIncome;
+    private int jobsLastYear;
 
-    private boolean agreeTerms;
-    private boolean agreePrivacy;
-    /*private boolean agreeProvide;
-    private boolean agreeOpenApi;*/
-    private boolean agreeFinance;
-
-    private boolean agreeMarketing;
-    private boolean agreeThirdParty;
+    private Yn agreeTerms;
+    private Yn agreePrivacy;
+    private Yn agreeFinance;
+    private Yn agreeMarketing;
+    private Yn agreeThirdParty;
 }
