@@ -9,9 +9,9 @@ For further reference, please consider the following sections:
 * [Create an OCI image](https://docs.spring.io/spring-boot/3.4.5/gradle-plugin/packaging-oci-image.html)
 * [Spring Data JPA](https://docs.spring.io/spring-boot/3.4.5/reference/data/sql.html#data.sql.jpa-and-spring-data)
 * [Spring Boot DevTools](https://docs.spring.io/spring-boot/3.4.5/reference/using/devtools.html)
-* [JDBC API](https://docs.spring.io/spring-boot/3.4.5/reference/data/sql.html)
+* [JDBC ](https://docs.spring.io/spring-boot/3.4.5/reference/data/sql.html)
 * [Spring Security](https://docs.spring.io/spring-boot/3.4.5/reference/web/spring-security.html)
-* [OpenAI](https://docs.spring.io/spring-ai/reference/api/chat/openai-chat.html)
+* [OpenAI](https://docs.spring.io/spring-ai/reference//chat/openai-chat.html)
 * [Thymeleaf](https://docs.spring.io/spring-boot/3.4.5/reference/web/servlet.html#web.servlet.spring-mvc.template-engines)
 * [Spring Web](https://docs.spring.io/spring-boot/3.4.5/reference/web/servlet.html)
 

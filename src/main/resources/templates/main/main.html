@@ -97,17 +97,27 @@
                 </button>
             </section>
 
-            <!-- 채용공고 목록 -->
-            <section class="job-section">
-                <h2>실시간 채용정보</h2>
-                <div class="job-list">
-                    <div class="job-card"></div>
-                    <div class="job-card"></div>
-                    <div class="job-card"></div>
-                </div>
-            </section>
-        </div>
-    </main>
+  <!-- 채용공고 목록 -->
+  <section class="job-section">
+    <h2>실시간 채용정보</h2>
+    <div class="job-list">
+      <div th:each="job : ${jobList}" class="job-card">
+        <h3 th:text="${job.title}">채용공고 제목</h3>
+        <p><strong>회사명:</strong> <span th:text="${job.companyName}">회사명</span></p>
+        <p><strong>주소:</strong> <span th:text="${job.address}">주소</span></p>
+        <p><strong>요구 기술:</strong> <span th:text="${job.requiredSkills}">기술스택</span></p>
+        <a th:href="@{'/job/detail/' + ${job.id}}">상세보기</a>
+      </div>
+    </div>
+
+    <!-- ✅ 페이지네이션 -->
+    <div class="pagination">
+      <a th:if="${currentPage > 1}" th:href="@{'/main?page=' + ${currentPage - 1}}">이전</a>
+      <span th:text="'현재 페이지: ' + ${currentPage} + ' / ' + ${totalPages}"></span>
+      <a th:if="${currentPage < totalPages}" th:href="@{'/main?page=' + ${currentPage + 1}}">다음</a>
+    </div>
+  </section>
+
 
     <!-- Footer Fragment -->
     <div th:insert="~{fragments/footer :: footer}"></div>
@@ -144,10 +154,10 @@
                 region
             });
 
-            // TODO: 서버에 요청 또는 페이지 이동
-            // window.location.href = `/search?keyword=${keyword}&title=${title}&skill=${skill}&region=${region}`;
-        });
-    };
+      // 서버에 요청 또는 페이지 이동
+       window.location.href = `/search-page?keyword=${keyword}&title=${title}&skill=${skill}&region=${region}`;
+    });
+  };
 </script>
 <!--헤더 추가할때 dropdown & logout.js추가-->
 <script th:src="@{/js/dropdown.js}"></script>
