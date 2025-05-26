@@ -1,6 +1,5 @@
 package com.multi.matchingbot.jobposting;
 
-import com.multi.matchingbot.jobposting.domain.JobPosting;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

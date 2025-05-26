@@ -1,5 +1,6 @@
 package com.multi.matchingbot.auth.AuthCompany;
 
+import com.multi.matchingbot.common.domain.enums.Yn;
 import lombok.Data;
 
 @Data

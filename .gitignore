@@ -47,7 +47,7 @@ build/
 *.pem
 *.crt
 token.txt
-api_keys.json
+_keys.json
 
 #########################
 # ✅ OS/시스템 파일
