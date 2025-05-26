@@ -9,9 +9,6 @@ public class JobPostingMapper {
 
     public static JobPostingDto toDto(JobPosting entity) {
 
-        System.out.println("🟡 [Mapper] entity.getStartDate() = " + entity.getStartDate());
-        System.out.println("🟡 [Mapper] entity.getEndDate() = " + entity.getEndDate());
-
         JobPostingDto dto = new JobPostingDto();
         dto.setId(entity.getId());
         dto.setTitle(entity.getTitle());

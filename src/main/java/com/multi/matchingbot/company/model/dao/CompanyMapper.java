@@ -8,6 +8,8 @@ public class CompanyMapper {
 
     public static CompanyDto toDto(Company entity) {
         CompanyDto dto = new CompanyDto();
+
+
         BeanUtils.copyProperties(entity, dto);
         return dto;
     }

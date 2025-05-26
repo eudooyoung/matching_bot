@@ -1,5 +1,6 @@
 package com.multi.matchingbot.jobposting.service;
 
+
 import com.multi.matchingbot.jobposting.JobPostingRepository;
 import com.multi.matchingbot.jobposting.domain.JobPosting;
 import com.multi.matchingbot.jobposting.domain.JobPostingDto;

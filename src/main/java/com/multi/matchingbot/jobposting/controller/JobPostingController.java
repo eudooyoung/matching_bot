@@ -1,5 +1,6 @@
 package com.multi.matchingbot.jobposting.controller;
 
+
 import com.multi.matchingbot.jobposting.domain.JobPostingDto;
 import com.multi.matchingbot.jobposting.service.JobPostingService;
 import jakarta.validation.Valid;
