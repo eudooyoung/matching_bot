@@ -17,11 +17,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Company extends BaseEntity {
 
-    // 할일
-    // validation 처리
-    // default 값 처리
-    // 테이블 연관 관계 처리
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -66,28 +61,27 @@ public class Company extends BaseEntity {
     @Column(nullable = false)
     private int jobsLastYear;
 
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Yn agreeTerms;
 
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Yn agreePrivacy;
 
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Yn agreeProvide;
 
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Yn agreeOpenApi;
 
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Yn agreeMarketing;
 
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Yn agreeThirdParty;
-
 }
