@@ -1,0 +1,76 @@
+
+.table {
+    width: 90%;
+    margin: 1rem auto;
+    border-collapse: collapse;
+    background-color: white;
+    text-align: center;
+    font-size: 16px;
+}
+
+.table th,
+.table td {
+    border: 1px solid #ddd;
+    padding: 5px;
+}
+
+.table thead {
+    background-color: #f0f0f0;
+}
+
+.table tbody tr:hover {
+    background-color: #f9f9f9; /* 연한 회색 강조 */
+    cursor: pointer; /* 선택 가능한 느낌 줄 수도 있음 */
+}
+
+.table td.status-active {
+    color: green;
+}
+
+.table td.status-inactive {
+    color: gray;
+}
+
+.btn-delete {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-restore {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.table-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2rem;
+    min-width: 200px; /* 너비는 적당히 조정 가능 */
+}
+
+.table-pagination a {
+    text-decoration: none; /* 밑줄 제거 */
+    /*color: black;*/
+    color: inherit; /* 부모 요소 색상 계승 (보통 검정) */
+}
+
+.table-pagination a:hover {
+    text-decoration: underline;
+    color: #2196f3; /* hover 시만 강조 */
+}
+
+.active-page {
+    font-weight: bold;
+    text-decoration: underline;
+    color: #2196f3;
+}

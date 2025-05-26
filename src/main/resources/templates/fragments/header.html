@@ -1,37 +1,49 @@
 <!-- templates/fragments/header.html -->
 
-<div th:fragment="header(userType)" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<div th:fragment="header(role)" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
     <header class="header">
         <div class="logo">
             <a th:href="@{/}" class="logo-link">MatchingBot</a>
         </div>
 
-        <div class="nav">
-
-            <!-- 회원 -->
-            <div sec:authorize="isAuthenticated()">
-                <a href="javascript:void(0)" class="nav-link" onclick="logout()">로그아웃</a>
-                <a th:href="@{/community/list}" class="nav-link">커뮤니티</a>
-                <!-- 개인회원 전용 마이페이지 -->
-                <a th:href="@{/mypage/user}" class="nav-link" sec:authorize="hasRole('USER')">개인페이지</a>
-                <!-- 기업회원 전용 마이페이지 -->
-                <a th:href="@{/company/}" class="nav-link" sec:authorize="hasRole('COMPANY')">기업페이지</a>
+        <!-- 관리자 -->
+        <div sec:authorize="hasRole('ADMIN')" class="nav">
+            <a href="javascript:void(0)" class="nav-link" onclick="logout()">로그아웃</a>
+            <div class="dropdown-wrapper">
+                <button class="menu-button" onclick="toggleDropdown(this)">Menu</button>
+                <ul class="dropdown">
+                    <li><a th:href="@{/admin/members(page=0)}">개인 회원 관리</a></li>
+                    <li><a th:href="@{/admin/companies}">기업 회원 관리</a></li>
+                    <li><a th:href="@{/admin/resumes}">이력서 관리</a></li>
+                    <li><a th:href="@{/admin/jobs}">채용 공고 관리</a></li>
+                    <li><a th:href="@{/admin/community}">커뮤니티 관리</a></li>
+                </ul>
             </div>
-
-            <!-- 비회원  -->
-            <div sec:authorize="isAnonymous()">
-                <a th:href="@{/auth/login}" class="nav-link">로그인</a>
-                <a th:href="@{/job/list}" class="nav-link">커뮤니티</a>
-                <div class="dropdown-wrapper">
-                    <button class="menu-button green" onclick="toggleDropdown(this)">계정 생성하기</button>
-                    <ul class="dropdown green">
-                        <li><a th:href="@{/auth/register-user}">개인 회원</a></li>
-                        <li><a th:href="@{/auth/register-company}">기업 회원</a></li>
-                    </ul>
-                </div>
-            </div>
-
-
         </div>
+
+        <!-- 회원 -->
+        <div sec:authorize="hasAnyRole('MEMBER', 'COMPANY')" class="nav">
+            <a href="javascript:void(0)" class="nav-link" onclick="logout()">로그아웃</a>
+            <a th:href="@{/community/list}" class="nav-link">커뮤니티</a>
+            <!-- 개인회원 전용 마이페이지 -->
+            <a th:href="@{/mypage/user}" class="nav-link" sec:authorize="hasRole('MEMBER')">개인페이지</a>
+            <!-- 기업회원 전용 마이페이지 -->
+            <a th:href="@{/company/}" class="nav-link" sec:authorize="hasRole('COMPANY')">기업페이지</a>
+        </div>
+
+        <!-- 비회원  -->
+        <div sec:authorize="isAnonymous()" class="nav">
+            <div class="dropdown-wrapper">
+                <button class="menu-button green" onclick="toggleDropdown(this)">계정 생성하기</button>
+                <ul class="dropdown green">
+                    <li><a th:href="@{/auth/register-user}">개인 회원</a></li>
+                    <li><a th:href="@{/auth/register-company}">기업 회원</a></li>
+                </ul>
+            </div>
+            <a th:href="@{/auth/login}" class="nav-link">로그인</a>
+            <a th:href="@{/job/list}" class="nav-link">커뮤니티</a>
+        </div>
+
+
     </header>
 </div>

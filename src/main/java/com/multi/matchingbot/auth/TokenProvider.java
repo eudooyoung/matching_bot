@@ -27,7 +27,7 @@ public class TokenProvider {
     @Value("${jwt.issuer}")
     private String issuer;
 
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 3;
+    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000L * 30;
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000L * 60 * 5;
 
     public String generateAccessToken(UserDetails userDetails) {
@@ -45,22 +45,17 @@ public class TokenProvider {
         Map<String, Object> claims = new HashMap<>();
 
         // 클레임 요소 추가
-        claims.put("userType", mBotUserDetails.getUserType());
+        claims.put("role", mBotUserDetails.getRole().name());
         claims.put("userId", mBotUserDetails.getId());
-
-        /*
-        claims.put("auth", userDetails.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(",")));*/
+        claims.put("email", mBotUserDetails.getEmail());
 
 //        화면 출력 확인
         claims.put("auth", userDetails.getAuthorities().stream()
             .map(GrantedAuthority::getAuthority)
             .toList());
 
-        log.warn("클레임 설정 완료: userType={}, userId={}, userAuth={}",
-                mBotUserDetails.getUserType(), mBotUserDetails.getId(), mBotUserDetails.getAuthorities());
-
+        log.warn("클레임 설정 완료: role={}, userId={}, userAuth={}",
+                mBotUserDetails.getRole(), mBotUserDetails.getId(), mBotUserDetails.getAuthorities());
 
         return Jwts.builder()
                 .setIssuer(issuer)
@@ -70,23 +65,24 @@ public class TokenProvider {
                 .setExpiration(new Date(System.currentTimeMillis() + expiresIn))                        //  만료 시간 설정
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)                                    // 시그니쳐 알고리즘 특정
                 .compact();
-
     }
 
     private Key getSigningKey() {
         byte[] keyBytes = Base64.getDecoder().decode(secretKey);                        // JWT키 디코드
-        log.warn("secretKey 길이 (bytes): {}", keyBytes.length);
+//        log.warn("secretKey 길이 (bytes): {}", keyBytes.length);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
     public Claims parseClaims(String token) {
         try {
+//            log.warn("클레임 파싱 시작");
             return Jwts.parserBuilder()
                     .setSigningKey(getSigningKey())
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
         } catch (ExpiredJwtException e) {           // 만료되어도 정보를 꺼내서 던짐
+//            log.warn("토큰 만료");
             return e.getClaims();
         }
     }
