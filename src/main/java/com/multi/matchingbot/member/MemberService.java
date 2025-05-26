@@ -1,34 +1,35 @@
-package com.multi.matchingbot.user;
-
+package com.multi.matchingbot.member;
 
 
 import com.multi.matchingbot.common.domain.enums.Gender;
 import com.multi.matchingbot.common.domain.enums.Role;
 import com.multi.matchingbot.common.domain.enums.Yn;
-import com.multi.matchingbot.user.domain.User;
-import com.multi.matchingbot.user.domain.UserRegisterDto;
+import com.multi.matchingbot.member.domain.Member;
+import com.multi.matchingbot.member.domain.MemberRegisterDto;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
 @Service
 public class MemberService {
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public MemberService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
+    public MemberService(MemberRepository memberRepository, PasswordEncoder passwordEncoder) {
+        this.memberRepository = memberRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
 
-    public void register(UserRegisterDto dto) {
-        if (userRepository.existsByEmail(dto.getEmail())) {
+    public void register(MemberRegisterDto dto) {
+        if (memberRepository.existsByEmail(dto.getEmail())) {
             throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
         }
 
-        User user = User.builder()
+        Member member = Member.builder()
                 .email(dto.getEmail())
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .name(dto.getName())
@@ -40,11 +41,29 @@ public class MemberService {
                 .agreeLocation(dto.isLocationRequired() ? Yn.Y : Yn.N)
                 .alertBookmark(dto.isMarketingEmail() ? Yn.Y : Yn.N)
                 .alertResume(dto.isMarketingSms() ? Yn.Y : Yn.N)
-                .role(Role.USER)
+                .role(Role.MEMBER)
                 .status(Yn.Y)
                 .address(dto.getAddress())
                 .build();
 
-        userRepository.save(user);
+        memberRepository.save(member);
+    }
+
+    @Transactional
+    public void deactivateMember(Long id) {
+        Member member = memberRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("해당 회원이 존재하지 않습니다.")
+        );
+
+        member.setStatus(Yn.N);
+    }
+
+    @Transactional
+    public void reactivate(Long id) {
+        Member member = memberRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("해당 회원이 존재하지 않습니다.")
+        );
+
+        member.setStatus(Yn.Y);
     }
 }

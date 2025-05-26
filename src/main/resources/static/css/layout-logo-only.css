@@ -1,3 +1,13 @@
+html, body {
+    height: 100%;
+}
+
+/* 전체 페이지를 세로로 정렬하는 wrapper */
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
 
 body {
   margin: 0;
@@ -6,6 +16,16 @@ body {
 }
 
 /* Header */
+
+/*.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #103254;
+  padding: 1rem 2rem;
+  color: white;
+}*/
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -13,6 +33,8 @@ body {
   background-color: #103254;
   padding: 1rem 2rem;
   color: white;
+  height: 65px; /* 예시 고정값 */
+  box-sizing: border-box; /* 패딩 포함 계산 */
 }
 
 .logo {
@@ -20,6 +42,11 @@ body {
   text-decoration: none;
   font-size: 1.5rem;
   font-weight: bold;
+}
+
+/* 메인 콘텐츠는 늘어나게 */
+.main-content {
+  flex: 1;
 }
 
 /* Footer */

@@ -1,6 +1,7 @@
 package com.multi.matchingbot.common.security;
 
 import com.multi.matchingbot.auth.TokenProvider;
+import com.multi.matchingbot.common.domain.enums.Role;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -15,7 +16,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final UserDetailsService userDetailsService;
+    private final MBotUserDetailsService mBotUserDetailsService;
     private final TokenProvider tokenProvider;
     private final AntPathMatcher pathMatcher = new AntPathMatcher();
 
@@ -45,7 +45,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             "/js/**",
             "/css/**",
             "/images/**",
-//        "/favicon.ico"
+            "/.well-known/**",
+            "/error/**"
     };
 
     @Override
@@ -85,13 +86,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     // 응답 인가 처리
     private void authenticateRequest(String token, HttpServletRequest request) {
         try {
+//            log.warn("인가 요청 진입");
             String email = tokenProvider.extractUsername(token);
-            String userType = tokenProvider.parseClaims(token).get("userType", String.class);
+//            log.warn("유저 이메일 복원: {}", email);
+            String roleStr = tokenProvider.parseClaims(token).get("role", String.class);
+            Role role = Role.valueOf(roleStr);
+//            log.warn("유저 정보 복원 완료 email: {}, role: {}", email, role);
 
-            UserDetails userDetails = ((MBotUserDetailsService) userDetailsService)
-                    .loadByType(email, userType);       // authenticationService의 validateToken 메소드 호출
-
-//            List<GrantedAuthority> authorities = extractAuthoritiesFromToken(token);
+            UserDetails userDetails = mBotUserDetailsService.loadUserByType(email, role);
+//            log.warn("userDetail 생성");
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     userDetails,
@@ -106,7 +109,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             if (userDetails instanceof MBotUserDetails mBotUserDetails) {
                 request.setAttribute("userId", mBotUserDetails.getId());
-                request.setAttribute("userType", mBotUserDetails.getUserType());
+                request.setAttribute("userType", mBotUserDetails.getRole());
                 log.warn("JWT 인증 필터 통과 - 유저: {}, 권한: {}", userDetails.getUsername(), userDetails.getAuthorities());
             }
         } catch (Exception ex) {
@@ -131,6 +134,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     // 토큰 추출
     private String extractToken(HttpServletRequest request) {
+//        log.warn("토큰 추출 진입");
         if (request.getCookies() == null) return null;
 
         for (Cookie cookie : request.getCookies()) {

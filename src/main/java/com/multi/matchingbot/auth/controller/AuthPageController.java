@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Slf4j
 public class AuthPageController {
 
-    @GetMapping("/register-user")
+    @GetMapping("/register-member")
     public String showRegisterPage() {
         return "auth/register"; // resources/templates/auth/register.html
     }
