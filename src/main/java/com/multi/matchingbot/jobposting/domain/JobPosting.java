@@ -51,6 +51,12 @@ public class JobPosting extends BaseEntity {
     @Column(name = "trait_keywords", length = 100)
     private String traitKeywords;
 
+    @Column(nullable = false)
+    private Double latitude;
+
+    @Column(nullable = false)
+    private Double longitude;
+
     @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
 

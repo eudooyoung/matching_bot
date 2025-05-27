@@ -47,6 +47,12 @@ public class JobPostingDto {
     @Size(max = 100, message = "100자 이하로 입력해주세요.")
     private String traitKeywords;
 
+    @NotNull(message = "위도를 입력해주세요.")
+    private Double latitude;
+
+    @NotNull(message = "경도를 입력해주세요.")
+    private Double longitude;
+
     @NotNull(message = "시작일을 입력해주세요.")
     private LocalDate startDate;
 
