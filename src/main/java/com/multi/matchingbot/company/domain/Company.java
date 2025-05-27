@@ -78,14 +78,6 @@ public class Company extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Yn agreeFinance;
 
-    /*@Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Yn agreeProvide;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Yn agreeOpenApi;*/
-
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Yn agreeMarketing;
