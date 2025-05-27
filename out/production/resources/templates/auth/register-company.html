@@ -4,16 +4,13 @@
     <meta charset="UTF-8">
     <title>기업 회원가입</title>
     <link rel="stylesheet" type="text/css" href="/css/register.css">
-    <link rel="stylesheet" th:href="@{/css/common.css}" href="/css/common.css">
+    <link rel="stylesheet" th:href="@{/css/layout.css}" href="/css/layout.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 
 <div class="wrapper">
-    <!--    <div th:replace="fragments/header :: header(role=${role})"></div>-->
-
-    <!-- Header Fragment -->
-    <div th:replace="~{fragments/header :: header(userType=${userType})}"></div>
+        <div th:replace="fragments/header :: header(role=${role})"></div>
 
     <main class="main-content">
         <div class="container">
@@ -187,6 +184,7 @@
 
         if (!validatePassword(password)) {
             alert("비밀번호는 8~16자이며, 영문자/숫자/특수문자를 모두 포함해야 합니다.");
+            document.getElementById("password").focus();
             return;
         }
 
@@ -242,6 +240,7 @@
         });
     }
 </script>
-
+<script th:src="@{/js/dropdown.js}"></script>
+<script th:src="@{/js/logout.js}"></script>
 </body>
 </html>
