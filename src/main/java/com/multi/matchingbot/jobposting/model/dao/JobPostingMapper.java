@@ -1,8 +1,8 @@
 package com.multi.matchingbot.jobposting.model.dao;
 
 import com.multi.matchingbot.company.domain.Company;
-import com.multi.matchingbot.jobposting.JobPosting;
-import com.multi.matchingbot.jobposting.model.dto.JobPostingDto;
+import com.multi.matchingbot.jobposting.domain.JobPosting;
+import com.multi.matchingbot.jobposting.domain.JobPostingDto;
 import org.springframework.beans.BeanUtils;
 
 public class JobPostingMapper {
@@ -27,6 +27,8 @@ public class JobPostingMapper {
         dto.setCreatedBy(entity.getCreatedBy());
         dto.setUpdatedAt(entity.getUpdatedAt());
         dto.setUpdatedBy(entity.getUpdatedBy());
+        dto.setLatitude(entity.getLatitude());
+        dto.setLongitude(entity.getLongitude());
 
         if (entity.getCompany() != null) {
             dto.setCompanyId(entity.getCompany().getId());
