@@ -27,8 +27,8 @@ public class TokenProvider {
     @Value("${jwt.issuer}")
     private String issuer;
 
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000L * 30;
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000L * 60 * 5;
+    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000L * 60 * 60 * 24 * 3;
+    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000L * 60 * 60 * 24 * 14;;
 
     public String generateAccessToken(UserDetails userDetails) {
         return generateToken(userDetails, ACCESS_TOKEN_EXPIRE_TIME);

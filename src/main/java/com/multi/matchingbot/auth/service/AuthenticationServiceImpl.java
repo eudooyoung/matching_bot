@@ -32,7 +32,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final TokenProvider tokenProvider;
 
     public UserDetails authenticate(String email, String password, Role role) {
-        UserDetails userDetails = mBotUserDetailsService.loadUserByType(email, role);
+        UserDetails userDetails = mBotUserDetailsService.loadUserByTypeAndEmail(role, email);
 
         if (!passwordEncoder.matches(password, userDetails.getPassword())) {
             throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
@@ -98,7 +98,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public void refreshTokenAndSetCookie(String refreshToken, HttpServletResponse response) {
         // 토큰에서 userId, userType 추출
         String email = tokenProvider.extractUsername(refreshToken);
-        Role role = tokenProvider.parseClaims(refreshToken).get("role", Role.class);
+        String roleStr =  tokenProvider.parseClaims(refreshToken).get("role", String.class);
+        Role role = Role.valueOf(roleStr);
 
         // DB조회
         RefreshToken savedToken = refreshTokenRepository.findByEmailAndRole(email, role)
@@ -110,8 +111,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
         // access 토큰 재발급
-        UserDetails userDetails = mBotUserDetailsService.loadUserByUsername(email);
+        UserDetails userDetails = mBotUserDetailsService.loadUserByTypeAndEmail(role, email);
         String newAccessToken = tokenProvider.generateAccessToken(userDetails);
+
+        log.warn("access 토큰 재발급 완료");
 
 
         ResponseCookie accessCookie = ResponseCookie.from("accessToken", newAccessToken)

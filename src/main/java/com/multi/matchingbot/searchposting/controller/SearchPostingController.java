@@ -20,6 +20,7 @@ public class SearchPostingController {
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String skill,
             @RequestParam(required = false) String region
+
     ) {
         return searchPostingService.searchJobs(keyword, title, skill, region);
     }

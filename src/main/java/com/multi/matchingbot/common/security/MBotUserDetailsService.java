@@ -4,8 +4,8 @@ import com.multi.matchingbot.common.domain.enums.Role;
 import com.multi.matchingbot.common.error.InvalidRoleException;
 import com.multi.matchingbot.company.CompanyRepository;
 import com.multi.matchingbot.company.domain.Company;
-import com.multi.matchingbot.member.MemberRepository;
-import com.multi.matchingbot.member.domain.Member;
+import com.multi.matchingbot.member.repository.MemberRepository;
+import com.multi.matchingbot.member.domain.entities.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,7 +27,7 @@ public class MBotUserDetailsService implements UserDetailsService {
         throw new UnsupportedOperationException("이 서비스는 loadUserByType(...)만 지원합니다.");
     }
 
-    public UserDetails loadUserByType(String email, Role role) {
+    public UserDetails loadUserByTypeAndEmail(Role role, String email) {
         log.warn("▶ loadByType 호출 - email: {}, role: {}", email, role);
 
         switch (role) {

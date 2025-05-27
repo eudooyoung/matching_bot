@@ -1,11 +1,12 @@
-package com.multi.matchingbot.member;
+package com.multi.matchingbot.member.service;
 
 
 import com.multi.matchingbot.common.domain.enums.Gender;
 import com.multi.matchingbot.common.domain.enums.Role;
 import com.multi.matchingbot.common.domain.enums.Yn;
-import com.multi.matchingbot.member.domain.Member;
-import com.multi.matchingbot.member.domain.MemberRegisterDto;
+import com.multi.matchingbot.member.domain.entities.Member;
+import com.multi.matchingbot.member.domain.dtos.MemberRegisterDto;
+import com.multi.matchingbot.member.repository.MemberRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
