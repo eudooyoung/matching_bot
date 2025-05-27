@@ -40,8 +40,8 @@
 </head>
 
 <body>
-<p th:text="'현재 userType: ' + ${userType}"></p>
-<div th:replace="~{fragments/header :: header(userType=${userType})}"></div>
+<!--<p th:text="'현재 userType: ' + ${userType}"></p>-->
+<div th:replace="~{fragments/header :: header(role=${role})}"></div>
 
 <div class="container">
     <h2>공고 상세보기</h2>

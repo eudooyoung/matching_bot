@@ -8,8 +8,8 @@
 </head>
 <body>
 
-<p th:text="'현재 userType: ' + ${userType}"></p>
-<div th:replace="~{fragments/header :: header(userType=${userType})}"></div>
+<!--<p th:text="'현재 userType: ' + ${userType}"></p>-->
+<div th:replace="~{fragments/header :: header(role=${role})}"></div>
 
 <div class="container">
     <h2>기업 홈</h2>

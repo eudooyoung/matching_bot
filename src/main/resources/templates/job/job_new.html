@@ -7,8 +7,8 @@
     <link rel="stylesheet" th:href="@{/css/common.css}"/>
 </head>
 <body>
-<p th:text="'현재 userType: ' + ${userType}"></p>
-<div th:replace="~{fragments/header :: header(userType=${userType})}"></div>
+<!--<p th:text="'현재 userType: ' + ${userType}"></p>-->
+<div th:replace="~{fragments/header :: header(role=${role})}"></div>
 
 <div class="container">
     <h2>채용 공고 등록</h2>
