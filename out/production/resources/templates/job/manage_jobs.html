@@ -4,16 +4,12 @@
     <meta charset="UTF-8">
     <title>채용 공고 관리</title>
     <link rel="stylesheet" th:href="@{/css/manage_jobs.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}"/>
 </head>
 <body>
 
-<!-- 상단 네비게이션 -->
-<div class="navbar">
-    <a href="/main" class="logo">MatchingBot</a>
-    <button class="nav-button">커뮤니티</button>
-    <button class="nav-button" onclick="goToMyPage()">마이페이지</button>
-    <span class="user-name" th:text="${company_name}"></span>
-</div>
+<p th:text="'현재 userType: ' + ${role}"></p>
+<div th:replace="~{fragments/header :: header(role=${role})}"></div>
 
 <!-- 컨테이너 -->
 <div class="container">
@@ -33,24 +29,31 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="job : ${jobList}">
-            <td th:text="${job.id}"></td>
-            <td th:text="${job.title}"></td>
-            <td>
-                <span th:text="${#temporals.format(job.startDate, 'yyyy-MM-dd')}">시작일</span>
-                ~
-                <span th:text="${#temporals.format(job.endDate, 'yyyy-MM-dd')}">종료일</span>
-            </td>
-            <td><a th:href="@{'/job/' + ${job.id}}">상세보기</a></td>
-            <td>
-                <button class="nav-button" th:onclick="|location.href='/job/${job.id}/edit'|">수정</button>
-            </td>
-            <td>
-                <button class="delete-button" th:onclick="'deleteJob(' + ${job.id} + ')'">삭제</button>
-            </td>
+        <tr th:each="job, iterStat : ${jobPage.content}">
+            <td th:text="${job.id}">1</td>
+            <td th:text="${job.title}">제목</td>
+            <td th:text="${#temporals.format(job.startDate, 'yyyy-MM-dd')} + ' ~ ' + ${#temporals.format(job.endDate, 'yyyy-MM-dd')}">기간</td>
+            <td th:onclick="'location.href=\'/job/' + ${job.id} + '\''">상세보기</td>
+            <td><button class="update-button" th:onclick="'location.href=\'/job/' + ${job.id} + '/edit\''">수정</button></td>
+            <td><button class="delete-button" th:onclick="'deleteJob(' + ${job.id} + ')'">삭제</button></td>
         </tr>
         </tbody>
     </table>
+
+    <div class="pagination">
+        <button class="pag-button" th:if="${!jobPage.first}"
+                th:onclick="'location.href=\'/job/manage_jobs?page=' + ${jobPage.number - 1} + '\''">
+            이전
+        </button>
+
+        <span th:text="${jobPage.number + 1}">1</span> /
+        <span th:text="${jobPage.totalPages}">1</span>
+
+        <button class="pag-button" th:if="${!jobPage.last}"
+                th:onclick="'location.href=\'/job/manage_jobs?page=' + ${jobPage.number + 1} + '\''">
+            다음
+        </button>
+    </div>
 </div>
 
 <!-- 삭제 스크립트 -->
@@ -75,6 +78,9 @@
         }
     }
 </script>
+
+<script th:src="@{/js/dropdown.js}"></script>
+<script th:src="@{/js/logout.js}"></script>
 
 </body>
 </html>

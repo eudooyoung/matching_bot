@@ -3,13 +3,18 @@
 <head>
     <meta charset="UTF-8" />
     <title>공고 수정하기</title>
-    <link rel="stylesheet" th:href="@{/css/mypage.css}" />
+    <link rel="stylesheet" th:href="@{/css/mypage.css}"/>
+    <link rel="stylesheet" th:href="@{/css/common.css}"/>
     <style>
         .form-box {
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 20px;
-            background: #fff;
+            background-color: white;
+            margin: 50px auto;
+            padding-top: 60px;
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-bottom: 60px;
+            max-width: 1000px;
+            border: 1px solid #ccc;
             border-radius: 8px;
             box-shadow: 0 0 8px rgba(0,0,0,0.05);
         }
@@ -24,7 +29,7 @@
         .form-box input[type="email"],
         .form-box input[type="date"],
         .form-box textarea {
-            width: 100%;
+            width: 98%;
             padding: 8px;
             margin-top: 4px;
             border: 1px solid #ccc;
@@ -50,51 +55,66 @@
 </head>
 <body>
 
-<div class="navbar">
-    <a href="/main" class="logo">MatchingBot</a>
-    <button class="nav-button">커뮤니티</button>
-    <button class="nav-button" onclick="goToMyPage()">마이페이지</button>
-    <span class="user-name" th:text="${company_name}"></span>
-</div>
+<p th:text="'현재 userType: ' + ${role}"></p>
+<div th:replace="~{fragments/header :: header(role=${role})}"></div>
 
 <div class="form-box">
     <h2>공고 수정하기</h2>
 
-    <form th:action="@{'/job/' + ${job.id} + '/edit'}" method="post">
-        <input type="hidden" name="id" th:value="${job.id}" />
+    <form th:action="@{/job/{id}/edit(id=${job.id})}" method="post" th:object="${job}">
+        <input type="hidden" name="id" th:value="${job.id}"/>
 
         <label>제목</label>
         <input type="text" name="title" th:value="${job.title}" required />
+        <div th:if="${#fields.hasErrors('title')}" class="error-message" th:errors="*{title}"></div>
 
         <label>설명</label>
-        <textarea name="description" rows="3" th:text="${job.description}"></textarea>
+        <textarea name="description" rows="3" th:text="${job.description}" required ></textarea>
+        <div th:if="${#fields.hasErrors('description')}" class="error-message" th:errors="*{description}"></div>
 
         <label>근무지</label>
-        <input type="text" name="address" th:value="${job.address}" />
+        <input type="text" name="address" th:value="${job.address}" required />
+        <div th:if="${#fields.hasErrors('address')}" class="error-message" th:errors="*{address}"></div>
 
         <label>주요 업무</label>
-        <textarea name="mainTask" rows="2" th:text="${job.mainTask}"></textarea>
+        <textarea name="mainTask" rows="2" th:text="${job.mainTask}" required ></textarea>
+        <div th:if="${#fields.hasErrors('mainTask')}" class="error-message" th:errors="*{mainTask}"></div>
 
         <label>필요 기술</label>
-        <textarea name="requiredSkills" rows="2" th:text="${job.requiredSkills}"></textarea>
+        <textarea name="requiredSkills" rows="2" th:text="${job.requiredSkills}" required ></textarea>
+        <div th:if="${#fields.hasErrors('requiredSkills')}" class="error-message" th:errors="*{requiredSkills}"></div>
 
         <label>필요 성향</label>
-        <textarea name="requiredTraits" rows="2" th:text="${job.requiredTraits}"></textarea>
+        <textarea name="requiredTraits" rows="2" th:text="${job.requiredTraits}" required ></textarea>
+        <div th:if="${#fields.hasErrors('requiredTraits')}" class="error-message" th:errors="*{requiredTraits}"></div>
 
         <label>기술 키워드</label>
-        <input type="text" name="skillKeywords" th:value="${job.skillKeywords}" />
+        <input type="text" name="skillKeywords" th:value="${job.skillKeywords}" required />
+        <div th:if="${#fields.hasErrors('skillKeywords')}" class="error-message" th:errors="*{skillKeywords}"></div>
 
         <label>성향 키워드</label>
-        <input type="text" name="traitKeywords" th:value="${job.traitKeywords}" />
+        <input type="text" name="traitKeywords" th:value="${job.traitKeywords}" required />
+        <div th:if="${#fields.hasErrors('traitKeywords')}" class="error-message" th:errors="*{traitKeywords}"></div>
+
+        <label>위도</label>
+        <input type="text" name="latitude" th:value="${job.latitude}" required />
+        <div th:if="${#fields.hasErrors('latitude')}" class="error-message" th:errors="*{latitude}"></div>
+
+        <label>경도</label>
+        <input type="text" name="longitude" th:value="${job.longitude}" required />
+        <div th:if="${#fields.hasErrors('longitude')}" class="error-message" th:errors="*{longitude}"></div>
 
         <label>채용 시작일</label>
-        <input type="date" name="startDate" th:value="${job.startDate}" />
+        <input type="date" name="startDate" th:value="${job.startDate}" required />
+        <div th:if="${#fields.hasErrors('startDate')}" class="error-message" th:errors="*{startDate}"></div>
 
         <label>채용 마감일</label>
-        <input type="date" name="endDate" th:value="${job.endDate}" />
+        <input type="date" name="endDate" th:value="${job.endDate}" required />
+        <div th:if="${#fields.hasErrors('endDate')}" class="error-message" th:errors="*{endDate}"></div>
 
         <label>지원 이메일</label>
-        <input type="email" name="enrollEmail" th:value="${job.enrollEmail}" />
+        <input type="email" name="enrollEmail" th:value="${job.enrollEmail}" required />
+        <div th:if="${#fields.hasErrors('enrollEmail')}" class="error-message" th:errors="*{enrollEmail}"></div>
 
         <label>유의사항</label>
         <textarea name="notice" rows="2" th:text="${job.notice}"></textarea>
@@ -105,5 +125,9 @@
         </div>
     </form>
 </div>
+
+<script th:src="@{/js/dropdown.js}"></script>
+<script th:src="@{/js/logout.js}"></script>
+
 </body>
 </html>

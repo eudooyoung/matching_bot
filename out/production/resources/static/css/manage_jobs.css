@@ -1,25 +1,11 @@
-.navbar {
-    position: fixed; /* 상단 고정 */
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-    background-color: #1a2b49;
-    color: white;
+
+.header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 20px;
-    margin: 0; /* 상단 여백 제거 */
-    box-sizing: border-box;
-}
-
-.logo {
-    margin-right: auto;  /* 로고가 왼쪽에 붙도록 */
-    font-size: 24px;
-    font-weight: bold;
+    background-color: #103254;
+    padding: 1rem 2rem;
     color: white;
-    text-decoration: none;
 }
 
 .nav-links a {
@@ -42,13 +28,15 @@ body {
 }
 
 .container {
-    width: 90%;
-    max-width: 1000px;
+    background-color: white;
     margin: 50px auto;
     padding-top: 60px;
-    background-color: #fff;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 60px;
+    max-width: 1000px;
+    border: 1px solid #ccc;
     border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 h2 {
@@ -91,6 +79,17 @@ h2 {
     color: white;
     border: none;
     padding: 6px 14px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.update-button {
+    background-color: #2c3e50;
+    color: white;
+    border: none;
+    padding: 6px 14px;
     border-radius: 5px;
     font-weight: bold;
     cursor: pointer;
@@ -119,4 +118,22 @@ h2 {
 
 .delete-button:hover {
     background-color: #8a2c2c;
+}
+
+.pag-button{
+    background-color: #2c3e50;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    gap: 10px;
 }

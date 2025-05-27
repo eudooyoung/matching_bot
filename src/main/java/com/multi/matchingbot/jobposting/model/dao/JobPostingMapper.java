@@ -27,6 +27,8 @@ public class JobPostingMapper {
         dto.setCreatedBy(entity.getCreatedBy());
         dto.setUpdatedAt(entity.getUpdatedAt());
         dto.setUpdatedBy(entity.getUpdatedBy());
+        dto.setLatitude(entity.getLatitude());
+        dto.setLongitude(entity.getLongitude());
 
         if (entity.getCompany() != null) {
             dto.setCompanyId(entity.getCompany().getId());
