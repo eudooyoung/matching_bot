@@ -1,4 +1,4 @@
-package com.multi.matchingbot.member.domain;
+package com.multi.matchingbot.member.domain.dtos;
 
 public class MemberRegisterDto {
     private String email;

@@ -13,10 +13,11 @@
                 <button class="menu-button" onclick="toggleDropdown(this)">Menu</button>
                 <ul class="dropdown">
                     <li><a th:href="@{/admin/members(page=0)}">개인 회원 관리</a></li>
-                    <li><a th:href="@{/admin/companies}">기업 회원 관리</a></li>
-                    <li><a th:href="@{/admin/resumes}">이력서 관리</a></li>
-                    <li><a th:href="@{/admin/jobs}">채용 공고 관리</a></li>
-                    <li><a th:href="@{/admin/community}">커뮤니티 관리</a></li>
+                    <li><a th:href="@{/admin/companies(page=0)}">기업 회원 관리</a></li>
+                    <li><a th:href="@{/admin/resumes(page=0)}">이력서 관리</a></li>
+                    <li><a th:href="@{/admin/jobs(page=0)}">채용 공고 관리</a></li>
+                    <li><a th:href="@{/admin/community(page=0)}">커뮤니티 관리</a></li>
+                    <li><a th:href="@{/admin/attached-items.html(page=0)}">첨부 파일 관리</a></li>
                 </ul>
             </div>
         </div>

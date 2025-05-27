@@ -1,7 +1,7 @@
 package com.multi.matchingbot.member.controller;
 
-import com.multi.matchingbot.member.MemberService;
-import com.multi.matchingbot.member.domain.MemberRegisterDto;
+import com.multi.matchingbot.member.service.MemberService;
+import com.multi.matchingbot.member.domain.dtos.MemberRegisterDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

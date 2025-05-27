@@ -15,10 +15,12 @@ window.fetchWithAuth = async function fetchWithAuth(url, options = {}, retry = t
         });
 
         if (response.status === 401 && retry) {
-            const refreshResponse = await fetch('/auth/refresh', {
+            console.warn("401 발생 → api/v1/auth/refresh 요청 시도 중");
+            const refreshResponse = await fetch('/api/v1/auth/refresh', {
                 method: 'POST',
                 credentials: 'include'
             });
+            console.log("refresh 응답 상태:", refreshResponse.status);
 
             if (refreshResponse.ok) {
                 return window.fetchWithAuth(url, options, false);

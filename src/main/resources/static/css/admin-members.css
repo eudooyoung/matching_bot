@@ -1,3 +1,15 @@
+.search-bar-table {
+    width: auto;
+    margin: 0 auto 1rem auto;
+    border: none;
+    background: none;
+}
+
+.search-bar-table th {
+    border: none;
+    text-align: left;
+    padding: 0;
+}
 
 .table {
     width: 90%;
@@ -20,8 +32,19 @@
 
 .table tbody tr:hover {
     background-color: #f9f9f9; /* 연한 회색 강조 */
-    cursor: pointer; /* 선택 가능한 느낌 줄 수도 있음 */
+    /*cursor: pointer; !* 선택 가능한 느낌 줄 수도 있음 *!*/
 }
+
+.email-link {
+    color: #007bff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.email-link:hover {
+    text-decoration: underline;
+}
+
 
 .table td.status-active {
     color: green;

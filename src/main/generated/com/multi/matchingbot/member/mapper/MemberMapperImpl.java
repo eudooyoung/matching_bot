@@ -1,15 +1,13 @@
-package com.multi.matchingbot.member;
+package com.multi.matchingbot.member.mapper;
 
-import com.multi.matchingbot.member.domain.entities.Member;
 import com.multi.matchingbot.member.domain.dtos.MemberAdminViewDto;
+import com.multi.matchingbot.member.domain.entities.Member;
 import javax.annotation.processing.Generated;
-
-import com.multi.matchingbot.member.mapper.MemberMapper;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-26T11:54:28+0900",
+    date = "2025-05-27T07:20:35+0900",
     comments = "version: 1.6.3, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
