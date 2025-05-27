@@ -28,7 +28,6 @@ public class MapPostingDto {
         dto.setLongitude(job.getLongitude() != null ? job.getLongitude() : 0.0);
         dto.setCreatedAt(job.getCreatedAt());
         dto.setRequiredSkills(job.getRequiredSkills());
-
         Company company = job.getCompany();
         dto.setCompanyName(company != null ? company.getName() : ""); // ✅ null 방지
 
