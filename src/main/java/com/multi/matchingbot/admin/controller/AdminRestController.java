@@ -1,7 +1,8 @@
 package com.multi.matchingbot.admin.controller;
 
 import com.multi.matchingbot.company.service.CompanyService;
-import com.multi.matchingbot.member.MemberService;
+import com.multi.matchingbot.member.service.MemberService;
+import com.multi.matchingbot.member.service.ResumeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +13,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/admin")
 @RequiredArgsConstructor
-public class AdminController {
+public class AdminRestController {
 
     private final MemberService memberService;
     private final CompanyService companyService;
+    private final ResumeService resumeService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("members/{id}")
@@ -28,6 +30,13 @@ public class AdminController {
     @PatchMapping("members/{id}/reactivate")
     public ResponseEntity<Void> reactiveMember(@PathVariable("id") Long id) {
         memberService.reactivate(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("resumes/{id}")
+    public ResponseEntity<Void> deleteResume(@PathVariable("id") Long id) {
+        resumeService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }

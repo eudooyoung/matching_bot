@@ -16,15 +16,45 @@
             <h2 style="margin-bottom: 1.5rem;">개인 회원 관리</h2>
 
             <!-- 검색창 -->
-            <div style="margin-bottom: 1rem;">
-                <form method="get" th:action="@{/admin/users}">
-                    <input type="text" name="keyword" placeholder="이름, 이메일 검색…" style="padding: 0.5rem; width: 250px;">
-                    <button type="submit"
-                            style="padding: 0.5rem 1rem; background-color: #2196f3; color: white; border: none; border-radius: 4px;">
-                        검색
-                    </button>
-                </form>
-            </div>
+            <table class="search-bar-table" style="margin-bottom: 1rem;">
+                <thead>
+                <tr>
+                    <th colspan="4">
+                        <form method="get" th:action="@{/admin/members}"
+                              style="display: flex; gap: 1rem; align-items: center;">
+                            <!-- 이름/이메일 키워드 -->
+                            <input type="text" name="keyword" placeholder="이름, 이메일 검색..."
+                                   th:value="${cond.keyword}" style="padding: 0.5rem; width: 200px;"/>
+
+                            <!-- 상태 -->
+                            <select name="status" style="padding: 0.5rem;">
+                                <option value="">전체</option>
+                                <option value="Y" th:selected="${cond.status == 'Y'}">ACTIVE</option>
+                                <option value="N" th:selected="${cond.status == 'N'}">INACTIVE</option>
+                            </select>
+
+                            <!-- 정렬 기준 -->
+                            <select name="sortBy" style="padding: 0.5rem;">
+                                <option value="id" th:selected="${cond.sortBy == 'id'}">회원 번호</option>
+                                <option value="createdAt" th:selected="${cond.sortBy == 'createdAt'}">가입일</option>
+                            </select>
+
+                            <!-- 정렬 방향 -->
+                            <select name="direction" style="padding: 0.5rem;">
+                                <option value="DESC" th:selected="${cond.direction == 'DESC'}">내림차순</option>
+                                <option value="ASC" th:selected="${cond.direction == 'ASC'}">오름차순</option>
+                            </select>
+
+                            <!-- 버튼 -->
+                            <button type="submit"
+                                    style="padding: 0.5rem 1rem; background-color: #2196f3; color: white; border: none; border-radius: 4px;">
+                                검색
+                            </button>
+                        </form>
+                    </th>
+                </tr>
+                </thead>
+            </table>
 
             <!-- 회원 테이블 -->
             <table class="table">
@@ -48,7 +78,11 @@
                 <tr th:each="member : ${members}">
                     <td th:text="${member.formattedId}">아이디</td>
                     <td th:text="${member.name}">이름</td>
-                    <td th:text="${member.email}">이메일</td>
+                    <td>
+                        <a th:href="@{|/admin/members/${member.id}|}"
+                           th:text="${member.email}"
+                           class="email-link">이메일</a>
+                    </td>
                     <td th:text="${member.getGenderLabel()}">성별</td>
                     <td th:text="${member.phone}">010-1234-5678</td>
                     <td th:text="${member.getPrivacyLabel()}">동의</td>
@@ -64,16 +98,14 @@
                         <button type="button"
                                 class="btn-delete"
                                 th:if="${member.status.name() == 'Y'}"
-                                th:onclick="'deleteItem({ id: ' + ${member.id}
-                                + ', url: \'/api/v1/admin/members\', onSuccess: () => location.reload() })'">
+                                th:onclick="|deactivateItem({ id: ${member.id}, url: '/api/v1/admin/members', onSuccess: () => location.reload() })|">
                             삭제
                         </button>
 
                         <button type="button"
                                 class="btn-restore"
                                 th:if="${member.status.name() == 'N'}"
-                                th:onclick="'reactivateItem({ id: ' + ${member.id}
-                                + ', url: \'/api/v1/admin/members\', onSuccess: () => location.reload() })'">
+                                th:onclick="|reactivateItem({ id: ${member.id}, url: '/api/v1/admin/members', onSuccess: () => location.reload() })|">
                             복구
                         </button>
                     </td>
@@ -83,8 +115,8 @@
 
             <!-- 페이지네이션 (예시) -->
             <div class="table-pagination" style="margin-top: 1.5rem; text-align: center;">
-                <a th:if="${members.hasPrevious()}" th:href="@{/admin/members(page=${currentPage - 1})}">이전</a>
-                <span th:unless="${members.hasPrevious()}" style="visibility: hidden;">이전</span>
+                <a th:if="${page.hasPrevious()}" th:href="@{/admin/members(page=${currentPage - 1})}">이전</a>
+                <span th:unless="${page.hasPrevious()}" style="visibility: hidden;">이전</span>
 
                 <span th:each="pageNum : ${pageNumbers}" style="margin: 0 5px;">
                     <a th:href="@{/admin/members(page=${pageNum})}"
@@ -92,8 +124,8 @@
                        th:classappend="${pageNum == currentPage} ? 'active-page' : ''"></a>
                 </span>
 
-                <a th:if="${members.hasNext()}" th:href="@{/admin/members(page=${currentPage + 1})}">다음</a>
-                <span th:unless="${members.hasNext()}" style="visibility: hidden;">다음</span>
+                <a th:if="${page.hasNext()}" th:href="@{/admin/members(page=${currentPage + 1})}">다음</a>
+                <span th:unless="${page.hasNext()}" style="visibility: hidden;">다음</span>
             </div>
         </section>
     </main>
@@ -103,8 +135,8 @@
 </div>
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>
-<script th:src="@{/js/adminDelete.js}"></script>
-<script th:src="@{/js/adminReactivate.js}"></script>
+<script th:src="@{/js/admin/deactivate.js}"></script>
+<script th:src="@{/js/admin/reactivate.js}"></script>
 <script th:src="@{/js/fetchWithAuth.js}"></script>
 </body>
 </html>

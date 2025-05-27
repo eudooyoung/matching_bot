@@ -1,6 +1,7 @@
-package com.multi.matchingbot.member.domain;
+package com.multi.matchingbot.member.domain.entities;
 
 import com.multi.matchingbot.common.domain.entities.BaseEntity;
+import com.multi.matchingbot.jobposting.Occupation;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,8 +30,9 @@ public class Resume extends BaseEntity {
     @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Career> careers = new ArrayList<>();
 
-    @Column(nullable = false)
-    private Long occupationId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
+    private Occupation occupation;
 
     @Column(nullable = false, length = 50)
     private String title;

@@ -1,7 +1,7 @@
 package com.multi.matchingbot.member.mapper;
 
-import com.multi.matchingbot.member.domain.Member;
-import com.multi.matchingbot.member.domain.MemberAdminViewDto;
+import com.multi.matchingbot.member.domain.entities.Member;
+import com.multi.matchingbot.member.domain.dtos.MemberAdminViewDto;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

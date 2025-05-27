@@ -1,4 +1,4 @@
-package com.multi.matchingbot.member.domain;
+package com.multi.matchingbot.member.domain.entities;
 
 import com.multi.matchingbot.common.domain.entities.BaseEntity;
 import com.multi.matchingbot.common.domain.enums.CareerType;
