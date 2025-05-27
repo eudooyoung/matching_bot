@@ -16,6 +16,8 @@ security:
       - /admin/login
       - /map_popup
       - /api/v1/auth/login
+      - /search-page/**
+
     member-paths:
     company-paths:
     admin-paths:

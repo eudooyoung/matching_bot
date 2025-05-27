@@ -110,14 +110,6 @@
       </div>
     </div>
 
-    <!-- ✅ 페이지네이션 -->
-    <div class="pagination">
-      <a th:if="${currentPage > 1}" th:href="@{'/main?page=' + ${currentPage - 1}}">이전</a>
-      <span th:text="'현재 페이지: ' + ${currentPage} + ' / ' + ${totalPages}"></span>
-      <a th:if="${currentPage < totalPages}" th:href="@{'/main?page=' + ${currentPage + 1}}">다음</a>
-    </div>
-  </section>
-
 
     <!-- Footer Fragment -->
     <div th:insert="~{fragments/footer :: footer}"></div>
@@ -159,8 +151,6 @@
     });
   };
 </script>
-<!--헤더 추가할때 dropdown & logout.js추가-->
-<script th:src="@{/js/dropdown.js}"></script>
-<script th:src="@{/js/logout.js}"></script>
+
 </body>
 </html>

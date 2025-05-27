@@ -79,8 +79,9 @@
 
         clearJobMarkers();
 
-        fetch(`//jobs/nearby?lat=${lat}&lng=${lng}`)
-            .then(res => res.json())
+        fetch(`/api/maps/nearby?lat=${lat}&lng=${lng}`)
+
+                .then(res => res.json())
             .then(jobs => {
                 jobs.forEach(job => {
                     if (job.latitude && job.longitude) {
@@ -99,7 +100,7 @@
     직무: ${job.title}<br/>
     언어: ${job.requiredSkills || "정보 없음"}<br/>
     연봉: ${job.salary || "협의"}<br/>
-    <button onclick="window.location.href='/jobs/${job.id}'"
+    <button onclick="window.location.href='/search-page/${job.id}'"
             style="margin-top:5px; padding:3px 6px; font-size:13px;">
       상세보기
     </button>
