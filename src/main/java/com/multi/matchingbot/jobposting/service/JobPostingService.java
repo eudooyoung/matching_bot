@@ -1,10 +1,12 @@
 package com.multi.matchingbot.jobposting.service;
 
-import com.multi.matchingbot.jobposting.JobPosting;
 import com.multi.matchingbot.jobposting.JobPostingRepository;
+import com.multi.matchingbot.jobposting.domain.JobPosting;
+import com.multi.matchingbot.jobposting.domain.JobPostingDto;
 import com.multi.matchingbot.jobposting.model.dao.JobPostingMapper;
-import com.multi.matchingbot.jobposting.model.dto.JobPostingDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +43,20 @@ public class JobPostingService {
         return JobPostingMapper.toDto(saved);
     }
 
+//    public JobPostingDto save(JobPostingDto dto) {
+//        JobPosting entity = JobPostingMapper.toEntity(dto);
+//
+//        // 💡 영속 상태 Company 가져오기
+//        Company company = companyRepository.findById(dto.getCompanyId())
+//                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회사 ID입니다."));
+//        entity.setCompany(company);
+//
+//        entity.setCreatedAt(LocalDateTime.now());
+//        entity.setCreatedBy("SYSTEM");
+//
+//        return JobPostingMapper.toDto(repository.save(entity));
+//    }
+
     public JobPostingDto update(Long id, JobPostingDto dto) {
         JobPosting job = repository.findById(id).orElseThrow();
         job.setTitle(dto.getTitle());
@@ -73,5 +89,9 @@ public class JobPostingService {
                 .description(job.getDescription())
                 .companyId(job.getCompany().getId())
                 .build();
+    }
+
+    public Page<JobPostingDto> getAllPaged(PageRequest pageable) {
+        return repository.findAll(pageable).map(JobPostingMapper::toDto);
     }
 }
