@@ -20,8 +20,13 @@ security:
       - /search-page/**
       - /jobs/**
       - /community/**
+      - /community/detail/**
     member-paths:
       - /api/maps/**
+      - /community/write
+      - /community/edit/**
+      - /community/delete/**
+      - /community/**
     company-paths:
       - /company/**
     admin-paths:

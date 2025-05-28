@@ -75,4 +75,9 @@ public class MemberService {
 
         member.setStatus(Yn.Y);
     }
+    @Transactional(readOnly = true)
+    public Member findByUsername(String username) {
+        return memberRepository.findByEmail(username)
+                .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다: " + username));
+    }
 }
