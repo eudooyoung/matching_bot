@@ -21,6 +21,7 @@ security:
 
     member-paths:
     company-paths:
+      - /company/**
     admin-paths:
       - /admin/**
     api-paths:

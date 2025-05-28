@@ -15,7 +15,9 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
@@ -34,7 +36,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-//                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
@@ -48,7 +50,9 @@ public class SecurityConfig {
                         .requestMatchers(toArray(roleAccessProperties.getPermitAll())).permitAll()
                         .requestMatchers(toArray(roleAccessProperties.getAdminPaths())).hasRole("ADMIN")
                         .requestMatchers(toArray(roleAccessProperties.getCompanyPaths())).hasRole("COMPANY")
-                        .requestMatchers(toArray(roleAccessProperties.getMemberPaths())).hasRole("MEMBER")
+                        .requestMatchers("/api/maps/**").hasRole("MEMBER")  // ⛳ 임시 하드코딩
+
+                        //.requestMatchers(toArray(roleAccessProperties.getMemberPaths())).hasRole("MEMBER")
                         .requestMatchers(toArray(roleAccessProperties.getApiPaths())).authenticated()
                         .anyRequest().denyAll()
                 ).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -58,7 +62,7 @@ public class SecurityConfig {
     }
 
 
-/*    파이썬 쓸 때 확인
+//    파이썬 쓸 때 확인
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
@@ -70,7 +74,7 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
-}*/
+}
 
 
     @Bean
