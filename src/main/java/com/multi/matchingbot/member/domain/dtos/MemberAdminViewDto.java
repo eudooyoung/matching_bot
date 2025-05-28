@@ -1,13 +1,12 @@
-package com.multi.matchingbot.member.domain;
+package com.multi.matchingbot.member.domain.dtos;
 
+import com.multi.matchingbot.common.domain.dto.BaseAuditDto;
 import com.multi.matchingbot.common.domain.enums.Gender;
 import com.multi.matchingbot.common.domain.enums.Yn;
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
 @Data
-public class MemberAdminViewDto {
+public class MemberAdminViewDto extends BaseAuditDto {
     private Long id;
     private String formattedId;
     private String name;
@@ -17,10 +16,6 @@ public class MemberAdminViewDto {
     private Yn status;
     private Yn agreePrivacy;
     private Yn agreeService;
-    private String createdBy;
-    private LocalDateTime createdAt;
-    private String updatedBy;
-    private LocalDateTime updatedAt;
 
     public String getGenderLabel() {
         return gender.getLabel();

@@ -1,24 +1,20 @@
 package com.multi.matchingbot.admin.controller;
 
-import com.multi.matchingbot.common.domain.enums.Role;
+import com.multi.matchingbot.admin.service.AdminPageService;
+import com.multi.matchingbot.common.domain.dto.PagedResult;
+import com.multi.matchingbot.common.domain.dto.SearchCondition;
 import com.multi.matchingbot.common.security.MBotUserDetails;
-import com.multi.matchingbot.member.MemberMapper;
-import com.multi.matchingbot.member.MemberRepository;
-import com.multi.matchingbot.member.domain.MemberAdminViewDto;
+import com.multi.matchingbot.member.domain.dtos.MemberAdminViewDto;
+import com.multi.matchingbot.member.domain.dtos.ResumeAdminViewDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
-import java.util.stream.IntStream;
 
 @Slf4j
 @Controller
@@ -26,8 +22,7 @@ import java.util.stream.IntStream;
 @RequestMapping("/admin")
 public class AdminPageController {
 
-    private final MemberRepository memberRepository;
-    private final MemberMapper memberMapper;
+    private final AdminPageService adminPageService;
 
     @GetMapping({"/", "/main", ""})
     public String mainPage(Model model, @AuthenticationPrincipal MBotUserDetails user) {
@@ -46,16 +41,25 @@ public class AdminPageController {
     }
 
     @GetMapping("/members")
-    public void members(Model model, @RequestParam(name = "page", defaultValue = "0") int page) {
-        Pageable pageable = PageRequest.of(page, 10);
-        Page<MemberAdminViewDto> members = memberRepository.findByRoleNot(Role.ADMIN, pageable).map(memberMapper::toMemberAdminView);
-        int totalPages = members.getTotalPages();
-        int currentPage = members.getNumber();
-
-        List<Integer> pageNumbers = IntStream.range(0, totalPages).boxed().toList(); // 0부터 시작
-
-        model.addAttribute("members", members);
-        model.addAttribute("pageNumbers", pageNumbers);
-        model.addAttribute("currentPage", currentPage);
+    public void members(@ModelAttribute SearchCondition cond, Model model, @RequestParam(name = "page", defaultValue = "0") int page) {
+        PagedResult<MemberAdminViewDto> result = adminPageService.members(cond);
+        model.addAttribute("members", result.getPage().getContent());
+        model.addAttribute("page", result.getPage());
+        model.addAttribute("pageNumbers", result.getPageNumbers());
+        model.addAttribute("currentPage", result.getCurrentPage());
+        model.addAttribute("cond", cond);
     }
+
+
+
+    @GetMapping("/resumes")
+    public void resumes(Model model, @RequestParam(name = "page", defaultValue = "0") int page) {
+        PagedResult<ResumeAdminViewDto> result = adminPageService.resumes(page);
+        model.addAttribute("resumes", result.getPage().getContent());
+        model.addAttribute("page", result.getPage());
+        model.addAttribute("pageNumbers", result.getPageNumbers());
+        model.addAttribute("currentPage", result.getCurrentPage());
+    }
+
+
 }

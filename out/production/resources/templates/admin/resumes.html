@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8"/>
+    <title>MatchingBot</title>
+    <link rel="stylesheet" th:href="@{/css/layout.css}"/>
+    <link rel="stylesheet" th:href="@{/css/admin-members.css}"/>
+</head>
+<body>
+
+<div class="wrapper">
+    <div th:replace="~{fragments/header :: header(role=${role})}"></div>
+
+    <main class="main-content">
+        <section style="padding: 2rem;">
+            <h2 style="margin-bottom: 1.5rem;">이력서 관리</h2>
+
+            <!-- 검색창 -->
+            <div style="margin-bottom: 1rem;">
+                <form method="get" th:action="@{/admin/users}">
+                    <input type="text" name="keyword" placeholder="이름, 이메일 검색…" style="padding: 0.5rem; width: 250px;">
+                    <button type="submit"
+                            style="padding: 0.5rem 1rem; background-color: #2196f3; color: white; border: none; border-radius: 4px;">
+                        검색
+                    </button>
+                </form>
+            </div>
+
+            <!-- 회원 테이블 -->
+            <table class="table">
+                <thead style="background-color: #f0f0f0;">
+                <tr>
+                    <th>이력서 번호</th>
+                    <th>제목</th>
+                    <th>역량 키워드</th>
+                    <th>인재상 키워드</th>
+                    <th>희망 직무</th>
+                    <th>작성자</th>
+                    <th>작성일</th>
+                    <th>수정자</th>
+                    <th>수정일</th>
+                    <th>삭제</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="resume : ${resumes}">
+                    <td th:text="${resume.formattedId}">이력서 번호</td>
+                    <td th:text="${resume.title}">제목</td>
+                    <td th:text="${resume.skillKeywords}">역량 키워드</td>
+                    <td th:text="${resume.talentKeywords}">인재상 키워드</td>
+                    <td th:text="${resume.desiredOccupation}">희망 직무</td>
+                    <td th:text="${resume.createdBy}">작성자</td>
+                    <td th:text="${#temporals.format(resume.createdAt, 'yyyy-MM-dd HH:mm:ss')}">작성일</td>
+                    <td th:text="${resume.updatedBy}">수정자</td>
+                    <td th:text="${#temporals.format(resume.updatedAt, 'yyyy-MM-dd HH:mm:ss')}">수정일</td>
+                    <td>
+                        <button type="button"
+                                class="btn-delete"
+                                th:onclick="'deleteItem({ id: ' + ${resume.id}
+                                + ', url: \'/api/v1/admin/resumes\', onSuccess: () => location.reload() })'">
+                            삭제
+                        </button>
+
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <!-- 페이지네이션 (예시) -->
+            <div class="table-pagination" style="margin-top: 1.5rem; text-align: center;">
+                <a th:if="${resumes.hasPrevious()}" th:href="@{/admin/resumes(page=${currentPage - 1})}">이전</a>
+                <span th:unless="${resumes.hasPrevious()}" style="visibility: hidden;">이전</span>
+
+                <span th:each="pageNum : ${pageNumbers}" style="margin: 0 5px;">
+                    <a th:href="@{/admin/resumes(page=${pageNum})}"
+                       th:text="${pageNum + 1}"
+                       th:classappend="${pageNum == currentPage} ? 'active-page' : ''"></a>
+                </span>
+
+                <a th:if="${resumes.hasNext()}" th:href="@{/admin/resumes(page=${currentPage + 1})}">다음</a>
+                <span th:unless="${resumes.hasNext()}" style="visibility: hidden;">다음</span>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Fragment -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</div>
+<script th:src="@{/js/dropdown.js}"></script>
+<script th:src="@{/js/logout.js}"></script>
+<script th:src="@{/js/admin/delete.js}"></script>
+<script th:src="@{/js/fetchWithAuth.js}"></script>
+</body>
+</html>
