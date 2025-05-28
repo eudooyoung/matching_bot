@@ -3,6 +3,10 @@ package com.multi.matchingbot.admin.service;
 import com.multi.matchingbot.common.domain.dto.PagedResult;
 import com.multi.matchingbot.common.domain.dto.SearchCondition;
 import com.multi.matchingbot.common.domain.enums.Yn;
+import com.multi.matchingbot.company.CompanyRepository;
+import com.multi.matchingbot.company.domain.Company;
+import com.multi.matchingbot.company.domain.CompanyAdminView;
+import com.multi.matchingbot.company.model.dao.CompanyAdminMapper;
 import com.multi.matchingbot.member.domain.dtos.MemberAdminView;
 import com.multi.matchingbot.member.domain.dtos.ResumeAdminView;
 import com.multi.matchingbot.member.domain.entities.Member;
@@ -13,7 +17,6 @@ import com.multi.matchingbot.member.repository.MemberRepository;
 import com.multi.matchingbot.member.repository.ResumeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +28,8 @@ public class AdminPageService {
     private final MemberMapper memberMapper;
     private final ResumeRepository resumeRepository;
     private final ResumeMapper resumeMapper;
+    private final CompanyAdminMapper companyAdminMapper;
+    private final CompanyRepository companyRepository;
 
     public PagedResult<MemberAdminView> members(SearchCondition cond) {
         Yn status = (cond.getStatus() != null && !cond.getStatus().isBlank())
@@ -48,32 +53,41 @@ public class AdminPageService {
         return new PagedResult<>(pageResult);
     }
 
-    public PagedResult<MemberAdminView> companies(int page) {
-        Pageable pageable = PageRequest.of(page, 10);
-        Page<MemberAdminView> pageResult = memberRepository.findAll(pageable).map(memberMapper::toMemberAdminView);
+    public PagedResult<CompanyAdminView> companies(SearchCondition cond) {
+        Yn status = (cond.getStatus() != null && !cond.getStatus().isBlank())
+                ? Yn.valueOf(cond.getStatus())
+                : null;
 
+        Pageable pageable = cond.toPageable();
+        Page<Company> companies = companyRepository.searchWithCondition(cond.getKeyword(), status, pageable);
+        Page<CompanyAdminView> pageResult = companies.map(companyAdminMapper::toCompanyAdminView);
+        companies.forEach(c -> {
+            System.out.println("[DEBUG] 원본 email: " + c.getEmail());
+            System.out.println("[DEBUG] 원본 phone: " + c.getPhone());
+            System.out.println("[DEBUG] 원본 address: " + c.getAddress());
+        });
         return new PagedResult<>(pageResult);
     }
 
-    public PagedResult<MemberAdminView> jobs(int page) {
-        Pageable pageable = PageRequest.of(page, 10);
-        Page<MemberAdminView> pageResult = memberRepository.findAll(pageable).map(memberMapper::toMemberAdminView);
-
-        return new PagedResult<>(pageResult);
-    }
-
-    public PagedResult<MemberAdminView> communitiy(int page) {
-        Pageable pageable = PageRequest.of(page, 10);
-        Page<MemberAdminView> pageResult = memberRepository.findAll(pageable).map(memberMapper::toMemberAdminView);
-
-        return new PagedResult<>(pageResult);
-    }
-
-    public PagedResult<MemberAdminView> attachedItems(int page) {
-        Pageable pageable = PageRequest.of(page, 10);
-        Page<MemberAdminView> pageResult = memberRepository.findAll(pageable).map(memberMapper::toMemberAdminView);
-
-        return new PagedResult<>(pageResult);
-    }
+//    public PagedResult<MemberAdminView> jobs(int page) {
+//        Pageable pageable = PageRequest.of(page, 10);
+//        Page<MemberAdminView> pageResult = memberRepository.findAll(pageable).map(memberMapper::toMemberAdminView);
+//
+//        return new PagedResult<>(pageResult);
+//    }
+//
+//    public PagedResult<MemberAdminView> communitiy(int page) {
+//        Pageable pageable = PageRequest.of(page, 10);
+//        Page<MemberAdminView> pageResult = memberRepository.findAll(pageable).map(memberMapper::toMemberAdminView);
+//
+//        return new PagedResult<>(pageResult);
+//    }
+//
+//    public PagedResult<MemberAdminView> attachedItems(int page) {
+//        Pageable pageable = PageRequest.of(page, 10);
+//        Page<MemberAdminView> pageResult = memberRepository.findAll(pageable).map(memberMapper::toMemberAdminView);
+//
+//        return new PagedResult<>(pageResult);
+//    }
 
 }

@@ -4,6 +4,7 @@ import com.multi.matchingbot.admin.service.AdminPageService;
 import com.multi.matchingbot.common.domain.dto.PagedResult;
 import com.multi.matchingbot.common.domain.dto.SearchCondition;
 import com.multi.matchingbot.common.security.MBotUserDetails;
+import com.multi.matchingbot.company.domain.CompanyAdminView;
 import com.multi.matchingbot.member.domain.dtos.MemberAdminView;
 import com.multi.matchingbot.member.domain.dtos.ResumeAdminView;
 import lombok.RequiredArgsConstructor;
@@ -54,6 +55,16 @@ public class AdminPageController {
     public void resumes(@ModelAttribute SearchCondition cond, Model model) {
         PagedResult<ResumeAdminView> result = adminPageService.resumes(cond);
         model.addAttribute("resumes", result.getPage().getContent());
+        model.addAttribute("page", result.getPage());
+        model.addAttribute("pageNumbers", result.getPageNumbers());
+        model.addAttribute("currentPage", result.getCurrentPage());
+        model.addAttribute("cond", cond);
+    }
+
+    @GetMapping("/companies")
+    public void companies(@ModelAttribute SearchCondition cond, Model model) {
+        PagedResult<CompanyAdminView> result = adminPageService.companies(cond);
+        model.addAttribute("companies", result.getPage().getContent());
         model.addAttribute("page", result.getPage());
         model.addAttribute("pageNumbers", result.getPageNumbers());
         model.addAttribute("currentPage", result.getCurrentPage());
