@@ -3,9 +3,10 @@ package com.multi.matchingbot.admin.service;
 import com.multi.matchingbot.common.domain.dto.PagedResult;
 import com.multi.matchingbot.common.domain.dto.SearchCondition;
 import com.multi.matchingbot.common.domain.enums.Yn;
-import com.multi.matchingbot.member.domain.dtos.MemberAdminViewDto;
-import com.multi.matchingbot.member.domain.dtos.ResumeAdminViewDto;
+import com.multi.matchingbot.member.domain.dtos.MemberAdminView;
+import com.multi.matchingbot.member.domain.dtos.ResumeAdminView;
 import com.multi.matchingbot.member.domain.entities.Member;
+import com.multi.matchingbot.member.domain.entities.Resume;
 import com.multi.matchingbot.member.mapper.MemberMapper;
 import com.multi.matchingbot.member.mapper.ResumeMapper;
 import com.multi.matchingbot.member.repository.MemberRepository;
@@ -25,48 +26,52 @@ public class AdminPageService {
     private final ResumeRepository resumeRepository;
     private final ResumeMapper resumeMapper;
 
-    public PagedResult<MemberAdminViewDto> members(SearchCondition cond) {
+    public PagedResult<MemberAdminView> members(SearchCondition cond) {
         Yn status = (cond.getStatus() != null && !cond.getStatus().isBlank())
                 ? Yn.valueOf(cond.getStatus())
                 : null;
 
         Pageable pageable = cond.toPageable();
         Page<Member> members = memberRepository.searchWithCondition(cond.getKeyword(), status, pageable);
-        Page<MemberAdminViewDto> pageResult = members.map(memberMapper::toMemberAdminView);
+        Page<MemberAdminView> pageResult = members.map(memberMapper::toMemberAdminView);
         return new PagedResult<>(pageResult);
     }
 
-    public PagedResult<ResumeAdminViewDto> resumes(int page) {
-        Pageable pageable = PageRequest.of(page, 10);
-        Page<ResumeAdminViewDto> pageResult = resumeRepository.findAll(pageable).map(resumeMapper::toResumeAdminView);
+    public PagedResult<ResumeAdminView> resumes(SearchCondition cond) {
+        Yn status = (cond.getStatus() != null && !cond.getStatus().isBlank())
+                ? Yn.valueOf(cond.getStatus())
+                : null;
 
+        Pageable pageable = cond.toPageable();
+        Page<Resume> resumes = resumeRepository.searchWithCondition(cond.getKeyword(), status, pageable);
+        Page<ResumeAdminView> pageResult = resumes.map(resumeMapper::toResumeAdminView);
         return new PagedResult<>(pageResult);
     }
 
-    public PagedResult<MemberAdminViewDto> companies(int page) {
+    public PagedResult<MemberAdminView> companies(int page) {
         Pageable pageable = PageRequest.of(page, 10);
-        Page<MemberAdminViewDto> pageResult = memberRepository.findAll(pageable).map(memberMapper::toMemberAdminView);
-
-        return new PagedResult<>(pageResult);
-    }
-
-    public PagedResult<MemberAdminViewDto> jobs(int page) {
-        Pageable pageable = PageRequest.of(page, 10);
-        Page<MemberAdminViewDto> pageResult = memberRepository.findAll(pageable).map(memberMapper::toMemberAdminView);
-
-        return new PagedResult<>(pageResult);
-    }
-
-    public PagedResult<MemberAdminViewDto> communitiy(int page) {
-        Pageable pageable = PageRequest.of(page, 10);
-        Page<MemberAdminViewDto> pageResult = memberRepository.findAll(pageable).map(memberMapper::toMemberAdminView);
+        Page<MemberAdminView> pageResult = memberRepository.findAll(pageable).map(memberMapper::toMemberAdminView);
 
         return new PagedResult<>(pageResult);
     }
 
-    public PagedResult<MemberAdminViewDto> attachedItems(int page) {
+    public PagedResult<MemberAdminView> jobs(int page) {
         Pageable pageable = PageRequest.of(page, 10);
-        Page<MemberAdminViewDto> pageResult = memberRepository.findAll(pageable).map(memberMapper::toMemberAdminView);
+        Page<MemberAdminView> pageResult = memberRepository.findAll(pageable).map(memberMapper::toMemberAdminView);
+
+        return new PagedResult<>(pageResult);
+    }
+
+    public PagedResult<MemberAdminView> communitiy(int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<MemberAdminView> pageResult = memberRepository.findAll(pageable).map(memberMapper::toMemberAdminView);
+
+        return new PagedResult<>(pageResult);
+    }
+
+    public PagedResult<MemberAdminView> attachedItems(int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<MemberAdminView> pageResult = memberRepository.findAll(pageable).map(memberMapper::toMemberAdminView);
 
         return new PagedResult<>(pageResult);
     }

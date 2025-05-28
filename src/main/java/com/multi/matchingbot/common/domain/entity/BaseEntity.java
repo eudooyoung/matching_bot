@@ -1,4 +1,4 @@
-package com.multi.matchingbot.common.domain.entities;
+package com.multi.matchingbot.common.domain.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

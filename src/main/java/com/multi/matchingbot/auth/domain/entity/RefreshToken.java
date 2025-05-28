@@ -1,4 +1,4 @@
-package com.multi.matchingbot.auth.domain.entities;
+package com.multi.matchingbot.auth.domain.entity;
 
 import com.multi.matchingbot.common.domain.enums.Role;
 import jakarta.persistence.*;

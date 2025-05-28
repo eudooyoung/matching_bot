@@ -6,7 +6,7 @@ import com.multi.matchingbot.common.domain.enums.Yn;
 import lombok.Data;
 
 @Data
-public class MemberAdminViewDto extends BaseAuditDto {
+public class MemberAdminView extends BaseAuditDto {
     private Long id;
     private String formattedId;
     private String name;

@@ -1,6 +1,6 @@
 package com.multi.matchingbot.member.domain.entities;
 
-import com.multi.matchingbot.common.domain.entities.BaseEntity;
+import com.multi.matchingbot.common.domain.entity.BaseEntity;
 import com.multi.matchingbot.common.domain.enums.Gender;
 import com.multi.matchingbot.common.domain.enums.Role;
 import com.multi.matchingbot.common.domain.enums.Yn;

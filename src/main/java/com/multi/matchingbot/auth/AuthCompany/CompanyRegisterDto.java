@@ -5,6 +5,8 @@ import lombok.Data;
 
 @Data
 public class CompanyRegisterDto {
+    //validation 처리
+
     private String email;
     private String password;
     private String name;
