@@ -20,6 +20,7 @@ DROP TABLE IF EXISTS `resume`;
 DROP TABLE IF EXISTS `resume_bookmark`;
 DROP TABLE IF EXISTS `member`;
 DROP TABLE IF EXISTS `attached_items`;
+DROP TABLE IF EXISTS `region`;
 -- 3. 외래키 제약 조건 다시 활성화
 SET FOREIGN_KEY_CHECKS = 1;*/
 
@@ -66,11 +67,11 @@ CREATE TABLE member (
 
 CREATE TABLE occupation (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,                -- 직무번호 (기본키)
-    job_role_code CHAR(15) NOT NULL,      -- 직무코드
+    job_role_code BIGINT NOT NULL,      -- 직무코드
     job_role_name VARCHAR(15) NOT NULL,   -- 직무명
-    job_type_code CHAR(15) NOT NULL,      -- 직종코드
+    job_type_code BIGINT NOT NULL,      -- 직종코드
     job_type_name VARCHAR(15) NOT NULL,   -- 직종명
-    job_group_code CHAR(15) NOT NULL,     -- 직군코드
+    job_group_code BIGINT NOT NULL,     -- 직군코드
     job_group_name VARCHAR(15) NOT NULL   -- 직군명
 );
 
@@ -315,6 +316,15 @@ CREATE TABLE refresh_token (
   expired_at DATETIME NOT NULL,
   UNIQUE (email, role)
 );
+
+CREATE TABLE region (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '지역번호',
+    region_code BIGINT NOT NULL UNIQUE COMMENT '시/군/구 코드',
+    region_name VARCHAR(15) NOT NULL COMMENT '시/군/구 명',
+    region_type_code BIGINT NOT NULL COMMENT '시/도 코드',
+    region_type_name VARCHAR(15) NOT NULL COMMENT '시/도 명'
+);
+
 
 commit;
 show tables;
