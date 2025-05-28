@@ -139,30 +139,30 @@ CREATE TABLE company (
 
 -- 채용 공고 테이블 생성 --
 CREATE TABLE job (
-    id BIGINT NOT NULL AUTO_INCREMENT,
-    company_id BIGINT NOT NULL,
-    occupation_id BIGINT NOT NULL,
-    title VARCHAR(100) NOT NULL,
-    description VARCHAR(500) NOT NULL,
-    address VARCHAR(100) NOT NULL,
-    main_task VARCHAR(255) NOT NULL,
-    required_skills VARCHAR(255) NOT NULL,
-    required_traits VARCHAR(255) NOT NULL,
-    skill_keywords VARCHAR(100),
-    trait_keywords VARCHAR(100),
-    latitude DOUBLE NOT NULL,        -- ✅ 위도 추가
-    longitude DOUBLE NOT NULL,       -- ✅ 경도 추가
-    start_date DATE NOT NULL,
-    end_date DATE NOT NULL,
-    enroll_email VARCHAR(50) NOT NULL,
-    notice VARCHAR(255),
-    created_by VARCHAR(50) NOT NULL,
-    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_by VARCHAR(50),
-    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (id),
-    FOREIGN KEY (company_id) REFERENCES company(id),
-    FOREIGN KEY (occupation_id) REFERENCES occupation(id)
+                     id BIGINT NOT NULL AUTO_INCREMENT,
+                     company_id BIGINT NOT NULL,
+                     occupation_id BIGINT NOT NULL,
+                     title VARCHAR(100) NOT NULL,
+                     description VARCHAR(500) NOT NULL,
+                     address VARCHAR(100) NOT NULL,
+                     main_task VARCHAR(255) NOT NULL,
+                     required_skills VARCHAR(255) NOT NULL,
+                     required_traits VARCHAR(255) NOT NULL,
+                     skill_keywords VARCHAR(100),
+                     trait_keywords VARCHAR(100),
+                     latitude DOUBLE NOT NULL DEFAULT 37.5665,        -- ✅ 위도 default 값 추가
+                     longitude DOUBLE NOT NULL DEFAULT 126.9780,       -- ✅ 경도 default 값 추가
+                     start_date DATE NOT NULL,
+                     end_date DATE NOT NULL,
+                     enroll_email VARCHAR(50) NOT NULL,
+                     notice VARCHAR(255),
+                     created_by VARCHAR(50) NOT NULL,
+                     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                     updated_by VARCHAR(50),
+                     updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
+                     PRIMARY KEY (id),
+                     FOREIGN KEY (company_id) REFERENCES company(id),
+                     FOREIGN KEY (occupation_id) REFERENCES occupation(id)
 );
 
 

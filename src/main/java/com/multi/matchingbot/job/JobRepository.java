@@ -1,9 +1,9 @@
-package com.multi.matchingbot.jobposting;
+package com.multi.matchingbot.job;
 
-import com.multi.matchingbot.jobposting.domain.JobPosting;
+import com.multi.matchingbot.job.domain.Job;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
+public interface JobRepository extends JpaRepository<Job, Long> {
 }

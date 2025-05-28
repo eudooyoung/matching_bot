@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>채용 공고 관리</title>
-    <link rel="stylesheet" th:href="@{/css/manage_jobs.css}">
+    <link rel="stylesheet" th:href="@{/css/manage-jobs.css}">
     <link rel="stylesheet" th:href="@{/css/layout.css}"/>
 </head>
 <body>
@@ -15,7 +15,7 @@
 <div class="container">
     <h2>채용 공고 관리</h2>
 
-    <button class="nav-button" onclick="location.href='/job/new'">공고 등록하기</button>
+    <button class="nav-button" onclick="location.href='/job-new.html'">공고 등록하기</button>
 
     <table class="job-table">
         <thead>
@@ -42,7 +42,7 @@
 
     <div class="pagination">
         <button class="pag-button" th:if="${!jobPage.first}"
-                th:onclick="'location.href=\'/job/manage_jobs?page=' + ${jobPage.number - 1} + '\''">
+                th:onclick="'location.href=\'/job/manage-jobs?page=' + ${jobPage.number - 1} + '\''">
             이전
         </button>
 
@@ -50,7 +50,7 @@
         <span th:text="${jobPage.totalPages}">1</span>
 
         <button class="pag-button" th:if="${!jobPage.last}"
-                th:onclick="'location.href=\'/job/manage_jobs?page=' + ${jobPage.number + 1} + '\''">
+                th:onclick="'location.href=\'/job/manage-jobs?page=' + ${jobPage.number + 1} + '\''">
             다음
         </button>
     </div>

@@ -1,15 +1,15 @@
-package com.multi.matchingbot.jobposting.model.dao;
+package com.multi.matchingbot.job.mapper;
 
 import com.multi.matchingbot.company.domain.Company;
-import com.multi.matchingbot.jobposting.domain.JobPosting;
-import com.multi.matchingbot.jobposting.domain.JobPostingDto;
+import com.multi.matchingbot.job.domain.Job;
+import com.multi.matchingbot.job.domain.JobDto;
 import org.springframework.beans.BeanUtils;
 
-public class JobPostingMapper {
+public class JobMapper {
 
-    public static JobPostingDto toDto(JobPosting entity) {
+    public static JobDto toDto(Job entity) {
 
-        JobPostingDto dto = new JobPostingDto();
+        JobDto dto = new JobDto();
         dto.setId(entity.getId());
         dto.setTitle(entity.getTitle());
         dto.setDescription(entity.getDescription());
@@ -40,8 +40,8 @@ public class JobPostingMapper {
         return dto;
     }
 
-    public static JobPosting toEntity(JobPostingDto dto) {
-        JobPosting entity = new JobPosting();
+    public static Job toEntity(JobDto dto) {
+        Job entity = new Job();
         BeanUtils.copyProperties(dto, entity);
 
         Company company = new Company();

@@ -1,4 +1,4 @@
-package com.multi.matchingbot.jobposting.domain;
+package com.multi.matchingbot.job.domain;
 
 import com.multi.matchingbot.common.domain.entities.BaseEntity;
 import com.multi.matchingbot.company.domain.Company;
@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class JobPosting extends BaseEntity {
+public class Job extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

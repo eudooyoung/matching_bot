@@ -18,9 +18,12 @@ security:
       - /api/v1/auth/login
       - /api/v1/auth/refresh
       - /search-page/**
+      - /calendar
 
     member-paths:
     company-paths:
+      - /company/**
+      - /job/**
     admin-paths:
       - /admin/**
     api-paths:

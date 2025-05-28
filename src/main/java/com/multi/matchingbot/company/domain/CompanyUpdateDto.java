@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CompanyDto {
+public class CompanyUpdateDto {
 
     private Long id;
     private String email;

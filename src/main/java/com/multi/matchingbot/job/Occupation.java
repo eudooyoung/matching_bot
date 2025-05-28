@@ -1,4 +1,4 @@
-package com.multi.matchingbot.jobposting;
+package com.multi.matchingbot.job;
 
 import com.multi.matchingbot.member.domain.entities.Resume;
 import jakarta.persistence.*;

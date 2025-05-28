@@ -1,5 +1,6 @@
 package com.multi.matchingbot.common.security;
 
+
 import com.multi.matchingbot.common.domain.enums.Role;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

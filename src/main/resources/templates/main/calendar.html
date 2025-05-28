@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>채용 공고 달력</title>
-    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
     <link rel="stylesheet" th:href="@{/css/calendar.css}">
 </head>
 <body>
 
-<p th:text="'현재 userType: ' + ${userType}"></p>
-<div th:replace="~{fragments/header :: header(userType=${userType})}"></div>
+<!--<p th:text="'현재 userType: ' + ${userType}"></p>-->
+<div th:replace="~{fragments/header :: header(role=${role})}"></div>
 
 <div class="calendar">
     <div class="calendar-header">
