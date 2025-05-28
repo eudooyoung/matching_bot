@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 상세</title>
+    <link rel="stylesheet" th:href="@{/css/layout.css}"/>
+</head>
+<body>
+<h2 th:text="${post.title}">제목</h2>
+<p th:text="${post.createdBy}">작성자</p>
+<p th:text="${post.content}">내용</p>
+
+<hr>
+<h4>댓글</h4>
+<div th:each="comment : ${post.comments}">
+    <p><strong th:text="${comment.createdBy}"></strong>: <span th:text="${comment.content}"></span></p>
+</div>
+
+<!-- 댓글 작성 (회원만 가능) -->
+<div sec:authorize="isAuthenticated()">
+    <form th:action="@{'/community/' + ${post.id} + '/comment'}" method="post">
+        <textarea name="content" required></textarea>
+        <button type="submit">댓글 작성</button>
+    </form>
+</div>
+<script th:src="@{/js/dropdown.js}"></script>
+<script th:src="@{/js/logout.js}"></script>
+</body>
+</html>

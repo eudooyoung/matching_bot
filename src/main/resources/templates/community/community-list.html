@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8"/>
+  <title>MatchingBot | 커뮤니티</title>
+  <link rel="stylesheet" th:href="@{/css/layout.css}"/>
+</head>
+<body>
+<div class="wrapper">
+  <!-- ✅ Header Fragment -->
+  <div th:replace="~{fragments/header :: header(role=${role})}"></div>
+
+  <main class="main-content container">
+    <h2 style="text-align: center;">커뮤니티 게시글 목록</h2>
+
+    <!-- ✅ 카테고리 필터 -->
+    <form method="get" action="/community/list" style="text-align: center; margin-bottom: 20px;">
+      <select name="categoryId">
+        <option value="">전체</option>
+        <option th:each="category : ${categories}"
+                th:value="${category.id}"
+                th:text="${category.name}"></option>
+      </select>
+      <button type="submit">카테고리 필터</button>
+    </form>
+
+    <!-- ✅ 게시글 목록 -->
+    <section class="post-list">
+      <div th:each="post : ${postList}" class="job-card">
+        <h3>
+          <a th:href="@{'/community/' + ${post.id}}" th:text="${post.title}">제목</a>
+        </h3>
+        <p th:text="${post.content}">내용 미리보기</p>
+        <p><strong>작성자:</strong> <span th:text="${post.writerName}">작성자</span></p>
+      </div>
+    </section>
+
+    <!-- ✅ 글쓰기 버튼 -->
+    <div style="text-align: right; margin-top: 20px;">
+      <a th:href="@{/community/write}" class="btn btn-primary">✍ 글쓰기</a>
+    </div>
+  </main>
+
+  <!-- ✅ Footer Fragment -->
+  <div th:insert="~{fragments/footer :: footer}"></div>
+</div>
+
+<!-- ✅ JS 스크립트 -->
+<script th:src="@{/js/dropdown.js}"></script>
+<script th:src="@{/js/logout.js}"></script>
+</body>
+</html>
