@@ -29,6 +29,11 @@ public class MemberService {
         if (memberRepository.existsByEmail(dto.getEmail())) {
             throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
         }
+        // ✅ 필수 Enum 값 누락 시 명확히 예외 처리
+        if (dto.getGender() == null || dto.getGender().isBlank()) {
+            throw new IllegalArgumentException("성별은 필수 입력입니다.");
+        }
+
 
         Member member = Member.builder()
                 .email(dto.getEmail())
@@ -37,16 +42,19 @@ public class MemberService {
                 .birth(LocalDate.of(dto.getYear(), dto.getMonth(), dto.getDay()))
                 .gender(Gender.valueOf(dto.getGender())) // enum 처리
                 .phone(dto.getPhone1() + "-" + dto.getPhone2() + "-" + dto.getPhone3())
-                .agreeService(dto.isTermsRequired() ? Yn.Y : Yn.N)
-                .agreePrivacy(dto.isPrivacyRequired() ? Yn.Y : Yn.N)
+//                .agreeService(dto.isTermsRequired() ? Yn.Y : Yn.N)
+//                .agreePrivacy(dto.isPrivacyRequired() ? Yn.Y : Yn.N)
+                .agreeService(Yn.Y)
+                .agreePrivacy(Yn.Y)
                 .agreeLocation(dto.isLocationRequired() ? Yn.Y : Yn.N)
                 .alertBookmark(dto.isMarketingEmail() ? Yn.Y : Yn.N)
                 .alertResume(dto.isMarketingSms() ? Yn.Y : Yn.N)
-                .role(Role.MEMBER)
                 .status(Yn.Y)
+                .role(Role.MEMBER)
                 .address(dto.getAddress())
                 .build();
 
+        System.out.println(" 회원 등록 정보: " + member);  //  디버깅용 출력
         memberRepository.save(member);
     }
 
