@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>공고 등록</title>
+    <link rel="stylesheet" th:href="@{/css/mypage.css}" />
+    <link rel="stylesheet" th:href="@{/css/layout.css}" />
+</head>
+<body>
+<!--<p th:text="'현재 userType: ' + ${userType}"></p>-->
+<div th:replace="~{fragments/header :: header(role=${role})}"></div>
+
+<div class="container">
+    <h2>채용 공고 등록</h2>
+
+    <form th:action="@{/job/new}" method="post" th:object="${job}">
+
+        <div class="form-group">
+            <label>관심 직무</label>
+            <input type="text" th:field="*{occupationId}" required />
+        </div>
+
+        <div class="form-group">
+            <label>제목</label>
+            <input type="text" th:field="*{title}" required />
+            <div th:if="${#fields.hasErrors('title')}" class="error-message" th:errors="*{title}"></div>
+        </div>
+
+        <div class="form-group">
+            <label>설명</label>
+            <textarea th:field="*{description}" rows="5" required ></textarea>
+            <div th:if="${#fields.hasErrors('description')}" class="error-message" th:errors="*{description}"></div>
+        </div>
+
+        <div class="form-group">
+            <label>주소</label>
+            <input type="text" th:field="*{address}" required />
+            <div th:if="${#fields.hasErrors('address')}" class="error-message" th:errors="*{address}"></div>
+        </div>
+
+        <div class="form-group">
+            <label>주요 업무</label>
+            <textarea th:field="*{mainTask}" rows="2" required ></textarea>
+            <div th:if="${#fields.hasErrors('mainTask')}" class="error-message" th:errors="*{mainTask}"></div>
+        </div>
+
+        <div class="form-group">
+            <label>필요 기술</label>
+            <textarea th:field="*{requiredSkills}" rows="2" required ></textarea>
+            <div th:if="${#fields.hasErrors('requiredSkills')}" class="error-message" th:errors="*{requiredSkills}"></div>
+        </div>
+
+        <div class="form-group">
+            <label>필요 성향</label>
+            <textarea th:field="*{requiredTraits}" rows="2" required ></textarea>
+            <div th:if="${#fields.hasErrors('title')}" class="error-message" th:errors="*{requiredTraits}"></div>
+        </div>
+
+        <div class="form-group">
+            <label>기술 키워드</label>
+            <input type="text" th:field="*{skillKeywords}" />
+            <div th:if="${#fields.hasErrors('skillKeywords')}" class="error-message" th:errors="*{skillKeywords}"></div>
+        </div>
+
+        <div class="form-group">
+            <label>성향 키워드</label>
+            <input type="text" th:field="*{traitKeywords}" />
+            <div th:if="${#fields.hasErrors('traitKeywords')}" class="error-message" th:errors="*{traitKeywords}"></div>
+        </div>
+
+        <div class="form-group">
+            <label>시작일</label>
+            <input type="date" th:field="*{startDate}" required />
+            <div th:if="${#fields.hasErrors('startDate')}" class="error-message" th:errors="*{startDate}"></div>
+        </div>
+
+        <div class="form-group">
+            <label>종료일</label>
+            <input type="date" th:field="*{endDate}" required />
+            <div th:if="${#fields.hasErrors('endDate')}" class="error-message" th:errors="*{endDate}"></div>
+        </div>
+
+        <div class="form-group">
+            <label>이메일</label>
+            <input type="email" th:field="*{enrollEmail}" required />
+            <div th:if="${#fields.hasErrors('enrollEmail')}" class="error-message" th:errors="*{enrollEmail}"></div>
+        </div>
+
+        <div class="form-group">
+            <label>안내사항</label>
+            <textarea th:field="*{notice}" rows="2"></textarea>
+        </div>
+
+<!--        <div class="form-group">-->
+<!--            <label for="attachment">첨부파일</label>-->
+<!--            <input type="file" id="attachment" name="attachment" class="form-control" />-->
+<!--        </div>-->
+
+        <div class="button-group" style="margin-top: 20px; display: flex; gap: 16px;">
+            <button type="submit" class="btn btn-primary">등록</button>
+            <button type="button" class="btn btn-primary" onclick="location.href='/job/manage-jobs'">등록 취소</button>
+            <button type="button" class="btn btn-secondary" onclick="analyzeJob()">AI 공고분석</button>
+            <button type="button" class="btn btn-secondary" onclick="generatePoster()">포스터 생성하기</button>
+        </div>
+    </form>
+</div>
+
+<script th:src="@{/js/dropdown.js}"></script>
+<script th:src="@{/js/logout.js}"></script>
+
+</body>
+</html>
