@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 수정</title>
+    <link rel="stylesheet" th:href="@{/css/layout.css}"/>
+</head>
+<body>
+<h2>글 수정</h2>
+<form th:action="@{'/community/' + ${post.id} + '/edit'}" method="post">
+    <label>카테고리:
+        <select name="categoryId" required>
+            <option th:each="category : ${categories}"
+                    th:value="${category.id}"
+                    th:selected="${category.id} == ${post.categoryId}"
+                    th:text="${category.name}">
+            </option>
+        </select>
+    </label><br/>
+    <label>제목:
+        <input type="text" name="title" th:value="${post.title}" required>
+    </label><br/>
+    <label>내용:
+        <textarea name="content" required th:text="${post.content}"></textarea>
+    </label><br/>
+    <button type="submit">수정</button>
+</form>
+<form th:action="@{'/community/' + ${post.id} + '/delete'}" method="post">
+    <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
+</form>
+
+<!--헤더 추가할때 dropdown & logout.js추가-->
+<script th:src="@{/js/dropdown.js}"></script>
+<script th:src="@{/js/logout.js}"></script>
+
+</body>
+</html>

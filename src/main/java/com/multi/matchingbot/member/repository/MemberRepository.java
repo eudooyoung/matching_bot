@@ -23,10 +23,13 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
 
     @Query("""
-                SELECT m FROM Member m
-                WHERE m.role <> 'ADMIN'
-                AND (:keyword IS NULL OR m.name LIKE %:keyword% OR m.email LIKE %:keyword%)
-                AND (:status IS NULL OR m.status = :status)
-            """)
+            SELECT m FROM Member m
+            WHERE m.role <> 'ADMIN'
+            AND (:keyword IS NULL OR
+            m.name LIKE %:keyword% OR
+            m.email LIKE %:keyword% OR
+            CAST(m.id AS string) LIKE %:keyword%)
+            AND (:status IS NULL OR m.status = :status)
+        """)
     Page<Member> searchWithCondition(@Param("keyword") String keyword, @Param("status") Yn status, Pageable pageable);
 }

@@ -1,6 +1,6 @@
 package com.multi.matchingbot.mapposting.domain;
 
-import com.multi.matchingbot.common.domain.entities.BaseEntity;
+import com.multi.matchingbot.common.domain.entity.BaseEntity;
 import com.multi.matchingbot.company.domain.Company;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

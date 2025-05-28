@@ -20,6 +20,7 @@ DROP TABLE IF EXISTS `resume`;
 DROP TABLE IF EXISTS `resume_bookmark`;
 DROP TABLE IF EXISTS `member`;
 DROP TABLE IF EXISTS `attached_items`;
+DROP TABLE IF EXISTS `region`;
 -- 3. 외래키 제약 조건 다시 활성화
 SET FOREIGN_KEY_CHECKS = 1;*/
 
@@ -66,11 +67,11 @@ CREATE TABLE member (
 
 CREATE TABLE occupation (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,                -- 직무번호 (기본키)
-    job_role_code CHAR(15) NOT NULL,      -- 직무코드
+    job_role_code BIGINT NOT NULL,      -- 직무코드
     job_role_name VARCHAR(15) NOT NULL,   -- 직무명
-    job_type_code CHAR(15) NOT NULL,      -- 직종코드
+    job_type_code BIGINT NOT NULL,      -- 직종코드
     job_type_name VARCHAR(15) NOT NULL,   -- 직종명
-    job_group_code CHAR(15) NOT NULL,     -- 직군코드
+    job_group_code BIGINT NOT NULL,     -- 직군코드
     job_group_name VARCHAR(15) NOT NULL   -- 직군명
 );
 
@@ -128,6 +129,8 @@ CREATE TABLE company (
     agree_marketing ENUM('Y', 'N'),
     agree_third_party ENUM('Y', 'N'),
 
+    report_status ENUM('Y', 'N') NOT NULL DEFAULT 'N' COMMENT '평가 보고서 상태',
+
     created_by VARCHAR(50),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_by VARCHAR(50),
@@ -139,30 +142,30 @@ CREATE TABLE company (
 
 -- 채용 공고 테이블 생성 --
 CREATE TABLE job (
-                     id BIGINT NOT NULL AUTO_INCREMENT,
-                     company_id BIGINT NOT NULL,
-                     occupation_id BIGINT NOT NULL,
-                     title VARCHAR(100) NOT NULL,
-                     description VARCHAR(500) NOT NULL,
-                     address VARCHAR(100) NOT NULL,
-                     main_task VARCHAR(255) NOT NULL,
-                     required_skills VARCHAR(255) NOT NULL,
-                     required_traits VARCHAR(255) NOT NULL,
-                     skill_keywords VARCHAR(100),
-                     trait_keywords VARCHAR(100),
-                     latitude DOUBLE NOT NULL DEFAULT 37.5665,        -- ✅ 위도 default 값 추가
-                     longitude DOUBLE NOT NULL DEFAULT 126.9780,       -- ✅ 경도 default 값 추가
-                     start_date DATE NOT NULL,
-                     end_date DATE NOT NULL,
-                     enroll_email VARCHAR(50) NOT NULL,
-                     notice VARCHAR(255),
-                     created_by VARCHAR(50) NOT NULL,
-                     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                     updated_by VARCHAR(50),
-                     updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
-                     PRIMARY KEY (id),
-                     FOREIGN KEY (company_id) REFERENCES company(id),
-                     FOREIGN KEY (occupation_id) REFERENCES occupation(id)
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    company_id BIGINT NOT NULL,
+    occupation_id BIGINT NOT NULL,
+    title VARCHAR(100) NOT NULL,
+    description VARCHAR(500) NOT NULL,
+    address VARCHAR(100) NOT NULL,
+    main_task VARCHAR(255) NOT NULL,
+    required_skills VARCHAR(255) NOT NULL,
+    required_traits VARCHAR(255) NOT NULL,
+    skill_keywords VARCHAR(100),
+    trait_keywords VARCHAR(100),
+    latitude DOUBLE NOT NULL DEFAULT 37.5665,        -- ✅ 위도 default 값 추가
+    longitude DOUBLE NOT NULL DEFAULT 126.9780,       -- ✅ 경도 default 값 추가
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    enroll_email VARCHAR(50) NOT NULL,
+    notice VARCHAR(255),
+    created_by VARCHAR(50) NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_by VARCHAR(50),
+    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    FOREIGN KEY (company_id) REFERENCES company(id),
+    FOREIGN KEY (occupation_id) REFERENCES occupation(id)
 );
 
 
@@ -242,6 +245,7 @@ CREATE TABLE resume (
     trait_answer VARCHAR(255),
     skill_keywords VARCHAR(100),
     talent_keywords VARCHAR(100),
+    keywords_status ENUM('Y', 'N') NOT NULL DEFAULT 'N' COMMENT '키워드 추출 상태',
     created_by VARCHAR(50) NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_by VARCHAR(50),
@@ -315,6 +319,15 @@ CREATE TABLE refresh_token (
   expired_at DATETIME NOT NULL,
   UNIQUE (email, role)
 );
+
+CREATE TABLE region (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '지역번호',
+    region_code BIGINT NOT NULL UNIQUE COMMENT '시/군/구 코드',
+    region_name VARCHAR(15) NOT NULL COMMENT '시/군/구 명',
+    region_type_code BIGINT NOT NULL COMMENT '시/도 코드',
+    region_type_name VARCHAR(15) NOT NULL COMMENT '시/도 명'
+);
+
 
 commit;
 show tables;

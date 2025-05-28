@@ -1,6 +1,6 @@
 package com.multi.matchingbot.auth.domain;
 
-import com.multi.matchingbot.auth.domain.entities.RefreshToken;
+import com.multi.matchingbot.auth.domain.entity.RefreshToken;
 import com.multi.matchingbot.common.domain.enums.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

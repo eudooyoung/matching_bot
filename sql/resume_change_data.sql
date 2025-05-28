@@ -1177,7 +1177,7 @@ INSERT INTO occupation  VALUES
 
 INSERT INTO member (id, role, name, address, email, password, gender, birth, phone, agree_service, agree_privacy, agree_marketing, agree_location, alert_bookmark, alert_resume,
         status, created_by, created_at, updated_by, updated_at) VALUES
-    (1, 'ADMIN', '권영자', '충청남도 천안시 서북구 불당대로 50', 'member1@example.com', 'pass1234!', 'F', '1983-03-06', '01015433721', 'Y', 'Y', 'N', 'N', 'N', 'N',
+    (1, 'ADMIN', '권영자', '충청남도 천안시 서북구 불당대로 50', 'admin1@example.com', 'pass1234!', 'F', '1983-03-06', '01015433721', 'Y', 'Y', 'N', 'N', 'N', 'N',
         'Y', '권영자', CURRENT_TIMESTAMP, '권영자', CURRENT_TIMESTAMP),
     (2, 'MEMBER', '박하은', '광주광역시 북구 우치로 77', 'member2@example.com', 'pass1234!', 'M', '2002-08-09', '01047827635', 'Y', 'Y', 'N', 'Y', 'N', 'Y',
         'Y', '박하은', CURRENT_TIMESTAMP, '박하은', CURRENT_TIMESTAMP),
@@ -1998,203 +1998,203 @@ INSERT INTO career (
     position_title, start_date, end_date, salary, career_summary,
     created_by, created_at, updated_by, updated_at
 ) VALUES
-(1, 11, 'exp', '회사명1', '개발팀', '백엔드 개발자',
+(1, 11, 'EXP', '회사명1', '개발팀', '백엔드 개발자',
     '2018-12-31', '2020-12-30',
     38600000, '주요 프로젝트 및 성과 중심 요약 1',
     '사용자1', CURRENT_TIMESTAMP, '사용자1', CURRENT_TIMESTAMP),
-(2, 12, 'exp', '회사명2', '개발팀', '백엔드 개발자',
+(2, 12, 'EXP', '회사명2', '개발팀', '백엔드 개발자',
     '2018-12-31', '2019-12-31',
     34160000, '주요 프로젝트 및 성과 중심 요약 2',
     '사용자2', CURRENT_TIMESTAMP, '사용자2', CURRENT_TIMESTAMP),
-(3, 13, 'exp', '회사명3', '개발팀', '백엔드 개발자',
+(3, 13, 'EXP', '회사명3', '개발팀', '백엔드 개발자',
     '2016-01-01', '2018-12-31',
     45790000, '주요 프로젝트 및 성과 중심 요약 3',
     '사용자3', CURRENT_TIMESTAMP, '사용자3', CURRENT_TIMESTAMP),
-(4, 14, 'exp', '회사명4', '개발팀', '백엔드 개발자',
+(4, 14, 'EXP', '회사명4', '개발팀', '백엔드 개발자',
     '2016-12-31', '2019-12-31',
     28970000, '주요 프로젝트 및 성과 중심 요약 4',
     '사용자4', CURRENT_TIMESTAMP, '사용자4', CURRENT_TIMESTAMP),
-(5, 15, 'exp', '회사명5', '개발팀', '백엔드 개발자',
+(5, 15, 'EXP', '회사명5', '개발팀', '백엔드 개발자',
     '2018-12-31', '2021-12-30',
     41520000, '주요 프로젝트 및 성과 중심 요약 5',
     '사용자5', CURRENT_TIMESTAMP, '사용자5', CURRENT_TIMESTAMP),
-(6, 16, 'exp', '회사명6', '개발팀', '백엔드 개발자',
+(6, 16, 'EXP', '회사명6', '개발팀', '백엔드 개발자',
     '2017-12-31', '2019-12-31',
     37150000, '주요 프로젝트 및 성과 중심 요약 6',
     '사용자6', CURRENT_TIMESTAMP, '사용자6', CURRENT_TIMESTAMP),
-(7, 17, 'exp', '회사명7', '개발팀', '백엔드 개발자',
+(7, 17, 'EXP', '회사명7', '개발팀', '백엔드 개발자',
     '2019-12-31', '2022-12-30',
     40690000, '주요 프로젝트 및 성과 중심 요약 7',
     '사용자7', CURRENT_TIMESTAMP, '사용자7', CURRENT_TIMESTAMP),
-(8, 18, 'exp', '회사명8', '개발팀', '백엔드 개발자',
+(8, 18, 'EXP', '회사명8', '개발팀', '백엔드 개발자',
     '2019-12-31', '2020-12-30',
     46960000, '주요 프로젝트 및 성과 중심 요약 8',
     '사용자8', CURRENT_TIMESTAMP, '사용자8', CURRENT_TIMESTAMP),
-(9, 19, 'exp', '회사명9', '개발팀', '백엔드 개발자',
+(9, 19, 'EXP', '회사명9', '개발팀', '백엔드 개발자',
     '2017-12-31', '2018-12-31',
     28590000, '주요 프로젝트 및 성과 중심 요약 9',
     '사용자9', CURRENT_TIMESTAMP, '사용자9', CURRENT_TIMESTAMP),
-(10, 20, 'exp', '회사명10', '개발팀', '백엔드 개발자',
+(10, 20, 'EXP', '회사명10', '개발팀', '백엔드 개발자',
     '2015-01-01', '2017-12-31',
     40470000, '주요 프로젝트 및 성과 중심 요약 10',
     '사용자10', CURRENT_TIMESTAMP, '사용자10', CURRENT_TIMESTAMP),
-(11, 21, 'exp', '회사명11', '개발팀', '백엔드 개발자',
+(11, 21, 'EXP', '회사명11', '개발팀', '백엔드 개발자',
     '2018-12-31', '2019-12-31',
     33540000, '주요 프로젝트 및 성과 중심 요약 11',
     '사용자11', CURRENT_TIMESTAMP, '사용자11', CURRENT_TIMESTAMP),
-(12, 22, 'exp', '회사명12', '개발팀', '백엔드 개발자',
+(12, 22, 'EXP', '회사명12', '개발팀', '백엔드 개발자',
     '2016-12-31', '2017-12-31',
     42350000, '주요 프로젝트 및 성과 중심 요약 12',
     '사용자12', CURRENT_TIMESTAMP, '사용자12', CURRENT_TIMESTAMP),
-(13, 23, 'exp', '회사명13', '개발팀', '백엔드 개발자',
+(13, 23, 'EXP', '회사명13', '개발팀', '백엔드 개발자',
     '2019-12-31', '2021-12-30',
     49270000, '주요 프로젝트 및 성과 중심 요약 13',
     '사용자13', CURRENT_TIMESTAMP, '사용자13', CURRENT_TIMESTAMP),
-(14, 24, 'exp', '회사명14', '개발팀', '백엔드 개발자',
+(14, 24, 'EXP', '회사명14', '개발팀', '백엔드 개발자',
     '2016-12-31', '2017-12-31',
     36710000, '주요 프로젝트 및 성과 중심 요약 14',
     '사용자14', CURRENT_TIMESTAMP, '사용자14', CURRENT_TIMESTAMP),
-(15, 25, 'exp', '회사명15', '개발팀', '백엔드 개발자',
+(15, 25, 'EXP', '회사명15', '개발팀', '백엔드 개발자',
     '2018-12-31', '2019-12-31',
     27700000, '주요 프로젝트 및 성과 중심 요약 15',
     '사용자15', CURRENT_TIMESTAMP, '사용자15', CURRENT_TIMESTAMP),
-(16, 26, 'exp', '회사명16', '개발팀', '백엔드 개발자',
+(16, 26, 'EXP', '회사명16', '개발팀', '백엔드 개발자',
     '2016-01-01', '2017-12-31',
     27610000, '주요 프로젝트 및 성과 중심 요약 16',
     '사용자16', CURRENT_TIMESTAMP, '사용자16', CURRENT_TIMESTAMP),
-(17, 27, 'exp', '회사명17', '개발팀', '백엔드 개발자',
+(17, 27, 'EXP', '회사명17', '개발팀', '백엔드 개발자',
     '2019-12-31', '2021-12-30',
     37210000, '주요 프로젝트 및 성과 중심 요약 17',
     '사용자17', CURRENT_TIMESTAMP, '사용자17', CURRENT_TIMESTAMP),
-(18, 28, 'exp', '회사명18', '개발팀', '백엔드 개발자',
+(18, 28, 'EXP', '회사명18', '개발팀', '백엔드 개발자',
     '2019-12-31', '2022-12-30',
     34140000, '주요 프로젝트 및 성과 중심 요약 18',
     '사용자18', CURRENT_TIMESTAMP, '사용자18', CURRENT_TIMESTAMP),
-(19, 29, 'exp', '회사명19', '개발팀', '백엔드 개발자',
+(19, 29, 'EXP', '회사명19', '개발팀', '백엔드 개발자',
     '2016-01-01', '2017-12-31',
     30250000, '주요 프로젝트 및 성과 중심 요약 19',
     '사용자19', CURRENT_TIMESTAMP, '사용자19', CURRENT_TIMESTAMP),
-(20, 30, 'exp', '회사명20', '개발팀', '백엔드 개발자',
+(20, 30, 'EXP', '회사명20', '개발팀', '백엔드 개발자',
     '2018-12-31', '2019-12-31',
     44080000, '주요 프로젝트 및 성과 중심 요약 20',
     '사용자20', CURRENT_TIMESTAMP, '사용자20', CURRENT_TIMESTAMP),
-(21, 31, 'exp', '회사명21', '개발팀', '백엔드 개발자',
+(21, 31, 'EXP', '회사명21', '개발팀', '백엔드 개발자',
     '2019-12-31', '2022-12-30',
     38790000, '주요 프로젝트 및 성과 중심 요약 21',
     '사용자21', CURRENT_TIMESTAMP, '사용자21', CURRENT_TIMESTAMP),
-(22, 32, 'exp', '회사명22', '개발팀', '백엔드 개발자',
+(22, 32, 'EXP', '회사명22', '개발팀', '백엔드 개발자',
     '2016-01-01', '2018-12-31',
     38470000, '주요 프로젝트 및 성과 중심 요약 22',
     '사용자22', CURRENT_TIMESTAMP, '사용자22', CURRENT_TIMESTAMP),
-(23, 33, 'exp', '회사명23', '개발팀', '백엔드 개발자',
+(23, 33, 'EXP', '회사명23', '개발팀', '백엔드 개발자',
     '2016-01-01', '2018-12-31',
     45160000, '주요 프로젝트 및 성과 중심 요약 23',
     '사용자23', CURRENT_TIMESTAMP, '사용자23', CURRENT_TIMESTAMP),
-(24, 34, 'exp', '회사명24', '개발팀', '백엔드 개발자',
+(24, 34, 'EXP', '회사명24', '개발팀', '백엔드 개발자',
     '2016-01-01', '2017-12-31',
     45940000, '주요 프로젝트 및 성과 중심 요약 24',
     '사용자24', CURRENT_TIMESTAMP, '사용자24', CURRENT_TIMESTAMP),
-(25, 35, 'exp', '회사명25', '개발팀', '백엔드 개발자',
+(25, 35, 'EXP', '회사명25', '개발팀', '백엔드 개발자',
     '2019-12-31', '2020-12-30',
     26200000, '주요 프로젝트 및 성과 중심 요약 25',
     '사용자25', CURRENT_TIMESTAMP, '사용자25', CURRENT_TIMESTAMP),
-(26, 36, 'exp', '회사명26', '개발팀', '백엔드 개발자',
+(26, 36, 'EXP', '회사명26', '개발팀', '백엔드 개발자',
     '2016-12-31', '2018-12-31',
     34840000, '주요 프로젝트 및 성과 중심 요약 26',
     '사용자26', CURRENT_TIMESTAMP, '사용자26', CURRENT_TIMESTAMP),
-(27, 37, 'exp', '회사명27', '개발팀', '백엔드 개발자',
+(27, 37, 'EXP', '회사명27', '개발팀', '백엔드 개발자',
     '2018-12-31', '2020-12-30',
     26940000, '주요 프로젝트 및 성과 중심 요약 27',
     '사용자27', CURRENT_TIMESTAMP, '사용자27', CURRENT_TIMESTAMP),
-(28, 38, 'exp', '회사명28', '개발팀', '백엔드 개발자',
+(28, 38, 'EXP', '회사명28', '개발팀', '백엔드 개발자',
     '2016-12-31', '2019-12-31',
     49440000, '주요 프로젝트 및 성과 중심 요약 28',
     '사용자28', CURRENT_TIMESTAMP, '사용자28', CURRENT_TIMESTAMP),
-(29, 39, 'exp', '회사명29', '개발팀', '백엔드 개발자',
+(29, 39, 'EXP', '회사명29', '개발팀', '백엔드 개발자',
     '2015-01-01', '2016-01-01',
     28070000, '주요 프로젝트 및 성과 중심 요약 29',
     '사용자29', CURRENT_TIMESTAMP, '사용자29', CURRENT_TIMESTAMP),
-(30, 40, 'exp', '회사명30', '개발팀', '백엔드 개발자',
+(30, 40, 'EXP', '회사명30', '개발팀', '백엔드 개발자',
     '2019-12-31', '2020-12-30',
     41540000, '주요 프로젝트 및 성과 중심 요약 30',
     '사용자30', CURRENT_TIMESTAMP, '사용자30', CURRENT_TIMESTAMP),
-(31, 41, 'exp', '회사명31', '개발팀', '백엔드 개발자',
+(31, 41, 'EXP', '회사명31', '개발팀', '백엔드 개발자',
     '2019-12-31', '2022-12-30',
     40320000, '주요 프로젝트 및 성과 중심 요약 31',
     '사용자31', CURRENT_TIMESTAMP, '사용자31', CURRENT_TIMESTAMP),
-(32, 42, 'exp', '회사명32', '개발팀', '백엔드 개발자',
+(32, 42, 'EXP', '회사명32', '개발팀', '백엔드 개발자',
     '2019-12-31', '2020-12-30',
     38930000, '주요 프로젝트 및 성과 중심 요약 32',
     '사용자32', CURRENT_TIMESTAMP, '사용자32', CURRENT_TIMESTAMP),
-(33, 43, 'exp', '회사명33', '개발팀', '백엔드 개발자',
+(33, 43, 'EXP', '회사명33', '개발팀', '백엔드 개발자',
     '2017-12-31', '2020-12-30',
     47220000, '주요 프로젝트 및 성과 중심 요약 33',
     '사용자33', CURRENT_TIMESTAMP, '사용자33', CURRENT_TIMESTAMP),
-(34, 44, 'exp', '회사명34', '개발팀', '백엔드 개발자',
+(34, 44, 'EXP', '회사명34', '개발팀', '백엔드 개발자',
     '2016-12-31', '2017-12-31',
     42150000, '주요 프로젝트 및 성과 중심 요약 34',
     '사용자34', CURRENT_TIMESTAMP, '사용자34', CURRENT_TIMESTAMP),
-(35, 45, 'exp', '회사명35', '개발팀', '백엔드 개발자',
+(35, 45, 'EXP', '회사명35', '개발팀', '백엔드 개발자',
     '2018-12-31', '2021-12-30',
     45520000, '주요 프로젝트 및 성과 중심 요약 35',
     '사용자35', CURRENT_TIMESTAMP, '사용자35', CURRENT_TIMESTAMP),
-(36, 46, 'exp', '회사명36', '개발팀', '백엔드 개발자',
+(36, 46, 'EXP', '회사명36', '개발팀', '백엔드 개발자',
     '2016-01-01', '2016-12-31',
     43730000, '주요 프로젝트 및 성과 중심 요약 36',
     '사용자36', CURRENT_TIMESTAMP, '사용자36', CURRENT_TIMESTAMP),
-(37, 47, 'exp', '회사명37', '개발팀', '백엔드 개발자',
+(37, 47, 'EXP', '회사명37', '개발팀', '백엔드 개발자',
     '2019-12-31', '2020-12-30',
     46080000, '주요 프로젝트 및 성과 중심 요약 37',
     '사용자37', CURRENT_TIMESTAMP, '사용자37', CURRENT_TIMESTAMP),
-(38, 48, 'exp', '회사명38', '개발팀', '백엔드 개발자',
+(38, 48, 'EXP', '회사명38', '개발팀', '백엔드 개발자',
     '2017-12-31', '2019-12-31',
     30140000, '주요 프로젝트 및 성과 중심 요약 38',
     '사용자38', CURRENT_TIMESTAMP, '사용자38', CURRENT_TIMESTAMP),
-(39, 49, 'exp', '회사명39', '개발팀', '백엔드 개발자',
+(39, 49, 'EXP', '회사명39', '개발팀', '백엔드 개발자',
     '2018-12-31', '2019-12-31',
     42890000, '주요 프로젝트 및 성과 중심 요약 39',
     '사용자39', CURRENT_TIMESTAMP, '사용자39', CURRENT_TIMESTAMP),
-(40, 50, 'exp', '회사명40', '개발팀', '백엔드 개발자',
+(40, 50, 'EXP', '회사명40', '개발팀', '백엔드 개발자',
     '2015-01-01', '2016-12-31',
     45210000, '주요 프로젝트 및 성과 중심 요약 40',
     '사용자40', CURRENT_TIMESTAMP, '사용자40', CURRENT_TIMESTAMP),
-(41, 51, 'exp', '회사명41', '개발팀', '백엔드 개발자',
+(41, 51, 'EXP', '회사명41', '개발팀', '백엔드 개발자',
     '2016-12-31', '2019-12-31',
     44090000, '주요 프로젝트 및 성과 중심 요약 41',
     '사용자41', CURRENT_TIMESTAMP, '사용자41', CURRENT_TIMESTAMP),
-(42, 52, 'exp', '회사명42', '개발팀', '백엔드 개발자',
+(42, 52, 'EXP', '회사명42', '개발팀', '백엔드 개발자',
     '2019-12-31', '2020-12-30',
     34600000, '주요 프로젝트 및 성과 중심 요약 42',
     '사용자42', CURRENT_TIMESTAMP, '사용자42', CURRENT_TIMESTAMP),
-(43, 53, 'exp', '회사명43', '개발팀', '백엔드 개발자',
+(43, 53, 'EXP', '회사명43', '개발팀', '백엔드 개발자',
     '2016-12-31', '2019-12-31',
     33450000, '주요 프로젝트 및 성과 중심 요약 43',
     '사용자43', CURRENT_TIMESTAMP, '사용자43', CURRENT_TIMESTAMP),
-(44, 54, 'exp', '회사명44', '개발팀', '백엔드 개발자',
+(44, 54, 'EXP', '회사명44', '개발팀', '백엔드 개발자',
     '2015-01-01', '2016-01-01',
     34800000, '주요 프로젝트 및 성과 중심 요약 44',
     '사용자44', CURRENT_TIMESTAMP, '사용자44', CURRENT_TIMESTAMP),
-(45, 55, 'exp', '회사명45', '개발팀', '백엔드 개발자',
+(45, 55, 'EXP', '회사명45', '개발팀', '백엔드 개발자',
     '2018-12-31', '2019-12-31',
     25650000, '주요 프로젝트 및 성과 중심 요약 45',
     '사용자45', CURRENT_TIMESTAMP, '사용자45', CURRENT_TIMESTAMP),
-(46, 56, 'exp', '회사명46', '개발팀', '백엔드 개발자',
+(46, 56, 'EXP', '회사명46', '개발팀', '백엔드 개발자',
     '2015-01-01', '2016-01-01',
     41520000, '주요 프로젝트 및 성과 중심 요약 46',
     '사용자46', CURRENT_TIMESTAMP, '사용자46', CURRENT_TIMESTAMP),
-(47, 57, 'exp', '회사명47', '개발팀', '백엔드 개발자',
+(47, 57, 'EXP', '회사명47', '개발팀', '백엔드 개발자',
     '2016-01-01', '2016-12-31',
     28550000, '주요 프로젝트 및 성과 중심 요약 47',
     '사용자47', CURRENT_TIMESTAMP, '사용자47', CURRENT_TIMESTAMP),
-(48, 58, 'exp', '회사명48', '개발팀', '백엔드 개발자',
+(48, 58, 'EXP', '회사명48', '개발팀', '백엔드 개발자',
     '2019-12-31', '2022-12-30',
     43700000, '주요 프로젝트 및 성과 중심 요약 48',
     '사용자48', CURRENT_TIMESTAMP, '사용자48', CURRENT_TIMESTAMP),
-(49, 59, 'exp', '회사명49', '개발팀', '백엔드 개발자',
+(49, 59, 'EXP', '회사명49', '개발팀', '백엔드 개발자',
     '2016-01-01', '2018-12-31',
     34670000, '주요 프로젝트 및 성과 중심 요약 49',
     '사용자49', CURRENT_TIMESTAMP, '사용자49', CURRENT_TIMESTAMP),
-(50, 60, 'exp', '회사명50', '개발팀', '백엔드 개발자',
+(50, 60, 'EXP', '회사명50', '개발팀', '백엔드 개발자',
     '2016-12-31', '2019-12-31',
     49000000, '주요 프로젝트 및 성과 중심 요약 50',
     '사용자50', CURRENT_TIMESTAMP, '사용자50', CURRENT_TIMESTAMP);
@@ -2288,6 +2288,256 @@ values
 (4, 'CO', 'CO_file_19.jpg', 'co_4_322d48ab.jpg', '/files/co/4/', 'Y', 'seoyun55@hanmail.net', '2025-05-15 01:12:00', NULL, NULL),
 (1, 'VL', 'VL_file_20.jpg', 'vl_1_a35e5cde.jpg', '/files/vl/1/', 'Y', 'seoyeon45@daum.net', '2025-05-15 00:07:00', NULL, NULL);
 
+
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (1, '1', '강남구', '1', '서울');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (2, '2', '강동구', '1', '서울');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (3, '3', '강북구', '1', '서울');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (4, '4', '강서구', '1', '서울');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (5, '5', '관악구', '1', '서울');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (6, '6', '광진구', '1', '서울');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (7, '7', '구로구', '1', '서울');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (8, '8', '금천구', '1', '서울');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (9, '9', '노원구', '1', '서울');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (10, '10', '도봉구', '1', '서울');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (11, '11', '동대문구', '1', '서울');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (12, '12', '동작구', '1', '서울');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (13, '13', '마포구', '1', '서울');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (14, '14', '서대문구', '1', '서울');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (15, '15', '서초구', '1', '서울');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (16, '16', '성동구', '1', '서울');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (17, '17', '성북구', '1', '서울');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (18, '18', '송파구', '1', '서울');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (19, '19', '양천구', '1', '서울');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (20, '20', '영등포구', '1', '서울');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (21, '21', '용산구', '1', '서울');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (22, '22', '은평구', '1', '서울');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (23, '23', '종로구', '1', '서울');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (24, '24', '중구', '1', '서울');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (25, '25', '중랑구', '1', '서울');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (26, '26', '가평군', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (27, '27', '고양시 덕양구', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (28, '28', '고양시 일산동구', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (29, '29', '고양시 일산서구', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (30, '30', '과천시', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (31, '31', '광명시', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (32, '32', '광주시', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (33, '33', '구리시', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (34, '34', '군포시', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (35, '35', '김포시', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (36, '36', '남양주시', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (37, '37', '동두천시', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (38, '38', '부천시', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (39, '39', '성남시 분당구', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (40, '40', '성남시 수정구', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (41, '41', '성남시 중원구', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (42, '42', '수원시 권선구', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (43, '43', '수원시 장안구', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (44, '44', '수원시 팔달구', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (45, '45', '수원시 영통구', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (46, '46', '시흥시', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (47, '47', '안산시 단원구', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (48, '48', '안산시 상록구', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (49, '49', '안성시', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (50, '50', '안양시 동안구', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (51, '51', '안양시 만안구', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (52, '52', '양주시', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (53, '53', '양평군', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (54, '54', '여주시', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (55, '55', '연천군', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (56, '56', '오산시', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (57, '57', '용인시 기흥구', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (58, '58', '용인시 수지구', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (59, '59', '용인시 처인구', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (60, '60', '의왕시', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (61, '61', '의정부시', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (62, '62', '이천시', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (63, '63', '파주시', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (64, '64', '평택시', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (65, '65', '포천시', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (66, '66', '하남시', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (67, '67', '화성시', '2', '경기');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (68, '68', '강화군', '3', '인천');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (69, '69', '계양구', '3', '인천');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (70, '70', '미추홀구', '3', '인천');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (71, '71', '남동구', '3', '인천');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (72, '72', '동구', '3', '인천');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (73, '73', '부평구', '3', '인천');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (74, '74', '서구', '3', '인천');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (75, '75', '연수구', '3', '인천');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (76, '76', '옹진군', '3', '인천');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (77, '77', '중구', '3', '인천');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (78, '78', '대덕구', '4', '대전');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (79, '79', '동구', '4', '대전');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (80, '80', '서구', '4', '대전');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (81, '81', '유성구', '4', '대전');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (82, '82', '중구', '4', '대전');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (83, '83', '공주시', '6', '충남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (84, '84', '금산군', '6', '충남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (85, '85', '논산시', '6', '충남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (86, '86', '당진시', '6', '충남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (87, '87', '보령시', '6', '충남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (88, '88', '부여군', '6', '충남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (89, '89', '서산시', '6', '충남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (90, '90', '서천군', '6', '충남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (91, '91', '아산시', '6', '충남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (92, '92', '예산군', '6', '충남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (93, '93', '천안시 동남구', '6', '충남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (94, '94', '천안시 서북구', '6', '충남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (95, '95', '청양군', '6', '충남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (96, '96', '태안군', '6', '충남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (97, '97', '홍성군', '6', '충남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (98, '98', '계룡시', '6', '충남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (99, '99', '괴산군', '7', '충북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (100, '100', '단양군', '7', '충북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (101, '101', '보은군', '7', '충북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (102, '102', '영동군', '7', '충북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (103, '103', '옥천군', '7', '충북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (104, '104', '음성군', '7', '충북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (105, '105', '제천시', '7', '충북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (106, '106', '진천군', '7', '충북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (107, '107', '청주시 청원구', '7', '충북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (108, '108', '청주시 상당구', '7', '충북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (109, '109', '청주시 서원구', '7', '충북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (110, '110', '청주시 흥덕구', '7', '충북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (111, '111', '충주시', '7', '충북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (112, '112', '증평군', '7', '충북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (113, '113', '광산구', '8', '광주');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (114, '114', '남구', '8', '광주');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (115, '115', '동구', '8', '광주');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (116, '116', '북구', '8', '광주');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (117, '117', '서구', '8', '광주');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (118, '118', '강진군', '9', '전남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (119, '119', '고흥군', '9', '전남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (120, '120', '곡성군', '9', '전남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (121, '121', '광양시', '9', '전남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (122, '122', '구례군', '9', '전남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (123, '123', '나주시', '9', '전남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (124, '124', '담양군', '9', '전남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (125, '125', '목포시', '9', '전남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (126, '126', '무안군', '9', '전남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (127, '127', '보성군', '9', '전남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (128, '128', '순천시', '9', '전남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (129, '129', '신안군', '9', '전남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (130, '130', '여수시', '9', '전남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (131, '131', '영광군', '9', '전남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (132, '132', '영암군', '9', '전남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (133, '133', '완도군', '9', '전남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (134, '134', '장성군', '9', '전남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (135, '135', '장흥군', '9', '전남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (136, '136', '진도군', '9', '전남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (137, '137', '함평군', '9', '전남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (138, '138', '해남군', '9', '전남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (139, '139', '화순군', '9', '전남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (140, '140', '고창군', '10', '전북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (141, '141', '군산시', '10', '전북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (142, '142', '김제시', '10', '전북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (143, '143', '남원시', '10', '전북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (144, '144', '무주군', '10', '전북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (145, '145', '부안군', '10', '전북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (146, '146', '순창군', '10', '전북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (147, '147', '완주군', '10', '전북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (148, '148', '익산시', '10', '전북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (149, '149', '임실군', '10', '전북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (150, '150', '장수군', '10', '전북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (151, '151', '전주시 덕진구', '10', '전북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (152, '152', '전주시 완산구', '10', '전북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (153, '153', '정읍시', '10', '전북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (154, '154', '진안군', '10', '전북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (155, '155', '군위군', '11', '대구');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (156, '156', '남구', '11', '대구');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (157, '157', '달서구', '11', '대구');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (158, '158', '달성군', '11', '대구');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (159, '159', '동구', '11', '대구');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (160, '160', '북구', '11', '대구');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (161, '161', '서구', '11', '대구');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (162, '162', '수성구', '11', '대구');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (163, '163', '중구', '11', '대구');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (164, '164', '경산시', '12', '경북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (165, '165', '경주시', '12', '경북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (166, '166', '고령군', '12', '경북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (167, '167', '구미시', '12', '경북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (168, '168', '김천시', '12', '경북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (169, '169', '문경시', '12', '경북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (170, '170', '봉화군', '12', '경북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (171, '171', '상주시', '12', '경북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (172, '172', '성주군', '12', '경북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (173, '173', '안동시', '12', '경북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (174, '174', '영덕군', '12', '경북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (175, '175', '영양군', '12', '경북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (176, '176', '영주시', '12', '경북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (177, '177', '영천시', '12', '경북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (178, '178', '예천군', '12', '경북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (179, '179', '울릉군', '12', '경북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (180, '180', '울진군', '12', '경북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (181, '181', '의성군', '12', '경북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (182, '182', '청도군', '12', '경북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (183, '183', '청송군', '12', '경북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (184, '184', '칠곡군', '12', '경북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (185, '185', '포항시 남구', '12', '경북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (186, '186', '포항시 북구', '12', '경북');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (187, '187', '강서구', '13', '부산');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (188, '188', '금정구', '13', '부산');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (189, '189', '기장군', '13', '부산');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (190, '190', '남구', '13', '부산');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (191, '191', '동구', '13', '부산');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (192, '192', '동래구', '13', '부산');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (193, '193', '부산진구', '13', '부산');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (194, '194', '북구', '13', '부산');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (195, '195', '사상구', '13', '부산');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (196, '196', '사하구', '13', '부산');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (197, '197', '서구', '13', '부산');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (198, '198', '수영구', '13', '부산');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (199, '199', '연제구', '13', '부산');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (200, '200', '영도구', '13', '부산');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (201, '201', '중구', '13', '부산');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (202, '202', '해운대구', '13', '부산');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (203, '203', '남구', '14', '울산');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (204, '204', '동구', '14', '울산');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (205, '205', '북구', '14', '울산');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (206, '206', '울주군', '14', '울산');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (207, '207', '중구', '14', '울산');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (208, '208', '거제시', '15', '경남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (209, '209', '거창군', '15', '경남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (210, '210', '고성군', '15', '경남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (211, '211', '김해시', '15', '경남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (212, '212', '남해군', '15', '경남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (213, '213', '밀양시', '15', '경남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (214, '214', '사천시', '15', '경남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (215, '215', '산청군', '15', '경남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (216, '216', '양산시', '15', '경남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (217, '217', '의령군', '15', '경남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (218, '218', '진주시', '15', '경남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (219, '219', '창녕군', '15', '경남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (220, '220', '창원시 마산합포구', '15', '경남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (221, '221', '창원시 마산회원구', '15', '경남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (222, '222', '창원시 성산구', '15', '경남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (223, '223', '창원시 의창구', '15', '경남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (224, '224', '창원시 진해구', '15', '경남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (225, '225', '통영시', '15', '경남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (226, '226', '하동군', '15', '경남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (227, '227', '함안군', '15', '경남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (228, '228', '함양군', '15', '경남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (229, '229', '합천군', '15', '경남');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (230, '230', '강릉시', '16', '강원');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (231, '231', '고성군', '16', '강원');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (232, '232', '동해시', '16', '강원');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (233, '233', '삼척시', '16', '강원');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (234, '234', '속초시', '16', '강원');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (235, '235', '양구군', '16', '강원');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (236, '236', '양양군', '16', '강원');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (237, '237', '영월군', '16', '강원');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (238, '238', '원주시', '16', '강원');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (239, '239', '인제군', '16', '강원');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (240, '240', '정선군', '16', '강원');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (241, '241', '철원군', '16', '강원');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (242, '242', '춘천시', '16', '강원');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (243, '243', '태백시', '16', '강원');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (244, '244', '평창군', '16', '강원');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (245, '245', '홍천군', '16', '강원');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (246, '246', '화천군', '16', '강원');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (247, '247', '횡성군', '16', '강원');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (248, '248', '서귀포시', '17', '제주');
+INSERT INTO region (id, region_code, region_name, region_type_code, region_type_name) VALUES (249, '249', '제주시', '17', '제주');
 commit;
 
 select * from occupation;
