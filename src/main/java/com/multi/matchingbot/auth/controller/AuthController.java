@@ -1,6 +1,6 @@
 package com.multi.matchingbot.auth.controller;
 
-import com.multi.matchingbot.auth.domain.dtos.LoginRequest;
+import com.multi.matchingbot.auth.domain.dto.LoginRequest;
 import com.multi.matchingbot.auth.service.AuthenticationService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

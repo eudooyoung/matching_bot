@@ -20,6 +20,8 @@ security:
       - /search-page/**
       - /jobs/**
       - /community/**
+      - /calendar
+
       - /community/detail/**
     member-paths:
       - /api/maps/**
@@ -29,6 +31,7 @@ security:
       - /community/**
     company-paths:
       - /company/**
+      - /job/**
     admin-paths:
       - /admin/**
     api-paths:

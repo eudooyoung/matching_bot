@@ -2,17 +2,27 @@ server:
   port: 8091
 
 spring:
+
   config:
     import:
       - classpath:application-security.yml
+
   datasource:
     url: jdbc:mysql://localhost:${JDBC_PORT}/${JDBC_DATABASE}
     username: scott
     password: tiger
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+  web:
+    resources:
+      add-mappings: true
+    servlet:
+      throw-exception-if-no-handler-found: false
+
   application:
     admin:
       enabled: false
+
   thymeleaf:
     cache: false
 
@@ -28,8 +38,9 @@ spring:
 
 logging:
   level:
+    org.springframework.web: DEBUG
 #    root: DEBUG
-    org.hibernate.SQL: DEBUG
+#    org.hibernate.SQL: DEBUG
 
 
 kakao:

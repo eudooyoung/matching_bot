@@ -1,19 +1,22 @@
 package com.multi.matchingbot.company.domain;
 
-import com.multi.matchingbot.common.domain.entities.BaseEntity;
+import com.multi.matchingbot.common.domain.entity.BaseEntity;
 import com.multi.matchingbot.common.domain.enums.Role;
 import com.multi.matchingbot.common.domain.enums.Yn;
+import com.multi.matchingbot.jobposting.domain.JobPosting;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "company")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Builder
 public class Company extends BaseEntity {
 
@@ -86,4 +89,15 @@ public class Company extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Yn agreeThirdParty;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private Yn reportStatus = Yn.N;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Yn status;        // 가입 상태
+
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<JobPosting> jobPostings = new ArrayList<>();
 }

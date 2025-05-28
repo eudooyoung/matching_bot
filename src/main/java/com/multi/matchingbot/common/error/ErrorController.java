@@ -78,4 +78,9 @@ public class ErrorController {
         return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
     }
 
+//    @ExceptionHandler(NoResourceFoundException.class)
+//    public void handleNoResourceFoundException(NoResourceFoundException ex) throws NoResourceFoundException {
+//        throw ex; // DispatcherServlet에게 다시 넘겨서 404.html 보여주도록 유도
+//    }
+
 }

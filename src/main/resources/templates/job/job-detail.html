@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>공고 상세보기</title>
+    <link rel="stylesheet" th:href="@{/css/mypage.css}"/>
+    <link rel="stylesheet" th:href="@{/css/layout.css}"/>
+    <style>
+        .container {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 20px;
+        }
+        .job-box {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 30px;
+        }
+        .job-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #103254;
+            margin-bottom: 10px;
+        }
+        .job-sub {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .section {
+            margin-bottom: 16px;
+        }
+        .section h4 {
+            margin-bottom: 5px;
+            color: #333;
+        }
+        .section p {
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+<!--<p th:text="'현재 userType: ' + ${userType}"></p>-->
+<div th:replace="~{fragments/header :: header(role=${role})}"></div>
+
+<div class="container">
+    <h2>공고 상세보기</h2>
+
+    <div class="job-box">
+        <div class="job-title" th:text="${job.title}">채용 제목</div>
+
+        <div class="section">
+            <h4>설명</h4>
+            <p th:text="${job.description}">상세 설명</p>
+        </div>
+
+        <div class="section">
+            <h4>근무지</h4>
+            <p th:text="${job.address}">근무지 주소</p>
+        </div>
+
+        <div class="section">
+            <h4>주요 업무</h4>
+            <p th:text="${job.mainTask}">업무 내용</p>
+        </div>
+
+        <div class="section">
+            <h4>필요 기술</h4>
+            <p th:text="${job.requiredSkills}">필수 기술</p>
+        </div>
+
+        <div class="section">
+            <h4>필요 성향</h4>
+            <p th:text="${job.requiredTraits}">성향</p>
+        </div>
+
+        <div class="section">
+            <h4>기술 키워드</h4>
+            <p th:text="${job.skillKeywords}">기술 키워드</p>
+        </div>
+
+        <div class="section">
+            <h4>성향 키워드</h4>
+            <p th:text="${job.traitKeywords}">성향 키워드</p>
+        </div>
+
+        <div class="section">
+            <h4>채용 기간</h4>
+            <p th:text="${job.startDate} + ' ~ ' + ${job.endDate}">시작 ~ 종료일</p>
+        </div>
+
+        <div class="section">
+            <h4>지원 이메일</h4>
+            <p th:text="${job.enrollEmail}">example@domain.com</p>
+        </div>
+
+        <div class="section">
+            <h4>안내 사항</h4>
+            <p th:text="${job.notice}">지원 시 유의 사항</p>
+        </div>
+
+        <div style="margin-top: 30px; text-align: center;">
+            <button onclick="location.href='/job/manage-jobs'" class="nav-button">돌아가기</button>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/js/dropdown.js}"></script>
+<script th:src="@{/js/logout.js}"></script>
+
+</body>
+</html>

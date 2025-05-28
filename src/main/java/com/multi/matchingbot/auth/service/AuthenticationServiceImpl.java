@@ -3,7 +3,7 @@ package com.multi.matchingbot.auth.service;
 
 import com.multi.matchingbot.auth.TokenProvider;
 import com.multi.matchingbot.auth.domain.RefreshTokenRepository;
-import com.multi.matchingbot.auth.domain.entities.RefreshToken;
+import com.multi.matchingbot.auth.domain.entity.RefreshToken;
 import com.multi.matchingbot.common.domain.enums.Role;
 import com.multi.matchingbot.common.error.TokenException;
 import com.multi.matchingbot.common.security.MBotUserDetails;

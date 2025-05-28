@@ -1,7 +1,7 @@
 package com.multi.matchingbot.member.domain.entities;
 
-import com.multi.matchingbot.common.domain.entities.BaseEntity;
-import com.multi.matchingbot.jobposting.Occupation;
+import com.multi.matchingbot.common.domain.entity.BaseEntity;
+import com.multi.matchingbot.job.Occupation;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,10 +37,10 @@ public class Resume extends BaseEntity {
     @Column(nullable = false, length = 50)
     private String title;
 
-    @Column(nullable = false)
+    @Column
     private String skillAnswer;
 
-    @Column(nullable = false)
+    @Column
     private String traitAnswer;
 
     @Column(nullable = false, length = 100)
@@ -49,4 +49,17 @@ public class Resume extends BaseEntity {
     @Column(nullable = false, length = 100)
     private String talentKeywords;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 1)
+    @Builder.Default
+    private Yn keywordsStatus = Yn.N;
+
+    @PreUpdate
+    public void updateKeywordsStatus() {
+        if (skillKeywords == null || talentKeywords == null) {
+            this.keywordsStatus = Yn.N;
+        } else {
+            this.keywordsStatus = Yn.Y;
+        }
+    }
 }

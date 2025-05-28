@@ -129,6 +129,8 @@ CREATE TABLE company (
     agree_marketing ENUM('Y', 'N'),
     agree_third_party ENUM('Y', 'N'),
 
+    report_status ENUM('Y', 'N') NOT NULL DEFAULT 'N' COMMENT '평가 보고서 상태',
+
     created_by VARCHAR(50),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_by VARCHAR(50),
@@ -146,13 +148,13 @@ CREATE TABLE job (
     title VARCHAR(100) NOT NULL,
     description VARCHAR(500) NOT NULL,
     address VARCHAR(100) NOT NULL,
-    main_task VARCHAR(255) NOT NULL,
-    required_skills VARCHAR(255) NOT NULL,
-    required_traits VARCHAR(255) NOT NULL,
+    main_task VARCHAR(500) NOT NULL,
+    required_skills VARCHAR(500) NOT NULL,
+    required_traits VARCHAR(500) NOT NULL,
     skill_keywords VARCHAR(100),
     trait_keywords VARCHAR(100),
-    latitude DOUBLE NOT NULL,        -- ✅ 위도 추가
-    longitude DOUBLE NOT NULL,       -- ✅ 경도 추가
+    latitude DOUBLE NOT NULL DEFAULT 37.5665,        -- ✅ 위도 default 값 추가
+    longitude DOUBLE NOT NULL DEFAULT 126.9780,       -- ✅ 경도 default 값 추가
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
     enroll_email VARCHAR(50) NOT NULL,
@@ -243,6 +245,7 @@ CREATE TABLE resume (
     trait_answer VARCHAR(255),
     skill_keywords VARCHAR(100),
     talent_keywords VARCHAR(100),
+    keywords_status ENUM('Y', 'N') NOT NULL DEFAULT 'N' COMMENT '키워드 추출 상태',
     created_by VARCHAR(50) NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_by VARCHAR(50),
