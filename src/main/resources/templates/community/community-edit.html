@@ -7,7 +7,7 @@
 </head>
 <body>
 <h2>글 수정</h2>
-<form th:action="@{'/community/' + ${post.id} + '/edit'}" method="post">
+<form th:action="@{'/community/'  + 'edit/' + ${post.id}}" method="post">
     <label>카테고리:
         <select name="categoryId" required>
             <option th:each="category : ${categories}"
@@ -25,7 +25,7 @@
     </label><br/>
     <button type="submit">수정</button>
 </form>
-<form th:action="@{'/community/' + ${post.id} + '/delete'}" method="post">
+<form th:action="@{'/community/' +  'delete/' +${post.id} }" method="post">
     <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
 </form>
 
