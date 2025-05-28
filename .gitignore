@@ -77,3 +77,7 @@ Thumbs.db
 *.tmp
 *.bak
 *.pdf
+#########################
+# ✅ MapStruct 등 Annotation Processor 결과물
+#########################
+/src/main/generated/
