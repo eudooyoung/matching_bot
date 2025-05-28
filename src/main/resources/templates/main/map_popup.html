@@ -85,7 +85,13 @@
 
         clearJobMarkers();
 
-        fetch(`/api/maps/nearby?lat=${lat}&lng=${lng}`)
+        fetch(`/api/maps/nearby?lat=${lat}&lng=${lng}`, {
+            method: 'GET',
+            credentials: 'include',  // ✅ 쿠키 전송 허용
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
             .then(async res => {
                 if (!res.ok) {
                     const errorText = await res.text();
@@ -99,8 +105,6 @@
                 jobs.forEach(job => {
                     if (job.latitude && job.longitude) {
                         const coords = new kakao.maps.LatLng(job.latitude, job.longitude);
-
-                        // 채용공고 마커 (기본 붉은색 마커)
                         const jobMarker = new kakao.maps.Marker({
                             map,
                             position: coords
@@ -108,17 +112,17 @@
                         jobMarkers.push(jobMarker);
 
                         const content = `
-                          <div style="padding:5px; font-size:14px;">
-                            <strong>회사명: ${job.companyName || "미정"}</strong><br/>
-                            직무: ${job.title}<br/>
-                            언어: ${job.requiredSkills || "정보 없음"}<br/>
-                            연봉: ${job.salary || "협의"}<br/>
-                            <button onclick="window.location.href='/jobs/${job.id}'"
-                                    style="margin-top:5px; padding:3px 6px; font-size:13px;">
-                              상세보기
-                            </button>
-                          </div>
-                        `;
+              <div style="padding:5px; font-size:14px;">
+                <strong>회사명: ${job.companyName || "미정"}</strong><br/>
+                직무: ${job.title}<br/>
+                언어: ${job.requiredSkills || "정보 없음"}<br/>
+                연봉: ${job.salary || "협의"}<br/>
+                <button onclick="window.location.href='/jobs/${job.id}'"
+                        style="margin-top:5px; padding:3px 6px; font-size:13px;">
+                  상세보기
+                </button>
+              </div>
+            `;
                         const infowindow = new kakao.maps.InfoWindow({ content });
                         kakao.maps.event.addListener(jobMarker, 'click', () => {
                             if (currentInfowindow) currentInfowindow.close();
@@ -132,6 +136,7 @@
                 console.error("❌ 채용공고 마커 오류:", err.message);
                 alert("채용공고 데이터를 불러오는 데 실패했습니다.");
             });
+
     }
 
     function searchAddress() {
