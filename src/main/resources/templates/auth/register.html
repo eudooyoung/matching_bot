@@ -49,6 +49,7 @@
                 <input type="text" id="address" name="address" required>
                 <br>
 
+                <!-- 생년월일 / 성별 -->
                 <label>* 생년월일 / 성별</label>
                 <div class="birth-gender">
                     <select name="year" id="year" required></select>
@@ -71,7 +72,7 @@
                             dayEl.innerHTML += `<option value="${i}">${i}일</option>`;
                         }
                     </script>
-                    <label><input type="radio" name="gender" value="M"> 남</label>
+                    <label><input type="radio" name="gender" value="M" required> 남</label>
                     <label><input type="radio" name="gender" value="F"> 여</label>
                 </div>
 
@@ -85,9 +86,9 @@
                 <label class="agreement-title">* 약관동의</label>
                 <div class="checkbox-group">
                     <label><input type="checkbox" name="agree_all"> 전체 동의</label><br>
-                    <label><input type="checkbox" name="terms_required"> (필수) 서비스 이용약관 동의</label><br>
-                    <label><input type="checkbox" name="privacy_required"> (필수) 개인정보 수집 및 이용 동의</label><br>
-                    <label><input type="checkbox" name="location_required"> (필수) 위치기반 서비스 이용약관 동의</label><br>
+                    <label><input type="checkbox" name="terms_required" required> (필수) 서비스 이용약관 동의</label><br>
+                    <label><input type="checkbox" name="privacy_required" required> (필수) 개인정보 수집 및 이용 동의</label><br>
+                    <label><input type="checkbox" name="location_required" required> (필수) 위치기반 서비스 이용약관 동의</label><br>
                     <label><input type="checkbox" name="marketing_email"> (선택) 마케팅 정보 수신 동의 - 이메일</label><br>
                     <label><input type="checkbox" name="marketing_sms"> (선택) 마케팅 정보 수신 동의 - SMS/MMS</label><br>
                 </div>

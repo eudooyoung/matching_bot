@@ -3,8 +3,9 @@ package com.multi.matchingbot.auth.find;
 import com.multi.matchingbot.auth.AuthCompany.AuthCompanyRepository;
 import com.multi.matchingbot.auth.find.dto.FindCompanyPasswordDto;
 import com.multi.matchingbot.auth.find.dto.FindUserPasswordDto;
-import com.multi.matchingbot.member.MemberRepository;
-import com.multi.matchingbot.member.domain.Member;
+
+import com.multi.matchingbot.member.domain.entities.Member;
+import com.multi.matchingbot.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

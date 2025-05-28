@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>구직자 마이페이지</title>
+    <link rel="stylesheet" th:href="@{/css/layout.css}" href="/css/layout.css">
+
+</head>
+<body>
+<div th:replace="fragments/header :: header(role=${role})"></div>
+
+<main class="main-content">
+    <div class="container">
+        <h2>구직자 마이페이지</h2>
+
+        <!-- 프로필 정보 -->
+        <div class="member-info">
+            <div class="profile-circle">
+                <span th:text="${member.name.substring(0,1)}">F</span>
+            </div>
+            <p class="member-name">
+                <span th:text="${member.name}">회원이름</span> 님
+            </p>
+        </div>
+
+        <!-- 소개 텍스트 -->
+        <div class="intro-box">
+            <form id="introForm" th:action="@{/resume/updateIntro}" method="post">
+        <textarea id="introText" name="intro" maxlength="1000"
+                  th:text="${member.intro}" placeholder="간단한 소개를 입력하세요 (최대 1000자)"
+                  oninput="updateCharCount()"></textarea>
+                <div class="char-count">
+                    <span id="charCount">0</span>/1000자
+                </div>
+                <button type="submit">저장</button>
+            </form>
+        </div>
+        <!-- 기능 아코디언 목록 -->
+        <div class="accordion-box">
+
+            <div class="accordion-item">
+                <div class="accordion-left">
+                    <span class="accordion-title">이력서 관리</span>
+                    <span class="star">☆</span>
+                </div>
+                <button class="nav-button" onclick="location.href='/resume/Resume'">이동</button>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-left">
+                    <span class="accordion-title">관심 기업 목록</span>
+                    <span class="star">☆</span>
+                </div>
+                <button class="nav-button" onclick="location.href='/resume/resume_list'">이동</button>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-left">
+                    <span class="accordion-title">관심 공고 목록</span>
+                    <span class="star">☆</span>
+                </div>
+                <button class="nav-button" onclick="location.href='/resume/resume_list'">이동</button>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-left">
+                    <span class="accordion-title">개인 정보 수정</span>
+                    <span class="star">☆</span>
+                </div>
+                <button class="nav-button" onclick="location.href='/resume/profile_edit'">이동</button>
+            </div>
+        </div>
+    </div>
+</main>
+<!-- 공통 푸터 -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script th:src="@{/js/dropdown.js}"></script>
+<script th:src="@{/js/logout.js}"></script>
+</body>
+</html>
