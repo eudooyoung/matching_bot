@@ -18,9 +18,11 @@ security:
       - /api/v1/auth/login
       - /api/v1/auth/refresh
       - /search-page/**
+      - /jobs/**
 
     member-paths:
     company-paths:
+      - /company/**
     admin-paths:
       - /admin/**
     api-paths:

@@ -1,4 +1,4 @@
-package com.multi.matchingbot.common.domain.entities;
+package com.multi.matchingbot.common.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;

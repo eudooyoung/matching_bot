@@ -1,4 +1,4 @@
-package com.multi.matchingbot.auth.domain.dtos;
+package com.multi.matchingbot.auth.domain.dto;
 
 import com.multi.matchingbot.common.domain.enums.Role;
 import lombok.AllArgsConstructor;

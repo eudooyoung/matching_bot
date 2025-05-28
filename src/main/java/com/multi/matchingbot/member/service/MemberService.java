@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class MemberService {
@@ -51,10 +52,11 @@ public class MemberService {
     }
 
     @Transactional
-    public void deactivateMember(Long id) {
+    public void deactivate(Long id) {
         Member member = memberRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("해당 회원이 존재하지 않습니다.")
-        );
+                () -> new EntityNotFoundException("해당 회원이 존재하지 않습니다."));
+
+        if (member.getStatus() == Yn.N) return;
 
         member.setStatus(Yn.N);
     }
@@ -62,9 +64,20 @@ public class MemberService {
     @Transactional
     public void reactivate(Long id) {
         Member member = memberRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("해당 회원이 존재하지 않습니다.")
-        );
+                () -> new EntityNotFoundException("해당 회원이 존재하지 않습니다."));
+
+        if (member.getStatus() == Yn.Y) return;
 
         member.setStatus(Yn.Y);
+    }
+
+    @Transactional
+    public void deactivateBulks(List<Long> checkedIds) {
+        checkedIds.forEach(this::deactivate);
+    }
+
+    @Transactional
+    public void reactivateBulks(List<Long> checkedIds) {
+        checkedIds.forEach(this::reactivate);
     }
 }

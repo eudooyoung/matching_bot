@@ -22,13 +22,13 @@ public class AdminRestController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("members/{id}")
     public ResponseEntity<Void> deactivateMember(@PathVariable("id") Long id) {
-        memberService.deactivateMember(id);
+        memberService.deactivate(id);
         return ResponseEntity.noContent().build();
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("members/{id}/reactivate")
-    public ResponseEntity<Void> reactiveMember(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> reactivateMember(@PathVariable("id") Long id) {
         memberService.reactivate(id);
         return ResponseEntity.noContent().build();
     }

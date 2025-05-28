@@ -1,6 +1,7 @@
 package com.multi.matchingbot.common.config;
 
 import com.multi.matchingbot.common.security.JwtAuthenticationFilter;
+import com.multi.matchingbot.common.security.MBotAccessDeniedHandler;
 import com.multi.matchingbot.common.security.MBotAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -26,9 +27,16 @@ public class SecurityConfig {
 
     private final CorsConfigurationSource corsConfigurationSource;
     private final MBotAuthenticationEntryPoint mBotAuthenticationEntryPoint;
-//    private final MBotAccessDeniedHandler mBotAccessDeniedHandler;
+    private final MBotAccessDeniedHandler mBotAccessDeniedHandler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final RoleAccessProperties roleAccessProperties;
+
+//    @Bean
+//    public DispatcherServlet dispatcherServlet() {
+//        DispatcherServlet servlet = new DispatcherServlet();
+//        servlet.setThrowExceptionIfNoHandlerFound(false); // 명시적으로 지정
+//        return servlet;
+//    }
 
 
     @Bean
@@ -42,15 +50,15 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 //예외 처리
                 .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint(mBotAuthenticationEntryPoint))
-//                        .accessDeniedHandler(mBotAccessDeniedHandler)
+                        .authenticationEntryPoint(mBotAuthenticationEntryPoint)
+                        .accessDeniedHandler(mBotAccessDeniedHandler))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(toArray(roleAccessProperties.getPermitAll())).permitAll()
                         .requestMatchers(toArray(roleAccessProperties.getAdminPaths())).hasRole("ADMIN")
                         .requestMatchers(toArray(roleAccessProperties.getCompanyPaths())).hasRole("COMPANY")
                         .requestMatchers(toArray(roleAccessProperties.getMemberPaths())).hasRole("MEMBER")
                         .requestMatchers(toArray(roleAccessProperties.getApiPaths())).authenticated()
-                        .anyRequest().denyAll()
+                        .anyRequest().permitAll()
                 ).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
 

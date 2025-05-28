@@ -4,8 +4,8 @@ import com.multi.matchingbot.admin.service.AdminPageService;
 import com.multi.matchingbot.common.domain.dto.PagedResult;
 import com.multi.matchingbot.common.domain.dto.SearchCondition;
 import com.multi.matchingbot.common.security.MBotUserDetails;
-import com.multi.matchingbot.member.domain.dtos.MemberAdminViewDto;
-import com.multi.matchingbot.member.domain.dtos.ResumeAdminViewDto;
+import com.multi.matchingbot.member.domain.dtos.MemberAdminView;
+import com.multi.matchingbot.member.domain.dtos.ResumeAdminView;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,7 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Slf4j
 @Controller
@@ -41,8 +40,8 @@ public class AdminPageController {
     }
 
     @GetMapping("/members")
-    public void members(@ModelAttribute SearchCondition cond, Model model, @RequestParam(name = "page", defaultValue = "0") int page) {
-        PagedResult<MemberAdminViewDto> result = adminPageService.members(cond);
+    public void members(@ModelAttribute SearchCondition cond, Model model) {
+        PagedResult<MemberAdminView> result = adminPageService.members(cond);
         model.addAttribute("members", result.getPage().getContent());
         model.addAttribute("page", result.getPage());
         model.addAttribute("pageNumbers", result.getPageNumbers());
@@ -51,14 +50,14 @@ public class AdminPageController {
     }
 
 
-
     @GetMapping("/resumes")
-    public void resumes(Model model, @RequestParam(name = "page", defaultValue = "0") int page) {
-        PagedResult<ResumeAdminViewDto> result = adminPageService.resumes(page);
+    public void resumes(@ModelAttribute SearchCondition cond, Model model) {
+        PagedResult<ResumeAdminView> result = adminPageService.resumes(cond);
         model.addAttribute("resumes", result.getPage().getContent());
         model.addAttribute("page", result.getPage());
         model.addAttribute("pageNumbers", result.getPageNumbers());
         model.addAttribute("currentPage", result.getCurrentPage());
+        model.addAttribute("cond", cond);
     }
 
 

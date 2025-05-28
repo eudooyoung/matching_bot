@@ -1,7 +1,7 @@
 package com.multi.matchingbot.member.mapper;
 
+import com.multi.matchingbot.member.domain.dtos.MemberAdminView;
 import com.multi.matchingbot.member.domain.entities.Member;
-import com.multi.matchingbot.member.domain.dtos.MemberAdminViewDto;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -10,7 +10,7 @@ import org.mapstruct.Mapping;
 public interface MemberMapper {
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "formattedId", expression = "java(formatId(member.getId()))")
+    @Mapping(target = "formattedId", expression = "java(MemberMapper.formatId(member.getId()))")
     @Mapping(target = "name", source = "name")
     @Mapping(target = "email", source = "email")
     @Mapping(target = "gender", source = "gender")
@@ -22,9 +22,9 @@ public interface MemberMapper {
     @Mapping(target = "createdAt", source = "createdAt")
     @Mapping(target = "updatedBy", source = "updatedBy")
     @Mapping(target = "updatedAt", source = "updatedAt")
-    MemberAdminViewDto toMemberAdminView(Member member);
+    MemberAdminView toMemberAdminView(Member member);
 
-    default String formatId(Long id) {
+    static String formatId(Long id) {
         return String.format("U%05d", id);
     }
 }
