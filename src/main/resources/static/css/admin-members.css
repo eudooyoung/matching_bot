@@ -1,20 +1,10 @@
+/* ✅ 검색 영역 래퍼 */
 .search-bar-wrapper {
     width: 90%;
     margin: 0 auto 1.5rem auto;
 }
 
-.search-options select,
-.search-options button,
-.search-right input[type="text"],
-.btn-search
-{
-    height: 36px;             /* 높이 통일 */
-    padding: 0 0.75rem;       /* 좌우만 여백 */
-    font-size: 14px;
-    line-height: 1;
-    box-sizing: border-box;
-}
-
+/* ✅ 검색 폼 전체 */
 .search-form {
     display: flex;
     justify-content: space-between;
@@ -22,44 +12,83 @@
     flex-wrap: wrap;
 }
 
+/* ✅ 왼쪽 옵션 영역 */
 .search-options {
     display: flex;
     gap: 1rem;
 }
 
 .search-options select {
-    padding: 0.5rem;
+    padding: 0.25rem 0.5rem;
     font-size: 14px;
-    width: 150px;
+    width: 130px;
+    height: 36px;
+    box-sizing: border-box;
 }
 
+/* ✅ 오른쪽 검색창 영역 */
 .search-right {
     display: flex;
     align-items: center;
     justify-content: flex-end;
     gap: 1rem;
-    min-width: 220px; /* ✅ 버튼 위치 보정용 */
+    min-width: 220px;
 }
 
 .search-right input[type="text"] {
     width: 280px;
     padding: 0.5rem;
     font-size: 14px;
+    height: 36px;
+    box-sizing: border-box;
 }
 
-.btn-search {
-    width: 60px; /* 삭제/복구 버튼과 유사한 너비 */
-    /*margin-right: 0.75rem;*/
-    padding: 0.5rem 1rem;
-    background-color: #103254;
-    color: white;
+/* ✅ 공통 버튼 스타일 */
+.btn {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    box-sizing: border-box;
+    font-size: 14px;
+    padding: 0.2rem 0.4rem;
+
+}
+
+/* ✅ 검색 버튼 */
+.btn-search {
+    width: 60px;
+    height: 36px;
+    padding: 0.5rem 1rem;
+    background-color: #103254;
+    color: white;
     transition: background-color 0.2s ease;
 }
 
+/* ✅ 벌크 버튼 (작게) */
+.btn-bulk {
+    font-size: 13px;
+    height: 30px;
+    padding: 0.2rem 0.4rem;
+}
 
+/* ✅ 버튼 색상별 지정 */
+.btn-delete {
+    background-color: #f44336;
+    color: white;
+}
+
+.btn-restore {
+    background-color: #4caf50;
+    color: white;
+}
+
+.btn-extract {
+    background-color: #b2fd83;
+    color: #103254;
+    /*margin-top: 2px;*/
+}
+
+/* ✅ 테이블 영역 */
 .table {
     table-layout: fixed;
     width: 90%;
@@ -67,7 +96,7 @@
     border-collapse: collapse;
     background-color: white;
     text-align: center;
-    font-size: 15px;
+    font-size: 14px;
 }
 
 .table th,
@@ -84,10 +113,10 @@
 }
 
 .table tbody tr:hover {
-    background-color: #f9f9f9; /* 연한 회색 강조 */
-    /*cursor: pointer; !* 선택 가능한 느낌 줄 수도 있음 *!*/
+    background-color: #f9f9f9;
 }
 
+/* ✅ 이메일 링크 */
 .email-link {
     color: #007bff;
     text-decoration: none;
@@ -98,7 +127,7 @@
     text-decoration: underline;
 }
 
-
+/* ✅ 상태 색상 */
 .table td.status-active {
     color: green;
 }
@@ -107,46 +136,24 @@
     color: gray;
 }
 
-.btn-delete, .btn-restore, .btn-extract {
-    margin-top: 2px;
-    color: white;
-    border: none;
-    padding: 0.3rem 0.6rem;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.btn-extract {
-    background-color: #b2fd83;
-    color: #103254;
-}
-
-.btn-delete {
-    background-color: #f44336;
-}
-
-.btn-restore {
-    background-color: #4caf50;
-}
-
+/* ✅ 페이지네이션 */
 .table-pagination {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 0.5rem;
     min-height: 2rem;
-    min-width: 200px; /* 너비는 적당히 조정 가능 */
+    min-width: 200px;
 }
 
 .table-pagination a {
-    text-decoration: none; /* 밑줄 제거 */
-    /*color: black;*/
-    color: inherit; /* 부모 요소 색상 계승 (보통 검정) */
+    text-decoration: none;
+    color: inherit;
 }
 
 .table-pagination a:hover {
     text-decoration: underline;
-    color: #2196f3; /* hover 시만 강조 */
+    color: #2196f3;
 }
 
 .active-page {

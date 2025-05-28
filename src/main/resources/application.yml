@@ -36,9 +36,9 @@ spring:
         format_sql: true
         highlight_sql: true
 
-logging:
-  level:
-    org.springframework.web: DEBUG
+#logging:
+#  level:
+#    org.springframework.web: DEBUG
 #    root: DEBUG
 #    org.hibernate.SQL: DEBUG
 

@@ -19,8 +19,11 @@
             <div class="search-bar-wrapper">
                 <form method="get" th:action="@{/admin/resumes}" class="search-form">
                     <div class="search-options">
-                        <button type="button" class="btn-extract"
+                        <button type="button" class="btn btn-extract"
                                 onclick="setBulkAction('DELETE', '/admin/bulk/resumes')">선택 추출
+                        </button>
+                        <button type="button" class="btn btn-delete"
+                                onclick="setBulkAction('DELETE', '/admin/bulk/resumes')">선택 삭제
                         </button>
 
                         <!-- 정렬 기준 -->
@@ -48,7 +51,7 @@
 
                     <div class="search-right" onchange="this.form.submit()">
                         <input type="text" name="keyword" placeholder="이름, 이메일 검색..." th:value="${cond.keyword}"/>
-                        <button type="submit" class="btn-search">검색</button>
+                        <button type="submit" class="btn btn-search">검색</button>
                     </div>
                 </form>
             </div>
@@ -103,14 +106,14 @@
                     <td th:text="${resume.keywordsStatus}">키워드 추출 상태</td>
                     <td>
                         <button type="button"
-                                class="btn-extract"
+                                class="btn btn-extract"
                                 th:onclick="|extractKeywords({ id: ${resume.id}, url: '/api/v1/admin/resumes', onSuccess: () => location.reload() })|">
                             추출
                         </button>
                     </td>
                     <td>
                         <button type="button"
-                                class="btn-delete"
+                                class="btn btn-delete"
                                 th:onclick="|deleteItem({ id: ${resume.id}, url: '/api/v1/admin/resumes', onSuccess: () => location.reload() })|">
                             삭제
                         </button>

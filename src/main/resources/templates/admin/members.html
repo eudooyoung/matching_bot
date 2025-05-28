@@ -18,10 +18,10 @@
             <div class="search-bar-wrapper">
                 <form method="get" th:action="@{/admin/members}" class="search-form">
                     <div class="search-options">
-                        <button type="button" class="btn-delete"
+                        <button type="button" class="btn btn-delete"
                                 onclick="setBulkAction('DELETE', '/admin/bulk/members')">선택 삭제
                         </button>
-                        <button type="button" class="btn-restore"
+                        <button type="button" class="btn btn-restore"
                                 onclick="setBulkAction('RESTORE', '/admin/bulk/members')">선택 복구
                         </button>
                         <!-- 정렬 기준 -->
@@ -49,7 +49,7 @@
 
                     <div class="search-right" onchange="this.form.submit()">
                         <input type="text" name="keyword" placeholder="이름, 이메일 검색..." th:value="${cond.keyword}"/>
-                        <button type="submit" class="btn-search">검색</button>
+                        <button type="submit" class="btn btn-search">검색</button>
                     </div>
                 </form>
             </div>
@@ -114,14 +114,14 @@
                     </td>
                     <td>
                         <button type="button"
-                                class="btn-delete"
+                                class="btn btn-delete"
                                 th:if="${member.status.name() == 'Y'}"
                                 th:onclick="|deactivateItem({ id: ${member.id}, url: '/api/v1/admin/members', onSuccess: () => location.reload() })|">
                             삭제
                         </button>
 
                         <button type="button"
-                                class="btn-restore"
+                                class="btn btn-restore"
                                 th:if="${member.status.name() == 'N'}"
                                 th:onclick="|reactivateItem({ id: ${member.id}, url: '/api/v1/admin/members', onSuccess: () => location.reload() })|">
                             복구

@@ -7,6 +7,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @RestControllerAdvice
 @Slf4j
@@ -78,9 +79,9 @@ public class ErrorController {
         return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
     }
 
-//    @ExceptionHandler(NoResourceFoundException.class)
-//    public void handleNoResourceFoundException(NoResourceFoundException ex) throws NoResourceFoundException {
-//        throw ex; // DispatcherServlet에게 다시 넘겨서 404.html 보여주도록 유도
-//    }
+    @ExceptionHandler(NoResourceFoundException.class)
+    public void handleNoResourceFoundException(NoResourceFoundException ex) throws NoResourceFoundException {
+        throw ex; // DispatcherServlet에게 다시 넘겨서 404.html 보여주도록 유도
+    }
 
 }

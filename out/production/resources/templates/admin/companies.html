@@ -18,10 +18,10 @@
             <div class="search-bar-wrapper">
                 <form method="get" th:action="@{/admin/members}" class="search-form">
                     <div class="search-options">
-                        <button type="button" class="btn-delete"
+                        <button type="button" class="btn btn-delete"
                                 onclick="setBulkAction('DELETE', '/admin/bulk/companies')">선택 삭제
                         </button>
-                        <button type="button" class="btn-restore"
+                        <button type="button" class="btn btn-restore"
                                 onclick="setBulkAction('RESTORE', '/admin/bulk/companies')">선택 복구
                         </button>
                         <!-- 정렬 기준 -->
@@ -56,7 +56,7 @@
 
                     <div class="search-right" onchange="this.form.submit()">
                         <input type="text" name="keyword" placeholder="이름, 이메일 검색..." th:value="${cond.keyword}"/>
-                        <button type="submit" class="btn-search">검색</button>
+                        <button type="submit" class="btn btn-search">검색</button>
                     </div>
                 </form>
             </div>
@@ -64,81 +64,82 @@
             <!-- 회원 테이블 -->
             <table class="table">
                 <colgroup>
-                    <col style="width: 4%;"/>  <!-- 체크박스 -->
-                    <col style="width: 6%;"/>  <!-- 회원 번호 -->
-                    <col style="width: 6%;"/>  <!-- 이름 -->
-                    <col style="width: 15%;"/> <!-- 이메일 -->
-                    <col style="width: 4%;"/>  <!-- 사업자등록번호 -->
-                    <col style="width: 4%;"/>  <!-- 연락처 -->
-                    <col style="width: 8%;"/> <!-- 주소 -->
-                    <col style="width: 7%;"/>  <!-- 산업군 -->
-                    <col style="width: 7%;"/>  <!-- 필수 약관 상태 -->
-                    <col style="width: 15%;"/>  <!-- 생성일 -->
-                    <col style="width: 15%;"/>  <!-- 수정자 -->
-                    <col style="width: 15%;"/>  <!-- 수정일 -->
-                    <col style="width: 11%;"/> <!-- 보고서상태 -->
-                    <col style="width: 6%;"/>  <!-- 상태 -->
-                    <col style="width: 5%;"/>  <!-- 삭제/복구 -->
+                    <col style="width: 2%;"/>  <!-- 체크박스 -->
+                    <col style="width: 5%;"/>  <!-- 회원 번호 -->
+                    <col style="width: 8%;"/>  <!-- 이름 -->
+                    <col style="width: 11%;"/> <!-- 이메일 -->
+<!--                    <col style="width: 6%;"/>  &lt;!&ndash; 사업자등록번호 &ndash;&gt;-->
+                    <!--                    <col style="width: 4%;"/>  &lt;!&ndash; 연락처 &ndash;&gt;-->
+                    <col style="width: 10%;"/> <!-- 주소 -->
+                    <col style="width: 3%;"/>  <!-- 산업군 -->
+                    <col style="width: 3%;"/>  <!-- 필수 약관 상태 -->
+                    <col style="width: 7%;"/>  <!-- 생성일 -->
+                    <col style="width: 11%;"/>  <!-- 수정자 -->
+                    <col style="width: 7%;"/>  <!-- 수정일 -->
+                    <col style="width: 2%;"/> <!-- 보고서상태 -->
+                    <col style="width: 3%;"/>  <!-- 추출 -->
+                    <col style="width: 4%;"/>  <!-- 가입상태 -->
+                    <col style="width: 3%;"/>  <!-- 삭제/복구 -->
                 </colgroup>
                 <thead style="background-color: #f0f0f0;">
                 <tr>
                     <th><input type="checkbox" id="check-all"/></th>
                     <th>회원 번호</th>
-                    <th>이름</th>
+                    <th>회사 이름</th>
                     <th>이메일</th>
-                    <th>사업자등록번호</th>
-                    <th>연락처</th>
+<!--                    <th>사업자 번호</th>-->
+                    <!--                    <th>연락처</th>-->
                     <th>주소</th>
                     <th>산업군</th>
-                    <th>필수 약관 상태</th>
+                    <th>약관</th>
                     <th>생성일</th>
                     <th>수정자</th>
                     <th>수정일</th>
-                    <th>보고서 상태</th>
-                    <th>가입 상태</th>
-                    <th>삭제</th>
+                    <th>평가</th>
+                    <th>추출</th>
+                    <th>가입상태</th>
+                    <th>수정</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="company : ${companies}">
                     <td><input type="checkbox" name="checkedIds" th:value="${company.id}" class="check-row"
-                               th:data-status="${company.status.name()}"/>
+                               th:data-status="${company.status.name()}" />
                     </td>
                     <td th:text="${company.formattedId}">회원 번호</td>
-                    <td th:text="${company.name}">이름</td>
+                    <td th:text="${company.name}" th:attr="title=${company.name}">이름</td>
                     <td>
                         <a th:href="@{|/admin/companies/${company.id}|}"
                            th:text="${company.email}"
                            th:attr="title=${company.email}"
                            class="email-link">이메일</a>
                     </td>
-                    <td th:text="${company.businessNo}">사업자등록번호</td>
-                    <td th:text="${company.phone}">연락처</td>
-                    <td th:text="${company.getAddress()}">주소</td>
+<!--                    <td th:text="${company.businessNo}">사업자등록번호</td>-->
+                    <!--                    <td th:text="${company.phone}">연락처</td>-->
+                    <td th:text="${company.getAddress()}" th:attr="title=${company.getAddress()}">주소</td>
                     <td th:text="${company.getIndustry()}">산업군</td>
-                    <td th:text="${company.isAgreementValid}">산업군</td>
+                    <td th:text="${company.isAgreementValid}">필수</td>
                     <td th:text="${#temporals.format(company.createdAt, 'yyyy-MM-dd HH:mm:ss')}">생성일</td>
                     <td th:attr="title=${company.email}" th:text="${company.updatedBy}">수정자</td>
                     <td th:text="${#temporals.format(company.updatedAt, 'yyyy-MM-dd HH:mm:ss')}">수정일</td>
-                    <td th:text="${company.reportStatus}">보고서 상태</td>
+                    <td th:text="${company.reportStatus}">보고서</td>
                     <td>
                         <button type="button"
-                                class="btn-extract"
-                                th:onclick="|deactivateItem({ id: ${company.id}, url: '/api/v1/admin/companies', onSuccess: () => location.reload() })|">
-                            삭제
+                                class="btn btn-extract"
+                                th:onclick="|extractKeywords({ id: ${company.id}, url: '/api/v1/admin/companies', onSuccess: () => location.reload() })|">
+                            추출
                         </button>
                     </td>
                     <td th:class="${company.getStatusClass()}" th:text="${company.getStatusText()}">가입 상태</td>
                     <td>
                         <button type="button"
-                                class="btn-delete"
+                                class="btn btn-delete"
                                 th:if="${company.status.name() == 'Y'}"
                                 th:onclick="|deactivateItem({ id: ${company.id}, url: '/api/v1/admin/companies', onSuccess: () => location.reload() })|">
                             삭제
                         </button>
-
                         <button type="button"
-                                class="btn-restore"
+                                class="btn btn-restore"
                                 th:if="${company.status.name() == 'N'}"
                                 th:onclick="|reactivateItem({ id: ${company.id}, url: '/api/v1/admin/companies', onSuccess: () => location.reload() })|">
                             복구
