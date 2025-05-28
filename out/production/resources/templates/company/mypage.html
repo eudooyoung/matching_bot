@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <title>기업 마이페이지</title>
     <link rel="stylesheet" th:href="@{/css/mypage.css}"/>
-    <link rel="stylesheet" th:href="@{/css/common.css}"/>
+    <link rel="stylesheet" th:href="@{/css/layout.css}"/>
 </head>
 <body>
 <!--<p th:text="'현재 userType: ' + ${userType}"></p>-->
@@ -32,7 +32,7 @@
                 <span class="accordion-title">공고 관리</span>
                 <span class="star">☆</span>
             </div>
-            <button class="nav-button" onclick="location.href='/job/manage_jobs'">이동</button>
+            <button class="nav-button" onclick="location.href='/job/manage-jobs'">이동</button>
         </div>
 
         <div class="accordion-item">
@@ -40,7 +40,7 @@
                 <span class="accordion-title">관심 이력서 목록</span>
                 <span class="star">☆</span>
             </div>
-            <button class="nav-button" onclick="location.href='/job/resume_list'">이동</button>
+            <button class="nav-button" onclick="location.href='/job/resume-list'">이동</button>
         </div>
 
         <div class="accordion-item">
@@ -48,7 +48,7 @@
                 <span class="accordion-title">개인 정보 수정</span>
                 <span class="star">☆</span>
             </div>
-            <button class="nav-button" onclick="location.href='/job/profile_edit'">이동</button>
+            <button class="nav-button" onclick="location.href='/company/edit-profile'">이동</button>
         </div>
 
     </div>

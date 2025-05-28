@@ -20,10 +20,13 @@ security:
       - /search-page/**
       - /jobs/**
       - /community/**
+      - /calendar
+
     member-paths:
       - /api/maps/**
     company-paths:
       - /company/**
+      - /job/**
     admin-paths:
       - /admin/**
     api-paths:

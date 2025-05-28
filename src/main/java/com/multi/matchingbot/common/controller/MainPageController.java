@@ -25,5 +25,9 @@ public class MainPageController {
         return "main/main";
     }
 
+    @GetMapping("/calendar")
+    public String calendarPage() {
+        return "main/calendar";
+    }
 
 }

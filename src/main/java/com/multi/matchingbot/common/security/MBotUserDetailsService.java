@@ -21,7 +21,6 @@ public class MBotUserDetailsService implements UserDetailsService {
     private final MemberRepository memberRepository;
     private final CompanyRepository companyRepository;
 
-
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         throw new UnsupportedOperationException("이 서비스는 loadUserByType(...)만 지원합니다.");
