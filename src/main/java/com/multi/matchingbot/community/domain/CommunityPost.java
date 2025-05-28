@@ -1,0 +1,39 @@
+// CommunityPost.java
+package com.multi.matchingbot.community.domain;
+
+import com.multi.matchingbot.member.domain.entities.Member;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Entity
+@Getter
+@Setter
+public class CommunityPost {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private CommunityCategory category;
+
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    private String title;
+    private String content;
+    private int views;
+    private String createdBy;
+    private LocalDateTime createdAt;
+    private String updatedBy;
+    private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<CommunityComment> comments;
+}

@@ -31,7 +31,7 @@ public class SearchPostingPageController {
     }
 
     // SearchPostingPageController.java 내부
-    @GetMapping("/search-page/{id}")
+    @GetMapping("/jobs/{id}")
     public String viewDetail(@PathVariable Long id, Model model) {
         SearchPostingDto job = searchPostingService.findById(id); // 아래 서비스도 함께 추가
         model.addAttribute("job", job);
