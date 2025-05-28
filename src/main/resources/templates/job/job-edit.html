@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <title>공고 수정하기</title>
     <link rel="stylesheet" th:href="@{/css/mypage.css}"/>
-    <link rel="stylesheet" th:href="@{/css/common.css}"/>
+    <link rel="stylesheet" th:href="@{/css/layout.css}"/>
     <style>
         .form-box {
             background-color: white;
@@ -40,7 +40,7 @@
         .form-box button {
             margin-top: 24px;
             padding: 10px 18px;
-            background-color: #1a2b49;
+            background-color: #103254;
             color: white;
             border: none;
             border-radius: 4px;
@@ -49,7 +49,7 @@
         }
 
         .form-box button:hover {
-            background-color: #2e4064;
+            background-color: #103254;
         }
     </style>
 </head>
@@ -95,14 +95,6 @@
         <label>성향 키워드</label>
         <input type="text" name="traitKeywords" th:value="${job.traitKeywords}" required />
         <div th:if="${#fields.hasErrors('traitKeywords')}" class="error-message" th:errors="*{traitKeywords}"></div>
-
-        <label>위도</label>
-        <input type="text" name="latitude" th:value="${job.latitude}" required />
-        <div th:if="${#fields.hasErrors('latitude')}" class="error-message" th:errors="*{latitude}"></div>
-
-        <label>경도</label>
-        <input type="text" name="longitude" th:value="${job.longitude}" required />
-        <div th:if="${#fields.hasErrors('longitude')}" class="error-message" th:errors="*{longitude}"></div>
 
         <label>채용 시작일</label>
         <input type="date" name="startDate" th:value="${job.startDate}" required />

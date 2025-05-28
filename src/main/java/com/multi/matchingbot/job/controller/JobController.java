@@ -47,29 +47,29 @@ public class JobPostingController {
 
     // 공고 등록 페이지
     @GetMapping("/new")
-    public String showNewForm(Model model) {
+    public String showForm(Model model) {
         model.addAttribute("job", new JobPostingDto());
         return "job/job_new";
     }
 
     // 공고 등록 처리 (POST)
+    @PostMapping("/new")
+    public String save(@Valid @ModelAttribute("job") JobPostingDto dto, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "job/job_new";
+        }
+
+        jobPostingService.save(dto);
+
+        return "redirect:/job/manage_jobs";
+    }
+
 //    @PostMapping("/new")
-//    public String save(@Valid @ModelAttribute("job") JobPostingDto dto,
-//                       BindingResult bindingResult, Model model) {
-//        if (bindingResult.hasErrors()) {
-//            return "job/job_new";
-//        }
-//
+//    public String save(@ModelAttribute JobPostingDto dto) {
+//        dto.setCompanyId(1L); // ✅ 반드시 companyId 설정!
 //        jobPostingService.save(dto);
 //        return "redirect:/job/manage_jobs";
 //    }
-
-    @PostMapping("/new")
-    public String save(@ModelAttribute JobPostingDto dto) {
-        dto.setCompanyId(1L); // ✅ 반드시 companyId 설정!
-        jobPostingService.save(dto);
-        return "redirect:/job/manage_jobs";
-    }
 
     // 공고 상세보기
     @GetMapping("/{id}")

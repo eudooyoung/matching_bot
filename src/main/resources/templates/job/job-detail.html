@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <title>공고 상세보기</title>
     <link rel="stylesheet" th:href="@{/css/mypage.css}"/>
-    <link rel="stylesheet" th:href="@{/css/common.css}"/>
+    <link rel="stylesheet" th:href="@{/css/layout.css}"/>
     <style>
         .container {
             max-width: 900px;
@@ -19,7 +19,7 @@
         .job-title {
             font-size: 28px;
             font-weight: bold;
-            color: #1a2b49;
+            color: #103254;
             margin-bottom: 10px;
         }
         .job-sub {
@@ -82,16 +82,6 @@
         <div class="section">
             <h4>성향 키워드</h4>
             <p th:text="${job.traitKeywords}">성향 키워드</p>
-        </div>
-
-        <div class="section">
-            <h4>위도</h4>
-            <p th:text="${job.latitude}">위도</p>
-        </div>
-
-        <div class="section">
-            <h4>경도</h4>
-            <p th:text="${job.longitude}">경도</p>
         </div>
 
         <div class="section">
