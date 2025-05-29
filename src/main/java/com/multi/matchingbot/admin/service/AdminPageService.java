@@ -6,7 +6,7 @@ import com.multi.matchingbot.common.domain.enums.Yn;
 import com.multi.matchingbot.company.CompanyRepository;
 import com.multi.matchingbot.company.domain.Company;
 import com.multi.matchingbot.company.domain.CompanyAdminView;
-import com.multi.matchingbot.company.model.dao.CompanyAdminMapper;
+import com.multi.matchingbot.company.mapper.CompanyAdminMapper;
 import com.multi.matchingbot.member.domain.dtos.MemberAdminView;
 import com.multi.matchingbot.member.domain.dtos.ResumeAdminView;
 import com.multi.matchingbot.member.domain.entities.Member;

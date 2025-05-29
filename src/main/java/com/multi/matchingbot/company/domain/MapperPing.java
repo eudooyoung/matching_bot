@@ -1,6 +1,6 @@
 package com.multi.matchingbot.company.domain;
 
-import com.multi.matchingbot.company.model.dao.CompanyAdminMapper;
+import com.multi.matchingbot.company.mapper.CompanyAdminMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

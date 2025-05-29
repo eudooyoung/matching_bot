@@ -1,4 +1,4 @@
-package com.multi.matchingbot.company.model.dao;
+package com.multi.matchingbot.company.mapper;
 
 import com.multi.matchingbot.common.domain.enums.Yn;
 import com.multi.matchingbot.company.domain.Company;

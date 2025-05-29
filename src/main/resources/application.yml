@@ -9,6 +9,7 @@ spring:
 
   datasource:
     url: jdbc:mysql://localhost:${JDBC_PORT}/${JDBC_DATABASE}
+#    url: jdbc:mysql://localhost:3306/matching_bot
     username: scott
     password: tiger
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -24,6 +25,8 @@ spring:
       enabled: false
 
   thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
     cache: false
 
   jpa:
