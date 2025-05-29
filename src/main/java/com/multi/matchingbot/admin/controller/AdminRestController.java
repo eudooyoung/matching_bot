@@ -49,8 +49,8 @@ public class AdminRestController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("resumes/{id}")
-    public ResponseEntity<Void> deleteResume(@PathVariable("id") Long id) {
-        resumeService.delete(id);
+    public ResponseEntity<Void> deleteResumeHard(@PathVariable("id") Long id) {
+        resumeService.deleteHard(id);
         return ResponseEntity.noContent().build();
     }
 }

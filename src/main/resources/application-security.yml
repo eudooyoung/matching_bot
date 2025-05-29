@@ -28,6 +28,7 @@ security:
       - /company/**
       - /job/**
     admin-paths:
-      - /admin/**
+#      - /admin/**
+#      - /company/**
     api-paths:
       - /api/**

@@ -41,35 +41,37 @@ public class AdminPageController {
     }
 
     @GetMapping("/members")
-    public void members(@ModelAttribute SearchCondition cond, Model model) {
-        PagedResult<MemberAdminView> result = adminPageService.members(cond);
+    public void members(@ModelAttribute SearchCondition condition, Model model) {
+        PagedResult<MemberAdminView> result = adminPageService.members(condition);
         model.addAttribute("members", result.getPage().getContent());
         model.addAttribute("page", result.getPage());
         model.addAttribute("pageNumbers", result.getPageNumbers());
         model.addAttribute("currentPage", result.getCurrentPage());
-        model.addAttribute("cond", cond);
-    }
-
-
-    @GetMapping("/resumes")
-    public void resumes(@ModelAttribute SearchCondition cond, Model model) {
-        PagedResult<ResumeAdminView> result = adminPageService.resumes(cond);
-        model.addAttribute("resumes", result.getPage().getContent());
-        model.addAttribute("page", result.getPage());
-        model.addAttribute("pageNumbers", result.getPageNumbers());
-        model.addAttribute("currentPage", result.getCurrentPage());
-        model.addAttribute("cond", cond);
+        model.addAttribute("condition", condition);
     }
 
     @GetMapping("/companies")
-    public void companies(@ModelAttribute SearchCondition cond, Model model) {
-        PagedResult<CompanyAdminView> result = adminPageService.companies(cond);
+    public void companies(@ModelAttribute SearchCondition condition, Model model) {
+        log.warn("statusParam = [{}]", condition.getStatus());
+        PagedResult<CompanyAdminView> result = adminPageService.companies(condition);
         model.addAttribute("companies", result.getPage().getContent());
         model.addAttribute("page", result.getPage());
         model.addAttribute("pageNumbers", result.getPageNumbers());
         model.addAttribute("currentPage", result.getCurrentPage());
-        model.addAttribute("cond", cond);
+        model.addAttribute("condition", condition);
     }
+
+    @GetMapping("/resumes")
+    public void resumes(@ModelAttribute SearchCondition condition, Model model) {
+        log.warn("statusParam = [{}]", condition.getKeywordsStatus());
+        PagedResult<ResumeAdminView> result = adminPageService.resumes(condition);
+        model.addAttribute("resumes", result.getPage().getContent());
+        model.addAttribute("page", result.getPage());
+        model.addAttribute("pageNumbers", result.getPageNumbers());
+        model.addAttribute("currentPage", result.getCurrentPage());
+        model.addAttribute("condition", condition);
+    }
+
 
 
 }

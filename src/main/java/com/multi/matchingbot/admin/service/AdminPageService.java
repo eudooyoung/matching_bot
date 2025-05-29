@@ -26,47 +26,44 @@ public class AdminPageService {
 
     private final MemberRepository memberRepository;
     private final MemberMapper memberMapper;
-    private final ResumeRepository resumeRepository;
-    private final ResumeMapper resumeMapper;
     private final CompanyAdminMapper companyAdminMapper;
     private final CompanyRepository companyRepository;
+    private final ResumeRepository resumeRepository;
+    private final ResumeMapper resumeMapper;
 
-    public PagedResult<MemberAdminView> members(SearchCondition cond) {
-        Yn status = (cond.getStatus() != null && !cond.getStatus().isBlank())
-                ? Yn.valueOf(cond.getStatus())
-                : null;
+    public PagedResult<MemberAdminView> members(SearchCondition condition) {
+        Yn status = getStatus(condition.getStatus());
 
-        Pageable pageable = cond.toPageable();
-        Page<Member> members = memberRepository.searchWithCondition(cond.getKeyword(), status, pageable);
+        Pageable pageable = condition.toPageable();
+        Page<Member> members = memberRepository.searchWithCondition(condition.getKeyword(), status, pageable);
         Page<MemberAdminView> pageResult = members.map(memberMapper::toMemberAdminView);
         return new PagedResult<>(pageResult);
     }
 
-    public PagedResult<ResumeAdminView> resumes(SearchCondition cond) {
-        Yn status = (cond.getStatus() != null && !cond.getStatus().isBlank())
-                ? Yn.valueOf(cond.getStatus())
-                : null;
+    public PagedResult<CompanyAdminView> companies(SearchCondition condition) {
+        Yn status = getStatus(condition.getStatus());
+        Yn reportStatus = getStatus(condition.getReportStatus());
 
-        Pageable pageable = cond.toPageable();
-        Page<Resume> resumes = resumeRepository.searchWithCondition(cond.getKeyword(), status, pageable);
+        Pageable pageable = condition.toPageable();
+        Page<Company> companies = companyRepository.searchWithCondition(condition.getKeyword(), status, reportStatus, pageable);
+        Page<CompanyAdminView> pageResult = companies.map(companyAdminMapper::toCompanyAdminView);
+        return new PagedResult<>(pageResult);
+    }
+
+    public PagedResult<ResumeAdminView> resumes(SearchCondition condition) {
+        Yn keywordsStatus = getStatus(condition.getKeywordsStatus());
+
+        Pageable pageable = condition.toPageable();
+        Page<Resume> resumes = resumeRepository.searchWithCondition(condition.getKeyword(), keywordsStatus, pageable);
         Page<ResumeAdminView> pageResult = resumes.map(resumeMapper::toResumeAdminView);
         return new PagedResult<>(pageResult);
     }
 
-    public PagedResult<CompanyAdminView> companies(SearchCondition cond) {
-        Yn status = (cond.getStatus() != null && !cond.getStatus().isBlank())
-                ? Yn.valueOf(cond.getStatus())
+    private static Yn getStatus(String condition) {
+        Yn status = (condition != null && !condition.isBlank())
+                ? Yn.valueOf(condition)
                 : null;
-
-        Pageable pageable = cond.toPageable();
-        Page<Company> companies = companyRepository.searchWithCondition(cond.getKeyword(), status, pageable);
-        Page<CompanyAdminView> pageResult = companies.map(companyAdminMapper::toCompanyAdminView);
-        companies.forEach(c -> {
-            System.out.println("[DEBUG] 원본 email: " + c.getEmail());
-            System.out.println("[DEBUG] 원본 phone: " + c.getPhone());
-            System.out.println("[DEBUG] 원본 address: " + c.getAddress());
-        });
-        return new PagedResult<>(pageResult);
+        return status;
     }
 
 //    public PagedResult<MemberAdminView> jobs(int page) {
