@@ -1,4 +1,4 @@
-package com.multi.matchingbot.auth.AuthCompany;
+package com.multi.matchingbot.company.repository;
 
 import com.multi.matchingbot.company.domain.Company;
 import org.springframework.data.jpa.repository.JpaRepository;

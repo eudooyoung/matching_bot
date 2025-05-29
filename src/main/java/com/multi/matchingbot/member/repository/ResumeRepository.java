@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ResumeRepository extends JpaRepository<Resume, Long> {
     @Query("""
@@ -20,4 +22,6 @@ public interface ResumeRepository extends JpaRepository<Resume, Long> {
             AND (:status IS NULL OR r.keywordsStatus = :status)
         """)
     Page<Resume> searchWithCondition(@Param("keyword") String keyword, @Param("status") Yn status, Pageable pageable);
+
+    List<Resume> findAllByOrderByCreatedAtDesc();
 }

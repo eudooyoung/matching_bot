@@ -24,6 +24,7 @@ security:
 
     member-paths:
       - /api/maps/**
+      - /member/**
     company-paths:
       - /company/**
       - /job/**

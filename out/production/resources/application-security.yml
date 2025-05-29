@@ -18,15 +18,16 @@ security:
       - /api/v1/auth/login
       - /api/v1/auth/refresh
       - /search-page/**
+      - /jobs/**
+      - /community/**
       - /calendar
 
-      - /search-page/**
-      - /jobs/**
-
     member-paths:
+      - /api/maps/**
+      - /member/**
     company-paths:
-      - /job/**
       - /company/**
+      - /job/**
     admin-paths:
       - /admin/**
     api-paths:

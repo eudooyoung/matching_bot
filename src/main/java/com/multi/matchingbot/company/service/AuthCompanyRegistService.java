@@ -1,8 +1,10 @@
-package com.multi.matchingbot.auth.AuthCompany;
+package com.multi.matchingbot.company.service;
 
 import com.multi.matchingbot.common.domain.enums.Role;
 import com.multi.matchingbot.common.domain.enums.Yn;
+import com.multi.matchingbot.company.repository.AuthCompanyRepository;
 import com.multi.matchingbot.company.domain.Company;
+import com.multi.matchingbot.company.domain.CompanyRegisterDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

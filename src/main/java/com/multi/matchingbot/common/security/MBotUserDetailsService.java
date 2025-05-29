@@ -2,7 +2,7 @@ package com.multi.matchingbot.common.security;
 
 import com.multi.matchingbot.common.domain.enums.Role;
 import com.multi.matchingbot.common.error.InvalidRoleException;
-import com.multi.matchingbot.company.CompanyRepository;
+import com.multi.matchingbot.company.repository.CompanyRepository;
 import com.multi.matchingbot.company.domain.Company;
 import com.multi.matchingbot.member.repository.MemberRepository;
 import com.multi.matchingbot.member.domain.entities.Member;

@@ -27,7 +27,7 @@
             <a href="javascript:void(0)" class="nav-link" onclick="logout()">로그아웃</a>
             <a th:href="@{/community/list}" class="nav-link">커뮤니티</a>
             <!-- 개인회원 전용 마이페이지 -->
-            <a th:href="@{/mypage/user}" class="nav-link" sec:authorize="hasRole('MEMBER')">개인페이지</a>
+            <a th:href="@{/member/mypage}" class="nav-link" sec:authorize="hasRole('MEMBER')">개인페이지</a>
             <!-- 기업회원 전용 마이페이지 -->
             <a th:href="@{/company/}" class="nav-link" sec:authorize="hasRole('COMPANY')">기업페이지</a>
         </div>
@@ -42,7 +42,7 @@
                 </ul>
             </div>
             <a th:href="@{/auth/login}" class="nav-link">로그인</a>
-            <a th:href="@{/job/list}" class="nav-link">커뮤니티</a>
+            <a th:href="@{/community/community-list}" class="nav-link">커뮤니티</a>
         </div>
 
 

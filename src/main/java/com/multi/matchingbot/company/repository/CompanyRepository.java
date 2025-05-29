@@ -1,4 +1,4 @@
-package com.multi.matchingbot.company;
+package com.multi.matchingbot.company.repository;
 
 
 import com.multi.matchingbot.company.domain.Company;
