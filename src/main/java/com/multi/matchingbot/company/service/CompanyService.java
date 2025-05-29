@@ -21,6 +21,11 @@ public class CompanyService {
 
     @Autowired
     private CompanyRepository companyRepository;
+    private final CompanyMapper companyMapper;
+
+    public CompanyService(CompanyMapper companyMapper) {
+        this.companyMapper = companyMapper;
+    }
 
     public CompanyUpdateDto getCompanyById(Long id) {
         Company company = companyRepository.findById(id)
@@ -45,6 +50,28 @@ public class CompanyService {
 
     public void deleteCompany(Long id) {
         companyRepository.deleteById(id);
+    }
+
+    public CompanyUpdateDto findById(Long companyId) {
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 회사입니다."));
+        return companyMapper.toUpdateDto(company);
+    }
+
+    public void update(CompanyUpdateDto dto, Long companyId) {
+        if (!dto.getId().equals(companyId)) {
+            throw new IllegalArgumentException("회사 정보 수정 권한이 없습니다.");
+        }
+
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 회사입니다."));
+
+        company.setName(dto.getName());
+        company.setEmail(dto.getEmail());
+        company.setPhone(dto.getPhone());
+        company.setAddress(dto.getAddress());
+
+        companyRepository.save(company);
     }
 
     @Transactional

@@ -3,7 +3,7 @@ package com.multi.matchingbot.company.domain;
 import com.multi.matchingbot.common.domain.entity.BaseEntity;
 import com.multi.matchingbot.common.domain.enums.Role;
 import com.multi.matchingbot.common.domain.enums.Yn;
-import com.multi.matchingbot.job.domain.Job;
+import com.multi.matchingbot.job.domain.entity.Job;
 import jakarta.persistence.*;
 import lombok.*;
 

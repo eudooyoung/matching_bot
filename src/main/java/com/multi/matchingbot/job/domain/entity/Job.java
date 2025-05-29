@@ -1,4 +1,4 @@
-package com.multi.matchingbot.job.domain;
+package com.multi.matchingbot.job.domain.entity;
 
 import com.multi.matchingbot.common.domain.entity.BaseEntity;
 import com.multi.matchingbot.company.domain.Company;
@@ -24,8 +24,9 @@ public class Job extends BaseEntity {
     @JoinColumn(name = "company_id", nullable = false)
     private Company company;
 
-    @Column(name = "occupation_id", nullable = false)
-    private Long occupationId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "occupation_id", nullable = false)
+    private Occupation occupation;
 
     @Column(nullable = false, length = 100)
     private String title;
@@ -51,10 +52,10 @@ public class Job extends BaseEntity {
     @Column(name = "trait_keywords", length = 100)
     private String traitKeywords;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Double latitude;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Double longitude;
 
     @Column(name = "start_date", nullable = false)

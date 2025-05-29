@@ -1,10 +1,11 @@
-package com.multi.matchingbot.job.domain;
+package com.multi.matchingbot.job.domain.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -47,16 +48,16 @@ public class JobDto {
     @Size(max = 100, message = "100자 이하로 입력해주세요.")
     private String traitKeywords;
 
-    @NotNull(message = "위도를 입력해주세요.")
     private Double latitude;
 
-    @NotNull(message = "경도를 입력해주세요.")
     private Double longitude;
 
     @NotNull(message = "시작일을 입력해주세요.")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
 
     @NotNull(message = "종료일을 입력해주세요.")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
 
     @NotBlank(message = "이메일을 입력해주세요.")

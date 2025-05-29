@@ -1,9 +1,11 @@
 package com.multi.matchingbot.job.mapper;
 
 import com.multi.matchingbot.company.domain.Company;
-import com.multi.matchingbot.job.domain.Job;
-import com.multi.matchingbot.job.domain.JobDto;
-import org.springframework.beans.BeanUtils;
+import com.multi.matchingbot.job.domain.entity.Job;
+import com.multi.matchingbot.job.domain.dto.JobDto;
+import com.multi.matchingbot.job.domain.entity.Occupation;
+
+import java.time.LocalDateTime;
 
 public class JobMapper {
 
@@ -33,23 +35,50 @@ public class JobMapper {
         if (entity.getCompany() != null) {
             dto.setCompanyId(entity.getCompany().getId());
         }
-        if (entity.getOccupationId() != null) {
-            dto.setOccupationId(entity.getOccupationId());
+        if (entity.getOccupation() != null) {
+            dto.setOccupationId(entity.getOccupation().getId());
         }
 
         return dto;
     }
 
-    public static Job toEntity(JobDto dto) {
-        Job entity = new Job();
-        BeanUtils.copyProperties(dto, entity);
+    public static Job toEntity(JobDto dto, Company company, Occupation occupation) {
+        return Job.builder()
+                .company(company)
+                .occupation(occupation)
+                .title(dto.getTitle())
+                .description(dto.getDescription())
+                .address(dto.getAddress())
+                .mainTask(dto.getMainTask())
+                .requiredSkills(dto.getRequiredSkills())
+                .requiredTraits(dto.getRequiredTraits())
+                .skillKeywords(dto.getSkillKeywords())
+                .traitKeywords(dto.getTraitKeywords())
+                .latitude(dto.getLatitude() != null ? dto.getLatitude() : 37.5665)
+                .longitude(dto.getLongitude() != null ? dto.getLongitude() : 126.9780)
+                .startDate(dto.getStartDate())
+                .endDate(dto.getEndDate())
+                .enrollEmail(dto.getEnrollEmail())
+                .notice(dto.getNotice())
+                .build();
+    }
 
-        Company company = new Company();
-        company.setId(dto.getCompanyId());
-        entity.setCompany(company);
-        entity.setStartDate(dto.getStartDate());
-        entity.setEndDate(dto.getEndDate());
-
-        return entity;
+    public static void updateFromDto(Job job, JobDto dto) {
+        job.setTitle(dto.getTitle());
+        job.setDescription(dto.getDescription());
+        job.setAddress(dto.getAddress());
+        job.setMainTask(dto.getMainTask());
+        job.setRequiredSkills(dto.getRequiredSkills());
+        job.setRequiredTraits(dto.getRequiredTraits());
+        job.setSkillKeywords(dto.getSkillKeywords());
+        job.setTraitKeywords(dto.getTraitKeywords());
+        job.setStartDate(dto.getStartDate());
+        job.setEndDate(dto.getEndDate());
+        job.setEnrollEmail(dto.getEnrollEmail());
+        job.setNotice(dto.getNotice());
+        job.setLatitude(dto.getLatitude() != null ? dto.getLatitude() : 37.5665);
+        job.setLongitude(dto.getLongitude() != null ? dto.getLongitude() : 126.9780);
+        job.setUpdatedAt(LocalDateTime.now());
+        job.setUpdatedBy("SYSTEM");
     }
 }

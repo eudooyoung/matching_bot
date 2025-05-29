@@ -45,7 +45,7 @@ h2 {
 }
 
 .register-btn {
-    background-color: #2c3e50;
+    background-color: #103254;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -55,7 +55,7 @@ h2 {
 }
 
 .register-btn:hover {
-    background-color: #1a252f;
+    background-color: #103254;
 }
 
 .job-table {
@@ -75,7 +75,7 @@ h2 {
 }
 
 .nav-button {
-    background-color: #2c3e50;
+    background-color: #103254;
     color: white;
     border: none;
     padding: 6px 14px;
@@ -86,7 +86,7 @@ h2 {
 }
 
 .update-button {
-    background-color: #2c3e50;
+    background-color: green;
     color: white;
     border: none;
     padding: 6px 14px;
@@ -96,18 +96,18 @@ h2 {
 }
 
 .nav-button:hover {
-    background-color: #2c3e50;
+    background-color: #103254;
 }
 
 .view-link {
-    color: #1a2b49;
+    color: #103254;
     text-decoration: underline;
     font-weight: bold;
     cursor: pointer;
 }
 
 .delete-button {
-    background-color: #a94442;
+    background-color: brown;
     color: white;
     border: none;
     padding: 6px 14px;
@@ -117,11 +117,11 @@ h2 {
 }
 
 .delete-button:hover {
-    background-color: #8a2c2c;
+    background-color: brown;
 }
 
 .pag-button{
-    background-color: #2c3e50;
+    background-color: #103254;
     color: white;
     border: none;
     padding: 6px 14px;
@@ -136,4 +136,16 @@ h2 {
     align-items: center;
     margin-top: 20px;
     gap: 10px;
+}
+
+.mypage-button {
+    background-color: #103254;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }

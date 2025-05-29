@@ -11,28 +11,71 @@
 <div th:replace="~{fragments/header :: header(role=${role})}"></div>
 
 <div class="container">
-    <h2>관심 이력서</h2>
-    <div class="resume-header">
-        <input type="checkbox" />
-        <button class="delete-btn">삭제</button>
-    </div>
+    <h2>관심 이력서 관리</h2>
+
+    <button type="submit" class="delete-button">삭제</button>
+
     <table class="resume-table">
         <thead>
         <tr>
-            <th>작성자</th>
+            <th>번호</th>
             <th>이력서 제목</th>
             <th>작성 날짜</th>
-            <th>상세 보기</th>
+            <th>상세보기</th>
             <th>즐겨찾기</th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td colspan="5" class="no-data">등록된 관심기업이 없습니다.</td>
+        <tr th:each="resume, iterStat : ${resumes.content}">
+            <td th:text="${resume.member.name}">작성자</td>
+            <td th:text="${resume.title}">이력서 제목</td>
+            <td th:text="${#temporals.format(resume.createdAt, 'yyyy-MM-dd')}">작성일</td>
+            <td><a th:href="@{/resume/detail/{id}(id=${resume.id})}">상세보기</a></td>
+            <td><button class="delete-button" th:onclick="'deleteResume(' + ${job.id} + ')'">☆</button></td>
         </tr>
         </tbody>
     </table>
+
+    <button class="mypage-button" onclick="location.href='/company/mypage'">돌아가기</button>
+
+    <div class="pagination">
+        <button class="pag-button" th:if="${!resumes.first}"
+                th:onclick="'location.href=\'/job/manage-jobs?page=' + ${jobPage.number - 1} + '\''">
+            이전
+        </button>
+
+        <span th:text="${jobPage.number + 1}">1</span> /
+        <span th:text="${jobPage.totalPages}">1</span>
+
+        <button class="pag-button" th:if="${!jobPage.last}"
+                th:onclick="'location.href=\'/job/manage-jobs?page=' + ${jobPage.number + 1} + '\''">
+            다음
+        </button>
+    </div>
+
+    <!-- 페이징 -->
+<!--    <div class="pagination">-->
+<!--        <a th:if="${pageNumber > 0}" th:href="@{'/resume/bookmark?page=' + ${pageNumber - 1}}">이전</a>-->
+<!--        <span th:text="${pageNumber + 1}">1</span>-->
+<!--        <a th:if="${hasNext}" th:href="@{'/resume/bookmark?page=' + ${pageNumber + 1}}">다음</a>-->
+<!--    </div>-->
 </div>
+
+<script>
+    function toggleStar(button) {
+        if (button.textContent === '☆') {
+            button.textContent = '★';
+            button.classList.add('filled');
+        } else {
+            button.textContent = '☆';
+            button.classList.remove('filled');
+        }
+    }
+
+    function goToMyPage() {
+        window.location.href = '/company/mypage';
+    }
+</script>
 
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>
