@@ -1,13 +1,16 @@
 package com.multi.matchingbot.job.controller;
 
+import com.multi.matchingbot.common.domain.enums.Role;
 import com.multi.matchingbot.common.security.MBotUserDetails;
-import com.multi.matchingbot.company.service.CompanyService;
 import com.multi.matchingbot.job.domain.dto.JobDto;
 import com.multi.matchingbot.job.service.JobService;
+import com.multi.matchingbot.job.service.ResumeBookmarkService;
+import com.multi.matchingbot.member.domain.dtos.ResumeDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,15 +24,15 @@ import org.springframework.web.bind.annotation.*;
 public class JobController {
 
     private final JobService jobService;
-    private final CompanyService companyService;
+    private final ResumeBookmarkService resumeBookmarkService;
 
     @Autowired
-    public JobController(JobService jobService, CompanyService companyService) {
+    public JobController(JobService jobService, ResumeBookmarkService resumeBookmarkService) {
         this.jobService = jobService;
-        this.companyService = companyService;
+        this.resumeBookmarkService = resumeBookmarkService;
     }
 
-    // ✅ 공고 목록
+    // 공고 목록
     @GetMapping("/manage-jobs")
     public String showManageJobsPage(Model model,
                                      @RequestParam(name = "page", defaultValue = "0") int page,
@@ -44,7 +47,7 @@ public class JobController {
         return "job/manage-jobs";
     }
 
-    // ✅ 공고 등록 페이지
+    // 공고 등록 페이지
     @GetMapping("/new")
     public String showForm(Model model, @AuthenticationPrincipal MBotUserDetails userDetails) {
         JobDto dto = new JobDto();
@@ -53,7 +56,7 @@ public class JobController {
         return "job/job-new";
     }
 
-    // ✅ 공고 등록 처리
+    // 공고 등록 처리
     @PostMapping("/new")
     public String save(@Valid @ModelAttribute("job") JobDto dto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
@@ -64,16 +67,16 @@ public class JobController {
         return "redirect:/job/manage-jobs";
     }
 
-    // ✅ 공고 수정 페이지
-    @GetMapping("/{id}/edit")
+    // 공고 수정 페이지
+    @GetMapping("/{id:[0-9]+}/edit")
     public String editJobForm(@PathVariable("id") Long id, Model model) {
         JobDto dto = jobService.getById(id);
         model.addAttribute("job", dto);
         return "job/job-edit";
     }
 
-    // ✅ 공고 수정 처리
-    @PostMapping("/{id}/edit")
+    // 공고 수정 처리
+    @PostMapping("/{id:[0-9]+}/edit")
     public String updateJob(@PathVariable("id") Long id,
                             @Valid @ModelAttribute("job") JobDto dto,
                             BindingResult bindingResult) {
@@ -85,25 +88,38 @@ public class JobController {
         return "redirect:/job/manage-jobs";
     }
 
-    // ✅ 공고 삭제 처리
-    @DeleteMapping("/{id}")
+    // 공고 삭제 처리
+    @DeleteMapping("/{id:[0-9]+}")
     @ResponseBody
     public void deleteJob(@PathVariable("id") Long id) {
         jobService.delete(id);
     }
 
-    // ✅ 공고 상세 보기
-    @GetMapping("/{id}")
+    // 공고 상세 보기
+    @GetMapping("/{id:[0-9]+}")
     public String showDetail(@PathVariable("id") Long id, Model model) {
         JobDto job = jobService.getById(id);
         model.addAttribute("job", job);
         return "job/job-detail";
     }
 
-//    // 관심 이력서 페이지
-//    @GetMapping("/resume/bookmark")
-//    public String showResumeListPage() {
-//        return "job/resume-list";
-//    }
+    // 관심 이력서 페이지 조회
+    @GetMapping("/bookmark")
+    public String getBookmarkedResumes(@AuthenticationPrincipal MBotUserDetails mBotUserDetails,
+                                       @RequestParam(name = "page", defaultValue = "0") int page, Model model) {
 
+        // 인증 정보 null 체크
+        if (mBotUserDetails == null || mBotUserDetails.getRole() != Role.COMPANY) {
+            throw new AccessDeniedException("기업 회원만 접근 가능합니다.");
+        }
+
+        Long companyId = mBotUserDetails.getId();
+
+        Page<ResumeDto> resumePage = resumeBookmarkService.getBookmarkedResumePage(companyId, page);
+
+        model.addAttribute("resumes", resumePage);
+        model.addAttribute("companyId", companyId);
+
+        return "job/resume-list";
+    }
 }

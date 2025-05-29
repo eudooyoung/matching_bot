@@ -33,7 +33,6 @@ security:
       - /company/**
       - /job/**
       - /api/occupations/hierarchy
-      - /resume/**
     admin-paths:
 #      - /admin/**
 #      - /company/**

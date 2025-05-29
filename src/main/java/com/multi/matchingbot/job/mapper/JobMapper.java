@@ -7,9 +7,9 @@ import com.multi.matchingbot.job.domain.entity.Occupation;
 
 import java.time.LocalDateTime;
 
-public class JobMapper {
+public interface JobMapper {
 
-    public static JobDto toDto(Job entity) {
+    static JobDto toDto(Job entity) {
 
         JobDto dto = new JobDto();
         dto.setId(entity.getId());
@@ -42,7 +42,7 @@ public class JobMapper {
         return dto;
     }
 
-    public static Job toEntity(JobDto dto, Company company, Occupation occupation) {
+    static Job toEntity(JobDto dto, Company company, Occupation occupation) {
         return Job.builder()
                 .company(company)
                 .occupation(occupation)
@@ -63,7 +63,7 @@ public class JobMapper {
                 .build();
     }
 
-    public static void updateFromDto(Job job, JobDto dto) {
+    static void updateFromDto(Job job, JobDto dto) {
         job.setTitle(dto.getTitle());
         job.setDescription(dto.getDescription());
         job.setAddress(dto.getAddress());

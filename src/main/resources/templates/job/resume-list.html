@@ -7,7 +7,7 @@
     <link rel="stylesheet" th:href="@{/css/layout.css}"/>
 </head>
 <body>
-<!--<p th:text="'현재 userType: ' + ${userType}"></p>-->
+
 <div th:replace="~{fragments/header :: header(role=${role})}"></div>
 
 <div class="container">
@@ -31,7 +31,14 @@
             <td th:text="${resume.title}">이력서 제목</td>
             <td th:text="${#temporals.format(resume.createdAt, 'yyyy-MM-dd')}">작성일</td>
             <td><a th:href="@{/resume/detail/{id}(id=${resume.id})}">상세보기</a></td>
-            <td><button class="delete-button" th:onclick="'deleteResume(' + ${job.id} + ')'">☆</button></td>
+            <td>
+                <button class="delete-button"
+                        th:classappend="${resume.bookmarked} ? 'filled' : ''"
+                        th:text="${resume.bookmarked} ? '★' : '☆'"
+                        th:onclick="'toggleBookmark(' + ${resume.id} + ',' + ${company.id} + ', this)'">
+                    ☆
+                </button>
+            </td>
         </tr>
         </tbody>
     </table>
@@ -40,40 +47,40 @@
 
     <div class="pagination">
         <button class="pag-button" th:if="${!resumes.first}"
-                th:onclick="'location.href=\'/job/manage-jobs?page=' + ${jobPage.number - 1} + '\''">
+                th:onclick="'location.href=\'/resume/bookmarked?page=' + ${resumes.number - 1} + '\''">
             이전
         </button>
 
-        <span th:text="${jobPage.number + 1}">1</span> /
-        <span th:text="${jobPage.totalPages}">1</span>
+        <span th:text="${resumes.number + 1}">1</span> /
+        <span th:text="${resumes.totalPages}">1</span>
 
-        <button class="pag-button" th:if="${!jobPage.last}"
-                th:onclick="'location.href=\'/job/manage-jobs?page=' + ${jobPage.number + 1} + '\''">
+        <button class="pag-button" th:if="${!resumes.last}"
+                th:onclick="'location.href=\'/resume/bookmarked?page=' + ${resumes.number + 1} + '\''">
             다음
         </button>
     </div>
-
-    <!-- 페이징 -->
-<!--    <div class="pagination">-->
-<!--        <a th:if="${pageNumber > 0}" th:href="@{'/resume/bookmark?page=' + ${pageNumber - 1}}">이전</a>-->
-<!--        <span th:text="${pageNumber + 1}">1</span>-->
-<!--        <a th:if="${hasNext}" th:href="@{'/resume/bookmark?page=' + ${pageNumber + 1}}">다음</a>-->
-<!--    </div>-->
 </div>
 
 <script>
-    function toggleStar(button) {
-        if (button.textContent === '☆') {
-            button.textContent = '★';
-            button.classList.add('filled');
-        } else {
-            button.textContent = '☆';
-            button.classList.remove('filled');
-        }
-    }
-
-    function goToMyPage() {
-        window.location.href = '/company/mypage';
+    function toggleBookmark(resumeId, companyId, button) {
+        fetch('/resume-bookmarks', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                resumeId: resumeId,
+                companyId: companyId
+            })
+        }).then(() => {
+            if (button.textContent === '☆') {
+                button.textContent = '★';
+                button.classList.add('filled');
+            } else {
+                button.textContent = '☆';
+                button.classList.remove('filled');
+            }
+        });
     }
 </script>
 
