@@ -1,8 +1,8 @@
 package com.multi.matchingbot.member.controller;
 
+import com.multi.matchingbot.admin.mapper.MemberAdminMapper;
 import com.multi.matchingbot.common.security.MBotUserDetails;
-import com.multi.matchingbot.member.domain.dtos.MemberAdminView;
-import com.multi.matchingbot.member.mapper.MemberMapper;
+import com.multi.matchingbot.admin.domain.MemberAdminView;
 import com.multi.matchingbot.member.service.MemberService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MemberController {
 
     private final MemberService memberService;
-    private final MemberMapper memberMapper;
+    private final MemberAdminMapper memberAdminMapper;
 
-    public MemberController(MemberService memberService, MemberMapper memberMapper) {
+    public MemberController(MemberService memberService, MemberAdminMapper memberAdminMapper) {
         this.memberService = memberService;
-        this.memberMapper = memberMapper;
+        this.memberAdminMapper = memberAdminMapper;
     }
 
     // 구직자 마이페이지 진입
@@ -27,7 +27,7 @@ public class MemberController {
     public String showMypage(Model model, @AuthenticationPrincipal MBotUserDetails userDetails) {
         Long memberId = userDetails.getId();
 
-        MemberAdminView memberView = memberMapper.toMemberAdminView(
+        MemberAdminView memberView = memberAdminMapper.toMemberAdminView(
                 memberService.getMemberById(memberId)
         );
 
@@ -36,11 +36,11 @@ public class MemberController {
         return "member/member-mypage";
     }
 
-//     추후 개인정보 수정 페이지로 이동할 때 사용
+    //     추후 개인정보 수정 페이지로 이동할 때 사용
     @GetMapping("/profile_edit")
     public String editProfileForm(Model model, @AuthenticationPrincipal MBotUserDetails userDetails) {
         Long memberId = userDetails.getId();
-        MemberAdminView memberView = memberMapper.toMemberAdminView(
+        MemberAdminView memberView = memberAdminMapper.toMemberAdminView(
                 memberService.getMemberById(memberId)
         );
 

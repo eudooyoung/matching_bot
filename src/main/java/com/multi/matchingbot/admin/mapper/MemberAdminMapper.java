@@ -1,13 +1,13 @@
-package com.multi.matchingbot.member.mapper;
+package com.multi.matchingbot.admin.mapper;
 
-import com.multi.matchingbot.member.domain.dtos.MemberAdminView;
+import com.multi.matchingbot.admin.domain.MemberAdminView;
 import com.multi.matchingbot.member.domain.entities.Member;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
-public interface MemberMapper {
+public interface MemberAdminMapper {
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "formattedId", expression = "java(MemberMapper.formatId(member.getId()))")

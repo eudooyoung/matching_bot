@@ -16,12 +16,17 @@ public class MBotAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        log.warn("접근 거부: 사용자가 {} 경로에 접근할 권한이 없습니다. 403.html Forbidden 반환.", request.getRequestURI());
+        String uri = request.getRequestURI();
 
-        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-        response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().write("{\"error\": \"접근 권한이 없습니다.\"}");
-        response.getWriter().flush();
+        if (uri.startsWith("/api") || "XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
+            // JSON 응답
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.setContentType("application/json;charset=UTF-8");
+            response.getWriter().write("{\"error\": \"접근 권한이 없습니다.\"}");
+        } else {
+            // 일반 페이지 접근 → 403 HTML 페이지로 redirect
+            response.sendError(HttpServletResponse.SC_FORBIDDEN);
+        }
     }
 }
 
