@@ -61,7 +61,7 @@ public class SecurityConfig {
                         .requestMatchers(toArray(roleAccessProperties.getCompanyPaths())).hasRole("COMPANY")
                         .requestMatchers(toArray(roleAccessProperties.getMemberPaths())).hasRole("MEMBER")
                         .requestMatchers(toArray(roleAccessProperties.getApiPaths())).authenticated()
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
                 ).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
 
