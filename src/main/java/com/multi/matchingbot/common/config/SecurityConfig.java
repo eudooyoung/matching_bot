@@ -55,6 +55,9 @@ public class SecurityConfig {
                         .authenticationEntryPoint(mBotAuthenticationEntryPoint)
                         .accessDeniedHandler(mBotAccessDeniedHandler))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/community/write", "/community/edit/**", "/community/delete/**")
+                        .hasRole("MEMBER")
+
                         .requestMatchers(toArray(roleAccessProperties.getPermitAll())).permitAll()
                         .requestMatchers(toArray(roleAccessProperties.getAdminPaths())).hasRole("ADMIN")
                         .requestMatchers(toArray(roleAccessProperties.getCompanyPaths())).hasRole("COMPANY")

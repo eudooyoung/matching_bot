@@ -148,9 +148,9 @@ CREATE TABLE job (
     title VARCHAR(100) NOT NULL,
     description VARCHAR(500) NOT NULL,
     address VARCHAR(100) NOT NULL,
-    main_task VARCHAR(255) NOT NULL,
-    required_skills VARCHAR(255) NOT NULL,
-    required_traits VARCHAR(255) NOT NULL,
+    main_task VARCHAR(500) NOT NULL,
+    required_skills VARCHAR(500) NOT NULL,
+    required_traits VARCHAR(500) NOT NULL,
     skill_keywords VARCHAR(100),
     trait_keywords VARCHAR(100),
     latitude DOUBLE NOT NULL DEFAULT 37.5665,        -- ✅ 위도 default 값 추가

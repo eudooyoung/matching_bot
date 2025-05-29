@@ -10,11 +10,15 @@ import com.multi.matchingbot.community.repository.CommunityPostRepository;
 import com.multi.matchingbot.member.domain.entities.Member;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CommunityService {
@@ -41,7 +45,7 @@ public class CommunityService {
         return post;
     }
 
-    public void savePost(CommunityPostDto dto, Member member) {
+    public void createPost(CommunityPostDto dto, Member member) {
         CommunityCategory category = categoryRepo.findById(dto.getCategoryId())
                 .orElseThrow(() -> new EntityNotFoundException("Category not found"));
 
@@ -71,11 +75,24 @@ public class CommunityService {
         postRepo.save(post);
     }
 
+    @Transactional
     public void deletePost(Long postId, Member member) {
         CommunityPost post = postRepo.findById(postId)
-                .orElseThrow(() -> new EntityNotFoundException("Post not found"));
+                .orElseThrow(() -> new EntityNotFoundException("해당 게시글이 존재하지 않습니다."));
+
+        log.info("🔍 삭제 시도 - 게시글 ID: {}, 요청자 ID: {}, 작성자 ID: {}",
+                postId, member.getId(), post.getMember().getId());
+
+        if (!post.getMember().getId().equals(member.getId())) {
+            log.warn("❌ 삭제 권한 없음");
+            throw new AccessDeniedException("삭제 권한이 없습니다.");
+        }
+
         postRepo.delete(post);
+        log.info("✅ 게시글 삭제 성공 - ID: {}", postId);
     }
+
+
 
     public void addComment(Long postId, String content, Member member) {
         CommunityPost post = postRepo.findById(postId)

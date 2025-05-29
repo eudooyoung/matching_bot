@@ -84,4 +84,9 @@ public class MemberService {
     public void reactivateBulk(List<Long> checkedIds) {
         checkedIds.forEach(this::reactivate);
     }
+    @Transactional(readOnly = true)
+    public Member findByUsername(String username) {
+        return memberRepository.findByEmail(username)
+                .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다: " + username));
+    }
 }
