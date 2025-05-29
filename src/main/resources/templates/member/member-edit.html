@@ -1,49 +1,49 @@
-<!--<!DOCTYPE html>-->
-<!--<html lang="ko" xmlns:th="http://www.thymeleaf.org">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <title>이력서 수정</title>-->
-<!--    <link rel="stylesheet" th:href="@{/css/layout.css}" />-->
-<!--</head>-->
-<!--<body>-->
-<!--<div th:replace="fragments/header :: header(role=${role})"></div>-->
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>이력서 수정</title>
+    <link rel="stylesheet" th:href="@{/css/layout.css}" />
+</head>
+<body>
+<div th:replace="fragments/header :: header(role=${role})"></div>
 
-<!--<main class="main-content">-->
-<!--    <div class="container">-->
-<!--        <h2>이력서 수정</h2>-->
+<main class="main-content">
+    <div class="container">
+        <h2>이력서 수정</h2>
 
-<!--        <form method="post" th:action="@{/member/edit/{id}(id=${resume.id})}" th:object="${resume}">-->
+        <form method="post" th:action="@{/member/edit/{id}(id=${resume.id})}" th:object="${resume}">
 
-<!--            &lt;!&ndash; 이력서 제목 &ndash;&gt;-->
-<!--            <label>이력서 제목</label>-->
-<!--            <input type="text" th:field="*{title}" placeholder="이력서 제목"/>-->
+            <!-- 이력서 제목 -->
+            <label>이력서 제목</label>
+            <input type="text" th:field="*{resume.title}" placeholder="이력서 제목"/>
 
-<!--            &lt;!&ndash; 관심 직무 &ndash;&gt;-->
-<!--            <label>1차 직무</label>-->
-<!--            <input type="text" th:value="${resume.occupation.category1}" readonly/>-->
+            <!-- 관심 직무 -->
+            <label>1차 직무</label>
+            <input type="text" th:value="${resume.occupation.category1}" readonly/>
 
-<!--            <label>2차 직무</label>-->
-<!--            <input type="text" th:value="${resume.occupation.category2}" readonly/>-->
+            <label>2차 직무</label>
+            <input type="text" th:value="${resume.occupation.category2}" readonly/>
 
-<!--            <label>3차 직무</label>-->
-<!--            <input type="text" th:value="${resume.occupation.category3}" readonly/>-->
+            <label>3차 직무</label>
+            <input type="text" th:value="${resume.occupation.category3}" readonly/>
 
-<!--            &lt;!&ndash; 자기소개서: 기술 중심 &ndash;&gt;-->
-<!--            <label>자기소개서 (기술 중심)</label>-->
-<!--            <textarea th:field="*{skillAnswer}" rows="6" placeholder="기술 역량 중심 자기소개 (500~1000자)"></textarea>-->
+            <!-- 자기소개서: 기술 중심 -->
+            <label>자기소개서 (기술 중심)</label>
+            <textarea th:field="*{resume.skillAnswer}" rows="6" placeholder="기술 역량 중심 자기소개 (500~1000자)"></textarea>
 
-<!--            &lt;!&ndash; 자기소개서: 인성 중심 &ndash;&gt;-->
-<!--            <label>자기소개서 (인성 중심)</label>-->
-<!--            <textarea th:field="*{traitAnswer}" rows="6" placeholder="인성 중심 자기소개 (500~1000자)"></textarea>-->
+            <!-- 자기소개서: 인성 중심 -->
+            <label>자기소개서 (인성 중심)</label>
+            <textarea th:field="*{resume.traitAnswer}" rows="6" placeholder="인성 중심 자기소개 (500~1000자)"></textarea>
 
-<!--            <div style="margin-top: 20px;">-->
-<!--                <button type="submit" class="btn-primary">저장</button>-->
-<!--                <a th:href="@{/member}" class="btn-secondary">취소</a>-->
-<!--            </div>-->
-<!--        </form>-->
-<!--    </div>-->
-<!--</main>-->
+            <div style="margin-top: 20px;">
+                <button type="submit" class="btn-primary">저장</button>
+                <a th:href="@{/member}" class="btn-secondary">취소</a>
+            </div>
+        </form>
+    </div>
+</main>
 
-<!--<div th:replace="fragments/footer :: footer"></div>-->
-<!--</body>-->
-<!--</html>-->
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

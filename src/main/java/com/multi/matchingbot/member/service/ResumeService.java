@@ -27,10 +27,6 @@ public class ResumeService {
         resumeRepository.deleteAllById(ids);
     }
 
-    public void deleteBulkHard(List<Long> checkedIds) {
-        checkedIds.forEach(this::deleteHard);
-    }
-
     public List<Resume> findByMemberId(Long memberId) {
         return resumeRepository.findByMemberId(memberId);
     }

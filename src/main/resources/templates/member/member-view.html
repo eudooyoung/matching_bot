@@ -10,33 +10,53 @@
 
 <main class="main-content">
     <div class="container">
-        <h2>이력서 상세 보기</h2>
+        <h2>이력서 상세보기</h2>
 
-        <section>
-            <h4>기본 정보</h4>
-            <p><strong>이름:</strong> <span th:text="${resume.member.name}">홍길동</span></p>
-            <p><strong>이메일:</strong> <span th:text="${resume.member.email}">email@example.com</span></p>
-            <p><strong>생년월일:</strong> <span th:text="${resume.member.birth}">1999-01-01</span></p>
-            <p><strong>주소:</strong> <span th:text="${resume.member.address}">서울시 강남구</span></p>
-        </section>
+        <div class="resume-box">
+            <div class="resume-title" th:text="${resume.title}">이력서 제목</div>
 
-        <section>
-            <h4>관심 직무</h4>
-            <p><strong>1차:</strong> <span th:text="${resume.occupation?.category1}">프론트엔드</span></p>
-            <p><strong>2차:</strong> <span th:text="${resume.occupation?.category2}">웹개발</span></p>
-            <p><strong>3차:</strong> <span th:text="${resume.occupation?.category3}">React</span></p>
-        </section>
+            <div class="section">
+                <h4>이름</h4>
+                <p th:text="${resume.member.name}">홍길동</p>
+            </div>
 
-        <section>
-            <h4>자기소개서</h4>
-            <p><strong>기술 중심:</strong></p>
-            <pre th:text="${resume.skillAnswer}">기술 기반 자기소개 내용</pre>
-            <p><strong>인성 중심:</strong></p>
-            <pre th:text="${resume.traitAnswer}">인성 기반 자기소개 내용</pre>
-        </section>
+            <div class="section">
+                <h4>이메일</h4>
+                <p th:text="${resume.member.email}">email@example.com</p>
+            </div>
 
-        <div style="margin-top: 20px;">
-            <a th:href="@{/member}" class="btn-secondary">목록으로</a>
+            <div class="section">
+                <h4>생년월일</h4>
+                <p th:text="${resume.member.birth}">1999-01-01</p>
+            </div>
+
+            <div class="section">
+                <h4>주소</h4>
+                <p th:text="${resume.member.address}">서울시 강남구</p>
+            </div>
+
+            <div class="section">
+                <h4>관심 직무</h4>
+                <p>
+                    <span th:text="'1차: ' + ${resume.occupation?.category1}"></span><br/>
+                    <span th:text="'2차: ' + ${resume.occupation?.category2}"></span><br/>
+                    <span th:text="'3차: ' + ${resume.occupation?.category3}"></span>
+                </p>
+            </div>
+
+            <div class="section">
+                <h4>자기소개서 - 기술 중심</h4>
+                <pre th:text="${resume.skillAnswer}">기술 기반 자기소개 내용</pre>
+            </div>
+
+            <div class="section">
+                <h4>자기소개서 - 인성 중심</h4>
+                <pre th:text="${resume.traitAnswer}">인성 기반 자기소개 내용</pre>
+            </div>
+
+            <div style="margin-top: 30px; text-align: center;">
+                <button onclick="location.href='/member'" class="nav-button">목록으로</button>
+            </div>
         </div>
     </div>
 </main>
