@@ -4,8 +4,8 @@ package com.multi.matchingbot.member.service;
 import com.multi.matchingbot.common.domain.enums.Gender;
 import com.multi.matchingbot.common.domain.enums.Role;
 import com.multi.matchingbot.common.domain.enums.Yn;
-import com.multi.matchingbot.member.domain.entities.Member;
 import com.multi.matchingbot.member.domain.dtos.MemberRegisterDto;
+import com.multi.matchingbot.member.domain.entities.Member;
 import com.multi.matchingbot.member.repository.MemberRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Service
 public class MemberService {
@@ -59,31 +58,12 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    @Transactional
-    public void deactivate(Long id) {
-        Member member = memberRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("해당 회원이 존재하지 않습니다."));
-        if (member.getStatus() == Yn.N) return;
-        member.setStatus(Yn.N);
+    @Transactional(readOnly = true)
+    public Member getMemberById(Long id) {
+        return memberRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("해당 회원이 존재하지 않습니다."));
     }
 
-    @Transactional
-    public void reactivate(Long id) {
-        Member member = memberRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("해당 회원이 존재하지 않습니다."));
-        if (member.getStatus() == Yn.Y) return;
-        member.setStatus(Yn.Y);
-    }
-
-    @Transactional
-    public void deactivateBulk(List<Long> checkedIds) {
-        checkedIds.forEach(this::deactivate);
-    }
-
-    @Transactional
-    public void reactivateBulk(List<Long> checkedIds) {
-        checkedIds.forEach(this::reactivate);
-    }
     @Transactional(readOnly = true)
     public Member findByUsername(String username) {
         return memberRepository.findByEmail(username)

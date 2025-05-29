@@ -1,7 +1,8 @@
 package com.multi.matchingbot.job.service;
 
-import com.multi.matchingbot.company.CompanyRepository;
+
 import com.multi.matchingbot.company.domain.Company;
+import com.multi.matchingbot.company.repository.CompanyRepository;
 import com.multi.matchingbot.job.domain.dto.JobDto;
 import com.multi.matchingbot.job.domain.entity.Job;
 import com.multi.matchingbot.job.domain.entity.Occupation;

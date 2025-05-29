@@ -42,6 +42,7 @@ DROP TABLE IF EXISTS community_category;
 DROP TABLE IF EXISTS occupation;
 
 CREATE TABLE member (
+<<<<<<< HEAD
                         id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '회원 ID',
                         role ENUM('MEMBER', 'ADMIN') NOT NULL COMMENT '역할', -- 관리자=admin, 구직자=member
                         name VARCHAR(10) NOT NULL COMMENT '이름',
@@ -62,6 +63,28 @@ CREATE TABLE member (
                         created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '생성일시',
                         updated_by VARCHAR(50) COMMENT '수정자',
                         updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP COMMENT '수정일시'
+=======
+    id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '회원 ID',
+    role ENUM('MEMBER', 'ADMIN') NOT NULL COMMENT '역할', -- 관리자=admin, 구직자=member
+    name VARCHAR(10) NOT NULL COMMENT '이름',
+    address VARCHAR(200) NOT NULL COMMENT '주소',
+    email VARCHAR(50) NOT NULL UNIQUE COMMENT '이메일 (이메일형식)',
+    password VARCHAR(100) NOT NULL COMMENT '비밀번호 (암호화저장)',
+    gender ENUM('M', 'F') NOT NULL COMMENT '성별 (M/F)',
+    birth DATE COMMENT '생년월일',
+    phone VARCHAR(20) COMMENT '연락처',
+    agree_service ENUM('Y', 'N') NOT NULL CHECK (agree_service = 'Y') COMMENT '서비스이용약관동의 (Y/N)',
+    agree_privacy ENUM('Y', 'N') NOT NULL CHECK (agree_privacy = 'Y') COMMENT '정보수집및이용동의 (Y/N)',
+    agree_marketing ENUM('Y', 'N') COMMENT '마케팅정보수신동의 (Y/N)',
+    agree_location ENUM('Y', 'N') COMMENT '위치기반서비스동의 (Y/N)',
+    alert_bookmark ENUM('Y', 'N') COMMENT '관심기업채용공고알림 (Y/N)',
+    alert_resume ENUM('Y', 'N') COMMENT '이력서열람알림 (Y/N)',
+    status ENUM('Y', 'N') NOT NULL DEFAULT 'Y' COMMENT '가입 상태',
+    created_by VARCHAR(50) COMMENT '생성자',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '생성일시',
+    updated_by VARCHAR(50) COMMENT '수정자',
+    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP COMMENT '수정일시'
+>>>>>>> main
 );
 
 
@@ -117,6 +140,7 @@ CREATE TABLE company (
                          address VARCHAR(200) NOT NULL,
                          industry VARCHAR(50) NOT NULL,
 
+<<<<<<< HEAD
                          year_found year NOT NULL,
                          headcount INT NOT NULL,
                          annual_revenue INT NOT NULL,
@@ -128,6 +152,16 @@ CREATE TABLE company (
                          agree_finance ENUM('Y', 'N') NOT NULL CHECK(agree_finance = 'Y'),
                          agree_marketing ENUM('Y', 'N'),
                          agree_third_party ENUM('Y', 'N'),
+=======
+    agree_terms ENUM('Y', 'N') NOT NULL CHECK(agree_terms = 'Y'),
+    agree_privacy ENUM('Y', 'N') NOT NULL CHECK(agree_privacy = 'Y'),
+    agree_finance ENUM('Y', 'N') NOT NULL CHECK(agree_finance = 'Y'),
+    agree_marketing ENUM('Y', 'N'),
+    agree_third_party ENUM('Y', 'N'),
+    
+	status ENUM('Y', 'N') NOT NULL DEFAULT 'Y' COMMENT '가입 상태',
+    report_status ENUM('Y', 'N') NOT NULL DEFAULT 'N' COMMENT '평가 보고서 상태',
+>>>>>>> main
 
                          report_status ENUM('Y', 'N') NOT NULL DEFAULT 'N' COMMENT '평가 보고서 상태',
 
@@ -142,6 +176,7 @@ CREATE TABLE company (
 
 -- 채용 공고 테이블 생성 --
 CREATE TABLE job (
+<<<<<<< HEAD
                      id BIGINT NOT NULL AUTO_INCREMENT,
                      company_id BIGINT NOT NULL,
                      occupation_id BIGINT NOT NULL,
@@ -166,6 +201,32 @@ CREATE TABLE job (
                      PRIMARY KEY (id),
                      FOREIGN KEY (company_id) REFERENCES company(id),
                      FOREIGN KEY (occupation_id) REFERENCES occupation(id)
+=======
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    company_id BIGINT NOT NULL,
+    occupation_id BIGINT NOT NULL,
+    title VARCHAR(100) NOT NULL,
+    description VARCHAR(500) NOT NULL,
+    address VARCHAR(100) NOT NULL,
+    main_task VARCHAR(255) NOT NULL,
+    required_skills VARCHAR(255) NOT NULL,
+    required_traits VARCHAR(255) NOT NULL,
+    skill_keywords VARCHAR(100),
+    trait_keywords VARCHAR(100),
+    latitude DOUBLE NOT NULL DEFAULT 37.5665,        -- ✅ 위도 default 값 추가
+    longitude DOUBLE NOT NULL DEFAULT 126.9780,       -- ✅ 경도 default 값 추가
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    enroll_email VARCHAR(50) NOT NULL,
+    notice VARCHAR(255),
+    created_by VARCHAR(50) NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_by VARCHAR(50),
+    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    FOREIGN KEY (company_id) REFERENCES company(id),
+    FOREIGN KEY (occupation_id) REFERENCES occupation(id)
+>>>>>>> main
 );
 
 

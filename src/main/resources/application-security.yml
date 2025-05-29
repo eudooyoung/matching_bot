@@ -25,6 +25,7 @@ security:
       - /community/detail/**
     member-paths:
       - /api/maps/**
+      - /member/**
       - /community/write
       - /community/edit/**
       - /community/delete/**
@@ -34,7 +35,7 @@ security:
       - /job/**
       - /api/occupations/hierarchy
     admin-paths:
-#      - /admin/**
+      - /admin/**
 #      - /company/**
     api-paths:
       - /api/**

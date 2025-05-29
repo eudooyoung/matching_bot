@@ -1,8 +1,8 @@
-package com.multi.matchingbot.company.mapper;
+package com.multi.matchingbot.admin.mapper;
 
 import com.multi.matchingbot.common.domain.enums.Yn;
 import com.multi.matchingbot.company.domain.Company;
-import com.multi.matchingbot.company.domain.CompanyAdminView;
+import com.multi.matchingbot.admin.domain.CompanyAdminView;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

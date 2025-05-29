@@ -1,17 +1,21 @@
-package com.multi.matchingbot.member.mapper;
+package com.multi.matchingbot.admin.mapper;
 
+<<<<<<< HEAD:src/main/java/com/multi/matchingbot/member/mapper/ResumeMapper.java
 import com.multi.matchingbot.member.domain.dtos.ResumeAdminView;
 import com.multi.matchingbot.member.domain.dtos.ResumeDto;
+=======
+import com.multi.matchingbot.admin.domain.ResumeAdminView;
+>>>>>>> main:src/main/java/com/multi/matchingbot/admin/mapper/ResumeAdminMapper.java
 import com.multi.matchingbot.member.domain.entities.Resume;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
-public interface ResumeMapper {
+public interface ResumeAdminMapper {
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "formattedId", expression = "java(ResumeMapper.formatId(resume.getId()))")
+    @Mapping(target = "formattedId", expression = "java(ResumeAdminMapper.formatId(resume.getId()))")
     @Mapping(target = "title", source = "title")
     @Mapping(target = "skillKeywords", source = "skillKeywords")
     @Mapping(target = "talentKeywords", source = "talentKeywords")
