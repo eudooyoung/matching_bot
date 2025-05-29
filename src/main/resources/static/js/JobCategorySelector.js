@@ -291,7 +291,10 @@ function JobCategorySelector() {
     // 직무
     React.createElement("div", { style: colStyle }, [
       React.createElement("div", { key: "label3", style: labelStyle }, "직무"),
-      ...(sub && detailMap[sub] ? renderList(detailMap[sub], detail, setDetail) : [])
+      ...(sub && detailMap[sub] ? renderList(detailMap[sub], detail, (item) => {
+        setDetail(item);
+        document.getElementById("occupationId").value = item;
+      }) : [])
     ])
   );
 }

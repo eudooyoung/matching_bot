@@ -1,6 +1,6 @@
-package com.multi.matchingbot.job;
+package com.multi.matchingbot.job.repository;
 
-import com.multi.matchingbot.job.domain.Job;
+import com.multi.matchingbot.job.domain.entity.Job;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

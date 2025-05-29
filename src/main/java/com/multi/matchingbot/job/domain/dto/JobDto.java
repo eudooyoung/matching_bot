@@ -1,4 +1,4 @@
-package com.multi.matchingbot.job.domain;
+package com.multi.matchingbot.job.domain.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

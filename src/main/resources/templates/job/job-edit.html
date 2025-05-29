@@ -64,6 +64,10 @@
     <form th:action="@{/job/{id}/edit(id=${job.id})}" method="post" th:object="${job}">
         <input type="hidden" name="id" th:value="${job.id}"/>
 
+        <label>관심 직무</label>
+        <input type="hidden" th:field="*{occupationId}" id="occupationId" />
+        <div id="react-job-category-selector"></div>
+
         <label>제목</label>
         <input type="text" name="title" th:value="${job.title}" required />
         <div th:if="${#fields.hasErrors('title')}" class="error-message" th:errors="*{title}"></div>
@@ -89,11 +93,11 @@
         <div th:if="${#fields.hasErrors('requiredTraits')}" class="error-message" th:errors="*{requiredTraits}"></div>
 
         <label>기술 키워드</label>
-        <input type="text" name="skillKeywords" th:value="${job.skillKeywords}" required />
+        <input type="text" name="skillKeywords" th:value="${job.skillKeywords}" />
         <div th:if="${#fields.hasErrors('skillKeywords')}" class="error-message" th:errors="*{skillKeywords}"></div>
 
         <label>성향 키워드</label>
-        <input type="text" name="traitKeywords" th:value="${job.traitKeywords}" required />
+        <input type="text" name="traitKeywords" th:value="${job.traitKeywords}" />
         <div th:if="${#fields.hasErrors('traitKeywords')}" class="error-message" th:errors="*{traitKeywords}"></div>
 
         <label>채용 시작일</label>
@@ -120,6 +124,16 @@
 
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>
+
+<script type="module">
+    import React from "https://cdn.jsdelivr.net/npm/react@18.2.0/+esm";
+    import { createRoot } from "https://cdn.jsdelivr.net/npm/react-dom@18.2.0/client/+esm";
+
+    // React 전역 등록 (필요 시 다른 모듈에서 사용 가능하도록)
+    window.React = React;
+    window.createRoot = createRoot;
+</script>
+<script type="module" src="/js/JobCategorySelector.js"></script>
 
 </body>
 </html>
