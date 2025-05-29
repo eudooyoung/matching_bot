@@ -1,11 +1,7 @@
 package com.multi.matchingbot.admin.mapper;
 
-<<<<<<< HEAD:src/main/java/com/multi/matchingbot/member/mapper/ResumeMapper.java
-import com.multi.matchingbot.member.domain.dtos.ResumeAdminView;
-import com.multi.matchingbot.member.domain.dtos.ResumeDto;
-=======
 import com.multi.matchingbot.admin.domain.ResumeAdminView;
->>>>>>> main:src/main/java/com/multi/matchingbot/admin/mapper/ResumeAdminMapper.java
+import com.multi.matchingbot.member.domain.dtos.ResumeDto;
 import com.multi.matchingbot.member.domain.entities.Resume;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;

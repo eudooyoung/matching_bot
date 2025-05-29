@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -55,5 +56,15 @@ public class ResumeBookmarkService {
                 .collect(Collectors.toList());
 
         return new PageImpl<>(result, PageRequest.of(page, 10), result.size());
+    }
+
+    @Transactional
+    public void deleteBookmarks(Long companyId, List<Long> resumeIds) {
+        resumeBookmarkRepository.deleteByCompanyIdAndResumeIds(companyId, resumeIds);
+    }
+
+    @Transactional
+    public void deleteBookmarks(List<Long> resumeIds, Long companyId) {
+        resumeBookmarkRepository.deleteByCompanyIdAndResumeIds(companyId, resumeIds);
     }
 }

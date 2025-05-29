@@ -1,9 +1,12 @@
 package com.multi.matchingbot.job.controller;
 
+import com.multi.matchingbot.common.security.MBotUserDetails;
 import com.multi.matchingbot.job.domain.dto.ResumeBookmarkDto;
 import com.multi.matchingbot.job.service.ResumeBookmarkService;
 import com.multi.matchingbot.member.domain.dtos.ResumeDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,4 +29,13 @@ public class ResumeBookmarkController {
     public List<ResumeDto> getBookmarks(@PathVariable Long companyId) {
         return resumeBookmarkService.getBookmarks(companyId);
     }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deleteBookmarks(@AuthenticationPrincipal MBotUserDetails userDetails,
+                                                @RequestBody List<Long> resumeIds) {
+        Long companyId = userDetails.getId();
+        resumeBookmarkService.deleteBookmarks(companyId, resumeIds);
+        return ResponseEntity.ok().build();
+    }
+
 }

@@ -1,16 +1,15 @@
 package com.multi.matchingbot.job.controller;
 
-import com.multi.matchingbot.common.domain.enums.Role;
 import com.multi.matchingbot.common.security.MBotUserDetails;
 import com.multi.matchingbot.job.domain.dto.JobDto;
 import com.multi.matchingbot.job.service.JobService;
 import com.multi.matchingbot.job.service.ResumeBookmarkService;
 import com.multi.matchingbot.member.domain.dtos.ResumeDto;
+import com.multi.matchingbot.member.service.ResumeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,16 +18,20 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/job")
 public class JobController {
 
     private final JobService jobService;
     private final ResumeBookmarkService resumeBookmarkService;
+    private final ResumeService resumeService;
 
     @Autowired
-    public JobController(JobService jobService, ResumeBookmarkService resumeBookmarkService) {
+    public JobController(JobService jobService, ResumeBookmarkService resumeBookmarkService, ResumeService resumeService) {
         this.jobService = jobService;
+        this.resumeService = resumeService;
         this.resumeBookmarkService = resumeBookmarkService;
     }
 
@@ -104,22 +107,37 @@ public class JobController {
     }
 
     // 관심 이력서 페이지 조회
+//    @GetMapping("/bookmark")
+//    public String getBookmarkedResumes(@AuthenticationPrincipal MBotUserDetails mBotUserDetails,
+//                                       @RequestParam(name = "page", defaultValue = "0") int page,
+//                                       Model model) {
+//
+//        if (mBotUserDetails == null || mBotUserDetails.getRole() != Role.COMPANY) {
+//            throw new AccessDeniedException("기업 회원만 접근 가능합니다.");
+//        }
+//
+//        Long companyId = mBotUserDetails.getId();
+//
+//        Page<ResumeDto> resumePage = resumeBookmarkService.getBookmarkedResumePage(companyId, page);
+//
+//        model.addAttribute("resumePage", resumePage);
+//        model.addAttribute("companyId", companyId);
+//
+//        return "job/resume-list";
+//    }
+
     @GetMapping("/bookmark")
-    public String getBookmarkedResumes(@AuthenticationPrincipal MBotUserDetails mBotUserDetails,
-                                       @RequestParam(name = "page", defaultValue = "0") int page, Model model) {
-
-        // 인증 정보 null 체크
-        if (mBotUserDetails == null || mBotUserDetails.getRole() != Role.COMPANY) {
-            throw new AccessDeniedException("기업 회원만 접근 가능합니다.");
-        }
-
-        Long companyId = mBotUserDetails.getId();
-
-        Page<ResumeDto> resumePage = resumeBookmarkService.getBookmarkedResumePage(companyId, page);
-
-        model.addAttribute("resumes", resumePage);
-        model.addAttribute("companyId", companyId);
-
+    public String getAllResumes(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
+        Page<ResumeDto> resumePage = resumeService.getAllResumes(PageRequest.of(page, 10));
+        model.addAttribute("resumePage", resumePage);
         return "job/resume-list";
+    }
+
+    @PostMapping("/bookmark/delete")
+    public String deleteBookmarks(@RequestParam("resumeIds") List<Long> resumeIds,
+                                  @AuthenticationPrincipal MBotUserDetails userDetails) {
+        Long companyId = userDetails.getId();
+        resumeBookmarkService.deleteBookmarks(companyId, resumeIds);
+        return "redirect:/job/bookmark";
     }
 }
