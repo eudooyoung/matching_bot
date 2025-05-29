@@ -10,7 +10,7 @@ import org.mapstruct.Mapping;
 public interface ResumeAdminMapper {
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "formattedId", expression = "java(ResumeMapper.formatId(resume.getId()))")
+    @Mapping(target = "formattedId", expression = "java(ResumeAdminMapper.formatId(resume.getId()))")
     @Mapping(target = "title", source = "title")
     @Mapping(target = "skillKeywords", source = "skillKeywords")
     @Mapping(target = "talentKeywords", source = "talentKeywords")

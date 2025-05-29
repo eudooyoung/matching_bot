@@ -10,7 +10,7 @@ import org.mapstruct.Mapping;
 public interface MemberAdminMapper {
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "formattedId", expression = "java(MemberMapper.formatId(member.getId()))")
+    @Mapping(target = "formattedId", expression = "java(MemberAdminMapper.formatId(member.getId()))")
     @Mapping(target = "name", source = "name")
     @Mapping(target = "email", source = "email")
     @Mapping(target = "gender", source = "gender")
