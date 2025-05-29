@@ -3,7 +3,7 @@ package com.multi.matchingbot.company.domain;
 import com.multi.matchingbot.common.domain.entity.BaseEntity;
 import com.multi.matchingbot.common.domain.enums.Role;
 import com.multi.matchingbot.common.domain.enums.Yn;
-import com.multi.matchingbot.jobposting.domain.JobPosting;
+import com.multi.matchingbot.job.domain.Job;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -99,5 +99,5 @@ public class Company extends BaseEntity {
     private Yn status;        // 가입 상태
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<JobPosting> jobPostings = new ArrayList<>();
+    private List<Job> jobPostings = new ArrayList<>();
 }

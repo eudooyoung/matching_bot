@@ -4,7 +4,7 @@
     <meta charset="UTF-8"/>
     <title>MatchingBot</title>
     <link rel="stylesheet" th:href="@{/css/layout.css}"/>
-    <link rel="stylesheet" th:href="@{/css/admin-members.css}"/>
+    <link rel="stylesheet" th:href="@{/css/admin-boards.css}"/>
 </head>
 <body>
 
@@ -19,36 +19,41 @@
             <div class="search-bar-wrapper">
                 <form method="get" th:action="@{/admin/resumes}" class="search-form">
                     <div class="search-options">
-                        <button type="button" class="btn-extract"
-                                onclick="setBulkAction('DELETE', '/admin/bulk/resumes')">선택 추출
+                        <button type="button" class="btn btn-delete"
+                                onclick="setBulkDelete('DELETE', '/admin/bulk/resumes')">삭제
+                        </button>
+                        <button type="button" class="btn btn-extract"
+                                onclick="setBulkExtract('EXTRACT', '/admin/bulk/placeholder')">추출
                         </button>
 
                         <!-- 정렬 기준 -->
                         <select name="sortBy">
                             <option value="" disabled>정렬 기준</option>
-                            <option value="id" th:selected="${cond.sortBy == 'id'}">이력서 번호</option>
-                            <option value="createdAt" th:selected="${cond.sortBy == 'createdAt'}">생성일</option>
-                        </select>
-
-                        <!-- 상태 -->
-                        <select name="status" onchange="this.form.submit()">
-                            <option value="" disabled>추출 상태</option>
-                            <option value="">전체</option>
-                            <option value="Y" th:selected="${cond.status == 'Y'}">추출 완료</option>
-                            <option value="N" th:selected="${cond.status == 'N'}">미추출</option>
+                            <option value="id" th:selected="${condition.sortBy == 'id'}">이력서 번호</option>
+                            <option value="createdAt" th:selected="${condition.sortBy == 'createdAt'}">생성일</option>
                         </select>
 
                         <!-- 정렬 방향 -->
                         <select name="direction" onchange="this.form.submit()">
                             <option value="" disabled>정렬 순서</option>
-                            <option value="DESC" th:selected="${cond.direction == 'DESC'}">내림차순</option>
-                            <option value="ASC" th:selected="${cond.direction == 'ASC'}">오름차순</option>
+                            <option value="DESC" th:selected="${condition.direction == 'DESC'}">내림차순</option>
+                            <option value="ASC" th:selected="${condition.direction == 'ASC'}">오름차순</option>
                         </select>
+
+
+                        <!-- 상태 -->
+                        <select name="keywordsStatus" onchange="this.form.submit()">
+                            <option value="" disabled>추출 상태</option>
+                            <option value="">전체</option>
+                            <option value="Y" th:selected="${condition.keywordsStatus == 'Y'}">완료</option>
+                            <option value="N" th:selected="${condition.keywordsStatus == 'N'}">미완료</option>
+                        </select>
+
                     </div>
 
                     <div class="search-right" onchange="this.form.submit()">
-                        <input type="text" name="keyword" placeholder="이름, 이메일 검색..." th:value="${cond.keyword}"/>
-                        <button type="submit" class="btn-search">검색</button>
+                        <input type="text" name="keyword" placeholder="이름, 이메일 검색..." th:value="${condition.keyword}"/>
+                        <button type="submit" class="btn btn-search">검색</button>
                     </div>
                 </form>
             </div>
@@ -56,19 +61,19 @@
             <!-- 회원 테이블 -->
             <table class="table">
                 <colgroup>
-                    <col style="width: 2%;"/>  <!-- 체크박스 -->
-                    <col style="width: 4%;"/>  <!-- 회원 번호 -->
-                    <col style="width: 9%;"/>  <!-- 제목 -->
-                    <col style="width: 7%;"/> <!-- 역량 키워드 -->
-                    <col style="width: 7%;"/>  <!-- 인재상 키워드 -->
-                    <col style="width: 5%;"/> <!-- 희망 직무 -->
-                    <col style="width: 8%;"/>  <!-- 작성자 -->
-                    <col style="width: 8%;"/>  <!-- 작성일 -->
-                    <col style="width: 6%;"/> <!-- 수정자 -->
-                    <col style="width: 6%;"/>  <!-- 수정일 -->
-                    <col style="width: 3%;"/>  <!-- 키워드 추출 상태 -->
-                    <col style="width: 3%;"/>  <!-- 추출 -->
-                    <col style="width: 3%;"/>  <!-- 삭제 -->
+                    <col style="width: 25px;"/>  <!-- 체크박스 -->
+                    <col style="width: 60px;"/>  <!-- 회원 번호 -->
+                    <col style="width: 120px;"/>  <!-- 제목 -->
+                    <col style="width: 120px;"/> <!-- 역량 키워드 -->
+                    <col style="width: 120px;"/>  <!-- 인재상 키워드 -->
+                    <col style="width: 80px;"/> <!-- 희망 직무 -->
+                    <col style="width: 150px;"/>  <!-- 작성자 -->
+                    <col style="width: 100px;"/>  <!-- 작성일 -->
+                    <col style="width: 150px;"/> <!-- 수정자 -->
+                    <col style="width: 100px;"/>  <!-- 수정일 -->
+                    <col style="width: 40px;"/>  <!-- 평가 -->
+                    <col style="width: 40px;"/>  <!-- 삭제/복구 -->
+                    <col style="width: 40px;"/>  <!-- 삭제/복구 -->
                 </colgroup>
                 <thead style="background-color: #f0f0f0;">
                 <tr>
@@ -82,7 +87,7 @@
                     <th>작성일</th>
                     <th>수정자</th>
                     <th>수정일</th>
-                    <th>추출 상태</th>
+                    <th>키워드</th>
                     <th>추출</th>
                     <th>삭제</th>
                 </tr>
@@ -92,10 +97,10 @@
                     <td><input type="checkbox" name="checkedIds" th:value="${resume.id}" class="check-row"/>
                     </td>
                     <td th:text="${resume.formattedId}">이력서 번호</td>
-                    <td th:text="${resume.title}">제목</td>
-                    <td th:text="${resume.skillKeywords}">역량 키워드</td>
-                    <td th:text="${resume.talentKeywords}">인재상 키워드</td>
-                    <td th:text="${resume.desiredOccupation}">희망 직무</td>
+                    <td class="text-left-col" th:text="${resume.title}">제목</td>
+                    <td class="text-left-col" th:text="${resume.skillKeywords}">역량 키워드</td>
+                    <td class="text-left-col" th:text="${resume.talentKeywords}">인재상 키워드</td>
+                    <td class="text-left-col" th:text="${resume.desiredOccupation}">희망 직무</td>
                     <td th:text="${resume.createdBy}">작성자</td>
                     <td th:text="${#temporals.format(resume.createdAt, 'yyyy-MM-dd HH:mm:ss')}">작성일</td>
                     <td th:text="${resume.updatedBy}">수정자</td>
@@ -103,14 +108,14 @@
                     <td th:text="${resume.keywordsStatus}">키워드 추출 상태</td>
                     <td>
                         <button type="button"
-                                class="btn-extract"
-                                th:onclick="|extractKeywords({ id: ${resume.id}, url: '/api/v1/admin/resumes', onSuccess: () => location.reload() })|">
+                                class="btn btn-extract"
+                                th:onclick="|extractKeywords({ id: ${resume.id}, url: '/api/v1/admin/placeholder', onSuccess: () => location.reload() })|">
                             추출
                         </button>
                     </td>
                     <td>
                         <button type="button"
-                                class="btn-delete"
+                                class="btn btn-delete"
                                 th:onclick="|deleteItem({ id: ${resume.id}, url: '/api/v1/admin/resumes', onSuccess: () => location.reload() })|">
                             삭제
                         </button>
@@ -140,9 +145,10 @@
     <!-- Footer Fragment -->
     <div th:replace="~{fragments/footer :: footer}"></div>
 </div>
+<script th:src="@{/js/fetchWithAuth.js}"></script>
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>
 <script th:src="@{/js/admin/delete.js}"></script>
-<script th:src="@{/js/fetchWithAuth.js}"></script>
+<script th:src="@{/js/admin/bulkDelete.js}"></script>
 </body>
 </html>

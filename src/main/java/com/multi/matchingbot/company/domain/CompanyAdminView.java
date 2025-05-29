@@ -11,7 +11,8 @@ public class CompanyAdminView extends BaseAuditDto {
     private String name;
     private String email;
     private String phone;
-    private String maskedNo;
+    private String businessNo;
+//    private String maskedNo;
     private String address;
     private String industry;
     private boolean agreementValid;
@@ -21,5 +22,10 @@ public class CompanyAdminView extends BaseAuditDto {
     public String getStatusText() {
         return status == Yn.Y ? "ACTIVE" : "INACTIVE";
     }
+
+    public String getStatusClass() {
+        return status == Yn.Y ? "status-active" : "status-inactive";
+    }
+
 
 }

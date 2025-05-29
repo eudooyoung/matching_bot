@@ -63,9 +63,7 @@ public class MemberService {
     public void deactivate(Long id) {
         Member member = memberRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("해당 회원이 존재하지 않습니다."));
-
         if (member.getStatus() == Yn.N) return;
-
         member.setStatus(Yn.N);
     }
 
@@ -73,19 +71,17 @@ public class MemberService {
     public void reactivate(Long id) {
         Member member = memberRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("해당 회원이 존재하지 않습니다."));
-
         if (member.getStatus() == Yn.Y) return;
-
         member.setStatus(Yn.Y);
     }
 
     @Transactional
-    public void deactivateBulks(List<Long> checkedIds) {
+    public void deactivateBulk(List<Long> checkedIds) {
         checkedIds.forEach(this::deactivate);
     }
 
     @Transactional
-    public void reactivateBulks(List<Long> checkedIds) {
+    public void reactivateBulk(List<Long> checkedIds) {
         checkedIds.forEach(this::reactivate);
     }
     @Transactional(readOnly = true)

@@ -14,7 +14,7 @@ java {
 }
 
 configurations {
-    compileOnly {   
+    compileOnly {
         extendsFrom annotationProcessor
     }
 }
@@ -66,4 +66,20 @@ dependencyManagement {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+tasks.named('processResources') {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs += layout.buildDirectory.dir("generated/sources/annotationProcessor/java/main").get().asFile
+        }
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.generatedSourceOutputDirectory = layout.buildDirectory.dir("generated/sources/annotationProcessor/java/main").get().asFile
 }
