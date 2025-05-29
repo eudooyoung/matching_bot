@@ -24,7 +24,7 @@ public class ResumeService {
     }
 
 
-    public void delete(Long id) {
+
     public void deleteHard(Long id) {
         if (!resumeRepository.existsById(id)) {
             throw new EntityNotFoundException("해당 이력서가 존재하지 않습니다.");
@@ -32,6 +32,7 @@ public class ResumeService {
 
         resumeRepository.deleteById(id);
     }
+
     public void deleteAllByIds(List<Long> ids) {
         resumeRepository.deleteAllById(ids);
     }

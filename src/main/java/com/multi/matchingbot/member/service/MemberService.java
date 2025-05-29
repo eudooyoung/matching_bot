@@ -90,4 +90,10 @@ public class MemberService {
         return memberRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("해당 회원이 존재하지 않습니다."));
     }
+
+    @Transactional(readOnly = true)
+    public Member findByUsername(String username) {
+        return memberRepository.findByEmail(username)
+                .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다: " + username));
+    }
 }

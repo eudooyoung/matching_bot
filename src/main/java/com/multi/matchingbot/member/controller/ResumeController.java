@@ -44,7 +44,7 @@ public class ResumeController {
     // 단일 삭제
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {
-        resumeService.delete(id);
+        resumeService.deleteHard(id);
         return "redirect:/member";
     }
 
