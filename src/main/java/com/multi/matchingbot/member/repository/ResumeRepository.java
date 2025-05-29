@@ -23,5 +23,6 @@ public interface ResumeRepository extends JpaRepository<Resume, Long> {
         """)
     Page<Resume> searchWithCondition(@Param("keyword") String keyword, @Param("status") Yn status, Pageable pageable);
 
-    List<Resume> findAllByOrderByCreatedAtDesc();
+
+    List<Resume> findByMemberId(Long memberId);
 }

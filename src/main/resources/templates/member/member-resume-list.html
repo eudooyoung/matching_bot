@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>이력서 관리</title>
-  <link rel="stylesheet" th:href="@{/css/mypage.css}"/>
+  <link rel="stylesheet" th:href="@{/css/mypage.css}" />
   <link rel="stylesheet" th:href="@{/css/layout.css}" href="/css/layout.css">
 </head>
 <body>
@@ -15,15 +15,17 @@
   <div class="container">
     <h2>이력서 관리</h2>
 
-    <!-- 상단 버튼 -->
-    <div class="resume-actions" style="margin-bottom: 20px;">
-      <button type="submit" class="btn-danger">선택 삭제</button>
-      <button type="button" class="btn-primary" onclick="location.href='/member/new'">이력서 등록하기</button>
-      <button type="button" class="btn-secondary" onclick="location.href='/member/history'">이력서 열람 기록</button>
-    </div>
-
-    <!-- 이력서 관리 테이블 -->
+    <!-- 이력서 관리 테이블 및 삭제 버튼 포함 form -->
     <form method="post" th:action="@{/member/delete-bulk}">
+
+      <!-- 상단 버튼 -->
+      <div class="resume-actions" style="margin-bottom: 20px;">
+        <button type="submit" class="btn-danger">선택 삭제</button>
+        <button type="button" class="btn-primary" onclick="location.href='/member/new'">이력서 등록하기</button>
+        <button type="button" class="btn-secondary" onclick="location.href='/member/history'">이력서 열람 기록</button>
+      </div>
+
+      <!-- 이력서 테이블 -->
       <table class="resume-table">
         <thead>
         <tr>
@@ -36,10 +38,11 @@
           <th>삭제</th>
         </tr>
         </thead>
+
         <tbody>
         <!-- 데이터 없을 경우 -->
         <tr th:if="${resumes == null or #lists.isEmpty(resumes)}">
-          <td colspan="7">등록된 관심 이력서가 없습니다.</td>
+          <td colspan="7">등록된 이력서가 없습니다.</td>
         </tr>
 
         <!-- 데이터 있을 경우 -->
@@ -47,17 +50,16 @@
           <td><input type="checkbox" name="checkedIds" th:value="${resume.id}" /></td>
           <td th:text="${resume.member.name}">작성자</td>
           <td th:text="${resume.title}">이력서 제목</td>
-          <td th:text="${#temporals.format(resume.createdAt, 'yyyy.MM.dd')}">2025.05.28</td>
+          <td th:text="${#temporals.format(resume.createdAt, 'yyyy.MM.dd')}">작성일</td>
           <td><a th:href="@{/member/view/{id}(id=${resume.id})}">보기</a></td>
           <td><a th:href="@{/member/edit/{id}(id=${resume.id})}">수정</a></td>
-          <td><a th:href="@{/member/delete/{id}(id=${resume.id})}" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a></td>
+          <td>
+            <a th:href="@{/member/delete/{id}(id=${resume.id})}"
+               onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
+          </td>
         </tr>
         </tbody>
       </table>
-
-<!--      <div style="margin-top: 10px;">-->
-<!--        <button type="submit" class="btn-danger">선택 삭제</button>-->
-<!--      </div>-->
     </form>
   </div>
 </main>
@@ -65,6 +67,7 @@
 <!-- 공통 푸터 -->
 <div th:replace="fragments/footer :: footer"></div>
 
+<!-- 체크박스 전체 선택 스크립트 -->
 <script>
   function toggleAll(source) {
     const checkboxes = document.querySelectorAll('input[name="checkedIds"]');
