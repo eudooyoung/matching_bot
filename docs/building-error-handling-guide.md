@@ -15,7 +15,8 @@ MapStruct나 자동 생성 파일 문제로 인해 발생할 수 있는 문제�
 ### ✅ 초기화 단계 (터미널 명령)
 
 1. ./gradlew clean
-2. rm -rf build/ out/ src/main/generated/
+2. rm -rf build/ out/ src/main/generated/    
+- *(powershell: Remove-Item -Recurse -Force build, out, src\main\generated)*
 3. git clean -fd  # ⚠ 커밋되지 않은 파일/디렉토리는 모두 삭제됩니다!
 
 ⚠ git clean -fd 명령은 Git이 추적하지 않는 모든 파일과 폴더를 삭제합니다.  
