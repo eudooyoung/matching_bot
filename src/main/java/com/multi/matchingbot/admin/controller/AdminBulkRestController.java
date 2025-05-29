@@ -1,8 +1,8 @@
 package com.multi.matchingbot.admin.controller;
 
-import com.multi.matchingbot.company.service.CompanyService;
-import com.multi.matchingbot.member.service.MemberService;
-import com.multi.matchingbot.member.service.ResumeService;
+import com.multi.matchingbot.admin.service.CompanyAdminService;
+import com.multi.matchingbot.admin.service.MemberAdminService;
+import com.multi.matchingbot.admin.service.ResumeAdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -12,20 +12,20 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/admin/bulk")
 @RestController
-public class AdminBulkController {
+public class AdminBulkRestController {
 
-    private final MemberService memberService;
-    private final CompanyService companyService;
-    private final ResumeService resumeService;
+    private final MemberAdminService memberAdminService;
+    private final CompanyAdminService companyAdminService;
+    private final ResumeAdminService resumeAdminService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("members")
     public String bulkActionMember(@RequestParam(name = "checkedIds") List<Long> checkedIds,
                                    @RequestParam(name = "actionType") String actionType) {
         if ("DELETE".equals(actionType)) {
-            memberService.deactivateBulk(checkedIds);
+            memberAdminService.deactivateBulk(checkedIds);
         } else if ("RESTORE".equals(actionType)) {
-            memberService.reactivateBulk(checkedIds);
+            memberAdminService.reactivateBulk(checkedIds);
         }
         return "redirect:/admin/members";
     }
@@ -35,9 +35,9 @@ public class AdminBulkController {
     public String bulkActionCompany(@RequestParam(name = "checkedIds") List<Long> checkedIds,
                                     @RequestParam(name = "actionType") String actionType) {
         if ("DELETE".equals(actionType)) {
-            companyService.deactivateBulk(checkedIds);
+            companyAdminService.deactivateBulk(checkedIds);
         } else if ("RESTORE".equals(actionType)) {
-            companyService.reactivateBulk(checkedIds);
+            companyAdminService.reactivateBulk(checkedIds);
         }
         return "redirect:/admin/companies";
     }
@@ -45,7 +45,7 @@ public class AdminBulkController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("resumes")
     public String bulkDeleteResumeHard(@RequestParam(name = "checkedIds") List<Long> checkedIds) {
-        resumeService.deleteBulkHard(checkedIds);
+        resumeAdminService.deleteBulkHard(checkedIds);
         return "redirect:/admin/resumes";
     }
 }
