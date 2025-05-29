@@ -1,7 +1,7 @@
 package com.multi.matchingbot.company.service;
 
 import com.multi.matchingbot.common.domain.enums.Yn;
-import com.multi.matchingbot.company.CompanyRepository;
+import com.multi.matchingbot.company.repository.CompanyRepository;
 import com.multi.matchingbot.company.domain.Company;
 import com.multi.matchingbot.company.domain.CompanyUpdateDto;
 import com.multi.matchingbot.company.mapper.CompanyMapper;
