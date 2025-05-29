@@ -1,4 +1,4 @@
-package com.multi.matchingbot.member.domain.dtos;
+package com.multi.matchingbot.admin.domain;
 
 import com.multi.matchingbot.common.domain.dto.BaseAuditDto;
 import com.multi.matchingbot.common.domain.enums.Yn;

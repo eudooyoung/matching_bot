@@ -41,7 +41,7 @@ public class SecurityConfig {
 //    }
 
 
-     /***************************************security filter chain 수정 금지*****************************************************/
+     /*************************************** Security filter chain 임의 수정 금지, 담당자 문의해 주세요 *****************************************************/
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -67,7 +67,7 @@ public class SecurityConfig {
 
         return http.build();
     }
-    /***************************************security filter chain 수정 금지*****************************************************/
+    /*************************************** Security filter chain 임의 수정 금지, 담당자 문의해 주세요 *****************************************************/
 
 //    파이썬 쓸 때 확인
     @Bean

@@ -1,6 +1,7 @@
 package com.multi.matchingbot.member.controller;
 
 
+import com.multi.matchingbot.admin.service.ResumeAdminService;
 import com.multi.matchingbot.member.domain.entities.Resume;
 import com.multi.matchingbot.member.service.ResumeService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import java.util.List;
 public class ResumeController {
 
     private final ResumeService resumeService;
+    private final ResumeAdminService resumeAdminService;
 
     // 목록
     @GetMapping
@@ -44,7 +46,7 @@ public class ResumeController {
     // 단일 삭제
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {
-        resumeService.deleteHard(id);
+        resumeAdminService.deleteHard(id);
         return "redirect:/member";
     }
 
