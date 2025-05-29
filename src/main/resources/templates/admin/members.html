@@ -4,7 +4,8 @@
     <meta charset="UTF-8"/>
     <title>MatchingBot</title>
     <link rel="stylesheet" th:href="@{/css/layout.css}"/>
-    <link rel="stylesheet" th:href="@{/css/admin-members.css}"/>
+    <link rel="stylesheet" th:href="@{/css/admin-boards.css}"/>
+    <script src="../../static/js/admin/delete.js"></script>
 </head>
 <body>
 
@@ -16,40 +17,48 @@
             <h2 style="margin-bottom: 1.5rem;">개인 회원 관리</h2>
 
             <div class="search-bar-wrapper">
+
+                <!-- 일괄 버튼 -->
+                <div class="bulk-actions">
+                    <button type="button" class="btn btn-delete"
+                            onclick="setBulkAction('DELETE', '/api/v1/admin/bulk/members')">삭제
+                    </button>
+                    <button type="button" class="btn btn-restore"
+                            onclick="setBulkAction('RESTORE', '/api/v1/admin/bulk/members')">복구
+                    </button>
+                </div>
+
+
+                <!-- 필터 & 검색 -->
                 <form method="get" th:action="@{/admin/members}" class="search-form">
                     <div class="search-options">
-                        <button type="button" class="btn-delete"
-                                onclick="setBulkAction('DELETE', '/admin/bulk/members')">선택 삭제
-                        </button>
-                        <button type="button" class="btn-restore"
-                                onclick="setBulkAction('RESTORE', '/admin/bulk/members')">선택 복구
-                        </button>
                         <!-- 정렬 기준 -->
                         <select name="sortBy">
                             <option value="" disabled>정렬 기준</option>
-                            <option value="id" th:selected="${cond.sortBy == 'id'}">회원 번호</option>
-                            <option value="createdAt" th:selected="${cond.sortBy == 'createdAt'}">가입일</option>
+                            <option value="id" th:selected="${condition.sortBy == 'id'}">회원 번호</option>
+                            <option value="createdAt" th:selected="${condition.sortBy == 'createdAt'}">가입일</option>
+                        </select>
+
+                        <!-- 정렬 방향 -->
+                        <select name="direction" onchange="this.form.submit()">
+                            <option value="" disabled>정렬 순서</option>
+                            <option value="DESC" th:selected="${condition.direction == 'DESC'}">내림차순</option>
+                            <option value="ASC" th:selected="${condition.direction == 'ASC'}">오름차순</option>
                         </select>
 
                         <!-- 상태 -->
                         <select name="status" onchange="this.form.submit()">
                             <option value="" disabled>가입 상태</option>
                             <option value="">전체</option>
-                            <option value="Y" th:selected="${cond.status == 'Y'}">ACTIVE</option>
-                            <option value="N" th:selected="${cond.status == 'N'}">INACTIVE</option>
-                        </select>
-
-                        <!-- 정렬 방향 -->
-                        <select name="direction" onchange="this.form.submit()">
-                            <option value="" disabled>정렬 순서</option>
-                            <option value="DESC" th:selected="${cond.direction == 'DESC'}">내림차순</option>
-                            <option value="ASC" th:selected="${cond.direction == 'ASC'}">오름차순</option>
+                            <option value="Y" th:selected="${condition.status == 'Y'}">ACTIVE</option>
+                            <option value="N" th:selected="${condition.status == 'N'}">INACTIVE</option>
                         </select>
                     </div>
 
                     <div class="search-right" onchange="this.form.submit()">
-                        <input type="text" name="keyword" placeholder="이름, 이메일 검색..." th:value="${cond.keyword}"/>
-                        <button type="submit" class="btn-search">검색</button>
+                        <input type="text" name="keyword" placeholder="회원 번호, 이름, 이메일 검색"
+                               th:value="${condition.keyword}"/>
+                        <button type="submit" class="btn btn-search">검색</button>
                     </div>
                 </form>
             </div>
@@ -57,19 +66,19 @@
             <!-- 회원 테이블 -->
             <table class="table">
                 <colgroup>
-                    <col style="width: 4%;"/>  <!-- 체크박스 -->
-                    <col style="width: 6%;"/>  <!-- 회원 번호 -->
-                    <col style="width: 6%;"/>  <!-- 이름 -->
-                    <col style="width: 15%;"/> <!-- 이메일 -->
-                    <col style="width: 4%;"/>  <!-- 성별 -->
-                    <col style="width: 8%;"/> <!-- 연락처 -->
-                    <col style="width: 7%;"/>  <!-- 약관 -->
-                    <col style="width: 7%;"/>  <!-- 개인정보 -->
-                    <col style="width: 11%;"/> <!-- 가입일 -->
-                    <col style="width: 15%;"/>  <!-- 수정자 -->
-                    <col style="width: 11%;"/> <!-- 수정일 -->
-                    <col style="width: 6%;"/>  <!-- 상태 -->
-                    <col style="width: 5%;"/>  <!-- 삭제/복구 -->
+                    <col style="width: 25px;"/>  <!-- 체크박스 -->
+                    <col style="width: 60px;"/>  <!-- 회원 번호 -->
+                    <col style="width: 60px;"/>  <!-- 이름 -->
+                    <col style="width: 160px;"/> <!-- 이메일 -->
+                    <col style="width: 40px;"/>  <!-- 성별 -->
+                    <col style="width: 80px;"/> <!-- 연락처 -->
+                    <col style="width: 40px;"/>  <!-- 약관 -->
+                    <col style="width: 40px;"/>  <!-- 개인정보 -->
+                    <col style="width: 120px;"/> <!-- 가입일 -->
+                    <col style="width: 160px;"/>  <!-- 수정자 -->
+                    <col style="width: 120px;"/><!-- 수정일 -->
+                    <col style="width: 50px;"/>  <!-- 상태 -->
+                    <col style="width: 40px;"/>  <!-- 삭제/복구 -->
                 </colgroup>
                 <thead style="background-color: #f0f0f0;">
                 <tr>
@@ -79,8 +88,8 @@
                     <th>이메일</th>
                     <th>성별</th>
                     <th>연락처</th>
-                    <th>약관 동의</th>
-                    <th>개인정보 동의</th>
+                    <th>약관</th>
+                    <th>개인정보</th>
                     <th>생성일</th>
                     <th>수정자</th>
                     <th>수정일</th>
@@ -94,8 +103,8 @@
                                th:data-status="${member.status.name()}"/>
                     </td>
                     <td th:text="${member.formattedId}">아이디</td>
-                    <td th:text="${member.name}">이름</td>
-                    <td>
+                    <td class="text-left-col" th:text="${member.name}">이름</td>
+                    <td class="text-left-col">
                         <a th:href="@{|/admin/members/${member.id}|}"
                            th:text="${member.email}"
                            th:attr="title=${member.email}"
@@ -106,7 +115,7 @@
                     <td th:text="${member.getPrivacyLabel()}">동의</td>
                     <td th:text="${member.getServiceLabel()}">동의</td>
                     <td th:text="${#temporals.format(member.createdAt, 'yyyy-MM-dd HH:mm:ss')}">가입일</td>
-                    <td th:attr="title=${member.email}" th:text="${member.updatedBy}">수정자</td>
+                    <td class="text-left-col" th:attr="title=${member.email}" th:text="${member.updatedBy}">수정자</td>
                     <td th:text="${#temporals.format(member.updatedAt, 'yyyy-MM-dd HH:mm:ss')}">2025-04-10</td>
                     <td th:class="${member.getStatusClass()}"
                         th:text="${member.getStatusText()}">
@@ -114,14 +123,14 @@
                     </td>
                     <td>
                         <button type="button"
-                                class="btn-delete"
+                                class="btn btn-delete"
                                 th:if="${member.status.name() == 'Y'}"
                                 th:onclick="|deactivateItem({ id: ${member.id}, url: '/api/v1/admin/members', onSuccess: () => location.reload() })|">
                             삭제
                         </button>
 
                         <button type="button"
-                                class="btn-restore"
+                                class="btn btn-restore"
                                 th:if="${member.status.name() == 'N'}"
                                 th:onclick="|reactivateItem({ id: ${member.id}, url: '/api/v1/admin/members', onSuccess: () => location.reload() })|">
                             복구

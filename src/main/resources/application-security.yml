@@ -22,14 +22,20 @@ security:
       - /community/**
       - /calendar
 
+      - /community/detail/**
     member-paths:
       - /api/maps/**
+      - /community/write
+      - /community/edit/**
+      - /community/delete/**
+      - /community/**
     company-paths:
       - /company/**
       - /job/**
       - /api/occupations/hierarchy
       - /resume/**
     admin-paths:
-      - /admin/**
+#      - /admin/**
+#      - /company/**
     api-paths:
       - /api/**

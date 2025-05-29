@@ -81,6 +81,10 @@ Thumbs.db
 # ✅ MapStruct 등 Annotation Processor 결과물
 #########################
 /src/main/generated/
+/build/
+/build/generated/
 
+#########################
 # ✅ IntelliJ build output
+#########################
 /out/

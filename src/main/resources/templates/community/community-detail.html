@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>게시글 상세</title>
@@ -7,22 +7,44 @@
 </head>
 <body>
 <h2 th:text="${post.title}">제목</h2>
-<p th:text="${post.createdBy}">작성자</p>
+
+<p>
+    <span th:text="${post.createdBy}">작성자</span>
+    | <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}">작성일</span>
+</p>
+
 <p th:text="${post.content}">내용</p>
 
-<hr>
-<h4>댓글</h4>
-<div th:each="comment : ${post.comments}">
-    <p><strong th:text="${comment.createdBy}"></strong>: <span th:text="${comment.content}"></span></p>
-</div>
+<!--<hr>-->
+<!--<h4>댓글</h4>-->
+<!--<div th:each="comment : ${post.comments}">-->
+<!--    <p>-->
+<!--        <strong th:text="${comment.createdBy}">댓글 작성자</strong>:-->
+<!--        <span th:text="${comment.content}">댓글 내용</span>-->
+<!--    </p>-->
+<!--</div>-->
 
-<!-- 댓글 작성 (회원만 가능) -->
-<div sec:authorize="isAuthenticated()">
-    <form th:action="@{'/community/' + ${post.id} + '/comment'}" method="post">
-        <textarea name="content" required></textarea>
-        <button type="submit">댓글 작성</button>
+<!-- 서버에서 전달받은 인증 정보로 처리 -->
+<!--<div th:if="${isAuthenticated}">-->
+<!--    <form th:action="@{'/community/' + ${post.id} + '/comment'}" method="post">-->
+<!--        <textarea name="content" rows="4" placeholder="댓글을 입력하세요" required></textarea>-->
+<!--        <button type="submit">댓글 작성</button>-->
+<!--    </form>-->
+<!--</div>-->
+
+<!--<div th:unless="${isAuthenticated}">-->
+<!--    <p><a th:href="@{/login}">로그인</a> 후 댓글을 작성할 수 있습니다.</p>-->
+<!--</div>-->
+
+<!-- 본인 글일 경우만 삭제 버튼 -->
+<div th:if="${currentUserId != null and currentUserId == post.memberId}">
+    <a th:href="@{'/community/edit/' + ${post.id}}">✏ 수정</a>
+    <form th:action="@{'/community/delete/' + ${post.id}}" method="post" style="display:inline;">
+        <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?')">🗑 삭제</button>
     </form>
 </div>
+
+
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>
 </body>

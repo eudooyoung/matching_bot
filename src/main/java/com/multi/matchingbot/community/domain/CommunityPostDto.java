@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,6 +25,8 @@ public class CommunityPostDto {
     private LocalDateTime createdAt;
     private String writerName; // ✅ 추가
 
+    private List<CommunityComment> comments;
+
     public static CommunityPostDto fromEntity(CommunityPost post) {
         CommunityPostDto dto = new CommunityPostDto();
         dto.setId(post.getId());
@@ -40,6 +43,9 @@ public class CommunityPostDto {
         dto.setViews(post.getViews());
         dto.setCreatedBy(post.getCreatedBy());
         dto.setCreatedAt(post.getCreatedAt());
+
+
+
         return dto;
     }
 }

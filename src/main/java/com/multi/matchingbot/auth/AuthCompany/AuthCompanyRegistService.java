@@ -41,6 +41,7 @@ public class AuthCompanyRegistService {
                 .agreeFinance(dto.getAgreeFinance())
                 .agreeMarketing(dto.getAgreeMarketing())
                 .agreeThirdParty(dto.getAgreeThirdParty())
+                .status(Yn.Y)
                 .build();
 
         authCompanyRepository.save(company);

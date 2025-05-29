@@ -41,6 +41,7 @@ public class SecurityConfig {
 //    }
 
 
+     /***************************************security filter chain 수정 금지*****************************************************/
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -58,9 +59,7 @@ public class SecurityConfig {
                         .requestMatchers(toArray(roleAccessProperties.getPermitAll())).permitAll()
                         .requestMatchers(toArray(roleAccessProperties.getAdminPaths())).hasRole("ADMIN")
                         .requestMatchers(toArray(roleAccessProperties.getCompanyPaths())).hasRole("COMPANY")
-                        .requestMatchers("/api/maps/**").hasRole("MEMBER")  // ⛳ 임시 하드코딩
-
-                        //.requestMatchers(toArray(roleAccessProperties.getMemberPaths())).hasRole("MEMBER")
+                        .requestMatchers(toArray(roleAccessProperties.getMemberPaths())).hasRole("MEMBER")
                         .requestMatchers(toArray(roleAccessProperties.getApiPaths())).authenticated()
                         .anyRequest().permitAll()
                 ).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -68,7 +67,7 @@ public class SecurityConfig {
 
         return http.build();
     }
-
+    /***************************************security filter chain 수정 금지*****************************************************/
 
 //    파이썬 쓸 때 확인
     @Bean

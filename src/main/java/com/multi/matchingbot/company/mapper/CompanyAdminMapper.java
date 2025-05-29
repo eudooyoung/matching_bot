@@ -1,4 +1,4 @@
-package com.multi.matchingbot.company.model.dao;
+package com.multi.matchingbot.company.mapper;
 
 import com.multi.matchingbot.common.domain.enums.Yn;
 import com.multi.matchingbot.company.domain.Company;
@@ -6,7 +6,9 @@ import com.multi.matchingbot.company.domain.CompanyAdminView;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.springframework.context.annotation.Primary;
 
+@Primary
 @Mapper(componentModel = "spring")
 public interface CompanyAdminMapper {
 
@@ -16,7 +18,8 @@ public interface CompanyAdminMapper {
     @Mapping(target = "name", source = "name")
     @Mapping(target = "email", source = "email")
     @Mapping(target = "phone", source = "phone")
-    @Mapping(target = "maskedNo", expression = "java(CompanyAdminMapper.maskBusinessNo(company.getBusinessNo()))")
+    @Mapping(target = "businessNo", source = "businessNo")
+//    @Mapping(target = "maskedNo", expression = "java(maskBusinessNo(company.getBusinessNo()))")
     @Mapping(target = "address", source = "address")
     @Mapping(target = "industry", source = "industry")
     @Mapping(target = "agreementValid", expression = "java(CompanyAdminMapper.isAgreementValid(company))")
@@ -31,9 +34,10 @@ public interface CompanyAdminMapper {
         return String.format("C%05d", id);
     }
 
-    static String maskBusinessNo(String businessNo) {
-        return businessNo.substring(0, 2) + "-**-*****";
-    }
+//    default String maskBusinessNo(String businessNo) {
+//        if (businessNo == null || businessNo.length() < 10) return "";
+//        return businessNo.substring(0, 2) + "-**-" + businessNo.substring(6);
+//    }
 
     static boolean isAgreementValid(Company company) {
         return company.getAgreeTerms() == Yn.Y

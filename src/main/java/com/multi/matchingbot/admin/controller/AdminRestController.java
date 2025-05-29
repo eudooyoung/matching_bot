@@ -34,9 +34,23 @@ public class AdminRestController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("companies/{id}")
+    public ResponseEntity<Void> deactivateCompany(@PathVariable("id") Long id) {
+        companyService.deactivate(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping("companies/{id}/reactivate")
+    public ResponseEntity<Void> reactivateCompany(@PathVariable("id") Long id) {
+        companyService.reactivate(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("resumes/{id}")
-    public ResponseEntity<Void> deleteResume(@PathVariable("id") Long id) {
-        resumeService.delete(id);
+    public ResponseEntity<Void> deleteResumeHard(@PathVariable("id") Long id) {
+        resumeService.deleteHard(id);
         return ResponseEntity.noContent().build();
     }
 }
