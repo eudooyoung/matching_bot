@@ -4,6 +4,7 @@ import com.multi.matchingbot.admin.service.AdminPageService;
 import com.multi.matchingbot.common.domain.dto.PagedResult;
 import com.multi.matchingbot.common.domain.dto.SearchCondition;
 import com.multi.matchingbot.common.security.MBotUserDetails;
+import com.multi.matchingbot.company.domain.CompanyAdminView;
 import com.multi.matchingbot.member.domain.dtos.MemberAdminView;
 import com.multi.matchingbot.member.domain.dtos.ResumeAdminView;
 import lombok.RequiredArgsConstructor;
@@ -40,25 +41,37 @@ public class AdminPageController {
     }
 
     @GetMapping("/members")
-    public void members(@ModelAttribute SearchCondition cond, Model model) {
-        PagedResult<MemberAdminView> result = adminPageService.members(cond);
+    public void members(@ModelAttribute SearchCondition condition, Model model) {
+        PagedResult<MemberAdminView> result = adminPageService.members(condition);
         model.addAttribute("members", result.getPage().getContent());
         model.addAttribute("page", result.getPage());
         model.addAttribute("pageNumbers", result.getPageNumbers());
         model.addAttribute("currentPage", result.getCurrentPage());
-        model.addAttribute("cond", cond);
+        model.addAttribute("condition", condition);
     }
 
+    @GetMapping("/companies")
+    public void companies(@ModelAttribute SearchCondition condition, Model model) {
+        log.warn("statusParam = [{}]", condition.getStatus());
+        PagedResult<CompanyAdminView> result = adminPageService.companies(condition);
+        model.addAttribute("companies", result.getPage().getContent());
+        model.addAttribute("page", result.getPage());
+        model.addAttribute("pageNumbers", result.getPageNumbers());
+        model.addAttribute("currentPage", result.getCurrentPage());
+        model.addAttribute("condition", condition);
+    }
 
     @GetMapping("/resumes")
-    public void resumes(@ModelAttribute SearchCondition cond, Model model) {
-        PagedResult<ResumeAdminView> result = adminPageService.resumes(cond);
+    public void resumes(@ModelAttribute SearchCondition condition, Model model) {
+        log.warn("statusParam = [{}]", condition.getKeywordsStatus());
+        PagedResult<ResumeAdminView> result = adminPageService.resumes(condition);
         model.addAttribute("resumes", result.getPage().getContent());
         model.addAttribute("page", result.getPage());
         model.addAttribute("pageNumbers", result.getPageNumbers());
         model.addAttribute("currentPage", result.getCurrentPage());
-        model.addAttribute("cond", cond);
+        model.addAttribute("condition", condition);
     }
+
 
 
 }

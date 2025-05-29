@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>MatchingBot 기업 홈</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/manage-jobs.css}">
     <link rel="stylesheet" th:href="@{/css/layout.css}">
 </head>
 <body>
@@ -17,7 +18,7 @@
     <div class="user-info-box">
         <div class="user-box">
         <span>
-          <span th:text="${company_name}"></span> 님<button class="star-button" onclick="toggleStar(this)">☆</button>
+          <span th:text="${companyId}"></span> 님<button class="star-button" onclick="toggleStar(this)">☆</button>
         </span>
         </div>
         <div class="mypage-box">
@@ -29,14 +30,26 @@
         <p>평가 보고서 소개</p>
     </div>
 
-    <div class="list-box">
-        <p><strong>공고 리스트</strong></p>
-        <div th:each="job : ${jobList}" class="posting">
-            <span th:text="${job.title}">공고 제목</span>
-            <span th:text="${job.startDate} + ' ~ ' + ${job.endDate}">채용 기간</span>
-            <a th:href="@{'/job/' + ${job.id}}" class="detail-button">상세 보기</a>
-        </div>
-    </div>
+    <table class="job-table">
+        <thead>
+        <tr>
+            <th>번호</th>
+            <th>채용 공고 제목</th>
+            <th>채용 기간</th>
+            <th>상세보기</th>
+            <th>즐겨찾기</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="job, iterStat : ${jobPage.content}">
+            <td th:text="${job.id}">1</td>
+            <td th:text="${job.title}">제목</td>
+            <td th:text="${#temporals.format(job.startDate, 'yyyy-MM-dd')} + ' ~ ' + ${#temporals.format(job.endDate, 'yyyy-MM-dd')}">기간</td>
+            <td th:onclick="'location.href=\'/job/' + ${job.id} + '\''">상세보기</td>
+            <td><button class="star-button" onclick="toggleStar(this)">☆</button></td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 
 <script>

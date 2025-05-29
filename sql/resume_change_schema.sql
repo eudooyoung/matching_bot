@@ -57,7 +57,7 @@ CREATE TABLE member (
     agree_location ENUM('Y', 'N') COMMENT '위치기반서비스동의 (Y/N)',
     alert_bookmark ENUM('Y', 'N') COMMENT '관심기업채용공고알림 (Y/N)',
     alert_resume ENUM('Y', 'N') COMMENT '이력서열람알림 (Y/N)',
-    status ENUM('Y', 'N') COMMENT '상태 (Y/N)',
+    status ENUM('Y', 'N') NOT NULL DEFAULT 'Y' COMMENT '가입 상태',
     created_by VARCHAR(50) COMMENT '생성자',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '생성일시',
     updated_by VARCHAR(50) COMMENT '수정자',
@@ -128,7 +128,8 @@ CREATE TABLE company (
     agree_finance ENUM('Y', 'N') NOT NULL CHECK(agree_finance = 'Y'),
     agree_marketing ENUM('Y', 'N'),
     agree_third_party ENUM('Y', 'N'),
-
+    
+	status ENUM('Y', 'N') NOT NULL DEFAULT 'Y' COMMENT '가입 상태',
     report_status ENUM('Y', 'N') NOT NULL DEFAULT 'N' COMMENT '평가 보고서 상태',
 
     created_by VARCHAR(50),

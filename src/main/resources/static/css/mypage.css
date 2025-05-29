@@ -109,7 +109,7 @@
 
 /* 버튼 */
 .nav-button {
-    background-color: #1a2b49;
+    background-color: #103254;
     color: white;
     border: none;
     padding: 8px 14px;
@@ -120,7 +120,7 @@
 }
 
 .nav-button:hover {
-    background-color: #2e4064;
+    background-color: #103254;
 }
 
 .job-table {
@@ -209,7 +209,7 @@
 }
 
 .button-group .btn {
-    background-color: #1d2b4f;
+    background-color: #103254;
     color: white;
     border: none;
     padding: 12px 20px;
@@ -219,11 +219,55 @@
 }
 
 .button-group .btn:hover {
-    background-color: #14203a;
+    background-color: #103254;
 }
 
 .error-message {
     color: red;
     font-size: 0.9em;
     margin-top: 4px;
+}
+
+.delete-button {
+    background-color: brown;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.delete-button:hover {
+    background-color: brown;
+}
+
+.pag-button{
+    background-color: #103254;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+.mypage-button {
+    background-color: #103254;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }

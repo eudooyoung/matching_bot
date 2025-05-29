@@ -5,7 +5,7 @@
  * @param {string} paramName - 체크박스 name 속성 (예: 'checkedIds')
  */
 
-function setBulkAction(actionType, url, paramName = "checkedIds") {
+async function setBulkAction(actionType, url, paramName = "checkedIds") {
     const selectedCheckboxes = Array.from(document.querySelectorAll(`input[name="${paramName}"]:checked`));
 
     if (selectedCheckboxes.length === 0) {
@@ -16,7 +16,7 @@ function setBulkAction(actionType, url, paramName = "checkedIds") {
     const statuses = new Set(selectedCheckboxes.map(cb => cb.dataset.status));
 
     if (statuses.size > 1) {
-        alert("서로 다른 상태의 회원이 포함되어 있어 처리할 수 없습니다.");
+        alert("서로 다른 상태의 항목이 포함되어 있어 처리할 수 없습니다.");
         return;
     }
 
@@ -31,30 +31,27 @@ function setBulkAction(actionType, url, paramName = "checkedIds") {
         return;
     }
 
-    if (!confirm(`선택한 항목을 ${actionType === 'DELETE' ? '삭제' : '복구'}하시겠습니까?`)) {
+    const confirmMsg = actionType === "DELETE" ? "삭제" : "복구";
+    if (!confirm(`선택한 항목을 ${confirmMsg}하시겠습니까?`)) {
         return;
     }
 
-    const form = document.createElement("form");
-    form.method = "post";
-    form.action = url;
+    const ids = selectedCheckboxes.map(cb => cb.value);
 
-    selectedCheckboxes.forEach(cb => {
-        const input = document.createElement("input");
-        input.type = "hidden";
-        input.name = paramName;
-        input.value = cb.value;
-        form.appendChild(input);
-    });
+    try {
+        const response = await fetchWithAuth(url, {
+            method: "POST",
+            body: JSON.stringify({[paramName]: ids, actionType})
+        });
 
-    const actionInput = document.createElement("input");
-    actionInput.type = "hidden";
-    actionInput.name = "actionType";
-    actionInput.value = actionType;
-    form.appendChild(actionInput);
+        if (!response.ok) {
+            throw new Error("처리 중 오류 발생");
+        }
 
-    document.body.appendChild(form);
-    form.submit();
+        location.reload();
+    } catch (err) {
+        alert("요청 실패: " + err.message);
+    }
 }
 
 document.addEventListener("DOMContentLoaded", () => {

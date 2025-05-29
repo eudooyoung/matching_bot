@@ -23,39 +23,40 @@
 
 <h2>회원정보 수정</h2>
 <form method="post" th:object="${company}">
+    <input type="hidden" th:field="*{id}" />
 
     <label>이메일</label>
-    <input type="text" class="readonly" th:field="*{company.email}" readonly />
+    <input type="text" class="readonly" th:field="*{email}" readonly />
 
     <label>이름</label>
-    <input type="text" class="readonly" th:field="*{company.name}" readonly />
+    <input type="text" class="readonly" th:field="*{name}" readonly />
 
     <label>사업자 등록번호</label>
-    <input type="text" class="readonly" th:field="*{company.business_no}" readonly />
+    <input type="text" class="readonly" th:field="*{businessNo}" readonly />
 
     <label>회사 전화번호</label>
-    <input type="text" th:field="*{company.phone}" />
+    <input type="text" th:field="*{phone}" />
 
     <label>회사 주소</label>
-    <input type="text" th:field="*{company.address}" />
+    <input type="text" th:field="*{address}" />
 
     <label>산업군</label>
-    <input type="text" th:field="*{company.industry}" />
+    <input type="text" th:field="*{industry}" />
 
     <label>설립연도</label>
-    <input type="text" class="readonly" th:field="*{company.year_found}" readonly /> 년
+    <input type="text" class="readonly" th:field="*{yearFound}" readonly /> 년
 
     <label>직원 수</label>
-    <input type="number" th:field="*{company.headcount}" /> 명
+    <input type="number" th:field="*{headcount}" /> 명
 
     <label>연 매출</label>
-    <input type="number" th:field="*{company.annual_revenue}" /> 원
+    <input type="number" th:field="*{annualRevenue}" /> 원
 
     <label>영업 이익</label>
-    <input type="number" th:field="*{company.operating_income}" /> 원
+    <input type="number" th:field="*{operatingIncome}" /> 원
 
     <label>작년 채용 공고 수</label>
-    <input type="number" th:field="*{company.jobs_last_year}" /> 개
+    <input type="number" th:field="*{jobsLastYear}" /> 개
 
     <button type="submit">수정하기</button>
 </form>
