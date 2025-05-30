@@ -44,7 +44,7 @@
                            placeholder="회사명을 입력해주세요"
                            required
                            minlength="2"
-                           maxlength="15">
+                           maxlength="30">
                     <br>
                 </div>
 
@@ -57,13 +57,12 @@
                 </div>
 
                 <!-- 3. 주소 -->
-                <div>
-                    <label>* 주소</label><br>
-                    <input type="text" name="address" required>
-                </div>
+                <label for="address">* 주소</label>
+                <input type="text" id="address" name="address" required maxlength="50">
+                <br>
 
-                <label>* 업종</label><br>
-                <input type="text" name="industry" required><br>
+                <label>* 산업군</label><br>
+                <input type="text" name="industry" required maxlength="20"><br>
 
                 <!-- 5. 추가 기업 정보 -->
                 <div>
