@@ -1,41 +1,36 @@
 package com.multi.matchingbot.job.controller;
 
-import com.multi.matchingbot.common.security.MBotUserDetails;
-import com.multi.matchingbot.job.domain.dto.ResumeBookmarkDto;
 import com.multi.matchingbot.job.service.ResumeBookmarkService;
-import com.multi.matchingbot.member.domain.dtos.ResumeDto;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.security.Principal;
 
 @RestController
-@RequestMapping("/resume-bookmarks")
-@RequiredArgsConstructor
+@RequestMapping("/api/bookmarks")
 public class ResumeBookmarkController {
 
     private final ResumeBookmarkService resumeBookmarkService;
 
-    // 즐겨찾기 토글
-    @PostMapping
-    public void toggleBookmark(@RequestBody ResumeBookmarkDto dto) {
-        resumeBookmarkService.toggleBookmark(dto.getCompanyId(), dto.getResumeId());
+    public ResumeBookmarkController(ResumeBookmarkService resumeBookmarkService) {
+        this.resumeBookmarkService = resumeBookmarkService;
     }
 
-    // 기업이 즐겨찾기한 이력서 목록 (숫자만 허용)
-    @GetMapping("/{companyId:[0-9]+}")
-    public List<ResumeDto> getBookmarks(@PathVariable Long companyId) {
-        return resumeBookmarkService.getBookmarks(companyId);
-    }
-
-    @DeleteMapping
-    public ResponseEntity<Void> deleteBookmarks(@AuthenticationPrincipal MBotUserDetails userDetails,
-                                                @RequestBody List<Long> resumeIds) {
-        Long companyId = userDetails.getId();
-        resumeBookmarkService.deleteBookmarks(companyId, resumeIds);
+    @DeleteMapping("/job/resume-bookmark/delete")
+    public ResponseEntity<?> deleteBookmark(@RequestParam Long companyId,
+                                            @RequestParam Long resumeId) {
+        resumeBookmarkService.deleteBookmark(companyId, resumeId);
         return ResponseEntity.ok().build();
     }
 
+
+    private Long getCompanyIdFromPrincipal(Principal principal) {
+        // principal.getName() → username or companyId로 가정
+        // 실제 구현에 맞게 커스터마이징 필요
+        return Long.parseLong(principal.getName());
+    }
 }
+

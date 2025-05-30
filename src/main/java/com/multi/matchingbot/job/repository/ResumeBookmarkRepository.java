@@ -1,27 +1,14 @@
 package com.multi.matchingbot.job.repository;
 
 import com.multi.matchingbot.job.domain.entity.ResumeBookmark;
-import com.multi.matchingbot.member.domain.entities.Resume;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-
+@Repository
 public interface ResumeBookmarkRepository extends JpaRepository<ResumeBookmark, Long> {
 
-    Optional<ResumeBookmark> findByCompanyIdAndResumeId(Long companyId, Long resumeId);
-
-    // N+1 쿼리 방지용 Fetch Join 추가
-    @Query("SELECT b FROM ResumeBookmark b JOIN FETCH b.resume WHERE b.company.id = :companyId")
-    List<ResumeBookmark> findWithResumeByCompanyId(@Param("companyId") Long companyId);
-
-    @Modifying
-    @Query("DELETE FROM ResumeBookmark b WHERE b.company.id = :companyId AND b.resume.id IN :resumeIds")
-    void deleteByCompanyIdAndResumeIds(@Param("companyId") Long companyId, @Param("resumeIds") List<Long> resumeIds);
-
-    List<Resume> findAllBookmarkedResumesByCompanyId(Long companyId, Pageable pageable);
+    @Transactional
+    void deleteByCompanyIdAndResumeId(Long companyId, Long resumeId);
 }
+
