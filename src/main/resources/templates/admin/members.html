@@ -33,10 +33,10 @@
                 <form method="get" th:action="@{/admin/members}" class="search-form">
                     <div class="search-options">
                         <!-- 정렬 기준 -->
-                        <select name="sortBy">
+                        <select name="sortBy" onchange="this.form.submit()">
                             <option value="" disabled>정렬 기준</option>
                             <option value="id" th:selected="${condition.sortBy == 'id'}">회원 번호</option>
-                            <option value="createdAt" th:selected="${condition.sortBy == 'createdAt'}">가입일</option>
+                            <option value="createdAt" th:selected="${condition.sortBy == 'createdAt'}">생성일</option>
                         </select>
 
                         <!-- 정렬 방향 -->
@@ -108,7 +108,7 @@
                         <a th:href="@{|/admin/members/${member.id}|}"
                            th:text="${member.email}"
                            th:attr="title=${member.email}"
-                           class="email-link">이메일</a>
+                           class="link-detail">이메일</a>
                     </td>
                     <td th:text="${member.getGenderLabel()}">성별</td>
                     <td th:text="${member.phone}">010-1234-5678</td>

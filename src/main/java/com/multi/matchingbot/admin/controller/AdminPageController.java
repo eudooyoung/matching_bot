@@ -1,19 +1,24 @@
 package com.multi.matchingbot.admin.controller;
 
+import com.multi.matchingbot.admin.domain.*;
 import com.multi.matchingbot.admin.service.AdminPageService;
-import com.multi.matchingbot.admin.domain.AdminPagedResult;
-import com.multi.matchingbot.admin.domain.AdminSearchCondition;
 import com.multi.matchingbot.common.security.MBotUserDetails;
-import com.multi.matchingbot.admin.domain.CompanyAdminView;
-import com.multi.matchingbot.admin.domain.MemberAdminView;
-import com.multi.matchingbot.admin.domain.ResumeAdminView;
+import com.multi.matchingbot.company.service.CompanyService;
+import com.multi.matchingbot.job.domain.dto.JobDto;
+import com.multi.matchingbot.job.service.JobService;
+import com.multi.matchingbot.member.domain.entities.Resume;
+import com.multi.matchingbot.member.service.MemberService;
+import com.multi.matchingbot.member.service.ResumeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Slf4j
@@ -23,6 +28,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AdminPageController {
 
     private final AdminPageService adminPageService;
+    private final JobService jobService;
+    private final CompanyService companyService;
+    private final MemberService memberService;
+    private final ResumeService resumeService;
 
     @GetMapping({"/", "/main", ""})
     public String mainPage(Model model, @AuthenticationPrincipal MBotUserDetails user) {
@@ -50,6 +59,13 @@ public class AdminPageController {
         model.addAttribute("condition", condition);
     }
 
+    //    구직자 회원 정보 임시 매핑
+    @GetMapping("/members/{memberId}")
+    public String adminMemberDetail(@PathVariable(name = "memberId") Long memberId, Model model) {
+        model.addAttribute("memberId", memberService.getMemberById(memberId));
+        return "members/profile";
+    }
+
     @GetMapping("/companies")
     public void companies(@ModelAttribute AdminSearchCondition condition, Model model) {
         log.warn("statusParam = [{}]", condition.getStatus());
@@ -59,6 +75,20 @@ public class AdminPageController {
         model.addAttribute("pageNumbers", result.getPageNumbers());
         model.addAttribute("currentPage", result.getCurrentPage());
         model.addAttribute("condition", condition);
+    }
+
+    @GetMapping("/companies/{companyId}")
+    public String adminCompanyHome(@PathVariable(name = "companyId") Long companyId, Model model) {
+        model.addAttribute("companyId", companyId);
+        Page<JobDto> jobPage = jobService.getByCompanyIdPaged(companyId, PageRequest.of(0, 20));
+        model.addAttribute("jobPage", jobPage);
+        return "company/index";
+    }
+
+    @GetMapping("companies/edit-profile/{companyId}")
+    public String adminCompanyDetail(@PathVariable(name = "companyId") Long companyId, Model model) {
+        model.addAttribute("company", companyService.findById(companyId));
+        return "company/edit-profile";
     }
 
     @GetMapping("/resumes")
@@ -72,6 +102,10 @@ public class AdminPageController {
         model.addAttribute("condition", condition);
     }
 
-
-
+    @GetMapping("/resumes/{resumeId}")
+    public String adminResumeDetail(@PathVariable(name = "resumeId") Long resumeId, Model model) {
+        Resume resume = resumeService.findById(resumeId);
+        model.addAttribute("resume", resume);
+        return "member/member-edit";
+    }
 }

@@ -1,8 +1,9 @@
 package com.multi.matchingbot.common.security;
 
+import com.multi.matchingbot.auth.TokenValidator;
 import com.multi.matchingbot.auth.TokenProvider;
 import com.multi.matchingbot.common.domain.enums.Role;
-import io.jsonwebtoken.ExpiredJwtException;
+import com.multi.matchingbot.common.error.TokenException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -28,6 +29,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final MBotUserDetailsService mBotUserDetailsService;
     private final TokenProvider tokenProvider;
+    private final TokenValidator tokenValidator;
     private final AntPathMatcher pathMatcher = new AntPathMatcher();
 
     // 필터링 제외할 요청
@@ -47,89 +49,105 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     };
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
 
         String requestURI = request.getRequestURI();
 
-        for (String exactPath : EXACT_PATHS)
-            if (requestURI.equals(exactPath)) {
-                filterChain.doFilter(request, response);
+        // 바이패스 경로 처리
+        if (shouldBypass(requestURI)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        // 어세스토큰 추출
+        String accessToken = extractToken(request, "accessToken");
+
+        if (accessToken != null && tokenValidator.validateAccessToken(accessToken)) {
+            // 어세스토큰 존재 & 유효 -> 인가 처리
+            authenticateRequest(accessToken, request);
+        } else {
+            log.warn("!!! AccessToken 만료 >>> refreshToken 추출 시작");
+            if (!handleRefreshFlow(request, response)) // re
                 return;
-            }
+        }
 
-        // 와일드카드 경로 매칭
-        for (String wildcardPath : WILDCARD_PATHS)
-            if (pathMatcher.match(wildcardPath, requestURI)) {
-                filterChain.doFilter(request, response);
-                return;
-            }
+        filterChain.doFilter(request, response);
+    }
 
-        // accessToken 재발급 로직
-        String accessToken = extractAccessToken(request);
+    private boolean shouldBypass(String uri) {
+        for (String path : EXACT_PATHS)
+            if (uri.equals(path)) return true;
 
-        if (accessToken != null) {
-            try {
-                if (tokenProvider.validateToken(accessToken)) {
-                    authenticateRequest(accessToken, request);
-                }
-            } catch (ExpiredJwtException e) {
-                log.warn("AccessToken 만료 >>> refreshToken 추출 시작");
-                String refreshToken = extractRefreshToken(request);
-                if (refreshToken != null && tokenProvider.validateToken(refreshToken)) {
-                    log.warn("refreshToken 검증 완료 >>> 새로운 accessToken 발급 시작");
-                    String email = tokenProvider.extractUsername(refreshToken);
-                    String roleStr = tokenProvider.parseClaims(refreshToken).get("role", String.class);
-                    Role role = Role.valueOf(roleStr);
+        for (String pattern : WILDCARD_PATHS)
+            if (pathMatcher.match(pattern, uri)) return true;
 
-                    UserDetails userDetails = mBotUserDetailsService.loadUserByTypeAndEmail(role, email);
-                    String newAccessToken = tokenProvider.generateAccessToken(userDetails);
-                    log.warn("새 accessToken 발급 완료");
+        return false;
+    }
 
-                    ResponseCookie accessCookie = ResponseCookie.from("accessToken", newAccessToken)
-                            .httpOnly(true)
-                            .secure(false) // !!!!배포시 true로 전환!!!!!
-                            .path("/")
-                            .maxAge(tokenProvider.getAccessTokenExpireTime())
-                            .build();
-
-                    response.addHeader("Set-Cookie", accessCookie.toString());
-
-                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                            userDetails, null, userDetails.getAuthorities()
-                    );
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                } else {
-                    log.warn("RefreshToken 만료");
-                    String roleStr = tokenProvider.parseClaims(refreshToken).get("role", String.class);
-                    Role role = Role.valueOf(roleStr);
-
-                    if (role == Role.ADMIN) {
-                        response.sendRedirect("/admin/login");
-                    } else {
-                        response.sendRedirect("/auth/login");
-                    }
-
-                    return;
-                }
+    private String extractToken(HttpServletRequest request, String tokenName) {
+        if (request.getCookies() == null) return null;
+        for (Cookie cookie : request.getCookies()) {
+            if (tokenName.equals(cookie.getName())) {
+                return cookie.getValue();
             }
         }
-        filterChain.doFilter(request, response);
+        return null;
+    }
+
+    private boolean handleRefreshFlow(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String refreshToken = extractToken(request, "refreshToken");
+        if (refreshToken == null) {
+            log.warn("RefreshToken 없음 -> 로그인 리다이렉트");
+            response.sendRedirect(request.getRequestURI().startsWith("/admin") ? "/admin/login" : "/auth/login");
+            return false;
+        }
+
+        try {
+            tokenValidator.validateRefreshToken(refreshToken);
+            log.warn("refreshToken 검증 완료 >>> 새로운 accessToken 발급 시작");
+
+            String email = tokenProvider.extractUsername(refreshToken);
+            String roleStr = tokenProvider.parseClaims(refreshToken).get("role", String.class);
+            Role role = Role.valueOf(roleStr);
+
+            UserDetails userDetails = mBotUserDetailsService.loadUserByTypeAndEmail(role, email);
+            String newAccessToken = tokenProvider.generateAccessToken(userDetails);
+            log.warn("*** 새로운 accessToken 발급 완료");
+
+            ResponseCookie accessCookie = ResponseCookie.from("accessToken", newAccessToken)
+                    .httpOnly(true)
+                    .secure(false) // !!!!배포시 true로 전환!!!!!
+                    .path("/")
+                    .maxAge(tokenProvider.getAccessTokenExpireTime())
+                    .build();
+
+            response.addHeader("Set-Cookie", accessCookie.toString());
+
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                    userDetails, null, userDetails.getAuthorities()
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            return true;
+
+        } catch (TokenException e) {
+            log.warn("RefreshToken 발급 오류! 로그인 리다이렉션");
+            String roleStr = tokenProvider.parseClaims(refreshToken).get("role", String.class);
+            Role role = Role.valueOf(roleStr);
+            response.sendRedirect(role == Role.ADMIN ? "/admin/login" : "/auth/login");
+            return false;
+
+        }
     }
 
     // 응답 인가 처리
     private void authenticateRequest(String token, HttpServletRequest request) {
         try {
-//            log.warn("인가 요청 진입");
             String email = tokenProvider.extractUsername(token);
-//            log.warn("유저 이메일 복원: {}", email);
             String roleStr = tokenProvider.parseClaims(token).get("role", String.class);
             Role role = Role.valueOf(roleStr);
-//            log.warn("유저 정보 복원 완료 email: {}, role: {}", email, role);
 
             UserDetails userDetails = mBotUserDetailsService.loadUserByTypeAndEmail(role, email);
-//            log.warn("userDetail 생성");
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     userDetails,
@@ -153,30 +171,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
     }
 
-    // 토큰 추출
-    private String extractAccessToken(HttpServletRequest request) {
-//        log.warn("토큰 추출 진입");
-        if (request.getCookies() == null) return null;
-
-        for (Cookie cookie : request.getCookies()) {
-            if ("accessToken".equals(cookie.getName())) {
-                return cookie.getValue();
-            }
-        }
-        return null;
-    }
-
-    private String extractRefreshToken(HttpServletRequest request) {
-        //        log.warn("토큰 추출 진입");
-        if (request.getCookies() == null) return null;
-
-        for (Cookie cookie : request.getCookies()) {
-            if ("refreshToken".equals(cookie.getName())) {
-                return cookie.getValue();
-            }
-        }
-        return null;
-    }
 }
 
 

@@ -126,14 +126,14 @@
     text-align: left !important;
 }
 
-/* ✅ 이메일 링크 */
-.email-link {
+/* ✅ 상세페이지 링크 */
+.link-detail {
     color: #007bff;
     text-decoration: none;
     cursor: pointer;
 }
 
-.email-link:hover {
+.link-detail:hover {
     text-decoration: underline;
 }
 

@@ -29,7 +29,7 @@
                 <form method="get" th:action="@{/admin/resumes}" class="search-form">
                     <div class="search-options">
                         <!-- 정렬 기준 -->
-                        <select name="sortBy">
+                        <select name="sortBy" onchange="this.form.submit()">
                             <option value="" disabled>정렬 기준</option>
                             <option value="id" th:selected="${condition.sortBy == 'id'}">이력서 번호</option>
                             <option value="createdAt" th:selected="${condition.sortBy == 'createdAt'}">생성일</option>
@@ -52,7 +52,8 @@
                     </div>
 
                     <div class="search-right" onchange="this.form.submit()">
-                        <input type="text" name="keyword" placeholder="이름, 이메일 검색..." th:value="${condition.keyword}"/>
+                        <input type="text" name="keyword" placeholder="이력서 번호, 이름, 이메일 검색..."
+                               th:value="${condition.keyword}"/>
                         <button type="submit" class="btn btn-search">검색</button>
                     </div>
                 </form>
@@ -97,7 +98,12 @@
                     <td><input type="checkbox" name="checkedIds" th:value="${resume.id}" class="check-row"/>
                     </td>
                     <td th:text="${resume.formattedId}">이력서 번호</td>
-                    <td class="text-left-col" th:text="${resume.title}">제목</td>
+                    <td class="text-left-col">
+                        <a th:href="@{|/admin/resumes/${resume.id}|}"
+                           th:text="${resume.title}"
+                           th:attr="title=${resume.title}"
+                           class="link-detail">이력서 제목</a>
+                    </td>
                     <td class="text-left-col" th:text="${resume.skillKeywords}">역량 키워드</td>
                     <td class="text-left-col" th:text="${resume.talentKeywords}">인재상 키워드</td>
                     <td class="text-left-col" th:text="${resume.desiredOccupation}">희망 직무</td>

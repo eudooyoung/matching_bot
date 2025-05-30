@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 @Service
 public class CompanyService {
 
-    // private final, @RequiredArg로 의존성 주입 방식
 
     @Autowired
     private CompanyRepository companyRepository;

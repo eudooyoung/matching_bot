@@ -1,8 +1,10 @@
 package com.multi.matchingbot.auth;
 
-import com.multi.matchingbot.common.error.TokenException;
 import com.multi.matchingbot.common.security.MBotUserDetails;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +28,7 @@ public class TokenProvider {
     @Value("${jwt.issuer}")
     private String issuer;
 
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000L * 60 * 60 * 24;
+    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000L * 15;
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000L * 60 * 60 * 24 * 14;
 
 
@@ -63,7 +65,7 @@ public class TokenProvider {
                 .compact();
     }
 
-    private Key getSigningKey() {
+    public Key getSigningKey() {
         byte[] keyBytes = Base64.getDecoder().decode(secretKey);                        // JWT키 디코드
         return Keys.hmacShaKeyFor(keyBytes);
     }
@@ -88,36 +90,6 @@ public class TokenProvider {
     public Long extractUserId(String token) {
         Claims claims = parseClaims(token);
         return claims.get("userId", Long.class);
-    }
-
-    public boolean validateToken(String token) {
-        try {
-            log.info("[TokenProvider] 유효성 검증 중인 토큰: {}", token);
-            // 토큰을 비밀 키 와함께 복호화를 진행 해서 유효하지 않으면 false 반환, 유효하면 true 반환
-            Jwts.parserBuilder()
-                    .setSigningKey(getSigningKey())
-                    .build()
-                    .parseClaimsJws(token);
-
-            log.info("[TokenProvider] JWT 토큰이 유효합니다.");
-            return true;
-
-        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            log.error("[TokenProvider] 잘못된 JWT 서명입니다. 토큰: {}", token, e);
-            throw new TokenException("잘못된 JWT 서명입니다.");
-
-        } catch (ExpiredJwtException e) {
-            log.warn("[TokenProvider] 만료된 JWT 토큰입니다. 토큰: {}, 만료 시각: {}", token, e.getClaims().getExpiration(), e);
-            throw new TokenException("만료된 JWT 토큰입니다.");
-
-        } catch (UnsupportedJwtException e) {
-            log.error("[TokenProvider] 지원되지 않는 JWT 토큰입니다. 토큰: {}", token, e);
-            throw new TokenException("지원되지 않는 JWT 토큰입니다.");
-
-        } catch (IllegalArgumentException e) {
-            log.error("[TokenProvider] JWT 토큰이 잘못되었습니다. 토큰: {}", token, e);
-            throw new TokenException("JWT 토큰이 잘못되었습니다.");
-        }
     }
 
     public long getAccessTokenExpireTime() {
