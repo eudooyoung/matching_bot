@@ -3,8 +3,8 @@ package com.multi.matchingbot.job.controller;
 import com.multi.matchingbot.common.security.MBotUserDetails;
 import com.multi.matchingbot.job.domain.dto.JobDto;
 import com.multi.matchingbot.job.service.JobService;
+import com.multi.matchingbot.job.service.ResumeBookmarkService;
 import com.multi.matchingbot.member.domain.dtos.ResumeDto;
-import com.multi.matchingbot.member.service.ResumeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,12 +24,12 @@ import org.springframework.web.bind.annotation.*;
 public class JobController {
 
     private final JobService jobService;
-    private final ResumeService resumeService;
+    private final ResumeBookmarkService resumeBookmarkService;
 
     @Autowired
-    public JobController(JobService jobService, ResumeService resumeService) {
+    public JobController(JobService jobService, ResumeBookmarkService resumeBookmarkService) {
         this.jobService = jobService;
-        this.resumeService = resumeService;
+        this.resumeBookmarkService = resumeBookmarkService;
     }
 
     // 공고 목록
@@ -104,20 +104,15 @@ public class JobController {
     }
 
     // 관심 이력서 관리(id 포함)
-//    @GetMapping("/resume-bookmark")
-//    public String getBookmarkedResumes(Model model, @AuthenticationPrincipal MBotUserDetails mBotUserDetails) {
-//        Long companyId = mBotUserDetails.getCompanyId();
-//        Page<Resume> resumePage = resumeBookmarkService.getBookmarkedResumes(companyId, PageRequest.of(0, 10));
-//        model.addAttribute("resumePage", resumePage); // ✅ 이게 꼭 있어야 함
-//        return "job/resume-bookmark";
-//    }
-
-    // 관심 이력서 관리
     @GetMapping("/resume-bookmark")
-    public String showResumeBookmarkPage(Model model,
+    public String showResumeBookmarkPage(@AuthenticationPrincipal MBotUserDetails userDetails, Model model,
                                          @PageableDefault(size = 10) Pageable pageable) {
-        Page<ResumeDto> resumePage = resumeService.getAllResumes(pageable);
+        Long companyId = userDetails.getCompanyId();
+        model.addAttribute("companyId", companyId);
+
+        Page<ResumeDto> resumePage = resumeBookmarkService.getBookmarkedResumes(companyId, pageable); // ✅ 변경된 쿼리
         model.addAttribute("resumePage", resumePage);
+
         return "job/resume-bookmark";
     }
 }

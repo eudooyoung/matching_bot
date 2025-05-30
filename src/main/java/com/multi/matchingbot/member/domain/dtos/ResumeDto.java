@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Data
 public class ResumeDto {
 
     private Long id;                    // 이력서 ID
@@ -21,4 +22,11 @@ public class ResumeDto {
     private LocalDateTime createdAt;   // 작성일
     private String memberName;         // 작성자 이름 (member 테이블 join 필요)
     private boolean bookmarked;        // 관심 이력서 여부 (join or 별도 체크)
+
+    public ResumeDto(Long id, String title, LocalDateTime createdAt, String memberName) {
+        this.id = id;
+        this.title = title;
+        this.createdAt = createdAt;
+        this.memberName = memberName;
+    }
 }
