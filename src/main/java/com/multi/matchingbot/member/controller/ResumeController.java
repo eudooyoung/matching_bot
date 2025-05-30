@@ -47,7 +47,7 @@ public class ResumeController {
     public String view(@PathVariable Long id, Model model) {
         Resume resume = resumeService.findById(id);
         model.addAttribute("resume", resume);
-        return "member/view"; // 향후 추가
+        return "member/member-view"; // 향후 추가
     }
 
     // 수정 폼
@@ -55,7 +55,7 @@ public class ResumeController {
     public String editForm(@PathVariable Long id, Model model) {
         Resume resume = resumeService.findById(id);
         model.addAttribute("resume", resume);
-        return "member/edit"; // 향후 추가
+        return "member/member-edit"; // 향후 추가
     }
 
     // 단일 삭제
