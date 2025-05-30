@@ -5,7 +5,7 @@
     <title>MatchingBot</title>
     <link rel="stylesheet" th:href="@{/css/layout.css}"/>
     <link rel="stylesheet" th:href="@{/css/admin-boards.css}"/>
-    <script src="../../static/js/admin/delete.js"></script>
+    <script src="../../static/js/admin/hardDeleteItem.js"></script>
 </head>
 <body>
 
@@ -21,10 +21,10 @@
                 <!-- 일괄 버튼 -->
                 <div class="bulk-actions">
                     <button type="button" class="btn btn-delete"
-                            onclick="setBulkAction('DELETE', '/api/v1/admin/bulk/members')">삭제
+                            onclick="bulkSoftAction('DELETE', '/api/v1/admin/bulk/members')">삭제
                     </button>
                     <button type="button" class="btn btn-restore"
-                            onclick="setBulkAction('RESTORE', '/api/v1/admin/bulk/members')">복구
+                            onclick="bulkSoftAction('PATCH', '/api/v1/admin/bulk/members')">복구
                     </button>
                 </div>
 
@@ -163,9 +163,9 @@
 
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>
-<script th:src="@{/js/fetchWithAuth.js}"></script>
-<script th:src="@{/js/admin/deactivate.js}"></script>
-<script th:src="@{/js/admin/reactivate.js}"></script>
-<script th:src="@{/js/admin/bulkAction.js}"></script>
+<script th:src="@{/js/auth/fetchWithAuth.js}"></script>
+<script th:src="@{/js/admin/softDeleteItem.js}"></script>
+<script th:src="@{/js/admin/restoreItem.js}"></script>
+<script th:src="@{/js/admin/bulksSoftAction.js}"></script>
 </body>
 </html>

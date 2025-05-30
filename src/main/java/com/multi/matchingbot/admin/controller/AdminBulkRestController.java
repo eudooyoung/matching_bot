@@ -1,13 +1,15 @@
 package com.multi.matchingbot.admin.controller;
 
+import com.multi.matchingbot.admin.domain.BulkRequestDto;
+import com.multi.matchingbot.admin.domain.BulkResponseDto;
 import com.multi.matchingbot.admin.service.CompanyAdminService;
 import com.multi.matchingbot.admin.service.MemberAdminService;
 import com.multi.matchingbot.admin.service.ResumeAdminService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/admin/bulk")
@@ -19,33 +21,33 @@ public class AdminBulkRestController {
     private final ResumeAdminService resumeAdminService;
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("members")
-    public String bulkActionMember(@RequestParam(name = "checkedIds") List<Long> checkedIds,
-                                   @RequestParam(name = "actionType") String actionType) {
-        if ("DELETE".equals(actionType)) {
-            memberAdminService.deactivateBulk(checkedIds);
-        } else if ("RESTORE".equals(actionType)) {
-            memberAdminService.reactivateBulk(checkedIds);
-        }
-        return "redirect:/admin/members";
+    @DeleteMapping("members")
+    public ResponseEntity<BulkResponseDto> deactivateMembers(@RequestBody BulkRequestDto requestDto) {
+        return ResponseEntity.ok(memberAdminService.deactivateBulk(requestDto.getIds()));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("companies")
-    public String bulkActionCompany(@RequestParam(name = "checkedIds") List<Long> checkedIds,
-                                    @RequestParam(name = "actionType") String actionType) {
-        if ("DELETE".equals(actionType)) {
-            companyAdminService.deactivateBulk(checkedIds);
-        } else if ("RESTORE".equals(actionType)) {
-            companyAdminService.reactivateBulk(checkedIds);
-        }
-        return "redirect:/admin/companies";
+    @PatchMapping("members")
+    public ResponseEntity<BulkResponseDto> restoreMembers(@RequestBody BulkRequestDto requestDto) {
+        return ResponseEntity.ok(memberAdminService.reactivateBulk(requestDto.getIds()));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("companies")
+    public ResponseEntity<BulkResponseDto> deactivateCompanies(@RequestBody BulkRequestDto requestDto) {
+        return ResponseEntity.ok(companyAdminService.deactivateBulk(requestDto.getIds()));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping("companies")
+    public ResponseEntity<BulkResponseDto> restoreCompanies(@RequestBody BulkRequestDto requestDto) {
+        return ResponseEntity.ok(companyAdminService.reactivateBulk(requestDto.getIds()));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("resumes")
-    public String bulkDeleteResumeHard(@RequestParam(name = "checkedIds") List<Long> checkedIds) {
-        resumeAdminService.deleteBulkHard(checkedIds);
-        return "redirect:/admin/resumes";
+    public ResponseEntity<BulkResponseDto> hardDeleteResumes(@RequestBody @Valid BulkRequestDto requestDto) {
+        return ResponseEntity.ok(resumeAdminService.bulkHardDelete(requestDto.getIds()));
     }
+
 }

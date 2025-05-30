@@ -1,8 +1,8 @@
 package com.multi.matchingbot.admin.controller;
 
 import com.multi.matchingbot.admin.service.AdminPageService;
-import com.multi.matchingbot.common.domain.dto.PagedResult;
-import com.multi.matchingbot.common.domain.dto.SearchCondition;
+import com.multi.matchingbot.admin.domain.AdminPagedResult;
+import com.multi.matchingbot.admin.domain.AdminSearchCondition;
 import com.multi.matchingbot.common.security.MBotUserDetails;
 import com.multi.matchingbot.admin.domain.CompanyAdminView;
 import com.multi.matchingbot.admin.domain.MemberAdminView;
@@ -41,8 +41,8 @@ public class AdminPageController {
     }
 
     @GetMapping("/members")
-    public void members(@ModelAttribute SearchCondition condition, Model model) {
-        PagedResult<MemberAdminView> result = adminPageService.members(condition);
+    public void members(@ModelAttribute AdminSearchCondition condition, Model model) {
+        AdminPagedResult<MemberAdminView> result = adminPageService.members(condition);
         model.addAttribute("members", result.getPage().getContent());
         model.addAttribute("page", result.getPage());
         model.addAttribute("pageNumbers", result.getPageNumbers());
@@ -51,9 +51,9 @@ public class AdminPageController {
     }
 
     @GetMapping("/companies")
-    public void companies(@ModelAttribute SearchCondition condition, Model model) {
+    public void companies(@ModelAttribute AdminSearchCondition condition, Model model) {
         log.warn("statusParam = [{}]", condition.getStatus());
-        PagedResult<CompanyAdminView> result = adminPageService.companies(condition);
+        AdminPagedResult<CompanyAdminView> result = adminPageService.companies(condition);
         model.addAttribute("companies", result.getPage().getContent());
         model.addAttribute("page", result.getPage());
         model.addAttribute("pageNumbers", result.getPageNumbers());
@@ -62,9 +62,9 @@ public class AdminPageController {
     }
 
     @GetMapping("/resumes")
-    public void resumes(@ModelAttribute SearchCondition condition, Model model) {
+    public void resumes(@ModelAttribute AdminSearchCondition condition, Model model) {
         log.warn("statusParam = [{}]", condition.getKeywordsStatus());
-        PagedResult<ResumeAdminView> result = adminPageService.resumes(condition);
+        AdminPagedResult<ResumeAdminView> result = adminPageService.resumes(condition);
         model.addAttribute("resumes", result.getPage().getContent());
         model.addAttribute("page", result.getPage());
         model.addAttribute("pageNumbers", result.getPageNumbers());

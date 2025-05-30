@@ -2,7 +2,7 @@ package com.multi.matchingbot.common.security;
 
 import com.multi.matchingbot.auth.TokenProvider;
 import com.multi.matchingbot.common.domain.enums.Role;
-import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -10,10 +10,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -21,8 +20,6 @@ import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -56,30 +53,68 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String requestURI = request.getRequestURI();
 
-        for (String exactPath : EXACT_PATHS) {
+        for (String exactPath : EXACT_PATHS)
             if (requestURI.equals(exactPath)) {
                 filterChain.doFilter(request, response);
-//                log.info("[JwtFilter] 요청 URI가 제외 경로에 해당하여 필터를 건너뜁니다.");
-
                 return;
             }
-        }
 
         // 와일드카드 경로 매칭
-        for (String wildcardPath : WILDCARD_PATHS) {
+        for (String wildcardPath : WILDCARD_PATHS)
             if (pathMatcher.match(wildcardPath, requestURI)) {
-//                log.info("[JwtFilter] 요청 URI가 와일드카드 제외 경로에 해당 → {}", wildcardPath);
                 filterChain.doFilter(request, response);
                 return;
             }
+
+        // accessToken 재발급 로직
+        String accessToken = extractAccessToken(request);
+
+        if (accessToken != null) {
+            try {
+                if (tokenProvider.validateToken(accessToken)) {
+                    authenticateRequest(accessToken, request);
+                }
+            } catch (ExpiredJwtException e) {
+                log.warn("AccessToken 만료 >>> refreshToken 추출 시작");
+                String refreshToken = extractRefreshToken(request);
+                if (refreshToken != null && tokenProvider.validateToken(refreshToken)) {
+                    log.warn("refreshToken 검증 완료 >>> 새로운 accessToken 발급 시작");
+                    String email = tokenProvider.extractUsername(refreshToken);
+                    String roleStr = tokenProvider.parseClaims(refreshToken).get("role", String.class);
+                    Role role = Role.valueOf(roleStr);
+
+                    UserDetails userDetails = mBotUserDetailsService.loadUserByTypeAndEmail(role, email);
+                    String newAccessToken = tokenProvider.generateAccessToken(userDetails);
+                    log.warn("새 accessToken 발급 완료");
+
+                    ResponseCookie accessCookie = ResponseCookie.from("accessToken", newAccessToken)
+                            .httpOnly(true)
+                            .secure(false) // !!!!배포시 true로 전환!!!!!
+                            .path("/")
+                            .maxAge(tokenProvider.getAccessTokenExpireTime())
+                            .build();
+
+                    response.addHeader("Set-Cookie", accessCookie.toString());
+
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                            userDetails, null, userDetails.getAuthorities()
+                    );
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                } else {
+                    log.warn("RefreshToken 만료");
+                    String roleStr = tokenProvider.parseClaims(refreshToken).get("role", String.class);
+                    Role role = Role.valueOf(roleStr);
+
+                    if (role == Role.ADMIN) {
+                        response.sendRedirect("/admin/login");
+                    } else {
+                        response.sendRedirect("/auth/login");
+                    }
+
+                    return;
+                }
+            }
         }
-
-        String token = extractToken(request);
-
-        if (token != null && tokenProvider.validateToken(token)) {
-            authenticateRequest(token, request);
-        }
-
         filterChain.doFilter(request, response);
     }
 
@@ -118,27 +153,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
     }
 
-    // 권한 추출
-    private List<GrantedAuthority> extractAuthoritiesFromToken(String token) {
-        Claims claims = tokenProvider.parseClaims(token);
-
-        List<?> rawRoles = claims.get("auth", List.class);
-        List<String> roles = rawRoles.stream()
-                .map(Object::toString)
-                .toList();
-
-        return roles.stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
-    }
-
     // 토큰 추출
-    private String extractToken(HttpServletRequest request) {
+    private String extractAccessToken(HttpServletRequest request) {
 //        log.warn("토큰 추출 진입");
         if (request.getCookies() == null) return null;
 
         for (Cookie cookie : request.getCookies()) {
             if ("accessToken".equals(cookie.getName())) {
+                return cookie.getValue();
+            }
+        }
+        return null;
+    }
+
+    private String extractRefreshToken(HttpServletRequest request) {
+        //        log.warn("토큰 추출 진입");
+        if (request.getCookies() == null) return null;
+
+        for (Cookie cookie : request.getCookies()) {
+            if ("refreshToken".equals(cookie.getName())) {
                 return cookie.getValue();
             }
         }

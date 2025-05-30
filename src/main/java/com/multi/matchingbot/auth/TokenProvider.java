@@ -6,7 +6,6 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -50,10 +49,6 @@ public class TokenProvider {
         claims.put("userId", mBotUserDetails.getId());
         claims.put("email", mBotUserDetails.getEmail());
 
-//        화면 출력 확인
-        claims.put("auth", userDetails.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .toList());
 
         log.warn("클레임 설정 완료: role={}, userId={}, userAuth={}",
                 mBotUserDetails.getRole(), mBotUserDetails.getId(), mBotUserDetails.getAuthorities());
@@ -70,7 +65,6 @@ public class TokenProvider {
 
     private Key getSigningKey() {
         byte[] keyBytes = Base64.getDecoder().decode(secretKey);                        // JWT키 디코드
-//        log.warn("secretKey 길이 (bytes): {}", keyBytes.length);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
@@ -83,7 +77,6 @@ public class TokenProvider {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (ExpiredJwtException e) {           // 만료되어도 정보를 꺼내서 던짐
-//            log.warn("토큰 만료");
             return e.getClaims();
         }
     }

@@ -1,6 +1,5 @@
-function setBulkDelete(url) {
-    const selected = Array.from(document.querySelectorAll(".check-row:checked"))
-        .map(cb => cb.value);
+async function bulkHardDelete(url) {
+    const selected = Array.from(document.querySelectorAll(".check-row:checked")).map(cb => cb.value);
 
     if (selected.length === 0) {
         alert("삭제할 항목을 선택하세요.");
@@ -9,24 +8,22 @@ function setBulkDelete(url) {
 
     if (!confirm("선택한 항목들을 완전히 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.")) return;
 
-    selected.forEach(async (id) => {
-        try {
-            const response = await fetchWithAuth(`${url}/${id}`, {
-                method: "DELETE",
-                credentials: "include"
-            });
+    try {
+        const response = await fetchWithAuth(url, {
+            method: "DELETE",
+            body: JSON.stringify({ ids: selected })
+        });
 
-            if (!response.ok) {
-                const errMsg = await response.text();
-                alert(`삭제 실패 (ID: ${id}): ${errMsg}`);
-            }
-        } catch (err) {
-            alert(`네트워크 오류로 ID ${id} 삭제 실패`);
-            console.error(err);
+        if (!response.ok) {
+            const errMsg = await response.text();
+            alert(`삭제 실패: ${errMsg}`);
         }
-    });
+    } catch (err) {
+        alert("네트워크 오류로 삭제 실패");
+        console.error(err);
+    }
 
-    setTimeout(() => location.reload(), 1000); // 삭제 후 새로고침
+    location.reload();
 }
 
 document.addEventListener("DOMContentLoaded", () => {

@@ -17,15 +17,17 @@
 
             <!-- 검색창 -->
             <div class="search-bar-wrapper">
+                <div class="bulk-actions">
+                    <button type="button" class="btn btn-delete"
+                            onclick="bulkHardDelete('/api/v1/admin/bulk/resumes')">삭제
+                    </button>
+                    <button type="button" class="btn btn-extract"
+                            onclick="bulkExtract('/admin/bulk/placeholder')">추출
+                    </button>
+                </div>
+
                 <form method="get" th:action="@{/admin/resumes}" class="search-form">
                     <div class="search-options">
-                        <button type="button" class="btn btn-delete"
-                                onclick="setBulkDelete('DELETE', '/admin/bulk/resumes')">삭제
-                        </button>
-                        <button type="button" class="btn btn-extract"
-                                onclick="setBulkExtract('EXTRACT', '/admin/bulk/placeholder')">추출
-                        </button>
-
                         <!-- 정렬 기준 -->
                         <select name="sortBy">
                             <option value="" disabled>정렬 기준</option>
@@ -40,7 +42,6 @@
                             <option value="ASC" th:selected="${condition.direction == 'ASC'}">오름차순</option>
                         </select>
 
-
                         <!-- 상태 -->
                         <select name="keywordsStatus" onchange="this.form.submit()">
                             <option value="" disabled>추출 상태</option>
@@ -48,7 +49,6 @@
                             <option value="Y" th:selected="${condition.keywordsStatus == 'Y'}">완료</option>
                             <option value="N" th:selected="${condition.keywordsStatus == 'N'}">미완료</option>
                         </select>
-
                     </div>
 
                     <div class="search-right" onchange="this.form.submit()">
@@ -145,10 +145,10 @@
     <!-- Footer Fragment -->
     <div th:replace="~{fragments/footer :: footer}"></div>
 </div>
-<script th:src="@{/js/fetchWithAuth.js}"></script>
+<script th:src="@{/js/auth/fetchWithAuth.js}"></script>
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>
-<script th:src="@{/js/admin/delete.js}"></script>
-<script th:src="@{/js/admin/bulkDelete.js}"></script>
+<script th:src="@{/js/admin/hardDeleteItem.js}"></script>
+<script th:src="@{/js/admin/bulkHardDelete.js}"></script>
 </body>
 </html>
