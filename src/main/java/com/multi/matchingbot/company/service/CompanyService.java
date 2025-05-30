@@ -17,11 +17,6 @@ public class CompanyService {
 
     @Autowired
     private CompanyRepository companyRepository;
-    private final CompanyMapper companyMapper;
-
-    public CompanyService(CompanyMapper companyMapper) {
-        this.companyMapper = companyMapper;
-    }
 
     public CompanyUpdateDto getCompanyById(Long id) {
         Company company = companyRepository.findById(id)
@@ -51,7 +46,7 @@ public class CompanyService {
     public CompanyUpdateDto findById(Long companyId) {
         Company company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 회사입니다."));
-        return companyMapper.toUpdateDto(company);
+        return CompanyMapper.toUpdateDto(company);
     }
 
     public void update(CompanyUpdateDto dto, Long companyId) {

@@ -1,9 +1,12 @@
 package com.multi.matchingbot.member.service;
 
+import com.multi.matchingbot.member.domain.dtos.ResumeDto;
 import com.multi.matchingbot.member.domain.entities.Resume;
 import com.multi.matchingbot.member.repository.ResumeRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,6 +32,26 @@ public class ResumeService {
 
     public List<Resume> findByMemberId(Long memberId) {
         return resumeRepository.findByMemberId(memberId);
+    }
+
+    public Page<ResumeDto> getAllResumes(Pageable pageable) {
+        return resumeRepository.findAll(pageable)
+                .map(this::toDto);
+    }
+
+    private ResumeDto toDto(Resume resume) {
+        return ResumeDto.builder()
+                .id(resume.getId())
+                .title(resume.getTitle())
+                .skillAnswer(resume.getSkillAnswer())
+                .traitAnswer(resume.getTraitAnswer())
+                .skillKeywords(resume.getSkillKeywords())
+                .talentKeywords(resume.getTalentKeywords())
+                .keywordsStatus(resume.getKeywordsStatus().name())
+                .createdAt(resume.getCreatedAt())
+                .memberName(resume.getMember().getName())  // join 필요
+                .bookmarked(false) // 모든 이력서 → 관심 여부는 false
+                .build();
     }
 
     public void updateResume(Long id, Resume updatedResume) {
