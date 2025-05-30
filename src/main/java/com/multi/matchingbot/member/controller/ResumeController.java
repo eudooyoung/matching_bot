@@ -44,7 +44,7 @@ public class ResumeController {
 
     @GetMapping("/view/{id}")
     public String view(@PathVariable("id") Long id, Model model) {
-        Resume resume = resumeService.findById(id);
+        Resume resume = resumeService.findByIdWithOccupation(id);
         model.addAttribute("resume", resume);
         return "member/member-view";
     }

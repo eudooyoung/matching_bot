@@ -42,11 +42,11 @@
                        placeholder="이름을 입력해주세요"
                        required
                        minlength="2"
-                       maxlength="4">
+                       maxlength="10">
                 <br>
 
                 <label for="address">* 주소</label>
-                <input type="text" id="address" name="address" required>
+                <input type="text" id="address" name="address" required maxlength="50">
                 <br>
 
                 <!-- 생년월일 / 성별 -->
@@ -78,9 +78,9 @@
 
                 <label for="phone">* 휴대전화번호</label>
                 <div class="phone-input">
-                    <input type="text" id="phone" name="phone1" maxlength="3" placeholder="010" required>
-                    <input type="text" name="phone2" maxlength="4" placeholder="0000" required>
-                    <input type="text" name="phone3" maxlength="4" placeholder="0000" required>
+                    <input type="text" name="phone1" maxlength="3" pattern="\d{3}" title="숫자 3자리를 입력하세요" required>
+                    <input type="text" name="phone2" maxlength="4" pattern="\d{3,4}" title="숫자 3~4자리를 입력하세요" required>
+                    <input type="text" name="phone3" maxlength="4" pattern="\d{4}" title="숫자 4자리를 입력하세요" required>
                 </div>
 
                 <label class="agreement-title">* 약관동의</label>
