@@ -53,4 +53,13 @@ public class ResumeService {
                 .bookmarked(false) // 모든 이력서 → 관심 여부는 false
                 .build();
     }
+
+    public void updateResume(Long id, Resume updatedResume) {
+        Resume resume = findById(id);
+        resume.setTitle(updatedResume.getTitle());
+        resume.setSkillAnswer(updatedResume.getSkillAnswer());
+        resume.setTraitAnswer(updatedResume.getTraitAnswer());
+        resumeRepository.save(resume);
+    }
+
 }

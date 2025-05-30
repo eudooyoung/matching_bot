@@ -1,6 +1,7 @@
-package com.multi.matchingbot.auth.reset;
+package com.multi.matchingbot.auth.controller;
 
-import com.multi.matchingbot.auth.reset.dto.ResetPasswordDto;
+import com.multi.matchingbot.auth.domain.dto.ResetPasswordDto;
+import com.multi.matchingbot.auth.service.ResetPasswordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

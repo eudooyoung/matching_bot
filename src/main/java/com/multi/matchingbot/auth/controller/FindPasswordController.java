@@ -1,7 +1,8 @@
-package com.multi.matchingbot.auth.find;
+package com.multi.matchingbot.auth.controller;
 
-import com.multi.matchingbot.auth.find.dto.FindCompanyPasswordDto;
-import com.multi.matchingbot.auth.find.dto.FindUserPasswordDto;
+import com.multi.matchingbot.auth.domain.dto.FindCompanyPasswordDto;
+import com.multi.matchingbot.auth.domain.dto.FindUserPasswordDto;
+import com.multi.matchingbot.auth.service.FindPasswordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
