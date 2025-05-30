@@ -42,30 +42,32 @@ public class ResumeController {
         return "member/member-resume-list";
     }
 
-    // 상세 보기
     @GetMapping("/view/{id}")
-    public String view(@PathVariable Long id, Model model) {
+    public String view(@PathVariable("id") Long id, Model model) {
         Resume resume = resumeService.findById(id);
         model.addAttribute("resume", resume);
-        return "member/member-view"; // 향후 추가
+        return "member/member-view";
     }
 
-    // 수정 폼
     @GetMapping("/edit/{id}")
-    public String editForm(@PathVariable Long id, Model model) {
+    public String editForm(@PathVariable("id") Long id, Model model) {
         Resume resume = resumeService.findById(id);
         model.addAttribute("resume", resume);
-        return "member/member-edit"; // 향후 추가
+        return "member/member-edit";
     }
 
-    // 단일 삭제
+    @PostMapping("/edit/{id}")
+    public String update(@PathVariable("id") Long id, @ModelAttribute Resume resume) {
+        resumeService.updateResume(id, resume);
+        return "redirect:/member/view/" + id;
+    }
+
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable Long id) {
+    public String delete(@PathVariable("id") Long id) {
         resumeAdminService.deleteHard(id);
         return "redirect:/member";
     }
 
-    // 선택 삭제
     @PostMapping("/delete-bulk")
     public String deleteBulk(@RequestParam(required = false, name = "checkedIds") List<Long> ids) {
         if (ids != null && !ids.isEmpty()) {
