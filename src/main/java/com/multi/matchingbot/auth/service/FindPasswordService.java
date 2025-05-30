@@ -1,8 +1,8 @@
-package com.multi.matchingbot.auth.find;
+package com.multi.matchingbot.auth.service;
 
 import com.multi.matchingbot.company.repository.AuthCompanyRepository;
-import com.multi.matchingbot.auth.find.dto.FindCompanyPasswordDto;
-import com.multi.matchingbot.auth.find.dto.FindUserPasswordDto;
+import com.multi.matchingbot.auth.domain.dto.FindCompanyPasswordDto;
+import com.multi.matchingbot.auth.domain.dto.FindUserPasswordDto;
 import com.multi.matchingbot.member.domain.entities.Member;
 import com.multi.matchingbot.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;

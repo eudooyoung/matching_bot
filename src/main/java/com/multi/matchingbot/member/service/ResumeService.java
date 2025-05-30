@@ -30,4 +30,13 @@ public class ResumeService {
     public List<Resume> findByMemberId(Long memberId) {
         return resumeRepository.findByMemberId(memberId);
     }
+
+    public void updateResume(Long id, Resume updatedResume) {
+        Resume resume = findById(id);
+        resume.setTitle(updatedResume.getTitle());
+        resume.setSkillAnswer(updatedResume.getSkillAnswer());
+        resume.setTraitAnswer(updatedResume.getTraitAnswer());
+        resumeRepository.save(resume);
+    }
+
 }
