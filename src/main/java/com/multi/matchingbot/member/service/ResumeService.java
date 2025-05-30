@@ -27,4 +27,7 @@ public class ResumeService {
         resumeRepository.deleteAllById(ids);
     }
 
+    public List<Resume> findByMemberId(Long memberId) {
+        return resumeRepository.findByMemberId(memberId);
+    }
 }
