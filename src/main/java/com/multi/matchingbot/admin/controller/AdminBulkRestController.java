@@ -28,19 +28,19 @@ public class AdminBulkRestController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("members")
-    public ResponseEntity<BulkResponseDto> restoreMembers(@RequestBody BulkRequestDto requestDto) {
+    public ResponseEntity<BulkResponseDto> restoreMembers(@RequestBody @Valid BulkRequestDto requestDto) {
         return ResponseEntity.ok(memberAdminService.reactivateBulk(requestDto.getIds()));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("companies")
-    public ResponseEntity<BulkResponseDto> deactivateCompanies(@RequestBody BulkRequestDto requestDto) {
+    public ResponseEntity<BulkResponseDto> deactivateCompanies(@RequestBody @Valid BulkRequestDto requestDto) {
         return ResponseEntity.ok(companyAdminService.deactivateBulk(requestDto.getIds()));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("companies")
-    public ResponseEntity<BulkResponseDto> restoreCompanies(@RequestBody BulkRequestDto requestDto) {
+    public ResponseEntity<BulkResponseDto> restoreCompanies(@RequestBody @Valid BulkRequestDto requestDto) {
         return ResponseEntity.ok(companyAdminService.reactivateBulk(requestDto.getIds()));
     }
 
