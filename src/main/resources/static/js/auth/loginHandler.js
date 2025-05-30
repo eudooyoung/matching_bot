@@ -2,9 +2,13 @@ function isLoginPage(url) {
     return url.includes("/admin/login") || url.includes("/auth/login");
 }
 
+function isRegisterPage(url) {
+    return url.includes("/auth/register") || url.includes("/auth/register-company");
+}
+
 function storePreviousUrl() {
     const previousUrl = document.referrer;
-    if (previousUrl && !isLoginPage(previousUrl)) {
+    if (previousUrl && !isLoginPage(previousUrl) && !isRegisterPage(previousUrl)) {
         sessionStorage.setItem("beforeLoginUrl", previousUrl);
     }
 }
@@ -19,7 +23,7 @@ async function handleLogin(emailId, passwordId, errorMsgId, role) {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ email, password, role })
+            body: JSON.stringify({email, password, role})
         });
 
         if (response.ok) {
