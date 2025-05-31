@@ -7,13 +7,13 @@ import lombok.Data;
 @Builder
 public class ContentStatsDto {
     // member
-    private int memberToday, memberWeek, memberMonth;
+    private int memberToday, memberWeek, memberMonth, memberTotal;
     // company
-    private int companyToday, companyWeek, companyMonth;
+    private int companyToday, companyWeek, companyMonth, companyTotal;
     // resume
-    private int resumeToday, resumeWeek, resumeMonth;
+    private int resumeToday, resumeWeek, resumeMonth, resumeTotal;
     // job
-    private int jobToday, jobWeek, jobMonth;
+    private int jobToday, jobWeek, jobMonth, jobTotal;
     // communityPost
-    private int communityPostToday, communityPostWeek, communityPostMonth;
+    private int communityPostToday, communityPostWeek, communityPostMonth, communityPostTotal;
 }

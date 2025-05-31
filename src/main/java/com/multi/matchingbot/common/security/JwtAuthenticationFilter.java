@@ -45,7 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             "/css/**",
             "/images/**",
             "/.well-known/**",
-            "/error/**"
+//            "/error/**"
     };
 
     @Override

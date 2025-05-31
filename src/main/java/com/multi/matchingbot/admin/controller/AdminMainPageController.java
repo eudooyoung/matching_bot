@@ -1,5 +1,6 @@
 package com.multi.matchingbot.admin.controller;
 
+import com.multi.matchingbot.admin.domain.ContentStatsDto;
 import com.multi.matchingbot.admin.service.AdminMainService;
 import com.multi.matchingbot.common.security.MBotUserDetails;
 import lombok.RequiredArgsConstructor;
@@ -12,12 +13,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/admin")
-public class AdminMainController {
+public class AdminMainPageController {
 
     private final AdminMainService adminMainService;
 
@@ -32,28 +34,30 @@ public class AdminMainController {
             log.info("비회원 접근");
         }
 
-        // 전체 수
-        model.addAttribute("memberCount", adminMainService.countActiveMembers());
-        model.addAttribute("companyCount", adminMainService.countActiveCompanies());
-        model.addAttribute("resumeCount", adminMainService.countResumes());
-        model.addAttribute("jobCount", adminMainService.countJobs());
-        model.addAttribute("communityPostCount", adminMainService.countCommunityPosts());
+        //스탯dto
+        ContentStatsDto statsDto = adminMainService.getContentStats();
 
         // 테이블별 현황
-        model.addAttribute("contentStats", adminMainService.getContentStats());
+        model.addAttribute("contentStats", statsDto);
 
         // 그래프 데이터
+        Map<String, List<Integer>> userTypeDataByPeriod = Map.of(
+                "today", List.of(statsDto.getMemberToday(), statsDto.getCompanyToday()),
+                "week", List.of(statsDto.getMemberWeek(), statsDto.getCompanyWeek()),
+                "month", List.of(statsDto.getMemberMonth(), statsDto.getCompanyMonth()),
+                "total", List.of(statsDto.getMemberTotal(), statsDto.getCompanyTotal())
+        );
         model.addAttribute("userTypeLabels", List.of("개인회원", "기업회원"));
-        model.addAttribute("userTypeData", List.of(
-                adminMainService.countActiveMembers(),
-                adminMainService.countActiveCompanies()
-        ));
+        model.addAttribute("userTypeDataByPeriod", userTypeDataByPeriod);
 
+        Map<String, List<Integer>> resumeJobDataByPeriod = Map.of(
+                "today", List.of(statsDto.getResumeToday(), statsDto.getJobToday()),
+                "week", List.of(statsDto.getResumeWeek(), statsDto.getJobWeek()),
+                "month", List.of(statsDto.getResumeMonth(), statsDto.getJobMonth()),
+                "total", List.of(statsDto.getResumeTotal(), statsDto.getJobTotal())
+        );
         model.addAttribute("resumeJobLabels", List.of("이력서", "채용공고"));
-        model.addAttribute("resumeJobData", List.of(
-                adminMainService.countResumes(),
-                adminMainService.countJobs()
-        ));
+        model.addAttribute("resumeJobDataByPeriod", resumeJobDataByPeriod);
 
         return "admin/main";
     }

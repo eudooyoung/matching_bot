@@ -20,26 +20,6 @@ public class AdminMainService {
     private final JobAdminRepository jobAdminRepository;
     private final CommunityAdminRepository communityAdminRepository;
 
-    public long countActiveMembers() {
-        return memberAdminRepository.countByStatusAndRole(Yn.Y, Role.MEMBER);
-    }
-
-    public long countActiveCompanies() {
-        return companyAdminRepository.countByStatus(Yn.Y);
-    }
-
-    public long countResumes() {
-        return resumeAdminRepository.count();
-    }
-
-    public long countJobs() {
-        return jobAdminRepository.count();
-    }
-
-    public long countCommunityPosts() {
-        return communityAdminRepository.count();
-    }
-
     public ContentStatsDto getContentStats() {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime todayStart = now.toLocalDate().atStartOfDay();
@@ -54,22 +34,28 @@ public class AdminMainService {
                 .memberToday(memberAdminRepository.countByCreatedAtBetween(todayStart, todayEnd))
                 .memberWeek(memberAdminRepository.countByCreatedAtBetween(weekStart, now))
                 .memberMonth(memberAdminRepository.countByCreatedAtBetween(monthStart, monthEnd))
+                .memberTotal((int)memberAdminRepository.countByStatusAndRole(Yn.Y, Role.MEMBER))
 
                 .companyToday(companyAdminRepository.countByCreatedAtBetween(todayStart, todayEnd))
                 .companyWeek(companyAdminRepository.countByCreatedAtBetween(weekStart, now))
                 .companyMonth(companyAdminRepository.countByCreatedAtBetween(monthStart, monthEnd))
+                .companyTotal((int)companyAdminRepository.countByStatus(Yn.Y))
 
                 .resumeToday(resumeAdminRepository.countByCreatedAtBetween(todayStart, todayEnd))
                 .resumeWeek(resumeAdminRepository.countByCreatedAtBetween(weekStart, now))
                 .resumeMonth(resumeAdminRepository.countByCreatedAtBetween(monthStart, monthEnd))
+                .resumeTotal((int)resumeAdminRepository.count())
 
                 .jobToday(jobAdminRepository.countByCreatedAtBetween(todayStart, todayEnd))
                 .jobWeek(jobAdminRepository.countByCreatedAtBetween(weekStart, now))
                 .jobMonth(jobAdminRepository.countByCreatedAtBetween(monthStart, monthEnd))
+                .jobTotal((int)jobAdminRepository.count())
 
                 .communityPostToday(communityAdminRepository.countByCreatedAtBetween(todayStart, todayEnd))
                 .communityPostWeek(communityAdminRepository.countByCreatedAtBetween(weekStart, now))
                 .communityPostMonth(communityAdminRepository.countByCreatedAtBetween(monthStart, monthEnd))
+                .communityPostTotal((int)communityAdminRepository.count())
+
                 .build();
     }
 }

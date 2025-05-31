@@ -34,7 +34,7 @@
 
 /* 공통 카드 박스 */
 .card {
-    background: #f4f6f8;
+    background: #e8e9ef;
     border-radius: 8px;
     padding: 0.75rem;
     text-align: center;
@@ -60,7 +60,7 @@
     justify-content: center;
     padding: 1rem;
     height: auto;
-    background-color: #dce9f7;
+    background-color: #c3d7ff;
     font-size: 0.95rem;
     font-weight: 600;
     text-decoration: none;
@@ -69,7 +69,7 @@
 }
 
 .link-card:hover {
-    background-color: #cbe0f5;
+    background-color: #9dc2fd;
 }
 
 /* 차트 섹션 (파이 차트 2개 등) */
@@ -88,6 +88,39 @@
     min-width: 260px;
     max-width: 360px;
     text-align: center;
+}
+
+.chart-header {
+    display: flex;
+    flex-direction: column; /* ⬅ 제목 + 버튼 수직 정렬 */
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.chart-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.chart-period-tabs {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.chart-tab {
+    padding: 0.3rem 0.6rem;
+    border: none;
+    background: #e0e0e0;
+    font-size: 0.85rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.chart-tab.active {
+    background: #103254;
+    color: white;
+    font-weight: bold;
 }
 
 /* 관리 항목 섹션 (바로가기 버튼 등) */

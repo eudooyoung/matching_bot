@@ -150,3 +150,10 @@ body {
     display: block;
 }
 
+/*에러 페이지*/
+.menu-button.error {
+    background-color: #a8a8a8;
+    color: #103254;
+    text-decoration: none;
+}
+

@@ -6,8 +6,8 @@
         <!-- ✅ 통계 카드 -->
         <section class="stats-grid">
             <div class="card">
-                <h3>전체 회원 수</h3>
-                <p th:text="${memberCount}">0</p>
+                <h3>구직 회원 수</h3>
+                <p th:text="${contentStats.memberTotal}">0</p>
                 <ul class="card-sublist">
                     <li>오늘: <span th:text="${contentStats.memberToday}">0</span></li>
                     <li>이번 주: <span th:text="${contentStats.memberWeek}">0</span></li>
@@ -15,8 +15,8 @@
                 </ul>
             </div>
             <div class="card">
-                <h3>기업 수</h3>
-                <p th:text="${companyCount}">0</p>
+                <h3>기업 회원 수</h3>
+                <p th:text="${contentStats.companyTotal}">0</p>
                 <ul class="card-sublist">
                     <li>오늘: <span th:text="${contentStats.companyToday}">0</span></li>
                     <li>이번 주: <span th:text="${contentStats.companyWeek}">0</span></li>
@@ -25,7 +25,7 @@
             </div>
             <div class="card">
                 <h3>이력서 수</h3>
-                <p th:text="${resumeCount}">0</p>
+                <p th:text="${contentStats.resumeTotal}">0</p>
                 <ul class="card-sublist">
                     <li>오늘: <span th:text="${contentStats.resumeToday}">0</span></li>
                     <li>이번 주: <span th:text="${contentStats.resumeWeek}">0</span></li>
@@ -34,7 +34,7 @@
             </div>
             <div class="card">
                 <h3>채용공고 수</h3>
-                <p th:text="${jobCount}">0</p>
+                <p th:text="${contentStats.jobTotal}">0</p>
                 <ul class="card-sublist">
                     <li>오늘: <span th:text="${contentStats.jobToday}">0</span></li>
                     <li>이번 주: <span th:text="${contentStats.jobWeek}">0</span></li>
@@ -43,7 +43,7 @@
             </div>
             <div class="card">
                 <h3>커뮤니티 글 수</h3>
-                <p th:text="${communityPostCount}">0</p>
+                <p th:text="${contentStats.communityPostTotal}">0</p>
                 <ul class="card-sublist">
                     <li>오늘: <span th:text="${contentStats.communityPostToday}">0</span></li>
                     <li>이번 주: <span th:text="${contentStats.communityPostWeek}">0</span></li>
@@ -55,25 +55,41 @@
         <!-- 파이 그래프 -->
         <section class="chart-section section-spacing">
             <div class="chart-box">
-                <h3>회원 유형 비율</h3>
+                <div class="chart-header">
+                    <h3>구직 & 기업 회원 가입 현황</h3>
+                    <div class="chart-period-tabs" data-chart="user">
+                        <button class="chart-tab active" data-period="total">전체</button>
+                        <button class="chart-tab" data-period="today">오늘</button>
+                        <button class="chart-tab" data-period="week">이번 주</button>
+                        <button class="chart-tab" data-period="month">이번 달</button>
+                    </div>
+                </div>
                 <canvas id="userTypePieChart"></canvas>
             </div>
 
             <div class="chart-box">
-                <h3>이력서 & 채용공고 수</h3>
+                <div class="chart-header">
+                    <h3>이력서 & 채용공고 등록 현황</h3>
+                    <div class="chart-period-tabs" data-chart="resume">
+                        <button class="chart-tab active" data-period="total">전체</button>
+                        <button class="chart-tab" data-period="today">오늘</button>
+                        <button class="chart-tab" data-period="week">이번 주</button>
+                        <button class="chart-tab" data-period="month">이번 달</button>
+                    </div>
+                </div>
                 <canvas id="resumeJobPieChart"></canvas>
             </div>
         </section>
 
         <!-- ✅ 관리 항목 바로가기 -->
         <section class="board-management section-spacing">
-            <h3>관리 항목 바로가기</h3>
+            <h3>관리 게시판 바로가기</h3>
             <div class="card-grid">
-                <a href="/admin/board/members" class="card link-card">👤 개인 회원 관리</a>
-                <a href="/admin/board/companies" class="card link-card">🏢 기업 회원 관리</a>
-                <a href="/admin/board/resumes" class="card link-card">📄 이력서 관리</a>
-                <a href="/admin/board/jobs" class="card link-card">📌 채용공고 관리</a>
-                <a href="/admin/board/community" class="card link-card">📝 커뮤니티 관리</a>
+                <a href="/admin/board/members" class="card link-card">개인 회원 관리</a>
+                <a href="/admin/board/companies" class="card link-card">기업 회원 관리</a>
+                <a href="/admin/board/resumes" class="card link-card">이력서 관리</a>
+                <a href="/admin/board/jobs" class="card link-card">채용공고 관리</a>
+                <a href="/admin/board/community" class="card link-card">커뮤니티 관리</a>
             </div>
         </section>
     </div>
@@ -82,83 +98,88 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
     <script th:inline="javascript">
-        Chart.register(ChartDataLabels);
+        document.addEventListener("DOMContentLoaded", () => {
+            Chart.register(ChartDataLabels);
 
-        const userTypeLabels = [[${userTypeLabels}]];
-        const userTypeData = [[${userTypeData}]];
+            const userTypeLabels = [[${userTypeLabels}]];
+            const resumeJobLabels = [[${resumeJobLabels}]];
 
-        const ctx = document.getElementById("userTypePieChart").getContext("2d");
-        new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: userTypeLabels,
-                datasets: [{
-                    data: userTypeData,
-                    backgroundColor: ['#f28e2c', '#4e79a7']
-                }]
-            },
-            options: {
+            const userTypeDataByPeriod = [[${userTypeDataByPeriod}]];
+            const resumeJobDataByPeriod = [[${resumeJobDataByPeriod}]];
+
+            const userCtx = document.getElementById("userTypePieChart").getContext("2d");
+            const resumeCtx = document.getElementById("resumeJobPieChart").getContext("2d");
+
+            const chartOptions = {
                 responsive: true,
                 maintainAspectRatio: true,
                 plugins: {
-                    legend: {
-                        position: 'bottom'
-                    },
-                    tooltip: {
-                        enabled: false
-                    },
+                    legend: {position: 'bottom'},
+                    tooltip: {enabled: false},
                     datalabels: {
                         color: '#fff',
                         formatter: (value, context) => {
                             const label = context.chart.data.labels[context.dataIndex];
-                            return `${label}\n${value}명`;
+                            return `${label}\n${value}`;
                         },
                         font: {
-                            size: '16px',
+                            size: 16,
                             weight: 'bold'
                         }
                     }
                 }
-            }
-        });
+            };
 
-        const resumeJobLabels = [[${resumeJobLabels}]];
-        const resumeJobData = [[${resumeJobData}]];
+            let userChart = new Chart(userCtx, {
+                type: 'pie',
+                data: {
+                    labels: userTypeLabels,
+                    datasets: [{
+                        data: userTypeDataByPeriod.total,
+                        backgroundColor: ['#fc7b1e', '#4e67a7']
+                    }]
+                },
+                options: chartOptions
+            });
 
-        const ctx2 = document.getElementById("resumeJobPieChart").getContext("2d");
-        new Chart(ctx2, {
-            type: 'pie',
-            data: {
-                labels: resumeJobLabels,
-                datasets: [{
-                    data: resumeJobData,
-                    backgroundColor: ['#f28e2c', '#4e79a7']
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom'
-                    },
-                    tooltip: {
-                        enabled: false
-                    },
-                    datalabels: {
-                        color: '#fff',
-                        formatter: (value, context) => {
-                            const label = context.chart.data.labels[context.dataIndex];
-                            return `${label}\n${value}건`;
-                        },
-                        font: {
-                            size: '16px',
-                            weight: 'bold'
-                        }
-                    },
-                    plugins: [ChartDataLabels]
+            let resumeChart = new Chart(resumeCtx, {
+                type: 'pie',
+                data: {
+                    labels: resumeJobLabels,
+                    datasets: [{
+                        data: resumeJobDataByPeriod.total,
+                        backgroundColor: ['#fc7b1e', '#4e67a7']
+                    }]
+                },
+                options: chartOptions
+            });
+
+            function updateChart(chartType, period) {
+                if (chartType === "user") {
+                    userChart.data.datasets[0].data = userTypeDataByPeriod[period];
+                    userChart.update();
+                } else if (chartType === "resume") {
+                    resumeChart.data.datasets[0].data = resumeJobDataByPeriod[period];
+                    resumeChart.update();
                 }
             }
+
+            document.querySelectorAll(".chart-period-tabs").forEach(tabGroup => {
+                const chartType = tabGroup.getAttribute("data-chart");
+
+                tabGroup.querySelectorAll(".chart-tab").forEach(btn => {
+                    btn.addEventListener("click", () => {
+                        const period = btn.getAttribute("data-period");
+
+                        // 버튼 클래스 초기화
+                        tabGroup.querySelectorAll(".chart-tab").forEach(tab => tab.classList.remove("active"));
+                        btn.classList.add("active");
+
+                        // 해당 차트만 업데이트
+                        updateChart(chartType, period);
+                    });
+                });
+            });
         });
     </script>
 </div>

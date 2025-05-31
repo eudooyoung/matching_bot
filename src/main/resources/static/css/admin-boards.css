@@ -13,15 +13,18 @@
 /* ✅ 검색 폼 전체 */
 .search-form {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
     flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1rem;
 }
 
 /* ✅ 왼쪽 옵션 영역 */
 .search-options {
+    flex: 1 1 300px; /* 유연하게 줄어들고 최소 300px 보장 */
     display: flex;
-    gap: 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 
 .search-options select {
@@ -34,19 +37,20 @@
 
 /* ✅ 오른쪽 검색창 영역 */
 .search-right {
+    flex: 1 1 300px;  /* 유연하게 줄어들고 최소 300px 보장 */
     display: flex;
-    align-items: center;
+    flex-wrap: wrap;
     justify-content: flex-end;
-    gap: 1rem;
-    min-width: 220px;
+    gap: 0.5rem;
+    min-width: 0; /* 줄바꿈 허용 */
+    max-width: 400px; /* ✅ 최대 너비 제한 */
 }
 
 .search-right input[type="text"] {
-    width: 280px;
-    padding: 0.5rem;
-    font-size: 14px;
-    height: 36px;
-    box-sizing: border-box;
+    flex: 1 1 180px;
+    min-width: 120px;
+    /*max-width: 280px;*/
+    max-width: 100%;
 }
 
 /* ✅ 공통 버튼 스타일 */
@@ -171,3 +175,4 @@
     text-decoration: underline;
     color: #2196f3;
 }
+
