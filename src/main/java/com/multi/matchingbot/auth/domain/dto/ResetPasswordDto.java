@@ -1,4 +1,4 @@
-package com.multi.matchingbot.auth.reset.dto;
+package com.multi.matchingbot.auth.domain.dto;
 
 import lombok.Getter;
 import lombok.Setter;

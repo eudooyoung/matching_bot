@@ -26,6 +26,11 @@ public class ResumeService {
                 .orElseThrow(() -> new EntityNotFoundException("해당 이력서를 찾을 수 없습니다."));
     }
 
+    public Resume findByIdWithOccupation(Long id) {
+        return resumeRepository.findWithOccupationById(id)
+                .orElseThrow(() -> new EntityNotFoundException("이력서를 찾을 수 없습니다."));
+    }
+
     public void deleteAllByIds(List<Long> ids) {
         resumeRepository.deleteAllById(ids);
     }
@@ -53,4 +58,13 @@ public class ResumeService {
                 .bookmarked(false) // 모든 이력서 → 관심 여부는 false
                 .build();
     }
+
+    public void updateResume(Long id, Resume updatedResume) {
+        Resume resume = findById(id);
+        resume.setTitle(updatedResume.getTitle());
+        resume.setSkillAnswer(updatedResume.getSkillAnswer());
+        resume.setTraitAnswer(updatedResume.getTraitAnswer());
+        resumeRepository.save(resume);
+    }
+
 }

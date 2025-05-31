@@ -16,7 +16,7 @@
     <main class="main-content">
         <div class="container">
             <h2>회원가입 (일반)</h2>
-            <form action="/auth/register" method="post">
+            <form id="userForm" action="/auth/register" method="post">
 
                 <label for="email">* 이메일</label>
                 <input type="email" id="email" name="email" placeholder="email@matchingbot.co.kr" required>
@@ -42,11 +42,11 @@
                        placeholder="이름을 입력해주세요"
                        required
                        minlength="2"
-                       maxlength="4">
+                       maxlength="10">
                 <br>
 
                 <label for="address">* 주소</label>
-                <input type="text" id="address" name="address" required>
+                <input type="text" id="address" name="address" required maxlength="50">
                 <br>
 
                 <!-- 생년월일 / 성별 -->
@@ -78,9 +78,9 @@
 
                 <label for="phone">* 휴대전화번호</label>
                 <div class="phone-input">
-                    <input type="text" id="phone" name="phone1" maxlength="3" placeholder="010" required>
-                    <input type="text" name="phone2" maxlength="4" placeholder="0000" required>
-                    <input type="text" name="phone3" maxlength="4" placeholder="0000" required>
+                    <input type="text" name="phone1" maxlength="3" pattern="\d{3}" title="숫자 3자리를 입력하세요" required>
+                    <input type="text" name="phone2" maxlength="4" pattern="\d{3,4}" title="숫자 3~4자리를 입력하세요" required>
+                    <input type="text" name="phone3" maxlength="4" pattern="\d{4}" title="숫자 4자리를 입력하세요" required>
                 </div>
 
                 <label class="agreement-title">* 약관동의</label>
@@ -115,17 +115,19 @@
         return regex.test(password);
     }
 
-    // form 제출 시 비밀번호 유효성 검사
-    document.getElementById("userForm").addEventListener("submit", function (e) {
-        const passwordInput = document.getElementById("password");
-        const password = passwordInput.value;
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("userForm").addEventListener("submit", function (e) {
+            const passwordInput = document.getElementById("password");
+            const password = passwordInput.value;
 
-        if (!validatePassword(password)) {
-            e.preventDefault();
-            alert("비밀번호는 8~16자이며, 영문자/숫자/특수문자를 모두 포함해야 합니다.");
-            passwordInput.focus();  // 사용자 편의성 개선
-        }
-    })
+            if (!validatePassword(password)) {
+                e.preventDefault();
+                alert("비밀번호는 8~16자이며, 영문자/숫자/특수문자를 모두 포함해야 합니다.");
+                passwordInput.focus();
+            }
+        });
+    });
+
 </script>
 
 <script th:src="@{/js/dropdown.js}"></script>
