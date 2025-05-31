@@ -1,12 +1,14 @@
 package com.multi.matchingbot.job.mapper;
 
 import com.multi.matchingbot.company.domain.Company;
-import com.multi.matchingbot.job.domain.entity.Job;
 import com.multi.matchingbot.job.domain.dto.JobDto;
+import com.multi.matchingbot.job.domain.entity.Job;
 import com.multi.matchingbot.job.domain.entity.Occupation;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
+@Component
 public interface JobMapper {
 
     static JobDto toDto(Job entity) {

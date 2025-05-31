@@ -10,7 +10,6 @@ import com.multi.matchingbot.job.mapper.JobMapper;
 import com.multi.matchingbot.job.repository.JobRepository;
 import com.multi.matchingbot.job.repository.OccupationRepository;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,9 +42,7 @@ public class JobService {
     }
 
     public JobDto getById(Long id) {
-        Job job = repository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("공고를 찾을 수 없습니다."));
-        return JobMapper.toDto(job);
+        return null;
     }
 
     @Transactional
@@ -81,10 +78,6 @@ public class JobService {
 
     public void delete(Long id) {
         repository.deleteById(id);
-    }
-
-    public Page<JobDto> getAllPaged(PageRequest pageable) {
-        return repository.findAll(pageable).map(JobMapper::toDto);
     }
 
     private JobDto convertToDto(Job job) {

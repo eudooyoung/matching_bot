@@ -1,8 +1,15 @@
 package com.multi.matchingbot.job.controller;
 
 import com.multi.matchingbot.common.security.MBotUserDetails;
+import com.multi.matchingbot.company.domain.Company;
+import com.multi.matchingbot.company.service.CompanyService;
 import com.multi.matchingbot.job.domain.dto.JobDto;
+import com.multi.matchingbot.job.domain.entity.Job;
+import com.multi.matchingbot.job.domain.entity.Occupation;
+import com.multi.matchingbot.job.mapper.JobMapper;
+import com.multi.matchingbot.job.repository.JobRepository;
 import com.multi.matchingbot.job.service.JobService;
+import com.multi.matchingbot.job.service.OccupationService;
 import com.multi.matchingbot.job.service.ResumeBookmarkService;
 import com.multi.matchingbot.member.domain.dtos.ResumeDto;
 import jakarta.validation.Valid;
@@ -23,12 +30,18 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/job")
 public class JobController {
 
+    private final CompanyService companyService;
     private final JobService jobService;
+    private final JobRepository jobRepository;
+    private final OccupationService occupationService;
     private final ResumeBookmarkService resumeBookmarkService;
 
     @Autowired
-    public JobController(JobService jobService, ResumeBookmarkService resumeBookmarkService) {
+    public JobController(CompanyService companyService, JobService jobService, JobRepository jobRepository, OccupationService occupationService, ResumeBookmarkService resumeBookmarkService) {
+        this.companyService = companyService;
         this.jobService = jobService;
+        this.jobRepository = jobRepository;
+        this.occupationService = occupationService;
         this.resumeBookmarkService = resumeBookmarkService;
     }
 
@@ -39,7 +52,7 @@ public class JobController {
                                      @RequestParam(name = "size", defaultValue = "20") int size) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         MBotUserDetails userDetails = (MBotUserDetails) authentication.getPrincipal();
-        Long companyId = userDetails.getId();
+        Long companyId = userDetails.getCompanyId();
 
         Page<JobDto> jobPage = jobService.getByCompanyIdPaged(companyId, PageRequest.of(page, size));
         model.addAttribute("jobPage", jobPage);
@@ -51,21 +64,47 @@ public class JobController {
     @GetMapping("/new")
     public String showForm(Model model, @AuthenticationPrincipal MBotUserDetails userDetails) {
         JobDto dto = new JobDto();
-        dto.setCompanyId(userDetails.getId());
+        dto.setCompanyId(userDetails.getCompanyId());
         model.addAttribute("job", dto);
+
         return "job/job-new";
     }
 
     // 공고 등록 처리
     @PostMapping("/new")
-    public String save(@Valid @ModelAttribute("job") JobDto dto, BindingResult bindingResult, Model model) {
+    public String registerJob(@Valid @ModelAttribute("job") JobDto jobDto,
+                              BindingResult bindingResult,
+                              @AuthenticationPrincipal MBotUserDetails userDetails) {
         if (bindingResult.hasErrors()) {
+            System.out.println("📌 Binding Error 발생:");
+            bindingResult.getAllErrors().forEach(e -> System.out.println("  - " + e));
             return "job/job-new";
         }
 
-        jobService.save(dto);
+        System.out.println("📌 Principal (로그인된 사용자): " + userDetails.getCompanyId());
+
+        Company company = companyService.findById(userDetails.getCompanyId());
+        System.out.println("📌 조회된 CompanyId: " + company);
+
+        System.out.println("📌 넘어온 occupationId: " + jobDto.getOccupationId());
+        Occupation occupation = occupationService.findById(jobDto.getOccupationId());
+        System.out.println("📌 조회된 Occupation: " + occupation);
+
+        System.out.println("📌 등록할 JobDto 정보:");
+        System.out.println(jobDto);
+
+        Job job = JobMapper.toEntity(jobDto, company, occupation);
+
+        System.out.println("📌 실제 저장될 Job entity:");
+        System.out.println(job);
+
+        jobRepository.save(job);
+
+        System.out.println("✅ 저장 성공!");
         return "redirect:/job/manage-jobs";
     }
+
+
 
     // 공고 수정 페이지
     @GetMapping("/{id:[0-9]+}/edit")
