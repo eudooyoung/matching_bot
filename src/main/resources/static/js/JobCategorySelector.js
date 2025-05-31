@@ -244,17 +244,17 @@ function JobCategorySelector() {
         })
         .then((data) => {
           const input = document.getElementById("occupationId");
-          if (input) {
-            input.value = data.id;
-            console.log("✅ occupationId 세팅 완료:", data.id);
-          } else {
-            console.error("❌ occupationId input 요소가 없음!");
+          if (input && data.id) {
+            input.value = data.id;                           // DOM value 설정
+            input.setAttribute("value", data.id);             // HTML 속성 반영
+            console.log("✅ 직무 선택 완료, ID:", data.id);
           }
         })
         .catch((err) => {
           console.error("❌ occupationId 설정 중 오류:", err);
         });
   };
+
 
   const colStyle = {
     width: "33%",

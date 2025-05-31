@@ -81,64 +81,77 @@ public class JobController {
             return "job/job-new";
         }
 
-        System.out.println("📌 Principal (로그인된 사용자): " + userDetails.getCompanyId());
+        // System.out.println("Principal (로그인된 사용자): " + userDetails.getCompanyId());
 
         Company company = companyService.findById(userDetails.getCompanyId());
-        System.out.println("📌 조회된 CompanyId: " + company);
+        // System.out.println("조회된 CompanyId: " + company);
 
-        System.out.println("📌 넘어온 occupationId: " + jobDto.getOccupationId());
+        // System.out.println("넘어온 occupationId: " + jobDto.getOccupationId());
         Occupation occupation = occupationService.findById(jobDto.getOccupationId());
-        System.out.println("📌 조회된 Occupation: " + occupation);
+        // System.out.println("조회된 Occupation: " + occupation);
 
-        System.out.println("📌 등록할 JobDto 정보:");
-        System.out.println(jobDto);
+        // System.out.println("등록할 JobDto 정보:");
+        // System.out.println(jobDto);
 
         Job job = JobMapper.toEntity(jobDto, company, occupation);
 
-        System.out.println("📌 실제 저장될 Job entity:");
-        System.out.println(job);
+        // System.out.println("실제 저장될 Job entity:");
+        // System.out.println(job);
 
         jobRepository.save(job);
 
-        System.out.println("✅ 저장 성공!");
+        // System.out.println("✅ 저장 성공!");
         return "redirect:/job/manage-jobs";
     }
 
 
-
     // 공고 수정 페이지
-    @GetMapping("/{id:[0-9]+}/edit")
-    public String editJobForm(@PathVariable("id") Long id, Model model) {
-        JobDto dto = jobService.getById(id);
-        model.addAttribute("job", dto);
-        return "job/job-edit";
+//    @GetMapping("/{id:[0-9]+}/edit")
+//    public String editJobForm(@PathVariable("id") Long id, Model model) {
+//        JobDto dto = jobService.getById(id);
+//        model.addAttribute("job", dto);
+//        return "job/job-edit";
+//    }
+    @GetMapping("/edit/{id}")
+    public String editJobForm(@PathVariable Long id, Model model, @AuthenticationPrincipal MBotUserDetails userDetails) {
+        Long companyId = userDetails.getCompanyId();
+
+        Job job = jobService.findById(id);
+        model.addAttribute("job", job);
+        model.addAttribute("role", userDetails.getAuthorities());
+        model.addAttribute("companyId", job.getCompany().getId());
+        return "job/edit";
     }
 
     // 공고 수정 처리
-    @PostMapping("/{id:[0-9]+}/edit")
-    public String updateJob(@PathVariable("id") Long id,
+    @PostMapping("/{id}/edit")
+    public String updateJob(@PathVariable Long id,
                             @Valid @ModelAttribute("job") JobDto dto,
                             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "job/job-edit";
         }
-
-        jobService.update(id, dto);
+        jobService.update(id, dto.toEntity()); // dto → entity 변환 방식 사용
         return "redirect:/job/manage-jobs";
     }
 
     // 공고 삭제 처리
-    @DeleteMapping("/{id:[0-9]+}")
-    @ResponseBody
-    public void deleteJob(@PathVariable("id") Long id) {
+    @GetMapping("/delete/{id}")
+    public String deleteJob(@PathVariable("id") Long id) {
         jobService.delete(id);
+        return "redirect:/job/manage-jobs";
     }
 
     // 공고 상세 보기
-    @GetMapping("/{id:[0-9]+}")
-    public String showDetail(@PathVariable("id") Long id, Model model) {
-        JobDto job = jobService.getById(id);
+    @GetMapping("/{id}")
+    public String getJobDetail(@PathVariable("id") Long id, Model model, @AuthenticationPrincipal MBotUserDetails userDetails) {
+        Long companyId = userDetails.getCompanyId();
+
+        Job job = jobService.findById(id);
         model.addAttribute("job", job);
+        model.addAttribute("role", userDetails.getAuthorities());
+        model.addAttribute("companyId", companyId);
+
         return "job/job-detail";
     }
 

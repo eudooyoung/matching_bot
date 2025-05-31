@@ -4,9 +4,9 @@ import com.multi.matchingbot.job.domain.entity.Occupation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.List;
 
 @Repository
 public interface OccupationRepository extends JpaRepository<Occupation, Long> {
-    Optional<Occupation> findByJobRoleName(String jobRoleName);
+    List<Occupation> findByJobRoleName(String jobRoleName);
 }

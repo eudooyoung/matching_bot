@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,13 +21,15 @@ public class OccupationController {
     private final OccupationRepository occupationRepository;
 
     @GetMapping("/id")
-    public ResponseEntity<?> getOccupationId(@RequestParam(value = "name", required = false) String jobRoleName) {
-        Optional<Occupation> occupationOpt = occupationRepository.findByJobRoleName(jobRoleName);
-        if (occupationOpt.isPresent()) {
-            return ResponseEntity.ok(Map.of("id", occupationOpt.get().getId()));
-        } else {
+    public ResponseEntity<?> getOccupationId(@RequestParam("jobRoleName") String jobRoleName) {
+        List<Occupation> occupations = occupationRepository.findByJobRoleName(jobRoleName);
+
+        if (occupations.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of("error", "직무명을 찾을 수 없습니다."));
         }
+
+        // 여러 개 중 첫 번째 Occupation 반환 (또는 다른 로직 필요)
+        return ResponseEntity.ok(Map.of("id", occupations.get(0).getId()));
     }
 }

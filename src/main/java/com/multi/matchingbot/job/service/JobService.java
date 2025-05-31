@@ -1,14 +1,12 @@
 package com.multi.matchingbot.job.service;
 
 
-import com.multi.matchingbot.company.domain.Company;
-import com.multi.matchingbot.company.repository.CompanyRepository;
 import com.multi.matchingbot.job.domain.dto.JobDto;
 import com.multi.matchingbot.job.domain.entity.Job;
-import com.multi.matchingbot.job.domain.entity.Occupation;
 import com.multi.matchingbot.job.mapper.JobMapper;
 import com.multi.matchingbot.job.repository.JobRepository;
 import com.multi.matchingbot.job.repository.OccupationRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,13 +19,13 @@ import java.util.stream.Collectors;
 public class JobService {
 
     private final JobRepository repository;
-    private final CompanyRepository companyRepository;
     private final OccupationRepository occupationRepository;
+    private final JobMapper jobMapper;
 
-    public JobService(JobRepository repository, CompanyRepository companyRepository, OccupationRepository occupationRepository) {
+    public JobService(JobRepository repository, OccupationRepository occupationRepository, JobMapper jobMapper) {
         this.repository = repository;
-        this.companyRepository = companyRepository;
         this.occupationRepository = occupationRepository;
+        this.jobMapper = jobMapper;
     }
 
     public Page<JobDto> getByCompanyIdPaged(Long companyId, Pageable pageable) {
@@ -41,41 +39,20 @@ public class JobService {
                 .collect(Collectors.toList());
     }
 
-    public JobDto getById(Long id) {
-        return null;
+    public Job findById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("공고를 찾을 수 없습니다."));
     }
 
     @Transactional
-    public JobDto save(JobDto dto) {
-        if (dto.getOccupationId() == null) {
-            throw new IllegalArgumentException("occupationId는 null일 수 없습니다.");
-        }
-
-        Company company = companyRepository.findById(dto.getCompanyId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회사입니다."));
-
-        Occupation occupation = occupationRepository.findById(dto.getOccupationId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 직무입니다."));
-
-        Job job = JobMapper.toEntity(dto, company, occupation);
-        return JobMapper.toDto(repository.save(job));
-    }
-
-    @Transactional
-    public JobDto update(Long id, JobDto dto) {
+    public void update(Long id, Job updatedJob) {
         Job job = repository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("공고를 찾을 수 없습니다."));
+                .orElseThrow(() -> new EntityNotFoundException("공고를 찾을 수 없습니다."));
 
-        if (dto.getOccupationId() != null) {
-            Occupation occupation = occupationRepository.findById(dto.getOccupationId())
-                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 직무입니다."));
-            job.setOccupation(occupation);
-        }
-
-        JobMapper.updateFromDto(job, dto);
-        return JobMapper.toDto(repository.save(job));
+        job.updateFrom(updatedJob); // 아래와 같이 정의 필요
     }
 
+    @Transactional
     public void delete(Long id) {
         repository.deleteById(id);
     }

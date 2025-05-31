@@ -6,8 +6,6 @@ import com.multi.matchingbot.job.domain.entity.Job;
 import com.multi.matchingbot.job.domain.entity.Occupation;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-
 @Component
 public interface JobMapper {
 
@@ -63,24 +61,5 @@ public interface JobMapper {
                 .enrollEmail(dto.getEnrollEmail())
                 .notice(dto.getNotice())
                 .build();
-    }
-
-    static void updateFromDto(Job job, JobDto dto) {
-        job.setTitle(dto.getTitle());
-        job.setDescription(dto.getDescription());
-        job.setAddress(dto.getAddress());
-        job.setMainTask(dto.getMainTask());
-        job.setRequiredSkills(dto.getRequiredSkills());
-        job.setRequiredTraits(dto.getRequiredTraits());
-        job.setSkillKeywords(dto.getSkillKeywords());
-        job.setTraitKeywords(dto.getTraitKeywords());
-        job.setStartDate(dto.getStartDate());
-        job.setEndDate(dto.getEndDate());
-        job.setEnrollEmail(dto.getEnrollEmail());
-        job.setNotice(dto.getNotice());
-        job.setLatitude(dto.getLatitude() != null ? dto.getLatitude() : 37.5665);
-        job.setLongitude(dto.getLongitude() != null ? dto.getLongitude() : 126.9780);
-        job.setUpdatedAt(LocalDateTime.now());
-        job.setUpdatedBy("SYSTEM");
     }
 }
