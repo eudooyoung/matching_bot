@@ -8,11 +8,7 @@
 
 <body>
 <div class="wrapper">
-    <header class="header">
-        <div class="logo">
-            <a th:href="@{/}" class="logo-link">MatchingBot</a>
-        </div>
-    </header>
+    <div th:replace="~{fragments/header :: header(role=${role})}"></div>
 
     <main class="main-content" style="text-align: center; padding: 3rem;">
         <h1>404 - 페이지를 찾을 수 없습니다</h1>

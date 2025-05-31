@@ -10,11 +10,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+
 @Repository
 public interface MemberAdminRepository extends JpaRepository<Member, Long> {
     @Query("""
                 SELECT m FROM Member m
-                WHERE m.role <> 'ADMIN'
+                WHERE m.role = 'MEMBER'
                 AND (:keyword IS NULL OR
                 m.name LIKE %:keyword% OR
                 m.email LIKE %:keyword% OR
@@ -23,6 +25,11 @@ public interface MemberAdminRepository extends JpaRepository<Member, Long> {
             """)
     Page<Member> searchWithCondition(@Param("keyword") String keyword, @Param("status") Yn status, Pageable pageable);
 
+    long countByStatusAndRole(Yn status, Role role);
+
     Page<Member> findByRoleNot(Role role, Pageable pageable);
+
+    int countByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
+
 
 }

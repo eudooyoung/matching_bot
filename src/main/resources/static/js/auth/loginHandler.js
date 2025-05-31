@@ -27,9 +27,13 @@ async function handleLogin(emailId, passwordId, errorMsgId, role) {
         });
 
         if (response.ok) {
-            const redirectUrl = sessionStorage.getItem("beforeLoginUrl") || "/main";
+            // const redirectUrl = sessionStorage.getItem("beforeLoginUrl") || "/main";
             sessionStorage.removeItem("beforeLoginUrl");
-            window.location.href = redirectUrl;
+            // ✅ 관리자면 무조건 /admin/main
+            window.location.href = (role === "ADMIN")
+                ? "/admin/main"
+                : (sessionStorage.getItem("beforeLoginUrl") || "/main");
+
         } else {
             const errorJson = await response.json();
             const msg = errorJson.message || "로그인 중 오류가 발생했습니다.";

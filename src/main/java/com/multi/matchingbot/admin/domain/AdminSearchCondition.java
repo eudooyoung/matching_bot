@@ -12,7 +12,7 @@ public class AdminSearchCondition {
     private String reportStatus;    // 보고서 추출 상태
     private String keywordsStatus;  // 키워드 추출 상태
     private int page = 0;
-    private int size = 10;
+    private int size = 15;
     private String sortBy = "id";
     private String direction = "DESC";
 

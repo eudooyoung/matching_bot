@@ -1,7 +1,7 @@
 package com.multi.matchingbot.common.security;
 
-import com.multi.matchingbot.auth.TokenValidator;
 import com.multi.matchingbot.auth.TokenProvider;
+import com.multi.matchingbot.auth.TokenValidator;
 import com.multi.matchingbot.common.domain.enums.Role;
 import com.multi.matchingbot.common.error.TokenException;
 import jakarta.servlet.FilterChain;
@@ -32,13 +32,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final TokenValidator tokenValidator;
     private final AntPathMatcher pathMatcher = new AntPathMatcher();
 
-    // 필터링 제외할 요청
-    private static final String[] EXACT_PATHS = {
+    // JWT 필터 제외 경로 정의
+    private static final String[] EXCLUDED_PATHS = {
+            // 절대 경로
             "/health-check",
-            "/favicon.ico"
-    };
+            "/favicon.ico",
 
-    private static final String[] WILDCARD_PATHS = {
+            // 포괄 경로
             "/auth/**",
             "/swagger-ui/**",
             "/js/**",
@@ -54,34 +54,60 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String requestURI = request.getRequestURI();
 
-        // 바이패스 경로 처리
+        // 필터 우회 경로 처리
         if (shouldBypass(requestURI)) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // 어세스토큰 추출
-        String accessToken = extractToken(request, "accessToken");
+        // 토큰 검증 & 재발급 로직
+        try {
+            // 어세스 토큰 추출
+            String accessToken = extractToken(request, "accessToken");
 
-        if (accessToken != null && tokenValidator.validateAccessToken(accessToken)) {
-            // 어세스토큰 존재 & 유효 -> 인가 처리
-            authenticateRequest(accessToken, request);
-        } else {
-            log.warn("!!! AccessToken 만료 >>> refreshToken 추출 시작");
-            if (!handleRefreshFlow(request, response)) // re
-                return;
+            if (accessToken != null && tokenValidator.validateAccessToken(accessToken)) {
+                // 어세스 토큰 존재 & 유효 -> 인가 처리
+                authenticateRequest(accessToken, request);
+            } else {
+                log.warn("!!! AccessToken 만료 >>> refreshToken 추출 시작");
+                String refreshToken = extractToken(request, "refreshToken");
+
+                if (refreshToken != null && tokenValidator.validateRefreshToken(refreshToken)) {
+                    log.info("refreshToken 검증 완료 >>> 새로운 accessToken 발급 시작");
+
+                    String email = tokenProvider.extractUsername(refreshToken);
+                    String roleStr = tokenProvider.parseClaims(refreshToken).get("role", String.class);
+                    Role role = Role.valueOf(roleStr);
+
+                    UserDetails userDetails = mBotUserDetailsService.loadUserByTypeAndEmail(role, email);
+                    String newAccessToken = tokenProvider.generateAccessToken(userDetails);
+                    log.info("*** 새로운 accessToken 발급 완료");
+
+                    ResponseCookie accessCookie = ResponseCookie.from("accessToken", newAccessToken)
+                            .httpOnly(true)
+                            .secure(false) // TODO:!!!!배포시 true로 전환!!!!!
+                            .path("/")
+                            .maxAge(tokenProvider.getAccessTokenExpireTime())
+                            .build();
+
+                    response.addHeader("Set-Cookie", accessCookie.toString());
+                    authenticateRequest(newAccessToken, request);
+                }
+            }
+        } catch (TokenException te) {
+            log.warn("토큰 처리 중 TokenException 발생", te);
+        } catch (Exception e) {
+            log.error("JWT 필터 처리 중 예외 발생", e); // ← log.error가 더 명확
         }
 
         filterChain.doFilter(request, response);
     }
 
     private boolean shouldBypass(String uri) {
-        for (String path : EXACT_PATHS)
-            if (uri.equals(path)) return true;
-
-        for (String pattern : WILDCARD_PATHS)
-            if (pathMatcher.match(pattern, uri)) return true;
-
+        for (String pattern : EXCLUDED_PATHS) {
+            if (pathMatcher.match(pattern, uri))
+                return true;
+        }
         return false;
     }
 
@@ -95,50 +121,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return null;
     }
 
-    private boolean handleRefreshFlow(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String refreshToken = extractToken(request, "refreshToken");
-        if (refreshToken == null) {
-            log.warn("RefreshToken 없음 -> 로그인 리다이렉트");
-            response.sendRedirect(request.getRequestURI().startsWith("/admin") ? "/admin/login" : "/auth/login");
-            return false;
-        }
-
-        try {
-            tokenValidator.validateRefreshToken(refreshToken);
-            log.warn("refreshToken 검증 완료 >>> 새로운 accessToken 발급 시작");
-
-            String email = tokenProvider.extractUsername(refreshToken);
-            String roleStr = tokenProvider.parseClaims(refreshToken).get("role", String.class);
-            Role role = Role.valueOf(roleStr);
-
-            UserDetails userDetails = mBotUserDetailsService.loadUserByTypeAndEmail(role, email);
-            String newAccessToken = tokenProvider.generateAccessToken(userDetails);
-            log.warn("*** 새로운 accessToken 발급 완료");
-
-            ResponseCookie accessCookie = ResponseCookie.from("accessToken", newAccessToken)
-                    .httpOnly(true)
-                    .secure(false) // !!!!배포시 true로 전환!!!!!
-                    .path("/")
-                    .maxAge(tokenProvider.getAccessTokenExpireTime())
-                    .build();
-
-            response.addHeader("Set-Cookie", accessCookie.toString());
-
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                    userDetails, null, userDetails.getAuthorities()
-            );
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            return true;
-
-        } catch (TokenException e) {
-            log.warn("RefreshToken 발급 오류! 로그인 리다이렉션");
-            String roleStr = tokenProvider.parseClaims(refreshToken).get("role", String.class);
-            Role role = Role.valueOf(roleStr);
-            response.sendRedirect(role == Role.ADMIN ? "/admin/login" : "/auth/login");
-            return false;
-
-        }
-    }
 
     // 응답 인가 처리
     private void authenticateRequest(String token, HttpServletRequest request) {
@@ -170,7 +152,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             log.warn("JWT인증 실패");
         }
     }
-
 }
 
 

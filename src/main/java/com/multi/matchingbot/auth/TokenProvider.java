@@ -28,7 +28,7 @@ public class TokenProvider {
     @Value("${jwt.issuer}")
     private String issuer;
 
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000L * 15;
+    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000L * 60 * 60 * 24 * 3;
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000L * 60 * 60 * 24 * 14;
 
 

@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class AdminPageService {
+public class AdminBoardService {
 
     private final MemberAdminRepository memberAdminRepository;
     private final MemberAdminMapper memberAdminMapper;
@@ -65,26 +65,5 @@ public class AdminPageService {
                 : null;
         return status;
     }
-
-//    public PagedResult<MemberAdminView> jobs(int page) {
-//        Pageable pageable = PageRequest.of(page, 10);
-//        Page<MemberAdminView> pageResult = memberRepository.findAll(pageable).map(memberMapper::toMemberAdminView);
-//
-//        return new PagedResult<>(pageResult);
-//    }
-//
-//    public PagedResult<MemberAdminView> communitiy(int page) {
-//        Pageable pageable = PageRequest.of(page, 10);
-//        Page<MemberAdminView> pageResult = memberRepository.findAll(pageable).map(memberMapper::toMemberAdminView);
-//
-//        return new PagedResult<>(pageResult);
-//    }
-//
-//    public PagedResult<MemberAdminView> attachedItems(int page) {
-//        Pageable pageable = PageRequest.of(page, 10);
-//        Page<MemberAdminView> pageResult = memberRepository.findAll(pageable).map(memberMapper::toMemberAdminView);
-//
-//        return new PagedResult<>(pageResult);
-//    }
 
 }

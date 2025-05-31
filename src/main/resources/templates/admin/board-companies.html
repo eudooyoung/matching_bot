@@ -115,7 +115,7 @@
                     <td th:text="${company.formattedId}">회원 번호</td>
                     <td th:text="${company.name}" th:attr="title=${company.name}" class="text-left-col">이름</td>
                     <td class="text-left-col">
-                        <a th:href="@{|/admin/companies/edit-profile/${company.id}|}"
+                        <a th:href="@{|/admin/board/companies/edit-profile/${company.id}|}"
                            th:text="${company.email}"
                            th:attr="title=${company.email}"
                            class="link-detail">이메일</a>
@@ -131,7 +131,7 @@
                     </td>
                     <td th:text="${#temporals.format(company.updatedAt, 'yyyy-MM-dd HH:mm:ss')}">수정일</td>
                     <td>
-                        <a class="link-detail" th:href="@{|/admin/companies/${company.id}|}" th:text="${company.reportStatus}">보고서 상태</a>
+                        <a class="link-detail" th:href="@{|/admin/board/companies/${company.id}|}" th:text="${company.reportStatus}">보고서 상태</a>
                     </td>
                     <td>
                         <button type="button"
@@ -161,11 +161,11 @@
 
             <!-- 페이지네이션 (예시) -->
             <div class="table-pagination" style="margin-top: 1.5rem; text-align: center;">
-                <a th:if="${page.hasPrevious()}" th:href="@{/admin/companies(page=${currentPage - 1})}">이전</a>
+                <a th:if="${page.hasPrevious()}" th:href="@{/admin/board/companies(page=${currentPage - 1})}">이전</a>
                 <span th:unless="${page.hasPrevious()}" style="visibility: hidden;">이전</span>
 
                 <span th:each="pageNum : ${pageNumbers}" style="margin: 0 5px;">
-                    <a th:href="@{/admin/companies(page=${pageNum})}"
+                    <a th:href="@{/admin/board/companies(page=${pageNum})}"
                        th:text="${pageNum + 1}"
                        th:classappend="${pageNum == currentPage} ? 'active-page' : ''"></a>
                 </span>

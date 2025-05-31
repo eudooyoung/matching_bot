@@ -1,8 +1,7 @@
 package com.multi.matchingbot.admin.controller;
 
 import com.multi.matchingbot.admin.domain.*;
-import com.multi.matchingbot.admin.service.AdminPageService;
-import com.multi.matchingbot.common.security.MBotUserDetails;
+import com.multi.matchingbot.admin.service.AdminBoardService;
 import com.multi.matchingbot.company.service.CompanyService;
 import com.multi.matchingbot.job.domain.dto.JobDto;
 import com.multi.matchingbot.job.service.JobService;
@@ -13,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,39 +22,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/admin")
-public class AdminPageController {
+@RequestMapping("/admin/board")
+public class AdminBoardController {
 
-    private final AdminPageService adminPageService;
+    private final AdminBoardService adminPageService;
     private final JobService jobService;
     private final CompanyService companyService;
     private final MemberService memberService;
     private final ResumeService resumeService;
 
-    @GetMapping({"/", "/main", ""})
-    public String mainPage(Model model, @AuthenticationPrincipal MBotUserDetails user) {
-        if (user != null) {
-            log.info("userType: {}", user.getRole());
-            model.addAttribute("role", user.getRole());
-        } else {
-            model.addAttribute("role", null);
-            log.info("비회원 접근");
-        }
-        return "main/main";
-    }
-
-    @GetMapping("/login")
-    public void login() {
-    }
-
     @GetMapping("/members")
-    public void members(@ModelAttribute AdminSearchCondition condition, Model model) {
+    public String members(@ModelAttribute AdminSearchCondition condition, Model model) {
         AdminPagedResult<MemberAdminView> result = adminPageService.members(condition);
         model.addAttribute("members", result.getPage().getContent());
         model.addAttribute("page", result.getPage());
         model.addAttribute("pageNumbers", result.getPageNumbers());
         model.addAttribute("currentPage", result.getCurrentPage());
         model.addAttribute("condition", condition);
+        return "/admin/board-members";
     }
 
     //    구직자 회원 정보 임시 매핑
@@ -67,7 +50,7 @@ public class AdminPageController {
     }
 
     @GetMapping("/companies")
-    public void companies(@ModelAttribute AdminSearchCondition condition, Model model) {
+    public String companies(@ModelAttribute AdminSearchCondition condition, Model model) {
         log.warn("statusParam = [{}]", condition.getStatus());
         AdminPagedResult<CompanyAdminView> result = adminPageService.companies(condition);
         model.addAttribute("companies", result.getPage().getContent());
@@ -75,6 +58,7 @@ public class AdminPageController {
         model.addAttribute("pageNumbers", result.getPageNumbers());
         model.addAttribute("currentPage", result.getCurrentPage());
         model.addAttribute("condition", condition);
+        return "/admin/board-companies";
     }
 
     @GetMapping("/companies/{companyId}")
@@ -92,7 +76,7 @@ public class AdminPageController {
     }
 
     @GetMapping("/resumes")
-    public void resumes(@ModelAttribute AdminSearchCondition condition, Model model) {
+    public String resumes(@ModelAttribute AdminSearchCondition condition, Model model) {
         log.warn("statusParam = [{}]", condition.getKeywordsStatus());
         AdminPagedResult<ResumeAdminView> result = adminPageService.resumes(condition);
         model.addAttribute("resumes", result.getPage().getContent());
@@ -100,6 +84,7 @@ public class AdminPageController {
         model.addAttribute("pageNumbers", result.getPageNumbers());
         model.addAttribute("currentPage", result.getCurrentPage());
         model.addAttribute("condition", condition);
+        return "/admin/board-resumes";
     }
 
     @GetMapping("/resumes/{resumeId}")

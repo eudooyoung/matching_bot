@@ -1,0 +1,164 @@
+<!-- 관리자 대시보드 fragment -->
+<div th:fragment="adminDashboard">
+
+    <h2 style="text-align: center">환영합니다, 관리자님</h2>
+    <div class="dashboard-wrapper">
+        <!-- ✅ 통계 카드 -->
+        <section class="stats-grid">
+            <div class="card">
+                <h3>전체 회원 수</h3>
+                <p th:text="${memberCount}">0</p>
+                <ul class="card-sublist">
+                    <li>오늘: <span th:text="${contentStats.memberToday}">0</span></li>
+                    <li>이번 주: <span th:text="${contentStats.memberWeek}">0</span></li>
+                    <li>이번 달: <span th:text="${contentStats.memberMonth}">0</span></li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>기업 수</h3>
+                <p th:text="${companyCount}">0</p>
+                <ul class="card-sublist">
+                    <li>오늘: <span th:text="${contentStats.companyToday}">0</span></li>
+                    <li>이번 주: <span th:text="${contentStats.companyWeek}">0</span></li>
+                    <li>이번 달: <span th:text="${contentStats.companyMonth}">0</span></li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>이력서 수</h3>
+                <p th:text="${resumeCount}">0</p>
+                <ul class="card-sublist">
+                    <li>오늘: <span th:text="${contentStats.resumeToday}">0</span></li>
+                    <li>이번 주: <span th:text="${contentStats.resumeWeek}">0</span></li>
+                    <li>이번 달: <span th:text="${contentStats.resumeMonth}">0</span></li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>채용공고 수</h3>
+                <p th:text="${jobCount}">0</p>
+                <ul class="card-sublist">
+                    <li>오늘: <span th:text="${contentStats.jobToday}">0</span></li>
+                    <li>이번 주: <span th:text="${contentStats.jobWeek}">0</span></li>
+                    <li>이번 달: <span th:text="${contentStats.jobMonth}">0</span></li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>커뮤니티 글 수</h3>
+                <p th:text="${communityPostCount}">0</p>
+                <ul class="card-sublist">
+                    <li>오늘: <span th:text="${contentStats.communityPostToday}">0</span></li>
+                    <li>이번 주: <span th:text="${contentStats.communityPostWeek}">0</span></li>
+                    <li>이번 달: <span th:text="${contentStats.communityPostMonth}">0</span></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 파이 그래프 -->
+        <section class="chart-section section-spacing">
+            <div class="chart-box">
+                <h3>회원 유형 비율</h3>
+                <canvas id="userTypePieChart"></canvas>
+            </div>
+
+            <div class="chart-box">
+                <h3>이력서 & 채용공고 수</h3>
+                <canvas id="resumeJobPieChart"></canvas>
+            </div>
+        </section>
+
+        <!-- ✅ 관리 항목 바로가기 -->
+        <section class="board-management section-spacing">
+            <h3>관리 항목 바로가기</h3>
+            <div class="card-grid">
+                <a href="/admin/board/members" class="card link-card">👤 개인 회원 관리</a>
+                <a href="/admin/board/companies" class="card link-card">🏢 기업 회원 관리</a>
+                <a href="/admin/board/resumes" class="card link-card">📄 이력서 관리</a>
+                <a href="/admin/board/jobs" class="card link-card">📌 채용공고 관리</a>
+                <a href="/admin/board/community" class="card link-card">📝 커뮤니티 관리</a>
+            </div>
+        </section>
+    </div>
+
+    <!-- 차트 스크립트 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <script th:inline="javascript">
+        Chart.register(ChartDataLabels);
+
+        const userTypeLabels = [[${userTypeLabels}]];
+        const userTypeData = [[${userTypeData}]];
+
+        const ctx = document.getElementById("userTypePieChart").getContext("2d");
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: userTypeLabels,
+                datasets: [{
+                    data: userTypeData,
+                    backgroundColor: ['#f28e2c', '#4e79a7']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                    tooltip: {
+                        enabled: false
+                    },
+                    datalabels: {
+                        color: '#fff',
+                        formatter: (value, context) => {
+                            const label = context.chart.data.labels[context.dataIndex];
+                            return `${label}\n${value}명`;
+                        },
+                        font: {
+                            size: '16px',
+                            weight: 'bold'
+                        }
+                    }
+                }
+            }
+        });
+
+        const resumeJobLabels = [[${resumeJobLabels}]];
+        const resumeJobData = [[${resumeJobData}]];
+
+        const ctx2 = document.getElementById("resumeJobPieChart").getContext("2d");
+        new Chart(ctx2, {
+            type: 'pie',
+            data: {
+                labels: resumeJobLabels,
+                datasets: [{
+                    data: resumeJobData,
+                    backgroundColor: ['#f28e2c', '#4e79a7']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                    tooltip: {
+                        enabled: false
+                    },
+                    datalabels: {
+                        color: '#fff',
+                        formatter: (value, context) => {
+                            const label = context.chart.data.labels[context.dataIndex];
+                            return `${label}\n${value}건`;
+                        },
+                        font: {
+                            size: '16px',
+                            weight: 'bold'
+                        }
+                    },
+                    plugins: [ChartDataLabels]
+                }
+            }
+        });
+    </script>
+</div>
