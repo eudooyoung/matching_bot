@@ -1,13 +1,16 @@
 package com.multi.matchingbot.company.service;
 
+import com.multi.matchingbot.chatbot.ChatbotReportService;
 import com.multi.matchingbot.common.domain.enums.Role;
 import com.multi.matchingbot.common.domain.enums.Yn;
-import com.multi.matchingbot.company.repository.AuthCompanyRepository;
 import com.multi.matchingbot.company.domain.Company;
 import com.multi.matchingbot.company.domain.CompanyRegisterDto;
+import com.multi.matchingbot.company.repository.AuthCompanyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.io.File;
 
 @Service
 @RequiredArgsConstructor
@@ -15,6 +18,8 @@ public class AuthCompanyRegistService {
 
     private final AuthCompanyRepository authCompanyRepository;
     private final PasswordEncoder passwordEncoder;
+
+    private final ChatbotReportService chatbotReportService;
 
     public void register(CompanyRegisterDto dto) {
         if (authCompanyRepository.existsByEmail(dto.getEmail())) {
@@ -46,6 +51,12 @@ public class AuthCompanyRegistService {
                 .status(Yn.Y)
                 .build();
 
-        authCompanyRepository.save(company);
+//        authCompanyRepository.save(company);
+
+        Company savedCompany = authCompanyRepository.save(company);
+
+        /*기업 평가 보고서 로직*/
+       File fullReportImage = chatbotReportService.generateFullReportImage(dto, savedCompany.getId());
+
     }
 }
