@@ -112,14 +112,16 @@ public class JobController {
 //        model.addAttribute("job", dto);
 //        return "job/job-edit";
 //    }
-    @GetMapping("/{id}/edit")
-    public String showEditForm(@PathVariable("id") Long id, Model model) {
-        Job job = jobRepository.findById(id).orElseThrow(() -> new RuntimeException("Job not found"));
-        JobDto dto = JobMapper.toDto(job);
-        model.addAttribute("job", dto);
+        @GetMapping("/{id}/edit")
+        public String showEditForm(@PathVariable("id") Long id, Model model) {
+            Job job = jobRepository.findById(id).orElseThrow(() -> new RuntimeException("Job not found"));
+            JobDto dto = JobMapper.toDto(job);
+            model.addAttribute("job", dto);
 
-        return "job/job-edit";
-    }
+            model.addAttribute("occupationId", dto.getOccupationId());
+
+            return "job/job-edit";
+        }
 
     // 공고 수정 처리
     @PostMapping("/{id}/edit")
@@ -129,14 +131,12 @@ public class JobController {
         if (bindingResult.hasErrors()) {
             return "job/job-edit";
         }
-        jobService.update(id, dto.toEntity());
-        return "redirect:/job/manage-jobs";
-    }
 
-    // 공고 삭제 처리
-    @GetMapping("/delete/{id}")
-    public String deleteJob(@PathVariable("id") Long id) {
-        jobService.delete(id);
+        Occupation occupation = occupationService.findById(dto.getOccupationId());
+        Job updatedJob = dto.toEntityWithOccupation(occupation);
+
+        jobService.update(id, updatedJob);
+
         return "redirect:/job/manage-jobs";
     }
 
