@@ -112,26 +112,24 @@ public class JobController {
 //        model.addAttribute("job", dto);
 //        return "job/job-edit";
 //    }
-    @GetMapping("/edit/{id}")
-    public String editJobForm(@PathVariable Long id, Model model, @AuthenticationPrincipal MBotUserDetails userDetails) {
-        Long companyId = userDetails.getCompanyId();
+    @GetMapping("/{id}/edit")
+    public String showEditForm(@PathVariable("id") Long id, Model model) {
+        Job job = jobRepository.findById(id).orElseThrow(() -> new RuntimeException("Job not found"));
+        JobDto dto = JobMapper.toDto(job);
+        model.addAttribute("job", dto);
 
-        Job job = jobService.findById(id);
-        model.addAttribute("job", job);
-        model.addAttribute("role", userDetails.getAuthorities());
-        model.addAttribute("companyId", job.getCompany().getId());
-        return "job/edit";
+        return "job/job-edit";
     }
 
     // 공고 수정 처리
     @PostMapping("/{id}/edit")
-    public String updateJob(@PathVariable Long id,
+    public String updateJob(@PathVariable("id") Long id,
                             @Valid @ModelAttribute("job") JobDto dto,
                             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "job/job-edit";
         }
-        jobService.update(id, dto.toEntity()); // dto → entity 변환 방식 사용
+        jobService.update(id, dto.toEntity());
         return "redirect:/job/manage-jobs";
     }
 

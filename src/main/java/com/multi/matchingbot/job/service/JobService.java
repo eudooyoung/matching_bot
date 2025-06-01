@@ -5,7 +5,6 @@ import com.multi.matchingbot.job.domain.dto.JobDto;
 import com.multi.matchingbot.job.domain.entity.Job;
 import com.multi.matchingbot.job.mapper.JobMapper;
 import com.multi.matchingbot.job.repository.JobRepository;
-import com.multi.matchingbot.job.repository.OccupationRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,13 +18,9 @@ import java.util.stream.Collectors;
 public class JobService {
 
     private final JobRepository repository;
-    private final OccupationRepository occupationRepository;
-    private final JobMapper jobMapper;
 
-    public JobService(JobRepository repository, OccupationRepository occupationRepository, JobMapper jobMapper) {
+    public JobService(JobRepository repository) {
         this.repository = repository;
-        this.occupationRepository = occupationRepository;
-        this.jobMapper = jobMapper;
     }
 
     public Page<JobDto> getByCompanyIdPaged(Long companyId, Pageable pageable) {
