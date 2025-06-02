@@ -1,3 +1,11 @@
+spring:
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY:}
+      model: gpt-4o
+      options:
+        temperature: 0.3
+
 jwt:
   issuer: ${JWT_ISSUER}
   secret: ${JWT_SECRET}
@@ -23,6 +31,7 @@ security:
       - /calendar
 
       - /community/detail/**
+      - /api/v1/chatbot/**
     member-paths:
       - /api/maps/**
       - /member/**
@@ -36,7 +45,7 @@ security:
       - /api/occupations/**
     admin-paths:
       - /admin/**
-#      - /company/**
-#      - /job/**
+    #      - /company/**
+    #      - /job/**
     api-paths:
       - /api/**
