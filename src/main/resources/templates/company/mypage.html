@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8" />
     <title>기업 마이페이지</title>
-    <link rel="stylesheet" th:href="@{/css/mypage.css}"/>
+    <link rel="stylesheet" th:href="@{/css/company-job.css}"/>
     <link rel="stylesheet" th:href="@{/css/layout.css}"/>
 </head>
 <body>
-<!--<p th:text="'현재 userType: ' + ${userType}"></p>-->
+
 <div th:replace="~{fragments/header :: header(role=${role})}"></div>
 
 <div class="container">
@@ -16,7 +16,11 @@
     <!-- 프로필 정보 -->
     <div class="user-info-box">
         <div class="profile-circle">F</div>
-        <span class="user-name" th:text="${company.name}"></span> 님
+        <div class="user-box">
+        <span>
+          <span th:text="${company.name}"></span> 님
+        </span>
+        </div>
     </div>
 
     <!-- 소개 텍스트 -->
@@ -50,7 +54,11 @@
 
     </div>
 </div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>
+
 </body>
 </html>

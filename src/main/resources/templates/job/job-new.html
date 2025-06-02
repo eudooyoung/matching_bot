@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8" />
     <title>공고 등록</title>
-    <link rel="stylesheet" th:href="@{/css/mypage.css}" />
-    <link rel="stylesheet" th:href="@{/css/layout.css}" />
+    <link rel="stylesheet" th:href="@{/css/company-job.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
 </head>
 <body>
-<!--<p th:text="'현재 userType: ' + ${userType}"></p>-->
+
 <div th:replace="~{fragments/header :: header(role=${role})}"></div>
 
 <div class="container">
     <h2>채용 공고 등록</h2>
 
     <form th:action="@{/job/new}" method="post" th:object="${job}">
-<!--        <input type="hidden" name="companyId" th:value="${job.companyId}" />-->
 
         <div class="form-group">
             <label>관심 직무</label>
@@ -111,6 +110,8 @@
     </form>
 </div>
 
+<div th:replace="~{fragments/footer :: footer}"></div>
+
 <!-- 🔽 하단에 script 위치 (기존 위치와 같게 유지) -->
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>
@@ -133,7 +134,7 @@
             }
         });
 
-        // ✅ Form 제출 전에 occupationId 값이 제대로 들어갔는지 검증
+        // Form 제출 전에 occupationId 값이 제대로 들어갔는지 검증
         const form = document.querySelector("form");
         if (form) {
             form.addEventListener("submit", function (e) {

@@ -93,12 +93,11 @@ public class JobDto {
         job.setNotice(this.notice);
         job.setLatitude(this.latitude);
         job.setLongitude(this.longitude);
-        // occupationId는 별도로 service에서 Occupation 찾아서 설정해야 함
         return job;
     }
 
     public Job toEntityWithOccupation(Occupation occupation) {
-        Job job = this.toEntity();  // 기본 필드 설정
+        Job job = this.toEntity();
         job.setOccupation(occupation);
         return job;
     }

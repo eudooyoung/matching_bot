@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <title>공고 상세보기</title>
-    <link rel="stylesheet" th:href="@{/css/mypage.css}"/>
-    <link rel="stylesheet" th:href="@{/css/layout.css}"/>
+    <link rel="stylesheet" th:href="@{/css/company-job.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
     <style>
         .container {
             max-width: 900px;
@@ -22,10 +22,6 @@
             color: #103254;
             margin-bottom: 10px;
         }
-        .job-sub {
-            font-size: 18px;
-            margin-bottom: 20px;
-        }
         .section {
             margin-bottom: 16px;
         }
@@ -38,9 +34,8 @@
         }
     </style>
 </head>
-
 <body>
-<!--<p th:text="'현재 userType: ' + ${userType}"></p>-->
+
 <div th:replace="~{fragments/header :: header(role=${role})}"></div>
 
 <div class="container">
@@ -104,6 +99,8 @@
         </div>
     </div>
 </div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
 
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>

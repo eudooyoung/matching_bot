@@ -1,8 +1,9 @@
 -- create database matching_bot;
+
 -- use hr;
 use matching_bot;
 
-/*-- 1. 외래키 제약 조건 해제
+-- 1. 외래키 제약 조건 해제
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `attached_items`;
 DROP TABLE IF EXISTS `career`;
@@ -22,8 +23,9 @@ DROP TABLE IF EXISTS `member`;
 DROP TABLE IF EXISTS `attached_items`;
 DROP TABLE IF EXISTS `region`;
 DROP TABLE IF EXISTS `refresh_token`;
+
 -- 3. 외래키 제약 조건 다시 활성화
-SET FOREIGN_KEY_CHECKS = 1;*/
+SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE member (
     id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '회원 ID',
@@ -204,19 +206,29 @@ CREATE TABLE community_comment (
 
 
 create table attached_items (
-	id BIGINT AUTO_INCREMENT PRIMARY KEY comment '첨부파일 ID',
-	reference_id BIGINT NOT NULL comment '참조 ID (company, resume, community_post)',
-	type VARCHAR(50) NOT NULL comment 'VL=기업평가, VS=평가요약, PO=기업포스터, RE=이력서사진, CO=게시글첨부',
-	check (type in ('VL', 'VS', 'PO', 'RE', 'CO')),
-	original_name VARCHAR(255) NOT NULL comment '실제이름',
-	system_name VARCHAR(255) NOT NULL comment '시스템이름',
-	path VARCHAR(255) NOT NULL comment '경로',
-	status ENUM('Y', 'N') NOT NULL comment '상태',
-	created_by VARCHAR(50) NOT NULL comment '생성자',
-	created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL comment '생성일',
-	updated_by VARCHAR(50) comment '수정자',
-	updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP comment '수정일',
-	index idx_attached (type, reference_id)
+    id BIGINT AUTO_INCREMENT PRIMARY KEY comment '첨부파일 ID',
+
+    reference_id BIGINT NOT NULL comment '참조 ID (company, resume, community_post)',
+    item_type ENUM(
+        'REPORT',
+        'SUMMARY',
+        'POSTER',
+        'RESUME',
+        'COMM'
+    ) NOT NULL COMMENT '파일 유형',
+
+    original_name VARCHAR(255) NOT NULL comment '실제 이름',
+    system_name VARCHAR(255) NOT NULL comment '서버 저장 파일명',
+    path VARCHAR(255) NOT NULL comment '경로',
+
+    status ENUM('Y', 'N') NOT NULL comment '상태 (Y=정상, N=삭제)',
+
+    created_by VARCHAR(50) NOT NULL comment '생성자',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL comment '생성일',
+    updated_by VARCHAR(50) comment '수정자',
+    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP comment '수정일',
+
+    index idx_attached (item_type, reference_id)
 );
 
 select * from attached_items;

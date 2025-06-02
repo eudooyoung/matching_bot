@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>회원정보 수정</title>
-    <link rel="stylesheet" th:href="@{/css/layout.css}" />
-    <link rel="stylesheet" th:href="@{/css/mypage.css}" />
+    <link rel="stylesheet" th:href="@{/css/company-job.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
     <style>
         .readonly {
             background-color: #e0e0e0;
@@ -18,11 +18,11 @@
 </head>
 <body>
 
-<!--<p th:text="'현재 userType: ' + ${userType}"></p>-->
 <div th:replace="~{fragments/header :: header(role=${role})}"></div>
 
 <div class="form-container">
     <h2 class="form-title">회원정보 수정</h2>
+
     <form method="post" th:object="${company}">
         <input type="hidden" th:field="*{id}" />
 
@@ -37,15 +37,19 @@
 
         <label>회사 전화번호</label>
         <input type="text" th:field="*{phone}" />
+        <div class="error-message" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
 
         <label>회사 주소</label>
         <input type="text" th:field="*{address}" />
+        <div class="error-message" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></div>
 
         <div class="form-row">
             <div class="form-group">
                 <label>산업군</label>
                 <input type="text" th:field="*{industry}" />
+                <div class="error-message" th:if="${#fields.hasErrors('industry')}" th:errors="*{industry}"></div>
             </div>
+
             <div class="form-group">
                 <label>설립연도</label>
                 <div style="display: flex; align-items: center;">
@@ -61,13 +65,16 @@
                 <div style="display: flex; align-items: center;">
                     <input type="number" th:field="*{headcount}" />
                     <span style="margin-left: 6px;">명</span>
+                    <div class="error-message" th:if="${#fields.hasErrors('headcount')}" th:errors="*{headcount}"></div>
                 </div>
             </div>
+
             <div class="form-group">
                 <label>채용 공고 수</label>
                 <div style="display: flex; align-items: center;">
                     <input type="number" th:field="*{jobsLastYear}" />
                     <span style="margin-left: 6px;">건</span>
+                    <div class="error-message" th:if="${#fields.hasErrors('jobsLastYear')}" th:errors="*{jobsLastYear}"></div>
                 </div>
             </div>
         </div>
@@ -77,14 +84,17 @@
                 <label>연 매출</label>
                 <div style="display: flex; align-items: center;">
                     <input type="number" th:field="*{annualRevenue}" />
-                    <span style="margin-left: 6px;">원</span>
+                    <span style="margin-left: 6px;">(억)원</span>
+                    <div class="error-message" th:if="${#fields.hasErrors('annualRevenue')}" th:errors="*{annualRevenue}"></div>
                 </div>
             </div>
+
             <div class="form-group">
                 <label>영업 이익</label>
                 <div style="display: flex; align-items: center;">
                     <input type="number" th:field="*{operatingIncome}" />
-                    <span style="margin-left: 6px;">원</span>
+                    <span style="margin-left: 6px;">(억)원</span>
+                    <div class="error-message" th:if="${#fields.hasErrors('operatingIncome')}" th:errors="*{operatingIncome}"></div>
                 </div>
             </div>
         </div>
@@ -94,6 +104,8 @@
         </div>
     </form>
 </div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
 
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>
