@@ -95,6 +95,9 @@ public class JobController {
 
         Job job = JobMapper.toEntity(jobDto, company, occupation);
 
+        // ✅ 추출된 키워드 문자열 추가 설정
+        job.setSkillKeywords(jobDto.getSkillKeywordsConcat());
+        job.setTraitKeywords(jobDto.getTraitKeywordsConcat());
         // System.out.println("실제 저장될 Job entity:");
         // System.out.println(job);
 
