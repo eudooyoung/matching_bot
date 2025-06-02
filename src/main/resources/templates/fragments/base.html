@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8"/>
+    <title>MatchingBot</title>
+    <link rel="stylesheet" th:href="@{/css/layout.css}"/>
+</head>
+<body>
+<!--확인용-->
+<!--<p th:text="'현재 userType: ' + ${role}"></p>-->
+<!-- Header Fragment -->
+<div class="wrapper">
+    <div th:replace="~{fragments/header :: header(role=${role})}"></div>
+
+    <!-- main 영역 -->
+    <main class="main-content">
+
+    </main>
+
+    <!-- Footer Fragment -->
+    <div th:insert="~{fragments/footer :: footer}"></div>
+</div>
+<!--헤더 추가할때 dropdown & logout.js추가-->
+<script th:src="@{/js/dropdown.js}"></script>
+<script th:src="@{/js/logout.js}"></script>
+</body>
+</html>

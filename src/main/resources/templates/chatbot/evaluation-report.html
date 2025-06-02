@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>기업 평가 결과</title>
+    <!--  <link rel="stylesheet" href="css/chatbot/company-report.css" />-->
+    <style>
+        body {
+            font-family: 'NanumGothic', sans-serif;
+            padding: 24px;
+            margin: 0 auto;
+            max-width: 660px; /* ✅ 전체 너비 줄임 */
+            font-size: 0.88em; /* ✅ 전체 폰트 축소 */
+            background-color: #fff;
+        }
+
+        .score-box {
+            background: #f1f1f1;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .score {
+            font-size: 2em;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .section {
+            margin-top: 25px;
+        }
+
+        .section h3 {
+            margin-bottom: 10px;
+        }
+
+        /* 리스트 */
+        ul li {
+          margin-bottom: 8px;
+        }
+
+        table {
+            width: 100%;
+            table-layout: fixed; /* ✅ 고정 폭 */
+            word-wrap: break-word; /* ✅ 줄바꿈 */
+            font-size: 0.87em; /* ✅ 테이블 전용 축소 */
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 6px 8px;
+            text-align: left;
+            vertical-align: top;
+            white-space: normal;
+        }
+
+        th {
+            background-color: #f9f9f9;
+        }
+
+        /* ✅ 테이블 각 컬럼 너비 고정 */
+        th:nth-child(1), td:nth-child(1) {
+            width: 18%;
+        }
+
+        /* 항목 */
+        th:nth-child(2), td:nth-child(2) {
+            width: 10%;
+        }
+
+        /* 점수 */
+        th:nth-child(3), td:nth-child(3) {
+            width: 72%;
+        }
+
+        /* 비고 */
+
+        .tag {
+            display: inline-block;
+            background: #e0f7fa;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-right: 4px;
+            font-size: 0.85em;
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>기업 평가 결과</h1>
+<h2 th:text="${name}">기업명</h2>
+
+<div class="score-box">
+    <p><strong>총점:</strong> <span class="score" th:text="${totalScore + ' / 5.0'}">4.3 / 5.0</span></p>
+    <p th:text="${summary}">요약 문장</p>
+</div>
+
+<div class="section">
+    <h3>1. 평가 요약</h3>
+    <ul>
+        <li><strong>기업 설명:</strong> <span th:text="${description}">기업 설명</span></li>
+        <li><strong>재무 상태:</strong> <span th:text="${financeSummary}">재무 요약</span></li>
+        <li><strong>고용 정보:</strong> <span th:text="${employmentSummary}">고용 정보 요약</span></li>
+    </ul>
+</div>
+
+<div class="section">
+    <h3>2. 항목별 점수</h3>
+    <table>
+        <tr>
+            <th>항목</th>
+            <th>점수</th>
+            <th>비고</th>
+        </tr>
+        <tr>
+            <td>재무 안정성</td>
+            <td th:text="${scoreFinance}">4.5</td>
+            <td th:text="${noteFinance}">비고</td>
+        </tr>
+        <tr>
+            <td>고용 규모 및 안정성</td>
+            <td th:text="${scoreEmployment}">4.0</td>
+            <td th:text="${noteEmployment}">비고</td>
+        </tr>
+        <tr>
+            <td>성장성</td>
+            <td th:text="${scoreGrowth}">4.3</td>
+            <td th:text="${noteGrowth}">비고</td>
+        </tr>
+        <tr>
+            <td>기업 평판</td>
+            <td th:text="${scoreReputation}">4.2</td>
+            <td th:text="${noteReputation}">비고</td>
+        </tr>
+    </table>
+</div>
+
+<div class="section">
+    <h3>3. 핵심 키워드</h3>
+    <div>
+        <span class="tag" th:each="keyword : ${keywords}" th:text="${keyword}">키워드</span>
+    </div>
+</div>
+
+<div class="section">
+    <h3>4. 종합 의견</h3>
+    <p th:text="${opinion}">분석 의견</p>
+</div>
+
+</body>
+</html>

@@ -150,6 +150,14 @@ body {
     display: block;
 }
 
+/*에러 페이지*/
+.menu-button.error {
+    background-color: #a8a8a8;
+    color: #103254;
+    text-decoration: none;
+}
+
+
 .resume-form {
     max-width: 600px;
     margin: 0 auto;
@@ -198,4 +206,36 @@ body {
     border-radius: 4px;
     text-decoration: none;
     text-align: center;
+}
+
+.input-group {
+    display: flex;
+    gap: 5px;
+}
+
+.keyword-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 100%; /* 전체 너비 확보 */
+    max-width: 520px;
+}
+
+.keyword-input {
+    display: flex;
+    align-items: center;
+    width: 100px; /* 100px * 5 + gap(8px * 4) = 520px 가로 정렬 */
+}
+
+.keyword-input input {
+    flex: 1;
+    min-width: 0;
+    padding: 4px;
+    font-size: 14px;
+}
+
+.keyword-input button {
+    margin-left: 3px;
+    padding: 4px 6px;
+    font-size: 14px;
 }

@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -25,6 +26,7 @@ import java.util.List;
 @Configuration
 @EnableConfigurationProperties(RoleAccessProperties.class)
 @RequiredArgsConstructor
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final CorsConfigurationSource corsConfigurationSource;
@@ -41,7 +43,7 @@ public class SecurityConfig {
 //    }
 
 
-     /*************************************** Security filter chain 임의 수정 금지, 담당자 문의해 주세요 *****************************************************/
+     /*************************************** Security filter chain 임의 수정 금지, 담당자에게 문의해 주세요 *****************************************************/
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -67,7 +69,7 @@ public class SecurityConfig {
 
         return http.build();
     }
-    /*************************************** Security filter chain 임의 수정 금지, 담당자 문의해 주세요 *****************************************************/
+    /*************************************** Security filter chain 임의 수정 금지, 담당자에게 문의해 주세요 *****************************************************/
 
 //    파이썬 쓸 때 확인
     @Bean
@@ -86,7 +88,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();  // 테스트용 주의!!!
+        return NoOpPasswordEncoder.getInstance();  // !!!테스트용 주의!!!
 //        return new BCryptPasswordEncoder();
     }
 

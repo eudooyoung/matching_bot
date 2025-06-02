@@ -77,7 +77,7 @@ public class CommunityController {
 //    }
 
     @GetMapping("/detail/{id}")
-    public String detail(@PathVariable Long id, Model model,Authentication authentication) {
+    public String detail(@PathVariable(name = "id") Long id, Model model,Authentication authentication) {
         var post = communityService.getPostWithComments(id);
         model.addAttribute("post",CommunityPostDto.fromEntity(post));
         model.addAttribute("categories", communityService.getAllCategories());
@@ -93,7 +93,7 @@ public class CommunityController {
     }
 
     @GetMapping("/edit/{id}")
-    public String editForm(@PathVariable Long id, Model model, Authentication authentication) {
+    public String editForm(@PathVariable(name = "id") Long id, Model model, Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
         }
@@ -113,7 +113,7 @@ public class CommunityController {
 
 
     @PostMapping("/edit/{id}")
-    public String update(@PathVariable Long id, @ModelAttribute CommunityPostDto postDto,
+    public String update(@PathVariable(name = "id") Long id, @ModelAttribute CommunityPostDto postDto,
                          Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
@@ -128,7 +128,7 @@ public class CommunityController {
 
 
     @PostMapping("/delete/{id}")
-    public String delete(@PathVariable Long id, Authentication authentication) {
+    public String delete(@PathVariable(name = "id") Long id, Authentication authentication) {
         // 로그인되지 않은 경우 로그인 페이지로 리다이렉트
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
