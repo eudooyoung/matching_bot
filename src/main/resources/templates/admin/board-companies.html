@@ -16,23 +16,26 @@
             <h2 style="margin-bottom: 1.5rem;">기업 회원 관리</h2>
 
             <div class="search-bar-wrapper">
+                <div class="bulk-actions">
+                    <button type="button" class="btn btn-delete"
+                            onclick="bulkSoftAction('DELETE', '/api/v1/admin/bulk/companies')">삭제
+                    </button>
+                    <button type="button" class="btn btn-restore"
+                            onclick="bulkSoftAction('PATCH', '/api/v1/admin/bulk/companies')">복구
+                    </button>
+                    <button type="button" class="btn btn-extract"
+                            onclick="bulkExtract('EXTRACT', '/admin/bulk/placeholder')">추출
+                    </button>
+                </div>
+
                 <form method="get" th:action="@{/admin/companies}" class="search-form">
                     <div class="search-options">
-                        <button type="button" class="btn btn-delete"
-                                onclick="setBulkAction('DELETE', '/admin/bulk/companies')">삭제
-                        </button>
-                        <button type="button" class="btn btn-restore"
-                                onclick="setBulkAction('RESTORE', '/admin/bulk/companies')">복구
-                        </button>
-                        <button type="button" class="btn btn-extract"
-                                onclick="setBulkAction('EXTRACT', '/admin/bulk/placeholder')">추출
-                        </button>
-
                         <!-- 정렬 기준 -->
-                        <select name="sortBy">
+                        <select name="sortBy" onchange="this.form.submit()">
                             <option value="" disabled>정렬 기준</option>
                             <option value="id" th:selected="${condition.sortBy == 'id'}">회원 번호</option>
-                            <option value="createdAt" th:selected="${condition.sortBy == 'createdAt'}">가입일</option>
+                            <option value="createdAt" th:selected="${condition.sortBy == 'createdAt'}">생성일
+                            </option>
                         </select>
 
                         <!-- 정렬 방향 -->
@@ -53,14 +56,14 @@
                         <select name="reportStatus" onchange="this.form.submit()">
                             <option value="" disabled>보고서 상태</option>
                             <option value="">전체</option>
-                            <option value="Y" th:selected="${condition.reportStatus == 'Y'}">완료</option>
+                            <option value="Y" th:selected="${condition.reportStatus == 'Y'}">추출 완료</option>
                             <option value="N" th:selected="${condition.reportStatus == 'N'}">미완료</option>
                         </select>
-
                     </div>
 
                     <div class="search-right" onchange="this.form.submit()">
-                        <input type="text" name="keyword" placeholder="이름, 이메일 검색..." th:value="${condition.keyword}"/>
+                        <input type="text" name="keyword" placeholder="회원 번호, 이름, 이메일 검색"
+                               th:value="${condition.keyword}"/>
                         <button type="submit" class="btn btn-search">검색</button>
                     </div>
                 </form>
@@ -112,20 +115,24 @@
                     <td th:text="${company.formattedId}">회원 번호</td>
                     <td th:text="${company.name}" th:attr="title=${company.name}" class="text-left-col">이름</td>
                     <td class="text-left-col">
-                        <a th:href="@{|/admin/companies/${company.id}|}"
+                        <a th:href="@{|/admin/board/companies/edit-profile/${company.id}|}"
                            th:text="${company.email}"
                            th:attr="title=${company.email}"
-                           class="email-link">이메일</a>
+                           class="link-detail">이메일</a>
                     </td>
                     <!--                    <td th:text="${company.businessNo}">사업자등록번호</td>-->
                     <!--                    <td th:text="${company.phone}">연락처</td>-->
-                    <td th:text="${company.getAddress()}" th:attr="title=${company.getAddress()}">주소</td>
+                    <td class="text-left-col" th:text="${company.getAddress()}" th:attr="title=${company.getAddress()}">주소</td>
                     <td class="text-left-col" th:text="${company.getIndustry()}">산업군</td>
-                    <td th:text="${company.isAgreementValid}">필수 동의</td>
+                    <td th:text="${company.getAgreementsStatus()}">필수 동의</td>
                     <td th:text="${#temporals.format(company.createdAt, 'yyyy-MM-dd HH:mm:ss')}">생성일</td>
-                    <td class="text-left-col" th:attr="title=${company.email}" th:text="${company.updatedBy}">수정자</td>
+                    <td class="text-left-col" th:attr="title=${company.email}" th:text="${company.updatedBy}">
+                        수정자
+                    </td>
                     <td th:text="${#temporals.format(company.updatedAt, 'yyyy-MM-dd HH:mm:ss')}">수정일</td>
-                    <td th:text="${company.reportStatus}">보고서</td>
+                    <td>
+                        <a class="link-detail" th:href="@{|/admin/board/companies/${company.id}|}" th:text="${company.reportStatus}">보고서 상태</a>
+                    </td>
                     <td>
                         <button type="button"
                                 class="btn btn-extract"
@@ -154,11 +161,11 @@
 
             <!-- 페이지네이션 (예시) -->
             <div class="table-pagination" style="margin-top: 1.5rem; text-align: center;">
-                <a th:if="${page.hasPrevious()}" th:href="@{/admin/companies(page=${currentPage - 1})}">이전</a>
+                <a th:if="${page.hasPrevious()}" th:href="@{/admin/board/companies(page=${currentPage - 1})}">이전</a>
                 <span th:unless="${page.hasPrevious()}" style="visibility: hidden;">이전</span>
 
                 <span th:each="pageNum : ${pageNumbers}" style="margin: 0 5px;">
-                    <a th:href="@{/admin/companies(page=${pageNum})}"
+                    <a th:href="@{/admin/board/companies(page=${pageNum})}"
                        th:text="${pageNum + 1}"
                        th:classappend="${pageNum == currentPage} ? 'active-page' : ''"></a>
                 </span>
@@ -175,9 +182,9 @@
 
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>
-<script th:src="@{/js/fetchWithAuth.js}"></script>
-<script th:src="@{/js/admin/deactivate.js}"></script>
-<script th:src="@{/js/admin/reactivate.js}"></script>
-<script th:src="@{/js/admin/bulkAction.js}"></script>
+<script th:src="@{/js/auth/fetchWithAuth.js}"></script>
+<script th:src="@{/js/admin/softDeleteItem.js}"></script>
+<script th:src="@{/js/admin/restoreItem.js}"></script>
+<script th:src="@{/js/admin/bulksSoftAction.js}"></script>
 </body>
 </html>

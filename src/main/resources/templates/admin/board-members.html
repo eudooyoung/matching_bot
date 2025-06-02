@@ -5,7 +5,7 @@
     <title>MatchingBot</title>
     <link rel="stylesheet" th:href="@{/css/layout.css}"/>
     <link rel="stylesheet" th:href="@{/css/admin-boards.css}"/>
-    <script src="../../static/js/admin/delete.js"></script>
+    <script src="../../static/js/admin/hardDeleteItem.js"></script>
 </head>
 <body>
 
@@ -21,10 +21,10 @@
                 <!-- 일괄 버튼 -->
                 <div class="bulk-actions">
                     <button type="button" class="btn btn-delete"
-                            onclick="setBulkAction('DELETE', '/api/v1/admin/bulk/members')">삭제
+                            onclick="bulkSoftAction('DELETE', '/api/v1/admin/bulk/members')">삭제
                     </button>
                     <button type="button" class="btn btn-restore"
-                            onclick="setBulkAction('RESTORE', '/api/v1/admin/bulk/members')">복구
+                            onclick="bulkSoftAction('PATCH', '/api/v1/admin/bulk/members')">복구
                     </button>
                 </div>
 
@@ -33,10 +33,10 @@
                 <form method="get" th:action="@{/admin/members}" class="search-form">
                     <div class="search-options">
                         <!-- 정렬 기준 -->
-                        <select name="sortBy">
+                        <select name="sortBy" onchange="this.form.submit()">
                             <option value="" disabled>정렬 기준</option>
                             <option value="id" th:selected="${condition.sortBy == 'id'}">회원 번호</option>
-                            <option value="createdAt" th:selected="${condition.sortBy == 'createdAt'}">가입일</option>
+                            <option value="createdAt" th:selected="${condition.sortBy == 'createdAt'}">생성일</option>
                         </select>
 
                         <!-- 정렬 방향 -->
@@ -105,10 +105,10 @@
                     <td th:text="${member.formattedId}">아이디</td>
                     <td class="text-left-col" th:text="${member.name}">이름</td>
                     <td class="text-left-col">
-                        <a th:href="@{|/admin/members/${member.id}|}"
+                        <a th:href="@{|/admin/board/members/${member.id}|}"
                            th:text="${member.email}"
                            th:attr="title=${member.email}"
-                           class="email-link">이메일</a>
+                           class="link-detail">이메일</a>
                     </td>
                     <td th:text="${member.getGenderLabel()}">성별</td>
                     <td th:text="${member.phone}">010-1234-5678</td>
@@ -142,11 +142,11 @@
 
             <!-- 페이지네이션 (예시) -->
             <div class="table-pagination" style="margin-top: 1.5rem; text-align: center;">
-                <a th:if="${page.hasPrevious()}" th:href="@{/admin/members(page=${currentPage - 1})}">이전</a>
+                <a th:if="${page.hasPrevious()}" th:href="@{/admin/board/members(page=${currentPage - 1})}">이전</a>
                 <span th:unless="${page.hasPrevious()}" style="visibility: hidden;">이전</span>
 
                 <span th:each="pageNum : ${pageNumbers}" style="margin: 0 5px;">
-                    <a th:href="@{/admin/members(page=${pageNum})}"
+                    <a th:href="@{/admin/board/members(page=${pageNum})}"
                        th:text="${pageNum + 1}"
                        th:classappend="${pageNum == currentPage} ? 'active-page' : ''"></a>
                 </span>
@@ -163,9 +163,9 @@
 
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>
-<script th:src="@{/js/fetchWithAuth.js}"></script>
-<script th:src="@{/js/admin/deactivate.js}"></script>
-<script th:src="@{/js/admin/reactivate.js}"></script>
-<script th:src="@{/js/admin/bulkAction.js}"></script>
+<script th:src="@{/js/auth/fetchWithAuth.js}"></script>
+<script th:src="@{/js/admin/softDeleteItem.js}"></script>
+<script th:src="@{/js/admin/restoreItem.js}"></script>
+<script th:src="@{/js/admin/bulksSoftAction.js}"></script>
 </body>
 </html>

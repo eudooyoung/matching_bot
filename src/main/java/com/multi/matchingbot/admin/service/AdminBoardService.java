@@ -9,8 +9,8 @@ import com.multi.matchingbot.admin.mapper.ResumeAdminMapper;
 import com.multi.matchingbot.admin.repository.CompanyAdminRepository;
 import com.multi.matchingbot.admin.repository.MemberAdminRepository;
 import com.multi.matchingbot.admin.repository.ResumeAdminRepository;
-import com.multi.matchingbot.common.domain.dto.PagedResult;
-import com.multi.matchingbot.common.domain.dto.SearchCondition;
+import com.multi.matchingbot.admin.domain.AdminPagedResult;
+import com.multi.matchingbot.admin.domain.AdminSearchCondition;
 import com.multi.matchingbot.common.domain.enums.Yn;
 import com.multi.matchingbot.company.domain.Company;
 import com.multi.matchingbot.member.domain.entities.Member;
@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class AdminPageService {
+public class AdminBoardService {
 
     private final MemberAdminRepository memberAdminRepository;
     private final MemberAdminMapper memberAdminMapper;
@@ -31,32 +31,32 @@ public class AdminPageService {
     private final ResumeAdminRepository resumeAdminRepository;
     private final ResumeAdminMapper resumeAdminMapper;
 
-    public PagedResult<MemberAdminView> members(SearchCondition condition) {
+    public AdminPagedResult<MemberAdminView> members(AdminSearchCondition condition) {
         Yn status = getStatus(condition.getStatus());
 
         Pageable pageable = condition.toPageable();
         Page<Member> members = memberAdminRepository.searchWithCondition(condition.getKeyword(), status, pageable);
         Page<MemberAdminView> pageResult = members.map(memberAdminMapper::toMemberAdminView);
-        return new PagedResult<>(pageResult);
+        return new AdminPagedResult<>(pageResult);
     }
 
-    public PagedResult<CompanyAdminView> companies(SearchCondition condition) {
+    public AdminPagedResult<CompanyAdminView> companies(AdminSearchCondition condition) {
         Yn status = getStatus(condition.getStatus());
         Yn reportStatus = getStatus(condition.getReportStatus());
 
         Pageable pageable = condition.toPageable();
         Page<Company> companies = companyAdminRepository.searchWithCondition(condition.getKeyword(), status, reportStatus, pageable);
         Page<CompanyAdminView> pageResult = companies.map(companyAdminMapper::toCompanyAdminView);
-        return new PagedResult<>(pageResult);
+        return new AdminPagedResult<>(pageResult);
     }
 
-    public PagedResult<ResumeAdminView> resumes(SearchCondition condition) {
+    public AdminPagedResult<ResumeAdminView> resumes(AdminSearchCondition condition) {
         Yn keywordsStatus = getStatus(condition.getKeywordsStatus());
 
         Pageable pageable = condition.toPageable();
         Page<Resume> resumes = resumeAdminRepository.searchWithCondition(condition.getKeyword(), keywordsStatus, pageable);
         Page<ResumeAdminView> pageResult = resumes.map(resumeAdminMapper::toResumeAdminView);
-        return new PagedResult<>(pageResult);
+        return new AdminPagedResult<>(pageResult);
     }
 
     private static Yn getStatus(String condition) {
@@ -65,26 +65,5 @@ public class AdminPageService {
                 : null;
         return status;
     }
-
-//    public PagedResult<MemberAdminView> jobs(int page) {
-//        Pageable pageable = PageRequest.of(page, 10);
-//        Page<MemberAdminView> pageResult = memberRepository.findAll(pageable).map(memberMapper::toMemberAdminView);
-//
-//        return new PagedResult<>(pageResult);
-//    }
-//
-//    public PagedResult<MemberAdminView> communitiy(int page) {
-//        Pageable pageable = PageRequest.of(page, 10);
-//        Page<MemberAdminView> pageResult = memberRepository.findAll(pageable).map(memberMapper::toMemberAdminView);
-//
-//        return new PagedResult<>(pageResult);
-//    }
-//
-//    public PagedResult<MemberAdminView> attachedItems(int page) {
-//        Pageable pageable = PageRequest.of(page, 10);
-//        Page<MemberAdminView> pageResult = memberRepository.findAll(pageable).map(memberMapper::toMemberAdminView);
-//
-//        return new PagedResult<>(pageResult);
-//    }
 
 }

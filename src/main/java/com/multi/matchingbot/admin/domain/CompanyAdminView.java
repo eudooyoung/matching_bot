@@ -15,7 +15,7 @@ public class CompanyAdminView extends BaseAuditDto {
 //    private String maskedNo;
     private String address;
     private String industry;
-    private boolean agreementValid;
+    private String agreementsStatus;
     private Yn reportStatus;
     private Yn status;
 

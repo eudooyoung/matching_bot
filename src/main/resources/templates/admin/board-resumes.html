@@ -17,17 +17,19 @@
 
             <!-- 검색창 -->
             <div class="search-bar-wrapper">
+                <div class="bulk-actions">
+                    <button type="button" class="btn btn-delete"
+                            onclick="bulkHardDelete('/api/v1/admin/bulk/resumes')">삭제
+                    </button>
+                    <button type="button" class="btn btn-extract"
+                            onclick="bulkExtract('/admin/bulk/placeholder')">추출
+                    </button>
+                </div>
+
                 <form method="get" th:action="@{/admin/resumes}" class="search-form">
                     <div class="search-options">
-                        <button type="button" class="btn btn-delete"
-                                onclick="setBulkDelete('DELETE', '/admin/bulk/resumes')">삭제
-                        </button>
-                        <button type="button" class="btn btn-extract"
-                                onclick="setBulkExtract('EXTRACT', '/admin/bulk/placeholder')">추출
-                        </button>
-
                         <!-- 정렬 기준 -->
-                        <select name="sortBy">
+                        <select name="sortBy" onchange="this.form.submit()">
                             <option value="" disabled>정렬 기준</option>
                             <option value="id" th:selected="${condition.sortBy == 'id'}">이력서 번호</option>
                             <option value="createdAt" th:selected="${condition.sortBy == 'createdAt'}">생성일</option>
@@ -40,7 +42,6 @@
                             <option value="ASC" th:selected="${condition.direction == 'ASC'}">오름차순</option>
                         </select>
 
-
                         <!-- 상태 -->
                         <select name="keywordsStatus" onchange="this.form.submit()">
                             <option value="" disabled>추출 상태</option>
@@ -48,11 +49,11 @@
                             <option value="Y" th:selected="${condition.keywordsStatus == 'Y'}">완료</option>
                             <option value="N" th:selected="${condition.keywordsStatus == 'N'}">미완료</option>
                         </select>
-
                     </div>
 
                     <div class="search-right" onchange="this.form.submit()">
-                        <input type="text" name="keyword" placeholder="이름, 이메일 검색..." th:value="${condition.keyword}"/>
+                        <input type="text" name="keyword" placeholder="이력서 번호, 이름, 이메일 검색..."
+                               th:value="${condition.keyword}"/>
                         <button type="submit" class="btn btn-search">검색</button>
                     </div>
                 </form>
@@ -97,7 +98,12 @@
                     <td><input type="checkbox" name="checkedIds" th:value="${resume.id}" class="check-row"/>
                     </td>
                     <td th:text="${resume.formattedId}">이력서 번호</td>
-                    <td class="text-left-col" th:text="${resume.title}">제목</td>
+                    <td class="text-left-col">
+                        <a th:href="@{|/admin/board/resumes/${resume.id}|}"
+                           th:text="${resume.title}"
+                           th:attr="title=${resume.title}"
+                           class="link-detail">이력서 제목</a>
+                    </td>
                     <td class="text-left-col" th:text="${resume.skillKeywords}">역량 키워드</td>
                     <td class="text-left-col" th:text="${resume.talentKeywords}">인재상 키워드</td>
                     <td class="text-left-col" th:text="${resume.desiredOccupation}">희망 직무</td>
@@ -127,7 +133,7 @@
 
             <!-- 페이지네이션 (예시) -->
             <div class="table-pagination" style="margin-top: 1.5rem; text-align: center;">
-                <a th:if="${page.hasPrevious()}" th:href="@{/admin/resumes(page=${currentPage - 1})}">이전</a>
+                <a th:if="${page.hasPrevious()}" th:href="@{/admin/board/resumes(page=${currentPage - 1})}">이전</a>
                 <span th:unless="${page.hasPrevious()}" style="visibility: hidden;">이전</span>
 
                 <span th:each="pageNum : ${pageNumbers}" style="margin: 0 5px;">
@@ -136,7 +142,7 @@
                                    th:classappend="${pageNum == currentPage} ? 'active-page' : ''"></a>
                             </span>
 
-                <a th:if="${page.hasNext()}" th:href="@{/admin/resumes(page=${currentPage + 1})}">다음</a>
+                <a th:if="${page.hasNext()}" th:href="@{/admin/board/resumes(page=${currentPage + 1})}">다음</a>
                 <span th:unless="${page.hasNext()}" style="visibility: hidden;">다음</span>
             </div>
         </section>
@@ -145,10 +151,10 @@
     <!-- Footer Fragment -->
     <div th:replace="~{fragments/footer :: footer}"></div>
 </div>
-<script th:src="@{/js/fetchWithAuth.js}"></script>
+<script th:src="@{/js/auth/fetchWithAuth.js}"></script>
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>
-<script th:src="@{/js/admin/delete.js}"></script>
-<script th:src="@{/js/admin/bulkDelete.js}"></script>
+<script th:src="@{/js/admin/hardDeleteItem.js}"></script>
+<script th:src="@{/js/admin/bulkHardDelete.js}"></script>
 </body>
 </html>

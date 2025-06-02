@@ -1,4 +1,4 @@
-// /static/js/common/deactivate.js
+// /static/js/common/softDeleteItem.js
 
 async function deactivateItem({ id, url, onSuccess }) {
     if (!confirm("정말 삭제하시겠습니까?")) return;
