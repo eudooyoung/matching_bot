@@ -1,7 +1,7 @@
 package com.multi.matchingbot.member.domain.entities;
 
 import com.multi.matchingbot.common.domain.entity.BaseEntity;
-import com.multi.matchingbot.common.domain.enums.CareerType;
+import com.multi.matchingbot.member.domain.CareerType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

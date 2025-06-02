@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+
 @Repository
 public interface ResumeAdminRepository extends JpaRepository<Resume, Long> {
     @Query("""
@@ -20,4 +22,7 @@ public interface ResumeAdminRepository extends JpaRepository<Resume, Long> {
                 AND (:status IS NULL OR r.keywordsStatus = :status)
             """)
     Page<Resume> searchWithCondition(@Param("keyword") String keyword, @Param("status") Yn status, Pageable pageable);
+
+    int countByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
+
 }

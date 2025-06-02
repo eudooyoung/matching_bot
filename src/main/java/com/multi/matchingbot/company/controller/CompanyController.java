@@ -1,6 +1,7 @@
 package com.multi.matchingbot.company.controller;
 
 import com.multi.matchingbot.common.security.MBotUserDetails;
+import com.multi.matchingbot.company.domain.Company;
 import com.multi.matchingbot.company.domain.CompanyUpdateDto;
 import com.multi.matchingbot.company.service.CompanyService;
 import com.multi.matchingbot.job.domain.dto.JobDto;
@@ -30,8 +31,11 @@ public class CompanyController {
 
     @GetMapping("/")
     public String companyIndex(@AuthenticationPrincipal MBotUserDetails userDetails, Model model) {
-        Long companyId = userDetails.getId(); // 로그인한 회사 ID
+        Long companyId = userDetails.getCompanyId();
         model.addAttribute("companyId", companyId);
+
+        Company company = companyService.findById(companyId);
+        model.addAttribute("company", company);
 
         Page<JobDto> jobPage = jobService.getByCompanyIdPaged(companyId, PageRequest.of(0, 20));
         model.addAttribute("jobPage", jobPage);
@@ -60,18 +64,22 @@ public class CompanyController {
     }
 
     @GetMapping("/mypage")
-    public String mypageHome() {
+    public String showCompanyMypage(Model model, @AuthenticationPrincipal MBotUserDetails userDetails) {
+        Long companyId = userDetails.getCompanyId();
+        Company company = companyService.findById(companyId);
+        model.addAttribute("company", company); // 이게 있어야 함
         return "company/mypage";
     }
 
     // 개인정보 수정 페이지
     @GetMapping("/edit-profile")
     public String showEditProfile(Model model, @AuthenticationPrincipal MBotUserDetails userDetails) {
-        Long companyId = userDetails.getId();
+        Long companyId = userDetails.getCompanyId();
         model.addAttribute("company", companyService.findById(companyId));
         return "company/edit-profile"; // 실제 템플릿 경로에 맞게
     }
 
+    // 개인정보 수정 처리
     @PostMapping("/edit-profile")
     public String updateProfile(@Valid @ModelAttribute("company") CompanyUpdateDto companyDto,
                                 BindingResult bindingResult,
@@ -80,8 +88,8 @@ public class CompanyController {
             return "company/edit-profile";
         }
 
-        companyService.update(companyDto, userDetails.getId());
-        return "redirect:/job/mypage";
+        companyService.update(companyDto, userDetails.getCompanyId());
+        return "redirect:/company/mypage";
     }
 
 }

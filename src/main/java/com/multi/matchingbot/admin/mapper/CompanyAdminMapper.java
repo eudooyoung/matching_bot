@@ -22,7 +22,7 @@ public interface CompanyAdminMapper {
 //    @Mapping(target = "maskedNo", expression = "java(maskBusinessNo(company.getBusinessNo()))")
     @Mapping(target = "address", source = "address")
     @Mapping(target = "industry", source = "industry")
-    @Mapping(target = "agreementValid", expression = "java(CompanyAdminMapper.isAgreementValid(company))")
+    @Mapping(target = "agreementsStatus", expression = "java(CompanyAdminMapper.agreementsStatus(company))")
     @Mapping(target = "reportStatus", source = "reportStatus")
     @Mapping(target = "status", source = "status")
     @Mapping(target = "createdAt", source = "createdAt")
@@ -39,10 +39,10 @@ public interface CompanyAdminMapper {
 //        return businessNo.substring(0, 2) + "-**-" + businessNo.substring(6);
 //    }
 
-    static boolean isAgreementValid(Company company) {
-        return company.getAgreeTerms() == Yn.Y
+    static String agreementsStatus(Company company) {
+        return (company.getAgreeTerms() == Yn.Y
                 && company.getAgreePrivacy() == Yn.Y
-                && company.getAgreeFinance() == Yn.Y;
+                && company.getAgreeFinance() == Yn.Y) ? "정상" : "확인 요망";
     }
 
 }

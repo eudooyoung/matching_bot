@@ -1,15 +1,19 @@
 package com.multi.matchingbot.admin.service;
 
+import com.multi.matchingbot.admin.domain.BulkResponseDto;
 import com.multi.matchingbot.admin.repository.CompanyAdminRepository;
 import com.multi.matchingbot.common.domain.enums.Yn;
 import com.multi.matchingbot.company.domain.Company;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CompanyAdminService {
@@ -33,12 +37,32 @@ public class CompanyAdminService {
     }
 
     @Transactional
-    public void deactivateBulk(List<Long> checkedIds) {
-        checkedIds.forEach(this::deactivate);
+    public BulkResponseDto deactivateBulk(List<Long> ids) {
+        List<Long> failed = new ArrayList<>();
+        for (Long id : ids) {
+            try {
+                deactivate(id);
+            } catch (Exception e) {
+                failed.add(id);
+                log.warn("ID {} 비활성화 실패: {}", id, e.getMessage());
+            }
+        }
+        boolean isSuccess = failed.isEmpty();
+        return new BulkResponseDto(isSuccess, failed);
     }
 
     @Transactional
-    public void reactivateBulk(List<Long> checkedIds) {
-        checkedIds.forEach(this::reactivate);
+    public BulkResponseDto reactivateBulk(List<Long> ids) {
+        List<Long> failed = new ArrayList<>();
+        for (Long id : ids) {
+            try {
+                reactivate(id);
+            } catch (Exception e) {
+                failed.add(id);
+                log.warn("ID {} 복구 실패: {}", id, e.getMessage());
+            }
+        }
+        boolean isSuccess = failed.isEmpty();
+        return new BulkResponseDto(isSuccess, failed);
     }
 }

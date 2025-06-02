@@ -1,0 +1,84 @@
+
+.login-container {
+    max-width: 400px;
+    margin: 4rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 개인 회원일 때 */
+.login-container.member-style {
+    /*border: 2px solid #ffcfac;*/
+    background-color: #fffdf7;
+}
+
+/* 기업 회원일 때 */
+.login-container.company-style {
+    /*border: 2px solid #a3a8b7;*/
+    background-color: #f8faff;
+}
+
+.tab-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.tab-buttons button {
+    flex: 1;
+    padding: 0.75rem;
+    border: none;
+    background-color: #e0e0e0;
+    color: #333;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.tab-buttons button.active {
+    font-weight: bold;
+}
+
+/* 각 유형별 색상 */
+.tab-button.active[data-type="member"] {
+    background-color: #fc7b1e; /* 개인 회원 */
+    color: white;
+}
+
+.tab-button.active[data-type="company"] {
+    background-color: #4e67a7; /* 기업 회원 */
+    color: white;
+}
+
+.login-form {
+    display: none;
+    flex-direction: column;
+}
+
+.login-form.active {
+    display: flex;
+}
+
+.login-form label {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.login-form input {
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.login-form button[type="submit"] {
+    background-color: #103254;
+    color: white;
+    padding: 0.75rem;
+    border: none;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+}

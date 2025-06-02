@@ -57,60 +57,71 @@
 <div class="form-box">
     <h2>공고 수정하기</h2>
 
+    <script>
+        function validateForm() {
+            const occId = document.getElementById('occupationId')?.value;
+            if (!occId || occId.trim() === "") {
+                alert("관심 직무를 선택해주세요.");
+                return false;
+            }
+            return true;
+        }
+    </script>
+
     <form th:action="@{/job/{id}/edit(id=${job.id})}" method="post" th:object="${job}" onsubmit="return validateForm();">
         <label>관심 직무</label>
-        <input type="hidden" th:field="*{job.occupationId}" id="occupationId" />
+        <input type="hidden" th:field="*{occupationId}" id="occupationId" />
         <div id="react-job-category-selector" th:attr="data-initial-id=${job.occupationId}"></div>
 
         <label>제목</label>
-        <input type="text" th:field="*{job.title}" required />
-        <div th:if="${#fields.hasErrors('title')}" class="error-message" th:errors="*{job.title}"></div>
+        <input type="text" th:field="*{title}" required />
+        <div th:if="${#fields.hasErrors('title')}" class="error-message" th:errors="*{title}"></div>
 
         <label>설명</label>
-        <textarea th:field="*{job.description}" rows="3" required></textarea>
-        <div th:if="${#fields.hasErrors('description')}" class="error-message" th:errors="*{job.description}"></div>
+        <textarea th:field="*{description}" rows="3" required></textarea>
+        <div th:if="${#fields.hasErrors('description')}" class="error-message" th:errors="*{description}"></div>
 
         <label>근무지</label>
-        <input type="text" th:field="*{job.address}" required />
-        <div th:if="${#fields.hasErrors('address')}" class="error-message" th:errors="*{job.address}"></div>
+        <input type="text" th:field="*{address}" required />
+        <div th:if="${#fields.hasErrors('address')}" class="error-message" th:errors="*{address}"></div>
 
         <label>주요 업무</label>
-        <textarea th:field="*{job.mainTask}" rows="2" required></textarea>
-        <div th:if="${#fields.hasErrors('mainTask')}" class="error-message" th:errors="*{job.mainTask}"></div>
+        <textarea th:field="*{mainTask}" rows="2" required></textarea>
+        <div th:if="${#fields.hasErrors('mainTask')}" class="error-message" th:errors="*{mainTask}"></div>
 
         <label>필요 기술</label>
-        <textarea th:field="*{job.requiredSkills}" rows="2" required></textarea>
-        <div th:if="${#fields.hasErrors('requiredSkills')}" class="error-message" th:errors="*{job.requiredSkills}"></div>
+        <textarea th:field="*{requiredSkills}" rows="2" required></textarea>
+        <div th:if="${#fields.hasErrors('requiredSkills')}" class="error-message" th:errors="*{requiredSkills}"></div>
 
         <label>필요 성향</label>
-        <textarea th:field="*{job.requiredTraits}" rows="2" required></textarea>
-        <div th:if="${#fields.hasErrors('requiredTraits')}" class="error-message" th:errors="*{job.requiredTraits}"></div>
+        <textarea th:field="*{requiredTraits}" rows="2" required></textarea>
+        <div th:if="${#fields.hasErrors('requiredTraits')}" class="error-message" th:errors="*{requiredTraits}"></div>
 
-        <input type="hidden" th:field="*{job.latitude}" th:value="${job.latitude != null ? job.latitude : 37.5665}" />
-        <input type="hidden" th:field="*{job.longitude}" th:value="${job.longitude != null ? job.longitude : 126.9780}" />
+        <input type="hidden" th:field="*{latitude}" th:value="${latitude != null ? latitude : 37.5665}" />
+        <input type="hidden" th:field="*{longitude}" th:value="${longitude != null ? longitude : 126.9780}" />
 
         <label>기술 키워드</label>
-        <input type="text" th:field="*{job.skillKeywords}" />
-        <div th:if="${#fields.hasErrors('skillKeywords')}" class="error-message" th:errors="*{job.skillKeywords}"></div>
+        <input type="text" th:field="*{skillKeywords}" />
+        <div th:if="${#fields.hasErrors('skillKeywords')}" class="error-message" th:errors="*{skillKeywords}"></div>
 
         <label>성향 키워드</label>
-        <input type="text" th:field="*{job.traitKeywords}" />
-        <div th:if="${#fields.hasErrors('traitKeywords')}" class="error-message" th:errors="*{job.traitKeywords}"></div>
+        <input type="text" th:field="*{traitKeywords}" />
+        <div th:if="${#fields.hasErrors('traitKeywords')}" class="error-message" th:errors="*{traitKeywords}"></div>
 
         <label>채용 시작일</label>
-        <input type="date" th:field="*{job.startDate}" required />
-        <div th:if="${#fields.hasErrors('startDate')}" class="error-message" th:errors="*{job.startDate}"></div>
+        <input type="date" th:field="*{startDate}" required />
+        <div th:if="${#fields.hasErrors('startDate')}" class="error-message" th:errors="*{startDate}"></div>
 
         <label>채용 마감일</label>
-        <input type="date" th:field="*{job.endDate}" required />
-        <div th:if="${#fields.hasErrors('endDate')}" class="error-message" th:errors="*{job.endDate}"></div>
+        <input type="date" th:field="*{endDate}" required />
+        <div th:if="${#fields.hasErrors('endDate')}" class="error-message" th:errors="*{endDate}"></div>
 
         <label>지원 이메일</label>
-        <input type="email" th:field="*{job.enrollEmail}" required />
-        <div th:if="${#fields.hasErrors('enrollEmail')}" class="error-message" th:errors="*{job.enrollEmail}"></div>
+        <input type="email" th:field="*{enrollEmail}" required />
+        <div th:if="${#fields.hasErrors('enrollEmail')}" class="error-message" th:errors="*{enrollEmail}"></div>
 
         <label>유의사항</label>
-        <textarea th:field="*{job.notice}" rows="2"></textarea>
+        <textarea th:field="*{notice}" rows="2"></textarea>
 
         <div style="margin-top: 24px;">
             <button type="submit">수정</button>
@@ -150,7 +161,7 @@
 <script>
     function validateForm() {
         const occId = document.getElementById('occupationId').value;
-        if (!occId) {
+        if (!occId || occId.trim() === "") {
             alert("관심 직무를 선택해주세요.");
             return false;
         }
