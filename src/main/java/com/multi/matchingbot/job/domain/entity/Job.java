@@ -69,4 +69,22 @@ public class Job extends BaseEntity {
 
     @Column(length = 255)
     private String notice;
+
+    public void updateFrom(Job updatedJob) {
+        this.title = updatedJob.getTitle();
+        this.description = updatedJob.getDescription();
+        this.address = updatedJob.getAddress();
+        this.mainTask = updatedJob.getMainTask();
+        this.requiredSkills = updatedJob.getRequiredSkills();
+        this.requiredTraits = updatedJob.getRequiredTraits();
+        this.skillKeywords = updatedJob.getSkillKeywords();
+        this.traitKeywords = updatedJob.getTraitKeywords();
+        this.startDate = updatedJob.getStartDate();
+        this.endDate = updatedJob.getEndDate();
+        this.enrollEmail = updatedJob.getEnrollEmail();
+        this.notice = updatedJob.getNotice();
+        this.occupation = updatedJob.getOccupation(); // 직무 정보까지 복사
+        this.latitude = updatedJob.getLatitude();
+        this.longitude = updatedJob.getLongitude();
+    }
 }

@@ -38,9 +38,9 @@
             <div class="section">
                 <h4>관심 직무</h4>
                 <p>
-                    <span th:text="'1차: ' + ${resume.occupation?.category1}"></span><br/>
-                    <span th:text="'2차: ' + ${resume.occupation?.category2}"></span><br/>
-                    <span th:text="'3차: ' + ${resume.occupation?.category3}"></span>
+                    <span th:if="${resume.occupation != null}" th:text="'1차: ' + ${resume.occupation.jobGroupName}">직군</span><br/>
+                    <span th:if="${resume.occupation != null}" th:text="'2차: ' + ${resume.occupation.jobTypeName}">직종</span><br/>
+                    <span th:if="${resume.occupation != null}" th:text="'3차: ' + ${resume.occupation.jobRoleName}">직무</span>
                 </p>
             </div>
 

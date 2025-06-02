@@ -4,6 +4,7 @@ import com.multi.matchingbot.company.domain.Company;
 import com.multi.matchingbot.company.domain.CompanyUpdateDto;
 import com.multi.matchingbot.company.mapper.CompanyMapper;
 import com.multi.matchingbot.company.repository.CompanyRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,12 +44,6 @@ public class CompanyService {
         companyRepository.deleteById(id);
     }
 
-    public CompanyUpdateDto findById(Long companyId) {
-        Company company = companyRepository.findById(companyId)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 회사입니다."));
-        return CompanyMapper.toUpdateDto(company);
-    }
-
     public void update(CompanyUpdateDto dto, Long companyId) {
         if (!dto.getId().equals(companyId)) {
             throw new IllegalArgumentException("회사 정보 수정 권한이 없습니다.");
@@ -63,5 +58,10 @@ public class CompanyService {
         company.setAddress(dto.getAddress());
 
         companyRepository.save(company);
+    }
+
+    public Company findById(Long companyId) {
+        return companyRepository.findById(companyId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 아이디의 회사 정보를 찾을 수 없습니다: " + companyId));
     }
 }

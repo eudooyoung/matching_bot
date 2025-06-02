@@ -68,6 +68,7 @@ public class MBotUserDetailsService implements UserDetailsService {
         log.warn("{} 로그인 성공 - {}", label, email);
 
         return new MBotUserDetails(
+                member.getName(),
                 member.getEmail(),
                 member.getPassword(),
                 member.getRole(),
@@ -83,6 +84,7 @@ public class MBotUserDetailsService implements UserDetailsService {
         log.warn("{} 로그인 성공 - {}", label, email);
 
         return new MBotUserDetails(
+                company.getName(),
                 company.getEmail(),
                 company.getPassword(),
                 company.getRole(),

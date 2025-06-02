@@ -234,6 +234,28 @@ function JobCategorySelector() {
   const [sub, setSub] = useState(null);
   const [detail, setDetail] = useState(null);
 
+  const handleFinalSelection = (jobRoleName) => {
+    setDetail(jobRoleName);
+
+    fetch(`/api/occupations/id?jobRoleName=${encodeURIComponent(jobRoleName)}`)
+        .then((res) => {
+          if (!res.ok) throw new Error("조회 실패");
+          return res.json();
+        })
+        .then((data) => {
+          const input = document.getElementById("occupationId");
+          if (input && data.id) {
+            input.value = data.id;                           // DOM value 설정
+            input.setAttribute("value", data.id);             // HTML 속성 반영
+            console.log("✅ 직무 선택 완료, ID:", data.id);
+          }
+        })
+        .catch((err) => {
+          console.error("❌ occupationId 설정 중 오류:", err);
+        });
+  };
+
+
   const colStyle = {
     width: "33%",
     maxHeight: "300px",
@@ -291,10 +313,9 @@ function JobCategorySelector() {
     // 직무
     React.createElement("div", { style: colStyle }, [
       React.createElement("div", { key: "label3", style: labelStyle }, "직무"),
-      ...(sub && detailMap[sub] ? renderList(detailMap[sub], detail, (item) => {
-        setDetail(item);
-        document.getElementById("occupationId").value = item;
-      }) : [])
+      ...(sub && detailMap[sub]
+          ? renderList(detailMap[sub], detail, handleFinalSelection)
+          : [])
     ])
   );
 }
@@ -302,3 +323,6 @@ function JobCategorySelector() {
 const container = document.getElementById("react-job-category-selector");
 const root = createRoot(container);
 root.render(React.createElement(JobCategorySelector));
+
+// ✅ 반드시 default export 해주세요 (import 시 사용됩니다!)
+export default JobCategorySelector;

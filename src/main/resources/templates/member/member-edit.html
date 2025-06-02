@@ -12,31 +12,43 @@
     <div class="container">
         <h2>이력서 수정</h2>
 
-        <form method="post" th:action="@{/member/edit/{id}(id=${resume.id})}" th:object="${resume}">
+        <form method="post" th:action="@{/member/edit/{id}(id=${resume.id})}" th:object="${resume}" class="resume-form">
 
             <!-- 이력서 제목 -->
-            <label>이력서 제목</label>
-            <input type="text" th:field="*{resume.title}" placeholder="이력서 제목"/>
+            <div class="form-group">
+                <label>이력서 제목</label>
+                <input type="text" th:field="*{title}" placeholder="이력서 제목"/>
+            </div>
 
             <!-- 관심 직무 -->
-            <label>1차 직무</label>
-            <input type="text" th:value="${resume.occupation.category1}" readonly/>
+            <div class="form-group">
+                <label>직군</label>
+                <input type="text" th:value="${resume.occupation?.jobGroupName}" readonly />
+            </div>
 
-            <label>2차 직무</label>
-            <input type="text" th:value="${resume.occupation.category2}" readonly/>
+            <div class="form-group">
+                <label>직종</label>
+                <input type="text" th:value="${resume.occupation?.jobTypeName}" readonly />
+            </div>
 
-            <label>3차 직무</label>
-            <input type="text" th:value="${resume.occupation.category3}" readonly/>
+            <div class="form-group">
+                <label>직무</label>
+                <input type="text" th:value="${resume.occupation?.jobRoleName}" readonly />
+            </div>
 
             <!-- 자기소개서: 기술 중심 -->
-            <label>자기소개서 (기술 중심)</label>
-            <textarea th:field="*{resume.skillAnswer}" rows="6" placeholder="기술 역량 중심 자기소개 (500~1000자)"></textarea>
+            <div class="form-group">
+                <label>자기소개서 (기술 중심)</label>
+                <textarea th:field="*{skillAnswer}" rows="6" placeholder="기술 역량 중심 자기소개 (500~1000자)"></textarea>
+            </div>
 
             <!-- 자기소개서: 인성 중심 -->
-            <label>자기소개서 (인성 중심)</label>
-            <textarea th:field="*{resume.traitAnswer}" rows="6" placeholder="인성 중심 자기소개 (500~1000자)"></textarea>
+            <div class="form-group">
+                <label>자기소개서 (인성 중심)</label>
+                <textarea th:field="*{traitAnswer}" rows="6" placeholder="인성 중심 자기소개 (500~1000자)"></textarea>
+            </div>
 
-            <div style="margin-top: 20px;">
+            <div class="form-actions">
                 <button type="submit" class="btn-primary">저장</button>
                 <a th:href="@{/member}" class="btn-secondary">취소</a>
             </div>

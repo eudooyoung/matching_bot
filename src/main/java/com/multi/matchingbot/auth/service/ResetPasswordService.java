@@ -1,7 +1,7 @@
-package com.multi.matchingbot.auth.reset;
+package com.multi.matchingbot.auth.service;
 
 import com.multi.matchingbot.company.repository.AuthCompanyRepository;
-import com.multi.matchingbot.auth.reset.dto.ResetPasswordDto;
+import com.multi.matchingbot.auth.domain.dto.ResetPasswordDto;
 import com.multi.matchingbot.company.domain.Company;
 import com.multi.matchingbot.member.domain.entities.Member;
 import com.multi.matchingbot.member.repository.MemberRepository;
