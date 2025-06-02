@@ -4,7 +4,6 @@ import com.multi.matchingbot.common.security.JwtAuthenticationFilter;
 import com.multi.matchingbot.common.security.MBotAccessDeniedHandler;
 import com.multi.matchingbot.common.security.MBotAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,7 +23,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
 
 @Configuration
-@EnableConfigurationProperties(RoleAccessProperties.class)
 @RequiredArgsConstructor
 @EnableMethodSecurity
 public class SecurityConfig {
@@ -62,7 +60,7 @@ public class SecurityConfig {
                         .requestMatchers(toArray(roleAccessProperties.getAdminPaths())).hasRole("ADMIN")
                         .requestMatchers(toArray(roleAccessProperties.getCompanyPaths())).hasRole("COMPANY")
                         .requestMatchers(toArray(roleAccessProperties.getMemberPaths())).hasRole("MEMBER")
-                        .requestMatchers(toArray(roleAccessProperties.getApiPaths())).authenticated()
+                        .requestMatchers(toArray(roleAccessProperties.getAuthenticatedPaths())).authenticated()
                         .anyRequest().authenticated()
                 ).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

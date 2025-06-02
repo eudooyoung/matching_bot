@@ -32,6 +32,12 @@ security:
 
       - /community/detail/**
       - /api/v1/chatbot/**
+
+      - /swagger-ui/**
+      - /v3/api-docs
+      - /v3/api-docs/**
+    authenticated-paths:      #authenticated
+      - /api/**
     member-paths:
       - /api/maps/**
       - /member/**
@@ -47,5 +53,3 @@ security:
       - /admin/**
     #      - /company/**
     #      - /job/**
-    api-paths:
-      - /api/**

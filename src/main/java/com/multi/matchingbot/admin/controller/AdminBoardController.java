@@ -49,6 +49,12 @@ public class AdminBoardController {
         return "members/profile";
     }
 
+    /**
+     *
+     * @param condition
+     * @param model
+     * @return
+     */
     @GetMapping("/companies")
     public String companies(@ModelAttribute AdminSearchCondition condition, Model model) {
         log.warn("statusParam = [{}]", condition.getStatus());
@@ -87,6 +93,12 @@ public class AdminBoardController {
         return "/admin/board-resumes";
     }
 
+    /**
+     *
+     * @param resumeId
+     * @param model
+     * @return
+     */
     @GetMapping("/resumes/{resumeId}")
     public String adminResumeDetail(@PathVariable(name = "resumeId") Long resumeId, Model model) {
         Resume resume = resumeService.findById(resumeId);

@@ -14,5 +14,5 @@ public class RoleAccessProperties {
     private List<String> memberPaths;
     private List<String> companyPaths;
     private List<String> adminPaths;
-    private List<String> apiPaths;
+    private List<String> authenticatedPaths;
 }
