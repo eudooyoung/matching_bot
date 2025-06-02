@@ -1,4 +1,4 @@
-package com.multi.matchingbot.attachedItem;
+package com.multi.matchingbot.attachedItem.domain;
 
 import com.multi.matchingbot.common.domain.enums.ItemType;
 import lombok.AllArgsConstructor;

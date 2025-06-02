@@ -2,26 +2,16 @@ package com.multi.matchingbot.chatbot;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.multi.matchingbot.company.domain.CompanyRegisterDto;
-import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.rendering.PDFRenderer;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -95,21 +85,51 @@ public class ChatbotReportService {
      * @param input 기업 기초 정보
      * @return 분석 정보가 포함된 Map (JSON 파싱 결과)
      */
-    public String generateReport(Map<String, Object> input) {
-        PromptTemplate template = new PromptTemplate(TEMPLATE);
-        String prompt = template.render(input);
+    public Map<String, Object> generateReport(Map<String, Object> input) {
+        try {
+            // 프롬프트 템플릿 생성
+            PromptTemplate template = new PromptTemplate(TEMPLATE);
+            // 프롬프트 템플릿 렌더링
+            String prompt = template.render(input);
 
-        return evaluationClient
-                .prompt(prompt)
-                .call()
-                .content();
+            // 응답 초기값
+            String aiResponse = evaluationClient
+                    .prompt(prompt)
+                    .call()
+                    .content();
+
+            if (aiResponse == null || aiResponse.trim().isEmpty()) {
+                log.warn("!! AI 응답 없음");
+                return new HashMap<>();
+            }
+
+            // 전처리 -> json형식 아닌 부분 삭제
+            String raw = aiResponse.trim();
+
+            if (raw.startsWith("```")) {
+                int start = raw.indexOf("{");
+                int end = raw.lastIndexOf("}");
+                if (start != -1 && end != -1) {
+                    raw = raw.substring(start, end + 1);
+                } else {
+                    log.warn("!! Ai 응답 Json 형식 오류");
+                    return new HashMap<>();
+                }
+            }
+
+            // json -> map parsing
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.readValue(raw, new TypeReference<>() {
+            });
+        } catch (Exception e) {
+            log.error("!! AI 리포트 생성 실패: {}", e.getMessage(), e);
+            return new HashMap<>();
+        }
     }
 
 
-
-
-
-    // 이미지 변환
+    // 리팩토링 완료
+   /* // 이미지 변환
     public File convertReportToImage(Map<String, Object> reportData, String companyId) throws Exception {
         // html 렌더링
         Context context = new Context();
@@ -161,9 +181,9 @@ public class ChatbotReportService {
         ImageIO.write(image, "png", output);
         log.info("이미지 생성 성공");
         return output;
-    }
+    }*/
 
-    public File generateFullReportImage(CompanyRegisterDto dto, Long companyId) {
+    /*public File generateFullReportImage(CompanyRegisterDto dto, Long companyId) {
         try {
             Map<String, Object> reportData = ReportDataBuilder.fromCompany(dto);
 
@@ -198,7 +218,7 @@ public class ChatbotReportService {
             System.err.println("AI 평가 이미지 생성 실패: " + e.getMessage());
             return null;
         }
-    }
+    }*/
 
 
 }

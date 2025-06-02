@@ -1,12 +1,15 @@
-package com.multi.matchingbot.attachedItem;
+package com.multi.matchingbot.attachedItem.mapper;
 
+import com.multi.matchingbot.attachedItem.domain.AttachedItem;
+import com.multi.matchingbot.attachedItem.domain.FileMeta;
 import com.multi.matchingbot.common.domain.enums.Yn;
 import lombok.NoArgsConstructor;
+
 
 @NoArgsConstructor
 public class FileMetaConverter {
 
-    public static AttachedItem toAttachedItem(FileMeta meta, Yn status) {
+    public static AttachedItem toEntity(FileMeta meta, Yn status) {
         return AttachedItem.builder()
                 .referenceId(meta.getReferenceId())
                 .itemType(meta.getItemType())

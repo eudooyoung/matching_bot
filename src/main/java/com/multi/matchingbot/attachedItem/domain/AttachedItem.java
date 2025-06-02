@@ -1,4 +1,4 @@
-package com.multi.matchingbot.attachedItem;
+package com.multi.matchingbot.attachedItem.domain;
 
 import com.multi.matchingbot.common.domain.entity.BaseEntity;
 import com.multi.matchingbot.common.domain.enums.ItemType;
@@ -28,6 +28,7 @@ public class AttachedItem extends BaseEntity {
     private long referenceId;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private ItemType itemType;
 
     @Column(nullable = false)
@@ -40,6 +41,7 @@ public class AttachedItem extends BaseEntity {
     private String path;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Yn status;
 
 }

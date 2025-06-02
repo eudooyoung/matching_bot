@@ -1,5 +1,6 @@
 package com.multi.matchingbot.attachedItem;
 
+import com.multi.matchingbot.attachedItem.domain.AttachedItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
