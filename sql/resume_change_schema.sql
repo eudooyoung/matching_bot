@@ -5,7 +5,7 @@ use matching_bot;
 
 -- 1. 외래키 제약 조건 해제
 SET FOREIGN_KEY_CHECKS = 0;
-DROP TABLE IF EXISTS `attached_items`;
+DROP TABLE IF EXISTS `attached_item`;
 DROP TABLE IF EXISTS `career`;
 DROP TABLE IF EXISTS `community_category`;
 DROP TABLE IF EXISTS `community_comment`;
@@ -20,7 +20,6 @@ DROP TABLE IF EXISTS `occupation`;
 DROP TABLE IF EXISTS `resume`;
 DROP TABLE IF EXISTS `resume_bookmark`;
 DROP TABLE IF EXISTS `member`;
-DROP TABLE IF EXISTS `attached_items`;
 DROP TABLE IF EXISTS `region`;
 DROP TABLE IF EXISTS `refresh_token`;
 
@@ -205,7 +204,7 @@ CREATE TABLE community_comment (
 );
 
 
-create table attached_items (
+create table attached_item (
     id BIGINT AUTO_INCREMENT PRIMARY KEY comment '첨부파일 ID',
 
     reference_id BIGINT NOT NULL comment '참조 ID (company, resume, community_post)',
@@ -228,10 +227,9 @@ create table attached_items (
     updated_by VARCHAR(50) comment '수정자',
     updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP comment '수정일',
 
-    index idx_attached (item_type, reference_id)
+--     UNIQUE KEY uq_attached_item_type_ref (item_type, reference_id),
+    INDEX idx_attached (item_type, reference_id)
 );
-
-select * from attached_items;
 
 CREATE TABLE resume (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,

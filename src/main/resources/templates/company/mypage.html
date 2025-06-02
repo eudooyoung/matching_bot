@@ -15,11 +15,9 @@
 
     <!-- 프로필 정보 -->
     <div class="user-info-box">
-        <div class="profile-circle">F</div>
-        <div class="user-box">
-        <span>
-          <span th:text="${company.name}"></span> 님
-        </span>
+        <div class="user-profile-group">
+            <div class="profile-circle">F</div>
+            <span class="user-name" th:text="${company.name + ' 님'}"></span>
         </div>
     </div>
 
@@ -32,23 +30,17 @@
     <div class="accordion-box">
 
         <div class="accordion-item">
-            <div class="accordion-left">
-                <span class="accordion-title">공고 관리</span>
-            </div>
+            <span class="accordion-title">공고 관리</span>
             <button class="nav-button" onclick="location.href='/job/manage-jobs'">이동</button>
         </div>
 
         <div class="accordion-item">
-            <div class="accordion-left">
-                <span class="accordion-title">관심 이력서 목록</span>
-            </div>
+            <span class="accordion-title">관심 이력서 목록</span>
             <button class="nav-button" onclick="location.href='/job/resume-bookmark'">이동</button>
         </div>
 
         <div class="accordion-item">
-            <div class="accordion-left">
-                <span class="accordion-title">개인 정보 수정</span>
-            </div>
+            <span class="accordion-title">개인 정보 수정</span>
             <button class="nav-button" onclick="location.href='/company/edit-profile'">이동</button>
         </div>
 

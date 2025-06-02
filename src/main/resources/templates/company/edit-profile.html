@@ -35,9 +35,20 @@
         <label>사업자 등록번호</label>
         <input type="text" class="readonly" th:field="*{businessNo}" readonly />
 
+<!--        <label>회사 전화번호</label>-->
+<!--        <input type="text" th:field="*{phone}" />-->
+<!--        <div class="error-message" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>-->
         <label>회사 전화번호</label>
-        <input type="text" th:field="*{phone}" />
-        <div class="error-message" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
+        <div class="phone-input">
+            <input type="text" name="phone1" maxlength="3" th:value="${#strings.substring(company.phone, 0, 3)}" pattern="\d*"
+                   oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
+            <span class="dash">-</span>
+            <input type="text" name="phone2" maxlength="4" th:value="${#strings.substring(company.phone, 3, 7)}" pattern="\d*"
+                   oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
+            <span class="dash">-</span>
+            <input type="text" name="phone3" maxlength="4" th:value="${#strings.substring(company.phone, 7)}" pattern="\d*"
+                   oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
+        </div>
 
         <label>회사 주소</label>
         <input type="text" th:field="*{address}" />
