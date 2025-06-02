@@ -11,7 +11,6 @@ import org.apache.pdfbox.rendering.PDFRenderer;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -25,7 +24,6 @@ import java.util.Map;
 
 @Slf4j
 @Service
-@ConditionalOnBean(name = "evaluationChatClient")
 @RequiredArgsConstructor
 public class ChatbotReportService {
 
