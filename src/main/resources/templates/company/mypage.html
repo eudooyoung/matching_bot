@@ -16,7 +16,7 @@
     <!-- 프로필 정보 -->
     <div class="user-info-box">
         <div class="profile-circle">F</div>
-        <span class="user-name" th:text="${company_name}"></span> 님
+        <span class="user-name" th:text="${company.name}"></span> 님
     </div>
 
     <!-- 소개 텍스트 -->
@@ -38,7 +38,7 @@
             <div class="accordion-left">
                 <span class="accordion-title">관심 이력서 목록</span>
             </div>
-            <button class="nav-button" onclick="location.href='/job/bookmark'">이동</button>
+            <button class="nav-button" onclick="location.href='/job/resume-bookmark'">이동</button>
         </div>
 
         <div class="accordion-item">
