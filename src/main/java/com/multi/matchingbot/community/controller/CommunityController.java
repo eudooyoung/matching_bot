@@ -30,7 +30,7 @@ public class CommunityController {
     }
 
     @GetMapping("/list")
-    public String list(@RequestParam(required = false) Long categoryId, Model model, Authentication authentication) {
+    public String list(@RequestParam(name = "categoryId", required = false) Long categoryId, Model model, Authentication authentication) {
         log.info("📌 list() 진입 - categoryId: {}", categoryId);
 
         List<CommunityCategory> categories = communityService.getAllCategories();

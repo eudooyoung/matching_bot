@@ -21,6 +21,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.Map;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -88,6 +89,12 @@ public class ChatbotReportService {
             ※ 응답은 반드시 JSON 객체만 반환하고, 코드 블록은 없어야 해.
             """;
 
+    /**
+     * AI 리포트 텍스트 생성 및 파싱
+     *
+     * @param input 기업 기초 정보
+     * @return 분석 정보가 포함된 Map (JSON 파싱 결과)
+     */
     public String generateReport(Map<String, Object> input) {
         PromptTemplate template = new PromptTemplate(TEMPLATE);
         String prompt = template.render(input);
@@ -97,6 +104,10 @@ public class ChatbotReportService {
                 .call()
                 .content();
     }
+
+
+
+
 
     // 이미지 변환
     public File convertReportToImage(Map<String, Object> reportData, String companyId) throws Exception {
@@ -135,8 +146,18 @@ public class ChatbotReportService {
         }
 
         // 이미지 저장
-        String basePath = new File("src/main/resources/static/upload/report/").getAbsolutePath() + "/";
-        File output = new File(basePath + "report-" + companyId + ".png");
+        String relativePath = "/upload/report/";
+        String baseName = "report-" + companyId;
+        String uuid = UUID.randomUUID().toString().substring(0, 8);
+        String extension = ".png";
+
+        String originalName = baseName + extension;
+        String systemName = baseName + "-" + uuid + extension;
+
+        String basePath = new File("src/main/resources/static" + relativePath).getAbsolutePath();
+        new File(basePath).mkdirs();
+
+        File output = new File(basePath, systemName);
         ImageIO.write(image, "png", output);
         log.info("이미지 생성 성공");
         return output;
