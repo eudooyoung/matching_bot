@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>관심 이력서</title>
+    <link rel="stylesheet" th:href="@{/css/mypage.css}"/>
+    <link rel="stylesheet" th:href="@{/css/layout.css}"/>
+    <style>
+        .bookmark-button {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: gold; /* ★ 색상 */
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .bookmark-button:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header(role=${role})}"></div>
+
+<div class="container">
+    <h2>관심 이력서 관리</h2>
+
+    <!-- 🔽 수정: companyId를 data attribute로 포함 -->
+    <button class="delete-button"
+            th:attr="data-company-id=${companyId}"
+            onclick="deleteSelected()">삭제</button>
+
+    <table class="resume-table">
+        <thead>
+        <tr>
+            <th><input type="checkbox" onclick="toggleAll(this)"/></th>
+            <th>번호</th>
+            <th>작성자</th>
+            <th>이력서 제목</th>
+            <th>작성 날짜</th>
+            <th>상세보기</th>
+            <th>즐겨찾기</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="resume, iterStat : ${resumePage.content}" th:attr="data-resume-id=${resume.id}">
+            <td>
+                <input type="checkbox" name="resumeIds" th:value="${resume.id}"/>
+            </td>
+            <td th:text="${iterStat.index + 1}"></td>
+            <td th:text="${resume.memberName}">작성자</td>
+            <td th:text="${resume.title}">이력서 제목</td>
+            <td th:text="${#temporals.format(resume.createdAt, 'yyyy-MM-dd')}">작성일</td>
+            <td><a th:href="@{/resume/detail/{id}(id=${resume.id})}">상세보기</a></td>
+            <td>
+                <button class="bookmark-button"
+                        th:data-resume-id="${resume.id}"
+                        th:data-company-id="${companyId}"
+                        onclick="deleteBookmark(this)">★
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <button class="mypage-button" onclick="location.href='/company/mypage'">돌아가기</button>
+
+    <div class="pagination">
+        <button class="pag-button" th:if="${!resumePage.first}"
+                th:onclick="'location.href=\'/job/resume-bookmark?page=' + ${resumePage.number - 1} + '\''">
+            이전
+        </button>
+
+        <span th:text="${resumePage.number + 1}">1</span> /
+        <span th:text="${resumePage.totalPages}">1</span>
+
+        <button class="pag-button" th:if="${!resumePage.last}"
+                th:onclick="'location.href=\'/job/resume-bookmark?page=' + ${resumePage.number + 1} + '\''">
+            다음
+        </button>
+    </div>
+</div>
+
+<!-- 🔽 필요한 JS 파일 로딩 -->
+<script th:src="@{/js/dropdown.js}"></script>
+<script th:src="@{/js/logout.js}"></script>
+<script th:src="@{/js/resume-bookmark.js}"></script>
+
+</body>
+</html>
