@@ -1,5 +1,7 @@
 package com.multi.matchingbot.job.domain.dto;
 
+import com.multi.matchingbot.job.domain.entity.Job;
+import com.multi.matchingbot.job.domain.entity.Occupation;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -74,4 +76,30 @@ public class JobDto {
     private String updatedBy;
 
     private LocalDateTime updatedAt;
+
+    public Job toEntity() {
+        Job job = new Job();
+        job.setTitle(this.title);
+        job.setDescription(this.description);
+        job.setAddress(this.address);
+        job.setMainTask(this.mainTask);
+        job.setRequiredSkills(this.requiredSkills);
+        job.setRequiredTraits(this.requiredTraits);
+        job.setSkillKeywords(this.skillKeywords);
+        job.setTraitKeywords(this.traitKeywords);
+        job.setStartDate(this.startDate);
+        job.setEndDate(this.endDate);
+        job.setEnrollEmail(this.enrollEmail);
+        job.setNotice(this.notice);
+        job.setLatitude(this.latitude);
+        job.setLongitude(this.longitude);
+        // occupationId는 별도로 service에서 Occupation 찾아서 설정해야 함
+        return job;
+    }
+
+    public Job toEntityWithOccupation(Occupation occupation) {
+        Job job = this.toEntity();  // 기본 필드 설정
+        job.setOccupation(occupation);
+        return job;
+    }
 }

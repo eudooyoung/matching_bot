@@ -33,7 +33,7 @@ security:
     company-paths:
       - /company/**
       - /job/**
-      - /api/occupations/hierarchy
+      - /api/occupations/**
     admin-paths:
       - /admin/**
 #      - /company/**

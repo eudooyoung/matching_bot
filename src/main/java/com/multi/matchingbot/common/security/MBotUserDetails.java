@@ -16,12 +16,14 @@ import java.util.List;
 //@AllArgsConstructor
 public class MBotUserDetails implements UserDetails {
 
+    private final String name;
     private final String email;
     private final String password;
     private final Role role;
     private final Long id;
 
-    public MBotUserDetails(String email, String password, Role role, Long id) {
+    public MBotUserDetails(String name, String email, String password, Role role, Long id) {
+        this.name = name;
         this.email = email;
         this.password = password;
         this.role = role;
@@ -66,4 +68,7 @@ public class MBotUserDetails implements UserDetails {
         return true;
     }
 
+    public Long getCompanyId() {
+        return this.id;
+    }
 }
