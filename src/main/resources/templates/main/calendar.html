@@ -8,83 +8,27 @@
 </head>
 <body>
 
-<!--<p th:text="'현재 userType: ' + ${userType}"></p>-->
 <div th:replace="~{fragments/header :: header(role=${role})}"></div>
 
-<div class="calendar">
+<div class="container">
     <div class="calendar-header">
-        <button class="nav-button prev" onclick="changeMonth(-1)">&#10094;</button>
-        <span id="monthYear">2025년 1월</span>
-        <button class="nav-button next" onclick="changeMonth(1)">&#10095;</button>
+        <button onclick="changeMonth(-1)">‹ 이전</button>
+        <span id="monthYear">2025년</span>
+        <button onclick="changeMonth(1)">다음 ›</button>
     </div>
-    <div class="calendar-body">
-        <div class="day-names">
-            <div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div>
-        </div>
-        <div class="dates" id="dates"></div>
+
+    <div class="day-names">
+        <div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div>
     </div>
+
+    <div class="calendar-grid" id="dates"></div>
 </div>
-<!--<script>-->
-<!--    let currentMonth = 4;-->
-<!--    const year = 2025;-->
 
-<!--    async function fetchJobs(month) {-->
-<!--        const res = await fetch(`/api/jobs?year=${year}&month=${month + 1}`);-->
-<!--        return await res.json(); // [{date: "2025-05-01", title: "공고 A"}, ...]-->
-<!--    }-->
-
-<!--    async function renderCalendar(month) {-->
-<!--        const jobPostings = await fetchJobs(month);-->
-
-<!--        const firstDay = new Date(year, month, 1).getDay();-->
-<!--        const lastDate = new Date(year, month + 1, 0).getDate();-->
-<!--        const datesContainer = document.getElementById('dates');-->
-<!--        const monthYear = document.getElementById('monthYear');-->
-<!--        monthYear.textContent = `${year}년 ${month + 1}월`;-->
-<!--        datesContainer.innerHTML = '';-->
-
-<!--        for (let i = 0; i < firstDay; i++) {-->
-<!--            const empty = document.createElement('div');-->
-<!--            empty.classList.add('empty');-->
-<!--            datesContainer.appendChild(empty);-->
-<!--        }-->
-
-<!--        for (let i = 1; i <= lastDate; i++) {-->
-<!--            const cell = document.createElement('div');-->
-<!--            cell.classList.add('calendar-cell');-->
-
-<!--            const dateText = document.createElement('div');-->
-<!--            dateText.className = 'date-number';-->
-<!--            dateText.textContent = i;-->
-<!--            cell.appendChild(dateText);-->
-
-<!--            const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;-->
-<!--            jobPostings-->
-<!--                .filter(post => post.date === dateKey)-->
-<!--                .forEach(post => {-->
-<!--                    const jobTitle = document.createElement('div');-->
-<!--                    jobTitle.className = 'job-title';-->
-<!--                    jobTitle.textContent = post.title;-->
-<!--                    cell.appendChild(jobTitle);-->
-<!--                });-->
-
-<!--            datesContainer.appendChild(cell);-->
-<!--        }-->
-<!--    }-->
-
-<!--    function changeMonth(delta) {-->
-<!--        currentMonth += delta;-->
-<!--        if (currentMonth < 0) currentMonth = 11;-->
-<!--        if (currentMonth > 11) currentMonth = 0;-->
-<!--        renderCalendar(currentMonth);-->
-<!--    }-->
-
-<!--    renderCalendar(currentMonth);-->
-<!--</script>-->
+<div th:replace="~{fragments/footer :: footer}"></div>
 
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>
-<script th:src="@{/calendar.js}"></script>
+<script th:src="@{/js/calendar.js}"></script>
 
 </body>
 </html>

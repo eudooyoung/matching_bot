@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>MatchingBot 기업 홈</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" th:href="@{/css/manage-jobs.css}">
+    <link rel="stylesheet" th:href="@{/css/company-job.css}">
     <link rel="stylesheet" th:href="@{/css/layout.css}">
 </head>
 <body>
 
-<!--<p th:text="'현재 userType: ' + ${userType}"></p>-->
 <div th:replace="~{fragments/header :: header(role=${role})}"></div>
 
 <div class="container">
@@ -67,6 +65,8 @@
         window.location.href = '/company/mypage';
     }
 </script>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
 
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>

@@ -2163,30 +2163,29 @@ INSERT INTO job_bookmark (id, member_id, job_id) VALUES
 (9, 21, 5),
 (10, 6, 6);
 
-
-insert into attached_items (reference_id, type, original_name, system_name, path, status, created_by, created_at, updated_by, updated_at)
+insert into attached_item (reference_id, item_type, original_name, system_name, path, status, created_by, created_at, updated_by, updated_at)
 values
-    (2, 'CO', 'CO_file_1.pdf', 'co_2_53532297.pdf', '/files/co/2/', 'Y', 'yeonghyiyang@gmail.com', '2025-05-15 22:21:00', NULL, NULL),
-    (2, 'CO', 'CO_file_1.pdf', 'co_2_53532297.pdf', '/files/co/2/', 'Y', 'yeonghyiyang@gmail.com', '2025-05-15 22:21:00', NULL, NULL),
-    (6, 'VL', 'VL_file_2.pdf', 'vl_6_59c37ce0.pdf', '/files/vl/6/', 'Y', 'ojang@yuhanhoesa.kr', '2025-05-15 09:03:00', NULL, NULL),
-    (9, 'VS', 'VS_file_3.pdf', 'vs_9_8818dfbc.pdf', '/files/vs/9/', 'Y', 'gimjunseo@jusighoesa.com', '2025-05-15 10:28:00', NULL, NULL),
-    (6, 'CO', 'CO_file_4.pdf', 'co_6_6c6098e3.pdf', '/files/co/6/', 'Y', 'gimyeongsu@nate.com', '2025-05-15 13:20:00', NULL, NULL),
-    (8, 'CO', 'CO_file_5.pdf', 'co_8_748b14d9.pdf', '/files/co/8/', 'Y', 'jiweon52@baggimcoe.kr', '2025-05-15 23:52:00', NULL, NULL),
-    (2, 'CO', 'CO_file_6.jpg', 'co_2_d3b47e7b.jpg', '/files/co/2/', 'Y', 'donghyeon07@jusighoesa.com', '2025-05-15 12:19:00', NULL, NULL),
-    (1, 'CO', 'CO_file_7.pdf', 'co_1_dc9f817f.pdf', '/files/co/1/', 'Y', 'doyungim@hanmail.net', '2025-05-15 08:50:00', NULL, NULL),
-    (10, 'RE', 'RE_file_8.pdf', 're_10_12181820.pdf', '/files/re/10/', 'Y', 'oi@ju.kr', '2025-05-15 08:36:00', NULL, NULL),
-    (8, 'VS', 'VS_file_9.png', 'vs_8_66cc0d7a.png', '/files/vs/8/', 'Y', 'seoyeoni@bagjang.kr', '2025-05-15 06:57:00', NULL, NULL),
-    (7, 'PO', 'PO_file_10.jpg', 'po_7_688febf3.jpg', '/files/po/7/', 'N', 'jangjungsu@naver.com', '2025-05-15 08:32:00', NULL, NULL),
-    (1, 'RE', 'RE_file_11.png', 're_1_ef89dc90.png', '/files/re/1/', 'Y', 'ygim@naver.com', '2025-05-15 18:38:00', NULL, NULL),
-    (1, 'VS', 'VS_file_12.png', 'vs_1_3bb209a1.png', '/files/vs/1/', 'Y', 'jangmiyeong@live.com', '2025-05-15 10:23:00', NULL, NULL),
-    (5, 'CO', 'CO_file_13.jpg', 'co_5_3ec818db.jpg', '/files/co/5/', 'Y', 'sugjao@naver.com', '2025-05-15 20:47:00', NULL, NULL),
-    (10, 'VS', 'VS_file_14.pdf', 'vs_10_97ee4ed6.pdf', '/files/vs/10/', 'Y', 'gimmyeongsug@hanmail.net', '2025-05-15 14:37:00', NULL, NULL),
-    (2, 'RE', 'RE_file_15.png', 're_2_148d3197.png', '/files/re/2/', 'Y', 'hanmiyeong@yunbag.kr', '2025-05-15 18:24:00', NULL, NULL),
-    (10, 'VS', 'VS_file_16.pdf', 'vs_10_9edbfd79.pdf', '/files/vs/10/', 'Y', 'noyeongsu@gimsinbag.com', '2025-05-15 12:08:00', NULL, NULL),
-    (1, 'VL', 'VL_file_17.pdf', 'vl_1_487cb346.pdf', '/files/vl/1/', 'Y', 'hyeonjeonggim@gweonigwag.org', '2025-05-15 11:42:00', NULL, NULL),
-    (10, 'VS', 'VS_file_18.png', 'vs_10_1b645919.png', '/files/vs/10/', 'Y', 'yejungim@yu.com', '2025-05-15 02:15:00', NULL, NULL),
-    (4, 'CO', 'CO_file_19.jpg', 'co_4_322d48ab.jpg', '/files/co/4/', 'Y', 'seoyun55@hanmail.net', '2025-05-15 01:12:00', NULL, NULL),
-    (1, 'VL', 'VL_file_20.jpg', 'vl_1_a35e5cde.jpg', '/files/vl/1/', 'Y', 'seoyeon45@daum.net', '2025-05-15 00:07:00', NULL, NULL);
+    (2, 'COMM', 'CO_file_1.pdf', 'co_2_53532297.pdf', '/files/co/2/', 'Y', 'yeonghyiyang@gmail.com', '2025-05-15 22:21:00', NULL, NULL),
+    (2, 'COMM', 'CO_file_1.pdf', 'co_2_53532297.pdf', '/files/co/2/', 'Y', 'yeonghyiyang@gmail.com', '2025-05-15 22:21:00', NULL, NULL),
+    (6, 'REPORT', 'VL_file_2.pdf', 'vl_6_59c37ce0.pdf', '/files/vl/6/', 'Y', 'ojang@yuhanhoesa.kr', '2025-05-15 09:03:00', NULL, NULL),
+    (9, 'SUMMARY', 'VS_file_3.pdf', 'vs_9_8818dfbc.pdf', '/files/vs/9/', 'Y', 'gimjunseo@jusighoesa.com', '2025-05-15 10:28:00', NULL, NULL),
+    (6, 'COMM', 'CO_file_4.pdf', 'co_6_6c6098e3.pdf', '/files/co/6/', 'Y', 'gimyeongsu@nate.com', '2025-05-15 13:20:00', NULL, NULL),
+    (8, 'COMM', 'CO_file_5.pdf', 'co_8_748b14d9.pdf', '/files/co/8/', 'Y', 'jiweon52@baggimcoe.kr', '2025-05-15 23:52:00', NULL, NULL),
+    (2, 'COMM', 'CO_file_6.jpg', 'co_2_d3b47e7b.jpg', '/files/co/2/', 'Y', 'donghyeon07@jusighoesa.com', '2025-05-15 12:19:00', NULL, NULL),
+    (1, 'COMM', 'CO_file_7.pdf', 'co_1_dc9f817f.pdf', '/files/co/1/', 'Y', 'doyungim@hanmail.net', '2025-05-15 08:50:00', NULL, NULL),
+    (10, 'RESUME', 'RE_file_8.pdf', 're_10_12181820.pdf', '/files/re/10/', 'Y', 'oi@ju.kr', '2025-05-15 08:36:00', NULL, NULL),
+    (8, 'SUMMARY', 'VS_file_9.png', 'vs_8_66cc0d7a.png', '/files/vs/8/', 'Y', 'seoyeoni@bagjang.kr', '2025-05-15 06:57:00', NULL, NULL),
+    (7, 'POSTER', 'PO_file_10.jpg', 'po_7_688febf3.jpg', '/files/po/7/', 'N', 'jangjungsu@naver.com', '2025-05-15 08:32:00', NULL, NULL),
+    (1, 'RESUME', 'RE_file_11.png', 're_1_ef89dc90.png', '/files/re/1/', 'Y', 'ygim@naver.com', '2025-05-15 18:38:00', NULL, NULL),
+    (1, 'SUMMARY', 'VS_file_12.png', 'vs_1_3bb209a1.png', '/files/vs/1/', 'Y', 'jangmiyeong@live.com', '2025-05-15 10:23:00', NULL, NULL),
+    (5, 'COMM', 'CO_file_13.jpg', 'co_5_3ec818db.jpg', '/files/co/5/', 'Y', 'sugjao@naver.com', '2025-05-15 20:47:00', NULL, NULL),
+    (10, 'SUMMARY', 'VS_file_14.pdf', 'vs_10_97ee4ed6.pdf', '/files/vs/10/', 'Y', 'gimmyeongsug@hanmail.net', '2025-05-15 14:37:00', NULL, NULL),
+    (2, 'RESUME', 'RE_file_15.png', 're_2_148d3197.png', '/files/re/2/', 'Y', 'hanmiyeong@yunbag.kr', '2025-05-15 18:24:00', NULL, NULL),
+    (10, 'SUMMARY', 'VS_file_16.pdf', 'vs_10_9edbfd79.pdf', '/files/vs/10/', 'Y', 'noyeongsu@gimsinbag.com', '2025-05-15 12:08:00', NULL, NULL),
+    (1, 'REPORT', 'VL_file_17.pdf', 'vl_1_487cb346.pdf', '/files/vl/1/', 'Y', 'hyeonjeonggim@gweonigwag.org', '2025-05-15 11:42:00', NULL, NULL),
+    (10, 'SUMMARY', 'VS_file_18.png', 'vs_10_1b645919.png', '/files/vs/10/', 'Y', 'yejungim@yu.com', '2025-05-15 02:15:00', NULL, NULL),
+    (4, 'COMM', 'CO_file_19.jpg', 'co_4_322d48ab.jpg', '/files/co/4/', 'Y', 'seoyun55@hanmail.net', '2025-05-15 01:12:00', NULL, NULL),
+    (1, 'REPORT', 'VL_file_20.jpg', 'vl_1_a35e5cde.jpg', '/files/vl/1/', 'Y', 'seoyeon45@daum.net', '2025-05-15 00:07:00', NULL, NULL);
 
 INSERT INTO resume_bookmark (company_id, resume_id) VALUES
 (1, 98),
@@ -2360,4 +2359,4 @@ select * from job_bookmark;
 select * from community_post;
 select * from community_comment;
 
-select * from attached_items;	
+select * from attached_item; 
