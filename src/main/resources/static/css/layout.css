@@ -36,6 +36,27 @@ body {
     font-weight: bold;
 }
 
+.notification-container {
+    position: relative;
+    display: inline-block;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.notification-bell {
+    font-size: 20px;
+    line-height: 1;
+}
+
+.notification-dot {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 8px;
+    height: 8px;
+    background-color: red;
+    border-radius: 50%;
+}
+
 /* 메인 콘텐츠는 늘어나게 */
 .main-content {
     flex: 1;

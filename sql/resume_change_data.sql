@@ -1383,6 +1383,8 @@ INSERT INTO notification (member_id, title, content, status) VALUES
                                                                  (32, '시스템 점검 안내', '즐겨찾기한 기업이 새로운 채용 공고를 올렸습니다.', 'unread'),
                                                                  (5, '지원 결과 업데이트', '관심 등록한 기업의 채용 마감일이 다가오고 있습니다.', 'read'),
                                                                  (12, '관심 기업 알림', '관심 등록한 기업의 채용 마감일이 다가오고 있습니다.', 'read');
+UPDATE notification SET status = 'UNREAD' WHERE status = 'unread';
+UPDATE notification SET status = 'READ' WHERE status = 'read';
 
 -- 커뮤니티 insert --
 -- 1. 카테고리 데이터 삽입

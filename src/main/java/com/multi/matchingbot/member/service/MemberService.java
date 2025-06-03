@@ -1,6 +1,5 @@
 package com.multi.matchingbot.member.service;
 
-
 import com.multi.matchingbot.common.domain.enums.Gender;
 import com.multi.matchingbot.common.domain.enums.Role;
 import com.multi.matchingbot.common.domain.enums.Yn;
@@ -12,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.time.LocalDate;
 
 @Service
@@ -68,5 +68,13 @@ public class MemberService {
     public Member findByUsername(String username) {
         return memberRepository.findByEmail(username)
                 .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다: " + username));
+    }
+
+    @Transactional(readOnly = true)
+    public Long findIdByPrincipal(Principal principal) {
+        if (principal == null) {
+            throw new IllegalStateException("로그인된 사용자가 없습니다.");
+        }
+        return findByUsername(principal.getName()).getId();
     }
 }

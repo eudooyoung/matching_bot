@@ -1,6 +1,5 @@
 package com.multi.matchingbot.job.service;
 
-
 import com.multi.matchingbot.job.domain.dto.JobDto;
 import com.multi.matchingbot.job.domain.entity.Job;
 import com.multi.matchingbot.job.mapper.JobMapper;
@@ -54,15 +53,15 @@ public class JobService {
         repository.deleteById(id);
     }
 
-    public Job createJob(Job job) {
-        // ✅ 주소가 있다면 위도, 경도 설정
+    @Transactional
+    public void createJob(Job job) {
         if (job.getAddress() != null && !job.getAddress().isBlank()) {
-            double[] latLon = geoService.getLatLngFromAddress(job.getAddress());
+            double[] latLon = geoService.getLatLngFromAddress(job.getAddress()); // geoService에서 위도, 경도 얻어옴
             job.setLatitude(latLon[0]);
             job.setLongitude(latLon[1]);
         }
 
-        return repository.save(job);
+        repository.save(job);
     }
 
     private JobDto convertToDto(Job job) {
