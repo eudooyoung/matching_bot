@@ -84,3 +84,21 @@
     font-weight: bold;
     margin-bottom: 4px;
 }
+
+/* 마감된 공고 (회색) */
+.job-title.expired {
+    background-color: #d3d3d3;
+    color: #777;
+}
+
+/* 마감 D-4 이하 공고 (헤더색: #103254) */
+.job-title.closing-soon {
+    background-color: #103254;
+    color: white;
+}
+
+/* 그 외 공고 (연한 하늘색) */
+.job-title.default {
+    background-color: #e0f4ff;
+    color: #103254;
+}
