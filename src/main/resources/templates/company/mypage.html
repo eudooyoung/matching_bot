@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8" />
     <title>기업 마이페이지</title>
-    <link rel="stylesheet" th:href="@{/css/mypage.css}"/>
+    <link rel="stylesheet" th:href="@{/css/company-job.css}"/>
     <link rel="stylesheet" th:href="@{/css/layout.css}"/>
 </head>
 <body>
-<!--<p th:text="'현재 userType: ' + ${userType}"></p>-->
+
 <div th:replace="~{fragments/header :: header(role=${role})}"></div>
 
 <div class="container">
@@ -15,8 +15,10 @@
 
     <!-- 프로필 정보 -->
     <div class="user-info-box">
-        <div class="profile-circle">F</div>
-        <span class="user-name" th:text="${company.name}"></span> 님
+        <div class="user-profile-group">
+            <div class="profile-circle">F</div>
+            <span class="user-name" th:text="${company.name + ' 님'}"></span>
+        </div>
     </div>
 
     <!-- 소개 텍스트 -->
@@ -28,29 +30,27 @@
     <div class="accordion-box">
 
         <div class="accordion-item">
-            <div class="accordion-left">
-                <span class="accordion-title">공고 관리</span>
-            </div>
+            <span class="accordion-title">공고 관리</span>
             <button class="nav-button" onclick="location.href='/job/manage-jobs'">이동</button>
         </div>
 
         <div class="accordion-item">
-            <div class="accordion-left">
-                <span class="accordion-title">관심 이력서 목록</span>
-            </div>
+            <span class="accordion-title">관심 이력서 목록</span>
             <button class="nav-button" onclick="location.href='/job/resume-bookmark'">이동</button>
         </div>
 
         <div class="accordion-item">
-            <div class="accordion-left">
-                <span class="accordion-title">개인 정보 수정</span>
-            </div>
+            <span class="accordion-title">개인 정보 수정</span>
             <button class="nav-button" onclick="location.href='/company/edit-profile'">이동</button>
         </div>
 
     </div>
 </div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>
+
 </body>
 </html>

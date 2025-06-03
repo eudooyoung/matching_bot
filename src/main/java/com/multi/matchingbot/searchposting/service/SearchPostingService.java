@@ -1,6 +1,7 @@
 package com.multi.matchingbot.searchposting.service;
 
-import com.multi.matchingbot.mapposting.domain.MapPosting;
+
+import com.multi.matchingbot.job.domain.entity.Job;
 import com.multi.matchingbot.searchposting.domain.SearchPostingDto;
 import com.multi.matchingbot.searchposting.repository.SearchPostingRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,12 +16,13 @@ public class SearchPostingService {
 
     private final SearchPostingRepository searchPostingRepository;
 
-    public List<SearchPostingDto> searchJobs(String keyword, String title, String skill, String region) {
-        List<MapPosting> postings = searchPostingRepository.searchByFilters(keyword, title, skill, region);
+    public List<SearchPostingDto> searchJobs(String keyword, String title, String regionMain, String regionSub) {
+        List<Job> postings = searchPostingRepository.searchByFilters(keyword, title, regionMain, regionSub);
         return postings.stream()
                 .map(SearchPostingDto::fromEntity)
                 .collect(Collectors.toList());
     }
+
 
     public SearchPostingDto findById(Long id) {
         return searchPostingRepository.findById(id)

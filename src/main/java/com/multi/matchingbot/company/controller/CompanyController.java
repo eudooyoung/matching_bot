@@ -8,7 +8,6 @@ import com.multi.matchingbot.company.domain.CompanyUpdateDto;
 import com.multi.matchingbot.company.service.CompanyService;
 import com.multi.matchingbot.job.domain.dto.JobDto;
 import com.multi.matchingbot.job.service.JobService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -97,9 +96,15 @@ public class CompanyController {
 
     // 개인정보 수정 처리
     @PostMapping("/edit-profile")
-    public String updateProfile(@Valid @ModelAttribute("company") CompanyUpdateDto companyDto,
+    public String updateProfile(@RequestParam("phone1") String phone1,
+                                @RequestParam("phone2") String phone2,
+                                @RequestParam("phone3") String phone3,
+                                @ModelAttribute("company") CompanyUpdateDto companyDto,
                                 BindingResult bindingResult,
                                 @AuthenticationPrincipal MBotUserDetails userDetails) {
+
+        companyDto.setPhone(phone1 + phone2 + phone3);  // 조합하여 저장
+
         if (bindingResult.hasErrors()) {
             return "company/edit-profile";
         }

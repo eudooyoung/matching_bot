@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>MatchingBot 기업 홈</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" th:href="@{/css/manage-jobs.css}">
+    <link rel="stylesheet" th:href="@{/css/company-job.css}">
     <link rel="stylesheet" th:href="@{/css/layout.css}">
 </head>
 <body>
@@ -69,13 +68,9 @@
         <tr th:each="job, iterStat : ${jobPage.content}">
             <td th:text="${iterStat.index + 1}">1</td>
             <td th:text="${job.title}">제목</td>
-            <td th:text="${#temporals.format(job.startDate, 'yyyy-MM-dd')} + ' ~ ' + ${#temporals.format(job.endDate, 'yyyy-MM-dd')}">
-                기간
-            </td>
+            <td th:text="${#temporals.format(job.startDate, 'yyyy-MM-dd')} + ' ~ ' + ${#temporals.format(job.endDate, 'yyyy-MM-dd')}">기간</td>
             <td th:onclick="'location.href=\'/job/' + ${job.id} + '\''">상세보기</td>
-            <td>
-                <button class="star-button" onclick="toggleStar(this)">☆</button>
-            </td>
+            <td><button class="star-button" onclick="toggleStar(this)">☆</button></td>
         </tr>
         </tbody>
     </table>
@@ -116,6 +111,8 @@
         window.location.href = '/company/mypage';
     }
 </script>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
 
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>

@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <title>공고 수정하기</title>
-    <link rel="stylesheet" th:href="@{/css/mypage.css}"/>
-    <link rel="stylesheet" th:href="@{/css/layout.css}"/>
+    <link rel="stylesheet" th:href="@{/css/company-job.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
     <style>
         .form-box {
             background-color: white;
@@ -129,6 +129,8 @@
         </div>
     </form>
 </div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
 
 <!-- 공통 스크립트 -->
 <script th:src="@{/js/dropdown.js}"></script>

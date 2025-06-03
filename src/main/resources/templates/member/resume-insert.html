@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>자기소개서 입력</title>
+    <link rel="stylesheet" href="/css/layout.css">
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            margin-bottom: 24px;
+            font-size: 22px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .row .form-group {
+            flex: 1;
+        }
+
+        /*.photo-upload {*/
+        /*    display: flex;*/
+        /*    align-items: center;*/
+        /*    gap: 10px;*/
+        /*}*/
+
+        .job-category-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .job-category-box .form-group {
+            flex: 1;
+        }
+
+        .experience-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .experience-box .form-group {
+            flex: 1 1 45%;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="fragments/header :: header(role=${role})"></div>
+
+<main class="main-content">
+    <div class="container">
+        <h2>자기소개서 입력</h2>
+
+        <form action="/member/resume-insert" method="post" enctype="multipart/form-data">
+            <!-- 인적사항 -->
+            <div class="form-group">
+                <label>간단한 자기 소개</label>
+                <input type="text" name="intro" placeholder="간결, 목표, 관심 분야도 좋아요">
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label>이름</label>
+                    <input type="text" name="name">
+                </div>
+                <div class="form-group">
+                    <label>성별</label>
+                    <select name="gender">
+                        <option value="">선택</option>
+                        <option value="M">남</option>
+                        <option value="F">여</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>이메일</label>
+                    <input type="email" name="email">
+                </div>
+                <div class="form-group">
+                    <label>주소</label>
+                    <input type="text" name="address">
+                </div>
+            </div>
+
+<!--            &lt;!&ndash; 사진 등록 &ndash;&gt;-->
+<!--            <div class="form-group photo-upload">-->
+<!--                <label for="photo">사진</label>-->
+<!--                <input type="file" id="photo" name="photo">-->
+<!--            </div> -->
+
+            <!-- 관심 직무 -->
+            <div class="job-category-box">
+                <div class="form-group">
+                    <label>1차분류</label>
+                    <select name="jobCategory1"></select>
+                </div>
+                <div class="form-group">
+                    <label>2차분류</label>
+                    <select name="jobCategory2"></select>
+                </div>
+                <div class="form-group">
+                    <label>3차분류</label>
+                    <select name="jobCategory3"></select>
+                </div>
+            </div>
+
+            <!-- 경력 체크박스 -->
+            <div class="form-group">
+                <label>경력 구분</label><br>
+                <label class="checkbox-inline"><input type="radio" name="careerType" value="new" checked onchange="toggleCareerFields()"> 신입</label>
+                <label class="checkbox-inline"><input type="radio" name="careerType" value="experienced" onchange="toggleCareerFields()"> 경력</label>
+            </div>
+
+            <!-- 경력 -->
+            <div class="experience-box" id="careerFields" style="display: none;">
+                <div class="form-group">
+                    <label>근무부서</label>
+                    <input type="text" name="department">
+                </div>
+                <div class="form-group">
+                    <label>직급/직책</label>
+                    <input type="text" name="position">
+                </div>
+                <div class="form-group">
+                    <label>입사일</label>
+                    <input type="text" name="entryDate">
+                </div>
+                <div class="form-group">
+                    <label>퇴사일</label>
+                    <input type="text" name="exitDate">
+                </div>
+                <div class="form-group">
+                    <label>회사명</label>
+                    <input type="text" name="company">
+                </div>
+            </div>
+
+            <!-- 자기소개서 -->
+            <div class="form-group">
+                <label>1. 단일 기업 대상 자기소개서 (500~1000자)</label>
+                <textarea name="selfIntro1" maxlength="1000"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>2. 일반형 자기소개서 (500~1000자)</label>
+                <textarea name="selfIntro2" maxlength="1000"></textarea>
+            </div>
+
+            <div class="form-group" style="text-align: right;">
+                <button type="submit">등록하기</button>
+            </div>
+        </form>
+    </div>
+</main>
+<div th:replace="fragments/footer :: footer"></div>
+
+    <script>
+        function toggleCareerFields() {
+            const isExperienced = document.querySelector('input[name="careerType"]:checked').value === 'experienced';
+            document.getElementById('careerFields').style.display = isExperienced ? 'flex' : 'none';
+        }
+
+        // 페이지 로드시 초기화
+        document.addEventListener('DOMContentLoaded', toggleCareerFields);
+    </script>
+<script th:src="@{/js/dropdown.js}"></script>
+<script th:src="@{/js/logout.js}"></script>
+</body>
+</html>

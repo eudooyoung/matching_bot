@@ -13,6 +13,7 @@ jwt:
 security:
   access:
     permit-all:
+      - /api/occupations/**
       - /css/**
       - /js/**
       - /favicon.ico
@@ -32,6 +33,7 @@ security:
 
       - /community/detail/**
       - /api/v1/chatbot/**
+      - /api/calendar/**
 
       - /swagger-ui/**
       - /v3/api-docs
@@ -53,3 +55,5 @@ security:
       - /admin/**
     #      - /company/**
     #      - /job/**
+    api-paths:
+      - /api/**
