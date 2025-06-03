@@ -4,7 +4,7 @@ let jobPostings = [];
 
 async function fetchJobs(month) {
     try {
-        const res = await fetch(`/api/jobs?year=${year}&month=${month + 1}`);
+        const res = await fetch(`/api/calendar?year=${year}&month=${month + 1}`);
         if (!res.ok) throw new Error("채용 공고 불러오기 실패");
         jobPostings = await res.json();
     } catch (error) {
@@ -50,7 +50,7 @@ function renderCalendar(month) {
         dateText.textContent = i;
         cell.appendChild(dateText);
 
-        const postingsToday = jobPostings.filter(post => post.deadline === thisDeadline);
+        const postingsToday = jobPostings.filter(post => post.endDate?.slice(0, 10) === thisDeadline);
         postingsToday.forEach(post => {
             const jobTitle = document.createElement("div");
             jobTitle.className = "job-title";
