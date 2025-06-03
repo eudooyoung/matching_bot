@@ -3,15 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>채용 공고 관리</title>
-    <link rel="stylesheet" th:href="@{/css/manage-jobs.css}">
-    <link rel="stylesheet" th:href="@{/css/layout.css}"/>
+    <link rel="stylesheet" th:href="@{/css/company-job.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
 </head>
 <body>
 
-<!--<p th:text="'현재 userType: ' + ${userType}"></p>-->
 <div th:replace="~{fragments/header :: header(role=${role})}"></div>
 
-<!-- 컨테이너 -->
 <div class="container">
 
     <h2>채용 공고 관리</h2>
@@ -29,6 +27,7 @@
             <th>삭제</th>
         </tr>
         </thead>
+
         <tbody>
         <tr th:each="job, iterStat : ${jobPage.content}">
             <td th:text="${iterStat.index + 1}">1</td>
@@ -79,6 +78,8 @@
         }
     }
 </script>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
 
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>

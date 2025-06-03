@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>관심 이력서</title>
-    <link rel="stylesheet" th:href="@{/css/mypage.css}"/>
-    <link rel="stylesheet" th:href="@{/css/layout.css}"/>
+    <link rel="stylesheet" th:href="@{/css/company-job.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
     <style>
         .bookmark-button {
             background: none;
@@ -82,6 +82,8 @@
         </button>
     </div>
 </div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
 
 <!-- 🔽 필요한 JS 파일 로딩 -->
 <script th:src="@{/js/dropdown.js}"></script>

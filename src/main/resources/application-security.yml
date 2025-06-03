@@ -29,10 +29,10 @@ security:
       - /search-page/**
       - /jobs/**
       - /community/**
-      - /calendar
 
       - /community/detail/**
       - /api/v1/chatbot/**
+      - /api/calendar/**
     member-paths:
       - /api/maps/**
       - /member/**

@@ -8,7 +8,6 @@ import com.multi.matchingbot.member.service.MemberService;
 import com.multi.matchingbot.member.service.ResumeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,14 +45,14 @@ public class ResumeController {
     public String view(@PathVariable("id") Long id, Model model) {
         Resume resume = resumeService.findByIdWithOccupation(id);
         model.addAttribute("resume", resume);
-        return "member/member-view";
+        return "/member/resume-view";
     }
 
     @GetMapping("/edit/{id}")
     public String editForm(@PathVariable("id") Long id, Model model) {
         Resume resume = resumeService.findById(id);
         model.addAttribute("resume", resume);
-        return "member/member-edit";
+        return "/member/resume-edit";
     }
 
     @PostMapping("/edit/{id}")
@@ -73,6 +72,23 @@ public class ResumeController {
         if (ids != null && !ids.isEmpty()) {
             resumeService.deleteAllByIds(ids);
         }
+        return "redirect:/member";
+    }
+
+    @GetMapping("/insert")
+    public String insertForm(Model model) {
+        model.addAttribute("resume", new Resume()); // 혹은 ResumeDto 사용
+        return "member/resume-insert";
+    }
+
+    @PostMapping("/insert")
+    public String insert(@ModelAttribute Resume resume) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Member member = memberService.findByUsername(email);
+        resume.setMember(member);
+
+        resumeService.save(resume);
         return "redirect:/member";
     }
 }

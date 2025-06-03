@@ -2,6 +2,7 @@ package com.multi.matchingbot.job.domain.dto;
 
 import com.multi.matchingbot.job.domain.entity.Job;
 import com.multi.matchingbot.job.domain.entity.Occupation;
+import com.multi.matchingbot.job.domain.entity.Job;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -22,6 +23,8 @@ public class JobDto {
     private Long id;
     private Long companyId;
     private Long occupationId;
+    private String skillKeywordsConcat;
+    private String traitKeywordsConcat;
 
     @NotBlank(message = "제목을 입력해주세요.")
     @Size(max = 100, message = "100자 이하로 입력해주세요.")
@@ -93,12 +96,11 @@ public class JobDto {
         job.setNotice(this.notice);
         job.setLatitude(this.latitude);
         job.setLongitude(this.longitude);
-        // occupationId는 별도로 service에서 Occupation 찾아서 설정해야 함
         return job;
     }
 
     public Job toEntityWithOccupation(Occupation occupation) {
-        Job job = this.toEntity();  // 기본 필드 설정
+        Job job = this.toEntity();
         job.setOccupation(occupation);
         return job;
     }
