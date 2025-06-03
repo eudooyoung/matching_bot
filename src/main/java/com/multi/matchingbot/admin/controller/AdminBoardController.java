@@ -81,6 +81,12 @@ public class AdminBoardController {
         return "company/edit-profile";
     }
 
+    /**
+     *
+     * @param condition 검색조건
+     * @param model
+     * @return
+     */
     @GetMapping("/resumes")
     public String resumes(@ModelAttribute AdminSearchCondition condition, Model model) {
         log.warn("statusParam = [{}]", condition.getKeywordsStatus());

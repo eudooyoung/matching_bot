@@ -13,6 +13,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -30,7 +31,17 @@ public class FileService {
      */
     public AttachedItem save(FileMeta meta, BufferedImage image) {
         try {
-            String fullPath = Paths.get("src/main/resources/static", meta.getPath(), meta.getSystemName()).toString();
+            Optional<AttachedItem> existingOpt = attachedItemRepository
+                    .findByReferenceIdAndItemTypeAndStatus(meta.getReferenceId(), meta.getItemType(), Yn.Y);
+
+            String systemName;
+            if (existingOpt.isPresent()) {
+                systemName = existingOpt.get().getSystemName();
+            } else {
+                systemName = meta.getSystemName();
+            }
+
+            String fullPath = Paths.get("src/main/resources/static", meta.getPath()).toString();
             File file = new File(fullPath);
             File parentDir = file.getParentFile();
 
@@ -44,7 +55,17 @@ public class FileService {
             log.info("이미지 저장 완료: {}", file.getAbsolutePath());
 
             AttachedItem entity = FileMetaConverter.toEntity(meta, Yn.Y);
+            entity.setSystemName(systemName);
+            entity.setOriginalName(meta.getOriginalName());
+            entity.setPath(meta.getPath());
+
+            if (existingOpt.isPresent())
+                entity.setId(existingOpt.get().getId());
+
             return attachedItemRepository.save(entity);
+            /*
+            AttachedItem entity = FileMetaConverter.toEntity(meta, Yn.Y);
+            return attachedItemRepository.save(entity);*/
         } catch (Exception e) {
             log.error("!! 파일 저장 or DB 업로드 실패");
             throw new RuntimeException("파일 저장 중 오류 발생", e);

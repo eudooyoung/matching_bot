@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "attached_items",
+@Table(name = "attached_item",
         indexes = {@Index(name = "idx_ref_type", columnList = "referenceId, itemType")}
 )
 public class AttachedItem extends BaseEntity {
