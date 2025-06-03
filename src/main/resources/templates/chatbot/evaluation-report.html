@@ -11,6 +11,8 @@
             margin: 0 auto;
             max-width: 660px; /* ✅ 전체 너비 줄임 */
             font-size: 0.88em; /* ✅ 전체 폰트 축소 */
+            font-weight: 400;
+            letter-spacing: 0.01em;
             background-color: #fff;
         }
 
@@ -38,7 +40,7 @@
 
         /* 리스트 */
         ul li {
-          margin-bottom: 8px;
+            margin-bottom: 8px;
         }
 
         table {
@@ -86,12 +88,13 @@
             margin-right: 4px;
             font-size: 0.85em;
             margin-bottom: 4px;
+            white-space: nowrap;
         }
     </style>
 </head>
 <body>
 
-<h1>기업 평가 결과</h1>
+<h1>AI 기업 평가 결과</h1>
 <h2 th:text="${name}">기업명</h2>
 
 <div class="score-box">

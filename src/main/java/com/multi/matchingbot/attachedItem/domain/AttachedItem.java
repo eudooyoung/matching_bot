@@ -1,5 +1,6 @@
-package com.multi.matchingbot.common.domain.entity;
+package com.multi.matchingbot.attachedItem.domain;
 
+import com.multi.matchingbot.common.domain.entity.BaseEntity;
 import com.multi.matchingbot.common.domain.enums.ItemType;
 import com.multi.matchingbot.common.domain.enums.Yn;
 import jakarta.persistence.*;
@@ -14,10 +15,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "attached_items",
+@Table(name = "attached_item",
         indexes = {@Index(name = "idx_ref_type", columnList = "referenceId, itemType")}
 )
-public class AttachedItems extends BaseEntity {
+public class AttachedItem extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,8 +28,8 @@ public class AttachedItems extends BaseEntity {
     private long referenceId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "item_type", nullable = false)
-    private ItemType type;
+    @Column(nullable = false)
+    private ItemType itemType;
 
     @Column(nullable = false)
     private String originalName;
@@ -40,6 +41,7 @@ public class AttachedItems extends BaseEntity {
     private String path;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Yn status;
 
 }

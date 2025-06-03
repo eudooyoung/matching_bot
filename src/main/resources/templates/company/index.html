@@ -7,7 +7,24 @@
     <link rel="stylesheet" th:href="@{/css/layout.css}">
 </head>
 <body>
+<style>
+    /* 평가 보고서 css*/
+    .report-image-wrapper {
+        text-align: center;
+        margin-top: 16px;
+        margin-bottom: 24px;
+    }
 
+    .report-image {
+        max-width: 100%;
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        border: 1px solid #ccc;
+    }
+</style>
+<!--<p th:text="'현재 userType: ' + ${userType}"></p>-->
 <div th:replace="~{fragments/header :: header(role=${role})}"></div>
 
 <div class="container">
@@ -26,6 +43,15 @@
 
     <div class="report-box">
         <p>평가 보고서 소개</p>
+
+        <div class="report-image-wrapper">
+            <img id="reportImage"
+                 th:if="${reportImageUrl != null}"
+                 th:src="@{${reportImageUrl} + '?v=' + ${#dates.createNow().getTime()}}"
+                 alt="기업 평가 보고서 이미지"
+                 class="report-image"
+                 onerror="handleImageLoadError(this)">
+        </div>
     </div>
 
     <table class="job-table">
@@ -51,6 +77,26 @@
 </div>
 
 <script>
+<!--    이미지 재로딩     -->
+    function handleImageLoadError(img) {
+        let retryCount = 0;
+        const maxRetries = 5;
+        const retryInterval = 2000; // 2초 간격
+
+        const src = img.src.split("?")[0]; // 원본 URL만 추출
+
+        const retryTimer = setInterval(() => {
+            retryCount++;
+            const timestamp = new Date().getTime();
+            img.src = src + "?v=" + timestamp;
+
+            if (retryCount >= maxRetries) {
+                clearInterval(retryTimer);
+                img.style.display = 'none'; // 5번 실패하면 숨김 처리
+            }
+        }, retryInterval);
+    }
+
     function toggleStar(button) {
         if (button.textContent === '☆') {
             button.textContent = '★';

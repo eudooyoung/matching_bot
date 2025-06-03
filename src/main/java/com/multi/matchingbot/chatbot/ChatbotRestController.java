@@ -14,11 +14,11 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ChatbotRestController {
 
-    private final ChatbotReportService chatbotService;
+    private final ChatbotReportService chatbotReportService;
 
     @PostMapping("/evaluate")
-    public ResponseEntity<String> generateCompanyReport(@RequestBody Map<String, Object> input) {
-        String report = chatbotService.generateReport(input);
+    public ResponseEntity<Map<String, Object>> generateCompanyReport(@RequestBody Map<String, Object> input) {
+        Map<String, Object> report = chatbotReportService.generateReport(input);
         return ResponseEntity.ok(report);
     }
 }

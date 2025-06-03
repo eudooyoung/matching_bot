@@ -1,5 +1,7 @@
 package com.multi.matchingbot.company.controller;
 
+import com.multi.matchingbot.attachedItem.domain.AttachedItem;
+import com.multi.matchingbot.attachedItem.service.AttachedItemService;
 import com.multi.matchingbot.common.security.MBotUserDetails;
 import com.multi.matchingbot.company.domain.Company;
 import com.multi.matchingbot.company.domain.CompanyUpdateDto;
@@ -15,6 +17,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @Controller
 @RequestMapping("/company")
 public class CompanyController {
@@ -22,6 +26,8 @@ public class CompanyController {
     @Autowired
     private final CompanyService companyService;
     private final JobService jobService;
+    @Autowired
+    private AttachedItemService attachedItemService;
 
     public CompanyController(CompanyService companyService, JobService jobService) {
         this.companyService = companyService;
@@ -38,6 +44,16 @@ public class CompanyController {
 
         Page<JobDto> jobPage = jobService.getByCompanyIdPaged(companyId, PageRequest.of(0, 20));
         model.addAttribute("jobPage", jobPage);
+
+        /*평가 보고서*/
+        Optional<AttachedItem> reportImageOpt =
+                attachedItemService.findReportForCompany(companyId);
+
+        if (reportImageOpt.isPresent()) {
+            AttachedItem report = reportImageOpt.get();
+            String url = "/" + report.getPath();
+            model.addAttribute("reportImageUrl", url);
+        }
 
         return "company/index";
     }
