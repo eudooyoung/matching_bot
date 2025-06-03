@@ -43,31 +43,12 @@ public class AttachedItemService {
             }
             reportData.putAll(parsed);
 
-           /* BufferedImage image = reportImageGenerator.convertReportToImage(reportData, reportType);
-
-            String extension = ".png";
-            String baseName = reportType.getFilePrefix();
-            String uuid = UUID.randomUUID().toString().substring(0, 16);
-            String systemName = baseName + "-" + uuid + extension;
-            String originalName = baseName + extension;
-            String path = "upload/company/" + companyId + "/" + systemName;
-
-            FileMeta meta = FileMeta.builder()
-                    .referenceId(companyId)
-                    .itemType(reportType.getItemType())
-                    .originalName(originalName)
-                    .systemName(systemName)
-                    .path(path)
-                    .build();
-
-            return fileService.save(meta, image);*/
-
             List<AttachedItem> savedItems = new ArrayList<>();
 
             for (ReportType reportType : List.of(ReportType.FULL, ReportType.SUMMARY)) {
                 BufferedImage image = reportImageGenerator.convertReportToImage(reportData, reportType);
 
-                String extension = ".png";
+                String extension = ".jpg";
                 String baseName = reportType.getFilePrefix();
                 String uuid = UUID.randomUUID().toString().substring(0, 16);
                 String systemName = baseName + "-" + uuid + extension;

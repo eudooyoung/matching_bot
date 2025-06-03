@@ -1,20 +1,22 @@
 document.addEventListener("DOMContentLoaded", async function () {
-    const imgId = "reportImage";
-    const spinnerId = "reportImageSpinner";
-    const img = document.getElementById(imgId);
-    const companyId = img?.dataset.companyId;
-    if (!companyId || !img) return;
+    const img = document.getElementById("summaryImage");
+    if (!img) return;
+
+    const companyId = img.dataset.companyId;
+    if (!companyId) return;
 
     try {
-        const response = await fetchWithAuth(`/attached/summary-image-path/${companyId}`);
-        if (response.ok) {
-            const url = await response.text();
-            loadImageWithSpinner(imgId, spinnerId, url);
+        const res = await fetchWithAuth(`/attached/summary-image-path/${companyId}`);
+        if (res.ok) {
+            const url = await res.text();
+            console.log(url);
+            img.src = url;
         } else {
-            document.getElementById(spinnerId).innerHTML = "<p>이미지 경로 요청 실패</p>";
+            img.src = "/img/fallback.jpg";
+            console.log("img.src:", img.src);
         }
-    } catch (err) {
-        console.error("이미지 로딩 오류", err);
-        document.getElementById(spinnerId).innerHTML = "<p>이미지 로딩 오류</p>";
+    } catch (e) {
+        console.error("이미지 로드 오류:", e);
+        img.src = "/img/fallback.jpg";
     }
 });

@@ -5,7 +5,6 @@
     <title>공고 상세보기</title>
     <link rel="stylesheet" th:href="@{/css/company-job.css}">
     <link rel="stylesheet" th:href="@{/css/layout.css}">
-    <link rel="stylesheet" th:href="@{/css/spinner.css}">
 
     <style>
         .container {
@@ -101,17 +100,16 @@
             <p th:text="${job.notice}">지원 시 유의 사항</p>
         </div>
 
-        <div class="report-box">
-            <div class="report-image-wrapper">
-                <div class="spinner-wrapper" id="reportImageSpinner">
-                    <div class="spinner"></div>
+        <div id="tab-report" class="tab-content active">
+            <div class="report-box">
+                <div class="report-image-wrapper">
+                    <img id="summaryImage"
+                         th:attr="data-company-id=${companyId}"
+                         src="/img/loading.jpg"
+                         alt="기업 평가 요약"
+                         loading="lazy"
+                         class="report-image"/>
                 </div>
-                <img id="reportImage"
-                     th:attr="data-company-id=${companyId}"
-                     src="/img/loading.jpg"
-                     alt="기업 평가 리포트"
-                     loading="lazy"
-                     class="report-image">
             </div>
         </div>
 
@@ -127,7 +125,6 @@
 <script th:src="@{/js/logout.js}"></script>
 <script th:src="@{/js/auth/fetchWithAuth.js}"></script>
 <script th:src="@{/js/loadSummaryImage.js}"></script>
-<script th:src="@{/js/loadImageWithSpinner.js}"></script>
 
 </body>
 </html>

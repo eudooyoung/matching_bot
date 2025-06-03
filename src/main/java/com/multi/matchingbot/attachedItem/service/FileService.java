@@ -1,9 +1,9 @@
 package com.multi.matchingbot.attachedItem.service;
 
 import com.multi.matchingbot.attachedItem.AttachedItemRepository;
+import com.multi.matchingbot.attachedItem.FileMetaConverter;
 import com.multi.matchingbot.attachedItem.domain.AttachedItem;
 import com.multi.matchingbot.attachedItem.domain.FileMeta;
-import com.multi.matchingbot.attachedItem.FileMetaConverter;
 import com.multi.matchingbot.common.domain.enums.Yn;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.nio.file.Paths;
 import java.util.Optional;
 
 @Slf4j
@@ -41,8 +40,7 @@ public class FileService {
                 systemName = meta.getSystemName();
             }
 
-            String fullPath = Paths.get("src/main/resources/static", meta.getPath()).toString();
-            File file = new File(fullPath);
+            File file = new File(meta.getPath());
             File parentDir = file.getParentFile();
 
             if (!parentDir.exists()) {
@@ -51,7 +49,7 @@ public class FileService {
                     log.info("새 디렉토리 생성: {}", parentDir);
             }
 
-            ImageIO.write(image, "png", file);
+            ImageIO.write(image, "jpg", file);
             log.info("이미지 저장 완료: {}", file.getAbsolutePath());
 
             AttachedItem entity = FileMetaConverter.toEntity(meta, Yn.Y);

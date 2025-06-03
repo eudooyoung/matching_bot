@@ -19,7 +19,7 @@ public class AttachedItemRestController {
     public ResponseEntity<String> getReportImagePath(@PathVariable("companyId") Long companyId) {
         return attachedItemService.findReportForCompany(companyId)
                 .map(report -> ResponseEntity.ok("/" + report.getPath()))
-                .orElse(ResponseEntity.ok("/img/fallback.jpeg")); // 기본 대체 이미지
+                .orElse(ResponseEntity.ok("/img/fallback.jpg")); // 기본 대체 이미지
     }
 
     @GetMapping("/summary-image-path/{companyId}")
