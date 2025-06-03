@@ -4,6 +4,7 @@
     <meta charset="UTF-8"/>
     <title>MatchingBot</title>
     <link rel="stylesheet" th:href="@{/css/layout.css}"/>
+    <link rel="stylesheet" th:href="@{/css/admin-dashboard.css}"/>
     <style>
         .search-filters {
             display: none;
@@ -19,18 +20,17 @@
     </style>
 </head>
 <body>
-<!--확인용-->
-<!--<p th:text="'현재 userType: ' + ${userType}"></p>-->
-<!-- Header Fragment -->
+
 <div class="wrapper">
     <div th:replace="~{fragments/header :: header(role=${role})}"></div>
 
     <main class="main-content">
-        <div sec:authorize="hasRole('ADMIN')">
-            <h2 style="text-align: center">환영합니다 관리자님</h2>
-        </div>
+        <!--<div sec:authorize="hasRole('ADMIN')"
+             th:replace="admin/dashboard :: adminDashboard">
+        </div>-->
 
-        <div sec:authorize="!hasRole('ADMIN')">
+        <!--        <div sec:authorize="!hasRole('ADMIN')">-->
+        <div>
             <!-- 검색 바 -->
             <section class="search-bar">
                 <input type="text" id="search-input" placeholder="채용 공고 검색"/>
@@ -58,27 +58,28 @@
                 <button th:onclick="|location.href='@{/calendar}'|">📅 채용 공고 달력 보기</button>
             </section>
 
-  <!-- 채용공고 목록 -->
-  <section class="job-section">
-    <h2>실시간 채용정보</h2>
-    <div class="job-list">
-      <div th:each="job : ${jobList}" class="job-card">
-        <h3 th:text="${job.title}">채용공고 제목</h3>
-        <p><strong>회사명:</strong> <span th:text="${job.companyName}">회사명</span></p>
-        <p><strong>주소:</strong> <span th:text="${job.address}">주소</span></p>
-        <p><strong>요구 기술:</strong> <span th:text="${job.requiredSkills}">기술스택</span></p>
-        <a th:href="@{'/job/detail/' + ${job.id}}">상세보기</a>
-      </div>
-    </div>
+            <!-- 채용공고 목록 -->
+            <section class="job-section">
+                <h2>실시간 채용정보</h2>
+                <div class="job-list">
+                    <div th:each="job : ${jobList}" class="job-card">
+                        <h3 th:text="${job.title}">채용공고 제목</h3>
+                        <p><strong>회사명:</strong> <span th:text="${job.companyName}">회사명</span></p>
+                        <p><strong>주소:</strong> <span th:text="${job.address}">주소</span></p>
+                        <p><strong>요구 기술:</strong> <span th:text="${job.requiredSkills}">기술스택</span></p>
+                        <a th:href="@{'/job/detail/' + ${job.id}}">상세보기</a>
+                    </div>
+                </div>
 
-    <!-- ✅ 페이지네이션 -->
-    <div class="pagination">
-      <a th:if="${currentPage > 1}" th:href="@{'/main?page=' + ${currentPage - 1}}">이전</a>
-      <span th:text="'현재 페이지: ' + ${currentPage} + ' / ' + ${totalPages}"></span>
-      <a th:if="${currentPage < totalPages}" th:href="@{'/main?page=' + ${currentPage + 1}}">다음</a>
-    </div>
-  </section>
-
+                <!-- ✅ 페이지네이션 -->
+                <div class="pagination">
+                    <a th:if="${currentPage > 1}" th:href="@{'/main?page=' + ${currentPage - 1}}">이전</a>
+                    <span th:text="'현재 페이지: ' + ${currentPage} + ' / ' + ${totalPages}"></span>
+                    <a th:if="${currentPage < totalPages}" th:href="@{'/main?page=' + ${currentPage + 1}}">다음</a>
+                </div>
+            </section>
+        </div>
+    </main>
 
     <!-- Footer Fragment -->
     <div th:insert="~{fragments/footer :: footer}"></div>
@@ -115,17 +116,17 @@
                 region
             });
 
-      // 서버에 요청 또는 페이지 이동
-       window.location.href = `/search-page?keyword=${keyword}&title=${title}&skill=${skill}&region=${region}`;
-    });
-  };
+            // 서버에 요청 또는 페이지 이동
+            window.location.href = `/search-page?keyword=${keyword}&title=${title}&skill=${skill}&region=${region}`;
+        });
+    };
 </script>
 <!--헤더 추가할때 dropdown & logout.js추가-->
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>
 <script type="module">
     import React from "https://cdn.jsdelivr.net/npm/react@18.2.0/+esm";
-    import { createRoot } from "https://cdn.jsdelivr.net/npm/react-dom@18.2.0/client/+esm";
+    import {createRoot} from "https://cdn.jsdelivr.net/npm/react-dom@18.2.0/client/+esm";
 
     // React 전역 등록 (필요 시 다른 모듈에서 사용 가능하도록)
     window.React = React;

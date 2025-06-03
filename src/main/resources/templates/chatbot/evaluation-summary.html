@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>기업 평가 요약</title>
+  <style>
+    body { font-family: sans-serif; padding: 30px; max-width: 700px; margin: auto; background-color: #fff; }
+    h1 { color: #333; margin-bottom: 30px; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+    th, td { text-align: left; padding: 10px; border: 1px solid #ccc; }
+    th { background-color: #f0f0f0; width: 30%; }
+    .summary { background: #f9f9f9; padding: 20px; border-radius: 8px; border: 1px solid #ddd; }
+    .score { font-size: 1.8em; color: #4CAF50; font-weight: bold; }
+    .keywords span {
+      display: inline-block; background: #e0f7fa; padding: 6px 12px;
+      border-radius: 4px; margin: 4px 4px 0 0; font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>기업 평가 요약 - [기업명]</h1>
+
+  <table>
+    <tr>
+      <th>총점</th>
+      <td><span class="score">[점수] / 5.0</span></td>
+    </tr>
+    <tr>
+      <th>재무 상태</th>
+      <td>[연매출], [영업이익], 부채비율 [10%] → ✅ 안정적</td>
+    </tr>
+    <tr>
+      <th>고용 정보</th>
+      <td>직원 수 [n]명, 최근 채용공고 수 [n]건</td>
+    </tr>
+    <tr>
+      <th>핵심 키워드</th>
+      <td class="keywords">
+        <span>[키워드1]</span>
+        <span>[키워드2]</span>
+        <span>[키워드3]</span>
+      </td>
+    </tr>
+  </table>
+
+  <div class="summary">
+    <strong>종합 의견:</strong><br>
+    [요약 분석 의견 입력]
+  </div>
+
+</body>
+</html>

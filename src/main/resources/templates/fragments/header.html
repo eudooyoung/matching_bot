@@ -3,7 +3,10 @@
 <div th:fragment="header(role)" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
     <header class="header">
         <div class="logo">
-            <a th:href="@{/}" class="logo-link">MatchingBot</a>
+            <!-- 관리자일 때 -->
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/main}" class="logo-link">MatchingBot</a>
+            <!-- 일반 사용자일 때 -->
+            <a sec:authorize="!hasRole('ADMIN')" th:href="@{/}" class="logo-link">MatchingBot</a>
         </div>
 
         <!-- 관리자 -->
@@ -12,11 +15,11 @@
             <div class="dropdown-wrapper">
                 <button class="menu-button" onclick="toggleDropdown(this)">Menu</button>
                 <ul class="dropdown">
-                    <li><a th:href="@{/admin/members(page=0)}">개인 회원 관리</a></li>
-                    <li><a th:href="@{/admin/companies(page=0)}">기업 회원 관리</a></li>
-                    <li><a th:href="@{/admin/resumes(page=0)}">이력서 관리</a></li>
-                    <li><a th:href="@{/admin/jobs(page=0)}">채용 공고 관리</a></li>
-                    <li><a th:href="@{/admin/community(page=0)}">커뮤니티 관리</a></li>
+                    <li><a th:href="@{/admin/board/members(page=0)}">개인 회원 관리</a></li>
+                    <li><a th:href="@{/admin/board/companies(page=0)}">기업 회원 관리</a></li>
+                    <li><a th:href="@{/admin/board/resumes(page=0)}">이력서 관리</a></li>
+                    <li><a th:href="@{/admin/board/jobs(page=0)}">채용 공고 관리</a></li>
+                    <li><a th:href="@{/admin/board/community(page=0)}">커뮤니티 관리</a></li>
 <!--                    <li><a th:href="@{/admin/attached-items.html(page=0)}">첨부 파일 관리</a></li>-->
                 </ul>
             </div>
@@ -42,7 +45,7 @@
                 </ul>
             </div>
             <a th:href="@{/auth/login}" class="nav-link">로그인</a>
-            <a th:href="@{/community/community-list}" class="nav-link">커뮤니티</a>
+            <a th:href="@{/community/list}" class="nav-link">커뮤니티</a>
         </div>
 
 

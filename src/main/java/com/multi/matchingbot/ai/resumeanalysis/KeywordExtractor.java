@@ -1,39 +1,40 @@
 package com.multi.matchingbot.ai.resumeanalysis;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import org.springframework.http.*;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
+import java.util.*;
 
+@Component
 public class KeywordExtractor {
 
-    public static void main(String[] args) {
+    public List<String> extractKeywords(String text) {
+        String url = "http://localhost:8081"; // FastAPI 서버 주소
+
+        // form data 구성
+        Map<String, String> body = new HashMap<>();
+        body.put("text", text);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED); // ⚠️ FastAPI가 받는 방식
+
+        HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(body, headers);
+
+        RestTemplate restTemplate = new RestTemplate();
+
         try {
-            // 1. HTML 파싱
-            Document doc = Jsoup.connect("http://localhost:8080").get();
-
-            // 2. 원문과 키워드 추출
-            Elements paragraphs = doc.select("p");
-            Elements keywordBlocks = doc.select("div:has(span.keyword)");
-
-            for (int i = 0; i < Math.min(paragraphs.size(), keywordBlocks.size()); i++) {
-                Element original = paragraphs.get(i);
-                Elements keywords = keywordBlocks.get(i).select("span.keyword");
-
-                System.out.println("✅ 원문: " + original.text());
-
-                System.out.print("🔑 키워드: ");
-                for (Element kw : keywords) {
-                    System.out.print(kw.text() + " ");
+            ResponseEntity<Map> response = restTemplate.postForEntity(url, requestEntity, Map.class);
+            if (response.getStatusCode() == HttpStatus.OK) {
+                Map<String, Object> responseBody = response.getBody();
+                if (responseBody != null && responseBody.containsKey("keywords")) {
+                    return (List<String>) responseBody.get("keywords");
                 }
-                System.out.println("\n--------------------------------------");
             }
-
-        } catch (IOException e) {
-            System.out.println("❌ 서버 연결 실패 또는 파싱 오류:");
-            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace(); // 로그로 오류 확인
         }
+
+        return Collections.emptyList(); // 실패 시 빈 리스트 반환
     }
 }
