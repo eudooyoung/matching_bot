@@ -18,10 +18,10 @@ public class SearchPostingController {
     public List<SearchPostingDto> searchJobs(
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) String title,
-            @RequestParam(required = false) String skill,
-            @RequestParam(required = false) String region
-
+            @RequestParam(required = false) String regionMain,
+            @RequestParam(required = false) String regionSub
     ) {
-        return searchPostingService.searchJobs(keyword, title, skill, region);
+        return searchPostingService.searchJobs(keyword, title, regionMain, regionSub);
     }
+
 }

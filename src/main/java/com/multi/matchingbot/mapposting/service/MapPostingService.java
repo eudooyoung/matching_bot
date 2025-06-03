@@ -1,6 +1,6 @@
 package com.multi.matchingbot.mapposting.service;
 
-import com.multi.matchingbot.mapposting.domain.MapPosting;
+import com.multi.matchingbot.job.domain.entity.Job;
 import com.multi.matchingbot.mapposting.domain.MapPostingDto;
 import com.multi.matchingbot.mapposting.repository.MapPostingRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +16,10 @@ public class MapPostingService {
     private final MapPostingRepository mapPostingRepository;
 
     public List<MapPostingDto> getNearbyPostings(double lat, double lng, double radiusKm) {
-        List<MapPosting> allJobs = mapPostingRepository.findAll();
+        List<Job> allJobs = mapPostingRepository.findAll();
         List<MapPostingDto> result = new ArrayList<>();
 
-        for (MapPosting job : allJobs) {
+        for (Job job : allJobs) {
             Double jobLat = job.getLatitude();
             Double jobLng = job.getLongitude();
 

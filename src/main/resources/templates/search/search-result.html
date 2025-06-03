@@ -63,11 +63,14 @@
           <div class="job-company mb-2" th:text="${job.companyName}">[회사명]</div>
 
           <div class="job-info">
-            <p><i class="bi bi-geo-alt-fill"></i> <strong>주소:</strong> <span th:text="${job.address}">[주소]</span></p>
-            <p><i class="bi bi-tools"></i> <strong>기술스택:</strong> <span th:text="${job.requiredSkills}">[기술]</span></p>
+            <p><strong>직군:</strong> <span th:text="${job.jobGroupName}">직군</span></p>
+            <p><strong>직종:</strong> <span th:text="${job.jobTypeName}">직종</span></p>
+            <p><strong>직무:</strong> <span th:text="${job.jobRoleName}">직무</span></p>
+            <p><strong>주소:</strong> <span th:text="${job.address}">주소</span></p>
+            <p><strong>기술스택:</strong> <span th:text="${job.requiredSkills}">기술</span></p>
           </div>
 
-          <a th:href="@{'/search-page/' + ${job.id}}" class="btn btn-primary w-100 mt-3">상세보기</a>
+          <a th:href="@{'/jobs/' + ${job.id}}" class="btn btn-primary w-100 mt-3">상세보기</a>
         </div>
       </div>
     </div>

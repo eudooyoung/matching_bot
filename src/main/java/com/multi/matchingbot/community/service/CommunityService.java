@@ -38,7 +38,7 @@ public class CommunityService {
     }
 
     public CommunityPost getPostWithComments(Long postId) {
-        CommunityPost post = postRepo.findById(postId)
+        CommunityPost post = postRepo.findByIdWithComments(postId)
                 .orElseThrow(() -> new EntityNotFoundException("Post not found"));
         post.setViews(post.getViews() + 1);
         postRepo.save(post);
@@ -111,4 +111,29 @@ public class CommunityService {
     public List<CommunityCategory> getAllCategories() {
         return categoryRepo.findAll();
     }
+
+    @Transactional
+    public void updateComment(Long commentId, String content, Member member) {
+        CommunityComment comment = commentRepo.findById(commentId)
+                .orElseThrow(() -> new EntityNotFoundException("댓글이 존재하지 않습니다."));
+
+        // 본인 댓글인지 확인
+        if (!comment.getMember().getId().equals(member.getId())) {
+            throw new AccessDeniedException("댓글 수정 권한이 없습니다.");
+        }
+
+        comment.setContent(content);
+        comment.setUpdatedBy(member.getName());
+        comment.setUpdatedAt(java.time.LocalDateTime.now());
+
+        // commentRepo.save(comment);  // 선택적: JPA의 영속성 컨텍스트 내에서 자동 반영됨
+    }
+
+    public Long getPostIdByCommentId(Long commentId) {
+        CommunityComment comment = commentRepo.findById(commentId)
+                .orElseThrow(() -> new EntityNotFoundException("댓글이 존재하지 않습니다."));
+        return comment.getPost().getId();
+    }
+
+
 }
