@@ -44,6 +44,7 @@
 
                 <label><strong>직무 선택:</strong></label>
                 <div id="react-job-category-selector"></div>
+                <input type="hidden" id="filter-title" name="title" />
 
                 <label><strong>지역 선택:</strong></label>
                 <div id="react-location-selector"></div>
@@ -108,19 +109,27 @@
         document.getElementById("search-button").addEventListener("click", () => {
             const keyword = document.getElementById("search-input").value;
             const title = document.getElementById("filter-title").value;
-            const skill = document.getElementById("filter-skill").value;
-            const region = document.getElementById("filter-region").value;
+            const regionMain = document.getElementById("filter-region-main").value;
+            const regionSub = document.getElementById("filter-region-sub").value;
 
             console.log("검색 조건:", {
                 keyword,
                 title,
-                skill,
-                region
+                regionMain,
+                regionSub
             });
 
-            // 서버에 요청 또는 페이지 이동
-            window.location.href = `/search-page?keyword=${keyword}&title=${title}&skill=${skill}&region=${region}`;
+            // ✅ 실제 파라미터 이름도 정확히 넘겨야 함
+            const query = new URLSearchParams({
+                keyword: keyword || '',
+                title: title || '',
+                regionMain: regionMain || '',
+                regionSub: regionSub || ''
+            }).toString();
+
+            window.location.href = `/search-page?${query}`;
         });
+
     };
 </script>
 <!--헤더 추가할때 dropdown & logout.js추가-->

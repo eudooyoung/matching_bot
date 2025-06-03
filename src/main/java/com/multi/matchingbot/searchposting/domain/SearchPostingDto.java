@@ -1,9 +1,8 @@
 package com.multi.matchingbot.searchposting.domain;
 
-import com.multi.matchingbot.mapposting.domain.MapPosting;
+import com.multi.matchingbot.job.domain.entity.Job;
+import com.multi.matchingbot.job.domain.entity.Occupation;
 import lombok.*;
-
-import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -11,22 +10,29 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class SearchPostingDto {
-
     private Long id;
     private String title;
     private String address;
-    private String requiredSkills;
     private String companyName;
-    private LocalDate endDate;
+    private String requiredSkills;
 
-    //fromEntity Entity를 Dto로 변환해주는 패턴
-    public static SearchPostingDto fromEntity(MapPosting posting) {
+    // 추가: 직군/직종/직무
+    private String jobGroupName;  // 직군
+    private String jobTypeName;   // 직종
+    private String jobRoleName;   // 직무
+
+    public static SearchPostingDto fromEntity(Job job) {
+        Occupation occupation = job.getOccupation();
         return SearchPostingDto.builder()
-                .id(posting.getId())
-                .title(posting.getTitle())
-                .address(posting.getAddress())
-                .requiredSkills(posting.getRequiredSkills())
-                .companyName(posting.getCompany().getName())
+                .id(job.getId())
+                .title(job.getTitle())
+                .address(job.getAddress())
+                .companyName(job.getCompany().getName())
+                .requiredSkills(job.getRequiredSkills())
+                .jobGroupName(occupation.getJobGroupName())
+                .jobTypeName(occupation.getJobTypeName())
+                .jobRoleName(occupation.getJobRoleName())
                 .build();
     }
 }
+

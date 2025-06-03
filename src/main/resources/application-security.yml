@@ -13,6 +13,7 @@ jwt:
 security:
   access:
     permit-all:
+      - /api/occupations/**
       - /css/**
       - /js/**
       - /favicon.ico

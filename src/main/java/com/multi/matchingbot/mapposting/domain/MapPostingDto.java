@@ -1,6 +1,7 @@
 package com.multi.matchingbot.mapposting.domain;
 
 import com.multi.matchingbot.company.domain.Company;
+import com.multi.matchingbot.job.domain.entity.Job;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,7 +20,7 @@ public class MapPostingDto {
     private String requiredSkills;
     private String companyName; // ✅ 회사명 추가
 
-    public static MapPostingDto fromEntity(MapPosting job) {
+    public static MapPostingDto fromEntity(Job job) {
         MapPostingDto dto = new MapPostingDto();
         dto.setId(job.getId());
         dto.setTitle(job.getTitle());

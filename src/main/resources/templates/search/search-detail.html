@@ -50,11 +50,17 @@
                 <h3 th:text="${job.title}">직무명</h3>
                 <p><strong>회사명:</strong> <span th:text="${job.companyName}">회사명</span></p>
                 <p><strong>주소:</strong> <span th:text="${job.address}">주소</span></p>
+
+                <p><strong>직군:</strong> <span th:text="${job.occupationGroupName}">직군</span></p>
+                <p><strong>직종:</strong> <span th:text="${job.occupationTypeName}">직종</span></p>
+                <p><strong>직무:</strong> <span th:text="${job.occupationName}">직무</span></p>
+
                 <p><strong>기술스택:</strong> <span th:text="${job.requiredSkills}">기술스택</span></p>
                 <p><strong>마감일:</strong> <span th:text="${job.endDate}">마감일</span></p>
 
                 <a th:href="@{/search-page}" class="btn btn-outline-secondary back-link">← 목록으로 돌아가기</a>
             </div>
+
 
             <div th:if="${job == null}" class="text-center text-muted mt-5">
                 <i class="bi bi-exclamation-triangle-fill" style="font-size: 2rem;"></i>

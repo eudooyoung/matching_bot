@@ -25,27 +25,38 @@ public class CommunityPostDto {
     private LocalDateTime createdAt;
     private String writerName; // ✅ 추가
 
-    private List<CommunityComment> comments;
+    private List<CommunityCommentDto> comments;
 
     public static CommunityPostDto fromEntity(CommunityPost post) {
         CommunityPostDto dto = new CommunityPostDto();
         dto.setId(post.getId());
+
         if (post.getCategory() != null) {
             dto.setCategoryId(post.getCategory().getId());
             dto.setCategoryName(post.getCategory().getName());
         }
+
         if (post.getMember() != null) {
             dto.setMemberId(post.getMember().getId());
             dto.setWriterName(post.getMember().getName());
         }
+
         dto.setTitle(post.getTitle());
         dto.setContent(post.getContent());
         dto.setViews(post.getViews());
         dto.setCreatedBy(post.getCreatedBy());
         dto.setCreatedAt(post.getCreatedAt());
 
-
+        // ✅ 댓글 리스트 변환 추가
+        if (post.getComments() != null) {
+            dto.setComments(
+                    post.getComments().stream()
+                            .map(CommunityCommentDto::fromEntity)
+                            .toList()
+            );
+        }
 
         return dto;
     }
+
 }

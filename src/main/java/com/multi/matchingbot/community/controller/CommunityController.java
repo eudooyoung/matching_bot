@@ -1,6 +1,7 @@
 package com.multi.matchingbot.community.controller;
 
 import com.multi.matchingbot.community.domain.CommunityCategory;
+import com.multi.matchingbot.community.domain.CommunityCommentDto;
 import com.multi.matchingbot.community.domain.CommunityPostDto;
 import com.multi.matchingbot.community.service.CommunityService;
 import com.multi.matchingbot.member.domain.entities.Member;
@@ -82,6 +83,10 @@ public class CommunityController {
         model.addAttribute("post",CommunityPostDto.fromEntity(post));
         model.addAttribute("categories", communityService.getAllCategories());
 
+        model.addAttribute("comment", post.getComments().stream()
+                .map(CommunityCommentDto::fromEntity)
+                .toList());
+
         if (authentication != null) {
             Member member = memberService.findByUsername(authentication.getName());
             model.addAttribute("currentUserId", member.getId());
@@ -139,5 +144,57 @@ public class CommunityController {
         communityService.deletePost(id, member);
         return "redirect:/community/list";
     }
+
+    @PostMapping("/{id}/comment")
+    public String addComment(@PathVariable(name = "id") Long postId,
+                             @RequestParam("content") String content,
+                             Authentication authentication) {
+
+        // 인증되지 않은 경우 로그인 페이지로 리다이렉트
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/login";
+        }
+
+        // 로그인한 사용자 정보로부터 Member 객체 조회
+        Member member = memberService.findByUsername(authentication.getName());
+
+        // 댓글 저장 서비스 호출
+        communityService.addComment(postId, content, member);
+
+        // 댓글 작성 후 해당 게시글 상세 페이지로 리다이렉트
+        return "redirect:/community/detail/" + postId;
+    }
+
+    @PostMapping("/comment/edit")
+    public String updateComment(@RequestParam Long id,
+                                @RequestParam String content,
+                                Authentication authentication) {
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/login";
+        }
+
+        Member member = memberService.findByUsername(authentication.getName());
+        communityService.updateComment(id, content, member);
+
+        Long postId = communityService.getPostIdByCommentId(id);
+        return "redirect:/community/detail/" + postId;
+    }
+
+    @PostMapping("/comment/{id}/update")
+    public String updateComment(@PathVariable("id") Long id,
+                                @RequestParam("content") String content,
+                                @RequestParam("postId") Long postId,
+                                Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/login";
+        }
+
+        Member member = memberService.findByUsername(authentication.getName());
+        communityService.updateComment(id, content, member);
+
+        return "redirect:/community/detail/" + postId;
+    }
+
 
 }
