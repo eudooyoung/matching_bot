@@ -21,7 +21,7 @@
       <!-- 상단 버튼 -->
       <div class="resume-actions" style="margin-bottom: 20px;">
         <button type="submit" class="btn-danger">선택 삭제</button>
-        <button type="button" class="btn-primary" onclick="location.href='/member/new'">이력서 등록하기</button>
+        <button type="button" class="btn-primary" onclick="location.href='/member/insert'">이력서 등록하기</button>
         <button type="button" class="btn-secondary" onclick="location.href='/member/history'">이력서 열람 기록</button>
       </div>
 
@@ -74,6 +74,7 @@
     checkboxes.forEach(cb => cb.checked = source.checked);
   }
 </script>
-
+<script th:src="@{/js/dropdown.js}"></script>
+<script th:src="@{/js/logout.js}"></script>
 </body>
 </html>

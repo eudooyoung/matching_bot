@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -42,6 +43,11 @@ public class ResumeService {
     public Page<ResumeDto> getAllResumes(Pageable pageable) {
         return resumeRepository.findAll(pageable)
                 .map(this::toDto);
+    }
+
+    @Transactional
+    public Resume save(Resume resume) {
+        return resumeRepository.save(resume);
     }
 
     private ResumeDto toDto(Resume resume) {

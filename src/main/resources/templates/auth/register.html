@@ -6,9 +6,45 @@
     <link rel="stylesheet" th:href="@{/css/register.css}" href="/css/register.css">
     <link rel="stylesheet" th:href="@{/css/layout.css}" href="/css/layout.css">
 </head>
+
+<style>
+    .agreement-box {
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 20px;
+        background-color: #f9f9f9;
+        margin-top: 10px;
+        font-size: 14px;
+        max-width: 600px;
+    }
+
+    .checkbox-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .checkbox-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .checkbox-item input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        margin: 0;
+        cursor: pointer;
+        flex-shrink: 0;
+    }
+
+    .checkbox-item span {
+        flex: 1;
+        word-break: break-word;
+    }
+</style>
+
 <body>
-
-
 <div class="wrapper">
         <div th:replace="fragments/header :: header(role=${role})"></div>
 
@@ -16,6 +52,12 @@
     <main class="main-content">
         <div class="container">
             <h2>회원가입 (일반)</h2>
+
+            <!-- 에러 메시지 표시 -->
+            <div th:if="${error}" class="error-message">
+                <p th:text="${error}">회원가입 중 오류가 발생했습니다.</p>
+            </div>
+
             <form id="userForm" action="/auth/register" method="post">
 
                 <label for="email">* 이메일</label>
@@ -76,21 +118,42 @@
                     <label><input type="radio" name="gender" value="F"> 여</label>
                 </div>
 
-                <label for="phone">* 휴대전화번호</label>
+                <label>* 휴대전화번호</label>
                 <div class="phone-input">
                     <input type="text" name="phone1" maxlength="3" pattern="\d{3}" title="숫자 3자리를 입력하세요" required>
                     <input type="text" name="phone2" maxlength="4" pattern="\d{3,4}" title="숫자 3~4자리를 입력하세요" required>
                     <input type="text" name="phone3" maxlength="4" pattern="\d{4}" title="숫자 4자리를 입력하세요" required>
                 </div>
 
+                <!-- 약관동의 -->
                 <label class="agreement-title">* 약관동의</label>
-                <div class="checkbox-group">
-                    <label><input type="checkbox" name="agree_all"> 전체 동의</label><br>
-                    <label><input type="checkbox" name="terms_required" required> (필수) 서비스 이용약관 동의</label><br>
-                    <label><input type="checkbox" name="privacy_required" required> (필수) 개인정보 수집 및 이용 동의</label><br>
-                    <label><input type="checkbox" name="location_required" required> (필수) 위치기반 서비스 이용약관 동의</label><br>
-                    <label><input type="checkbox" name="marketing_email"> (선택) 마케팅 정보 수신 동의 - 이메일</label><br>
-                    <label><input type="checkbox" name="marketing_sms"> (선택) 마케팅 정보 수신 동의 - SMS/MMS</label><br>
+                <div class="agreement-box">
+                    <div class="checkbox-group">
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="agree_all">
+                            <span>전체 동의</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="terms_required" required>
+                            <span>(필수) 서비스 이용약관 동의</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="privacy_required" required>
+                            <span>(필수) 개인정보 수집 및 이용 동의</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="location_required" required>
+                            <span>(필수) 위치기반 서비스 이용약관 동의</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="marketing_email">
+                            <span>(선택) 마케팅 정보 수신 동의 - 이메일</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="marketing_sms">
+                            <span>(선택) 마케팅 정보 수신 동의 - SMS/MMS</span>
+                        </label>
+                    </div>
                 </div>
 
                 <button type="submit">가입하기</button>
