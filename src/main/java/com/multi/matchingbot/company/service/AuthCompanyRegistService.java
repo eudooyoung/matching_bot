@@ -1,6 +1,5 @@
 package com.multi.matchingbot.company.service;
 
-import com.multi.matchingbot.attachedItem.domain.ReportType;
 import com.multi.matchingbot.attachedItem.service.AttachedItemService;
 import com.multi.matchingbot.common.domain.enums.Role;
 import com.multi.matchingbot.common.domain.enums.Yn;
@@ -8,9 +7,11 @@ import com.multi.matchingbot.company.domain.Company;
 import com.multi.matchingbot.company.domain.CompanyRegisterDto;
 import com.multi.matchingbot.company.repository.AuthCompanyRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthCompanyRegistService {
@@ -50,13 +51,14 @@ public class AuthCompanyRegistService {
                 .status(Yn.Y)
                 .build();
 
+        log.debug(company.toString());
+
 //        authCompanyRepository.save(company);
 
         Company savedCompany = authCompanyRepository.save(company);
 
         /*기업 평가 보고서 로직*/
-       attachedItemService.saveReportImage(dto, ReportType.FULL, savedCompany.getId());
-       attachedItemService.saveReportImage(dto, ReportType.SUMMARY, savedCompany.getId());
+       attachedItemService.saveReportImage(dto, savedCompany.getId());
 
     }
 }

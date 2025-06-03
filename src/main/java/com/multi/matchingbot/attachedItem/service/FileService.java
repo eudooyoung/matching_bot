@@ -3,7 +3,7 @@ package com.multi.matchingbot.attachedItem.service;
 import com.multi.matchingbot.attachedItem.AttachedItemRepository;
 import com.multi.matchingbot.attachedItem.domain.AttachedItem;
 import com.multi.matchingbot.attachedItem.domain.FileMeta;
-import com.multi.matchingbot.attachedItem.mapper.FileMetaConverter;
+import com.multi.matchingbot.attachedItem.FileMetaConverter;
 import com.multi.matchingbot.common.domain.enums.Yn;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

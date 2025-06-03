@@ -5,97 +5,81 @@
     <title>MatchingBot 기업 홈</title>
     <link rel="stylesheet" th:href="@{/css/company-job.css}">
     <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/spinner.css}">
 </head>
 <body>
-<style>
-    /* 평가 보고서 css*/
-    .report-image-wrapper {
-        text-align: center;
-        margin-top: 16px;
-        margin-bottom: 24px;
-    }
-
-    .report-image {
-        max-width: 100%;
-        width: 100%;
-        height: auto;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        border: 1px solid #ccc;
-    }
-</style>
 <!--<p th:text="'현재 userType: ' + ${userType}"></p>-->
-<div th:replace="~{fragments/header :: header(role=${role})}"></div>
+<div class="wrapper">
+    <div th:replace="~{fragments/header :: header(role=${role})}"></div>
 
-<div class="container">
-    <h2>기업 홈</h2>
+    <div class="container">
+        <h2>기업 홈</h2>
 
-    <div class="user-info-box">
-        <div class="user-box">
+        <div class="user-info-box">
+            <div class="user-box">
         <span>
           <span th:text="${company.name}"></span> 님<button class="star-button" onclick="toggleStar(this)">☆</button>
         </span>
+            </div>
+            <div class="mypage-box">
+                <button class="nav-button" onclick="goToMyPage()">마이페이지</button>
+            </div>
         </div>
-        <div class="mypage-box">
-            <button class="nav-button" onclick="goToMyPage()">마이페이지</button>
+
+        <div class="tab-buttons">
+            <button class="tab-button active" onclick="showTab('report')">기업 평가 보고서</button>
+            <button class="tab-button" onclick="showTab('jobs')">채용공고 목록</button>
+        </div>
+
+        <div id="tab-report" class="tab-content active">
+            <div class="report-box">
+                <div class="report-image-wrapper">
+                    <div class="spinner-wrapper" id="reportImageSpinner">
+                          <div class="spinner"></div>
+                      </div>
+                    <img id="reportImage"
+                         th:attr="data-company-id=${companyId}"
+                         src="/img/loading.jpg"
+                         alt="기업 평가 리포트"
+                         loading="lazy"
+                         class="report-image">
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-jobs" class="tab-content">
+            <table class="job-table">
+                <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>채용 공고 제목</th>
+                    <th>채용 기간</th>
+                    <th>상세보기</th>
+                    <th>즐겨찾기</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="job, iterStat : ${jobPage.content}">
+                    <td th:text="${iterStat.index + 1}">1</td>
+                    <td th:text="${job.title}">제목</td>
+                    <td th:text="${#temporals.format(job.startDate, 'yyyy-MM-dd')} + ' ~ ' + ${#temporals.format(job.endDate, 'yyyy-MM-dd')}">
+                        기간
+                    </td>
+                    <td th:onclick="'location.href=\'/job/' + ${job.id} + '\''">상세보기</td>
+                    <td>
+                        <button class="star-button" onclick="toggleStar(this)">☆</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
-    <div class="report-box">
-        <p>평가 보고서 소개</p>
+    <div th:replace="~{fragments/footer :: footer}"></div>
 
-        <div class="report-image-wrapper">
-            <img id="reportImage"
-                 th:if="${reportImageUrl != null}"
-                 th:src="@{${reportImageUrl} + '?v=' + ${#dates.createNow().getTime()}}"
-                 alt="기업 평가 보고서 이미지"
-                 class="report-image"
-                 onerror="handleImageLoadError(this)">
-        </div>
-    </div>
-
-    <table class="job-table">
-        <thead>
-        <tr>
-            <th>번호</th>
-            <th>채용 공고 제목</th>
-            <th>채용 기간</th>
-            <th>상세보기</th>
-            <th>즐겨찾기</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="job, iterStat : ${jobPage.content}">
-            <td th:text="${iterStat.index + 1}">1</td>
-            <td th:text="${job.title}">제목</td>
-            <td th:text="${#temporals.format(job.startDate, 'yyyy-MM-dd')} + ' ~ ' + ${#temporals.format(job.endDate, 'yyyy-MM-dd')}">기간</td>
-            <td th:onclick="'location.href=\'/job/' + ${job.id} + '\''">상세보기</td>
-            <td><button class="star-button" onclick="toggleStar(this)">☆</button></td>
-        </tr>
-        </tbody>
-    </table>
 </div>
 
 <script>
-<!--    이미지 재로딩     -->
-    function handleImageLoadError(img) {
-        let retryCount = 0;
-        const maxRetries = 5;
-        const retryInterval = 2000; // 2초 간격
-
-        const src = img.src.split("?")[0]; // 원본 URL만 추출
-
-        const retryTimer = setInterval(() => {
-            retryCount++;
-            const timestamp = new Date().getTime();
-            img.src = src + "?v=" + timestamp;
-
-            if (retryCount >= maxRetries) {
-                clearInterval(retryTimer);
-                img.style.display = 'none'; // 5번 실패하면 숨김 처리
-            }
-        }, retryInterval);
-    }
 
     function toggleStar(button) {
         if (button.textContent === '☆') {
@@ -111,11 +95,24 @@
         window.location.href = '/company/mypage';
     }
 </script>
+<script>
+    function showTab(tabName) {
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
 
-<div th:replace="~{fragments/footer :: footer}"></div>
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        tabContents.forEach(content => content.classList.remove('active'));
+
+        document.querySelector(`.tab-button[onclick*='${tabName}']`).classList.add('active');
+        document.getElementById(`tab-${tabName}`).classList.add('active');
+    }
+</script>
 
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>
+<script th:src="@{/js/auth/fetchWithAuth.js}"></script>
+<script th:src="@{/js/loadReportImage.js}"></script>
+<script th:src="@{/js/loadImageWithSpinner.js}"></script>
 
 </body>
 </html>
