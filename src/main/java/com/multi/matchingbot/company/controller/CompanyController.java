@@ -54,7 +54,7 @@ public class CompanyController {
 
         return "company/index";
     }
-    
+
     @GetMapping("/{id}")
     public CompanyUpdateDto getCompany(@PathVariable Long id) {
         return companyService.getCompanyById(id);
@@ -109,5 +109,24 @@ public class CompanyController {
         companyService.update(companyDto, userDetails.getCompanyId());
         return "redirect:/company/mypage";
     }
+
+//    // 개인정보 수정 처리
+//    @PostMapping("/edit-profile")
+//    public String updateProfile(@RequestParam("phone1") String phone1,
+//                                @RequestParam("phone2") String phone2,
+//                                @RequestParam("phone3") String phone3,
+//                                @ModelAttribute("company") CompanyUpdateDto companyDto,
+//                                BindingResult bindingResult,
+//                                @AuthenticationPrincipal MBotUserDetails userDetails) {
+//
+//        companyDto.setPhone(phone1 + phone2 + phone3);  // 조합하여 저장
+//
+//        if (bindingResult.hasErrors()) {
+//            return "company/edit-profile";
+//        }
+//
+//        companyService.update(companyDto, userDetails.getCompanyId());
+//        return "redirect:/company/mypage";
+//    }
 
 }

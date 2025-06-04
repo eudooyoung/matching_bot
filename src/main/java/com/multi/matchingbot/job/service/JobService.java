@@ -73,4 +73,8 @@ public class JobService {
                 .occupationId(job.getOccupation() != null ? job.getOccupation().getId() : null)
                 .build();
     }
+
+    public Page<Job> getPageJobs(Pageable pageable) {
+        return repository.findAll(pageable);
+    }
 }

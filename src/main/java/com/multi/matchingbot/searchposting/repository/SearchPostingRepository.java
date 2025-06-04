@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface SearchPostingRepository {
-    List<Job> searchByFilters(String keyword, String title, String regionMain, String regionSub);
+    List<Job> searchByFilters(String jobGroup, String jobType,String jobRole, String regionMain, String regionSub);
     Optional<Job> findById(Long id);
     Page<MapPostingDto> findAllMapPostings(Pageable pageable);
 }

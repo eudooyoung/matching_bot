@@ -30,6 +30,8 @@ security:
       - /jobs/**
       - /community/**
       - /calendar
+      - /job/**
+#      - /job/detail/**
 
       - /community/detail/**
       - /api/v1/chatbot/**
@@ -38,6 +40,7 @@ security:
       - /swagger-ui/**
       - /v3/api-docs
       - /v3/api-docs/**
+      - /upload/**
     authenticated-paths:      #authenticated
       - /api/**
     member-paths:

@@ -1,4 +1,4 @@
-package com.multi.matchingbot.attachedItem.mapper;
+package com.multi.matchingbot.attachedItem;
 
 import com.multi.matchingbot.attachedItem.domain.AttachedItem;
 import com.multi.matchingbot.attachedItem.domain.FileMeta;

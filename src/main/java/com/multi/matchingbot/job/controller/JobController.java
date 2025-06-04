@@ -123,18 +123,40 @@ public class JobController {
         return "redirect:/job/manage-jobs";
     }
 
-    // 공고 상세 보기
+     //공고 상세 보기 세빈코드
+//    @GetMapping("/{id}")
+//    public String getJobDetail(@PathVariable("id") Long id, Model model, @AuthenticationPrincipal MBotUserDetails userDetails) {
+//        Long companyId = userDetails.getCompanyId();
+//
+//
+//        Job job = jobService.findById(id);
+//        model.addAttribute("job", job);
+//        model.addAttribute("role", userDetails.getAuthorities());
+//        model.addAttribute("companyId", companyId);
+//
+//        return "job/job-detail";
+//    }
+
+    //공고 상세보기 형찬코드
     @GetMapping("/{id}")
     public String getJobDetail(@PathVariable("id") Long id, Model model, @AuthenticationPrincipal MBotUserDetails userDetails) {
-        Long companyId = userDetails.getCompanyId();
+
+        Long companyId = null;
+        String role = null;
+
+        if (userDetails != null) {
+            companyId = userDetails.getCompanyId();
+            role = userDetails.getRole().name();
+        }
 
         Job job = jobService.findById(id);
         model.addAttribute("job", job);
-        model.addAttribute("role", userDetails.getAuthorities());
+        model.addAttribute("role", role);
         model.addAttribute("companyId", companyId);
 
         return "job/job-detail";
     }
+
 
     // 관심 이력서 관리(id 포함)
     @GetMapping("/resume-bookmark")

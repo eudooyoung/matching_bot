@@ -11,6 +11,10 @@ import com.multi.matchingbot.member.domain.entities.Member;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -135,5 +139,37 @@ public class CommunityService {
         return comment.getPost().getId();
     }
 
+
+    public Page<CommunityPostDto> getPagedPosts(Long categoryId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<CommunityPost> postPage = (categoryId == null)
+                ? postRepo.findAll(pageable)
+                : postRepo.findByCategoryId(categoryId, pageable);
+
+        List<CommunityPostDto> postDtos = postPage.stream()
+                .map(CommunityPostDto::fromEntity)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(postDtos, pageable, postPage.getTotalElements());
+    }
+
+    @Transactional
+    public void deleteComment(Long commentId, Long memberId) {
+        log.info("🧪 댓글 삭제 시도 - commentId: {}, memberId: {}", commentId, memberId);
+
+        CommunityComment comment = commentRepo.findById(commentId)
+                .orElseThrow(() -> new EntityNotFoundException("댓글을 찾을 수 없습니다"));
+
+        log.info("✅ 댓글 존재 확인됨 - 작성자 ID: {}", comment.getMember().getId());
+
+        if (!comment.getMember().getId().equals(memberId)) {
+            log.warn("❌ 삭제 권한 없음 - 요청자 ID: {}, 작성자 ID: {}", memberId, comment.getMember().getId());
+            throw new AccessDeniedException("본인이 작성한 댓글만 삭제할 수 있습니다");
+        }
+
+        commentRepo.delete(comment);
+        log.info("✅ 댓글 삭제 실행됨 - commentId: {}", commentId);
+    }
 
 }
