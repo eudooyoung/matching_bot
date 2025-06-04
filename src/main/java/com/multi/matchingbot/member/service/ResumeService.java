@@ -1,8 +1,11 @@
 package com.multi.matchingbot.member.service;
 
 import com.multi.matchingbot.member.domain.dtos.ResumeDto;
+import com.multi.matchingbot.member.domain.dtos.ResumeViewLogDto;
 import com.multi.matchingbot.member.domain.entities.Resume;
+import com.multi.matchingbot.member.domain.entities.ResumeViewLog;
 import com.multi.matchingbot.member.repository.ResumeRepository;
+import com.multi.matchingbot.member.repository.ResumeViewLogRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -11,12 +14,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ResumeService {
 
     private final ResumeRepository resumeRepository;
+    private final ResumeViewLogRepository resumeViewLogRepository;
 
     public List<Resume> findAll() {
         return resumeRepository.findAll();
@@ -78,7 +83,24 @@ public class ResumeService {
         resume.setTitle(updatedResume.getTitle());
         resume.setSkillAnswer(updatedResume.getSkillAnswer());
         resume.setTraitAnswer(updatedResume.getTraitAnswer());
+
+        // occupation 수정
+        if (updatedResume.getOccupation() != null) {
+            resume.setOccupation(updatedResume.getOccupation());
+        }
+
         resumeRepository.save(resume);
     }*/
+
+    public List<ResumeViewLogDto> getResumeViewLogs(Long memberId) {
+        List<ResumeViewLog> logs = resumeViewLogRepository.findByResume_Member_IdOrderByViewedAtDesc(memberId);
+
+        return logs.stream().map(log -> ResumeViewLogDto.builder()
+                .companyName(log.getCompany().getName())
+                .industry(log.getCompany().getIndustry())
+                .viewedAt(log.getViewedAt())
+                .build()
+        ).collect(Collectors.toList());
+    }
 
 }

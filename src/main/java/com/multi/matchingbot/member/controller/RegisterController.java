@@ -1,7 +1,8 @@
 package com.multi.matchingbot.member.controller;
 
-import com.multi.matchingbot.member.domain.dtos.MemberRegisterDto;
 import com.multi.matchingbot.member.service.AuthMemberRegistService;
+import com.multi.matchingbot.member.service.MemberService;
+import com.multi.matchingbot.member.domain.dtos.MemberRegisterDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
 
 @Controller
 @RequestMapping("/auth")
@@ -22,7 +24,7 @@ public class RegisterController {
     @GetMapping("/register-member")
     public String showRegisterForm(Model model) {
         model.addAttribute("memberDto", new MemberRegisterDto());
-        return "auth/register-member";
+        return "auth/register";
 
     }
 
@@ -31,8 +33,10 @@ public class RegisterController {
                                BindingResult bindingResult,
                                Model model) {
         if (bindingResult.hasErrors()) {
-            // 입력값 검증 실패: 다시 등록 페이지로 이동하면서 에러 출력
-            return "auth/register-member";
+            bindingResult.getFieldErrors().forEach(error ->
+                    System.out.println("Field error in: " + error.getField() + " - " + error.getDefaultMessage())
+            );
+            return "auth/register";
         }
 
         try {
@@ -40,8 +44,9 @@ public class RegisterController {
             return "redirect:/auth/login";  // 성공 시 로그인 페이지로 이동
         } catch (Exception e) {
             e.printStackTrace(); // 예외 로그
+            model.addAttribute("memberDto", dto);
             model.addAttribute("error", e.getMessage());
-            return "auth/register-member"; // 실패 시 다시 폼 보여줌
+            return "auth/register"; // 실패 시 다시 폼 보여줌
         }
 
     }

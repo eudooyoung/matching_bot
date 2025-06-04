@@ -46,7 +46,7 @@
 
 <body>
 <div class="wrapper">
-        <div th:replace="fragments/header :: header(role=${role})"></div>
+    <div th:replace="~{fragments/header :: header(role=${role})}"></div>
 
 
     <main class="main-content">
@@ -58,7 +58,7 @@
                 <p th:text="${error}">회원가입 중 오류가 발생했습니다.</p>
             </div>
 
-            <form id="userForm" action="/auth/register" method="post">
+            <form id="userForm" action="/auth/register-member" method="post">
 
                 <label for="email">* 이메일</label>
                 <input type="email" id="email" name="email" placeholder="email@matchingbot.co.kr" required>
@@ -134,24 +134,20 @@
                             <span>전체 동의</span>
                         </label>
                         <label class="checkbox-item">
-                            <input type="checkbox" name="terms_required" required>
+                            <input type="checkbox" name="agreeService" value="Y" required>
                             <span>(필수) 서비스 이용약관 동의</span>
                         </label>
                         <label class="checkbox-item">
-                            <input type="checkbox" name="privacy_required" required>
+                            <input type="checkbox" name="agreePrivacy" value="Y" required>
                             <span>(필수) 개인정보 수집 및 이용 동의</span>
                         </label>
                         <label class="checkbox-item">
-                            <input type="checkbox" name="location_required" required>
+                            <input type="checkbox" name="agreeLocation" value="Y" required>
                             <span>(필수) 위치기반 서비스 이용약관 동의</span>
                         </label>
                         <label class="checkbox-item">
-                            <input type="checkbox" name="marketing_email">
+                            <input type="checkbox" name="agreeMarketing" value="Y">
                             <span>(선택) 마케팅 정보 수신 동의 - 이메일</span>
-                        </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="marketing_sms">
-                            <span>(선택) 마케팅 정보 수신 동의 - SMS/MMS</span>
                         </label>
                     </div>
                 </div>

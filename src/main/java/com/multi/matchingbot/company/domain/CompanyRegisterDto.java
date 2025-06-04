@@ -1,6 +1,7 @@
 package com.multi.matchingbot.company.domain;
 
 import com.multi.matchingbot.common.domain.enums.Yn;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
@@ -42,6 +43,7 @@ public class CompanyRegisterDto {
     @Min(value = 0, message = "영업이익은 0 이상이어야 합니다.")
     private int operatingIncome;
 
+//    @Column(name = "jobs_last_year")
     @Min(value = 0, message = "작년 채용 수는 0 이상이어야 합니다.")
     private int jobsLastYear;
 
