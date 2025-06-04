@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (!companyId) return;
 
     try {
-        const res = await fetchWithAuth(`/attached/summary-image-path/${companyId}`);
+        const res = await fetchWithAuth(`/api/v1/attached/summary-image-path/${companyId}`);
         if (res.ok) {
             const url = await res.text();
             console.log(url);

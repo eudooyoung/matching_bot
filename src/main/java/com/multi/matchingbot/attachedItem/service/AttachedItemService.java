@@ -10,6 +10,7 @@ import com.multi.matchingbot.chatbot.ReportDataBuilder;
 import com.multi.matchingbot.common.domain.enums.ItemType;
 import com.multi.matchingbot.common.domain.enums.Yn;
 import com.multi.matchingbot.company.domain.CompanyRegisterDto;
+import com.multi.matchingbot.company.domain.CompanyUpdateReportDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,49 @@ public class AttachedItemService {
      * @return 저장된 AttachedItem 엔티티를 리턴함
      */
     public List<AttachedItem> saveReportImage(CompanyRegisterDto dto, Long companyId) {
+        try {
+            Map<String, Object> reportData = ReportDataBuilder.fromCompany(dto);
+
+            Map<String, Object> parsed = chatbotReportService.generateReport(reportData);
+            if (parsed == null || parsed.isEmpty()) {
+                log.warn("⚠️ companyId={} - AI 응답 없음 또는 파싱 실패", companyId);
+                return null;
+            }
+            reportData.putAll(parsed);
+
+            List<AttachedItem> savedItems = new ArrayList<>();
+
+            for (ReportType reportType : List.of(ReportType.FULL, ReportType.SUMMARY)) {
+                BufferedImage image = reportImageGenerator.convertReportToImage(reportData, reportType);
+
+                String extension = ".jpg";
+                String baseName = reportType.getFilePrefix();
+                String uuid = UUID.randomUUID().toString().substring(0, 16);
+                String systemName = baseName + "-" + uuid + extension;
+                String originalName = baseName + extension;
+                String path = "upload/company/" + companyId + "/" + systemName;
+
+                FileMeta meta = FileMeta.builder()
+                        .referenceId(companyId)
+                        .itemType(reportType.getItemType())
+                        .originalName(originalName)
+                        .systemName(systemName)
+                        .path(path)
+                        .build();
+
+                AttachedItem saved = fileService.save(meta, image);
+                savedItems.add(saved);
+            }
+
+            return savedItems;
+
+        } catch (Exception e) {
+            log.error("!! 기업 ID={} 리포트 생성 실패: {}", companyId, e.getMessage(), e);
+            return null;
+        }
+    }
+
+    public List<AttachedItem> saveReportImage(CompanyUpdateReportDto dto, Long companyId) {
         try {
             Map<String, Object> reportData = ReportDataBuilder.fromCompany(dto);
 
