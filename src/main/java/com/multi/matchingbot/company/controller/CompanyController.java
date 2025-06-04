@@ -1,6 +1,5 @@
 package com.multi.matchingbot.company.controller;
 
-import com.multi.matchingbot.attachedItem.domain.AttachedItem;
 import com.multi.matchingbot.attachedItem.service.AttachedItemService;
 import com.multi.matchingbot.common.security.MBotUserDetails;
 import com.multi.matchingbot.company.domain.Company;
@@ -16,8 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/company")
@@ -46,18 +43,18 @@ public class CompanyController {
         model.addAttribute("jobPage", jobPage);
 
         /*평가 보고서*/
-        Optional<AttachedItem> reportImageOpt =
-                attachedItemService.findReportForCompany(companyId);
-
-        if (reportImageOpt.isPresent()) {
-            AttachedItem report = reportImageOpt.get();
-            String url = "/" + report.getPath();
-            model.addAttribute("reportImageUrl", url);
-        }
+//        Optional<AttachedItem> reportImageOpt =
+//                attachedItemService.findReportForCompany(companyId);
+//
+//        if (reportImageOpt.isPresent()) {
+//            AttachedItem report = reportImageOpt.get();
+//            String url = "/" + report.getPath();
+//            model.addAttribute("reportImageUrl", url);
+//        }
 
         return "company/index";
     }
-
+    
     @GetMapping("/{id}")
     public CompanyUpdateDto getCompany(@PathVariable Long id) {
         return companyService.getCompanyById(id);

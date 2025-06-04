@@ -13,7 +13,7 @@ public interface NotificationMapper {
                 .memberId(entity.getMember().getId())
                 .title(entity.getTitle())
                 .content(entity.getContent())
-                .status(String.valueOf(entity.getStatus()))
+                .status(entity.getStatus())
                 .build();
     }
 }
