@@ -94,4 +94,8 @@ public class NotificationService {
         LocalDateTime threshold = LocalDateTime.now().minusDays(30); // 30일
         notificationRepository.deleteByStatusAndCreatedAtBefore(NotificationStatus.READ, threshold);
     }
+
+    public boolean hasUnread(Long memberId) {
+        return notificationRepository.existsByMemberIdAndStatus(memberId, NotificationStatus.UNREAD);
+    }
 }
