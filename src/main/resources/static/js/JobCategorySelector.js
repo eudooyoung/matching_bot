@@ -229,6 +229,9 @@ const detailMap = {
   "방역·방재기사": ["해충방제","소독","소방·방재"]
 };
 
+
+
+
 function JobCategorySelector() {
   const [main, setMain] = useState(null);
   const [sub, setSub] = useState(null);
@@ -236,6 +239,10 @@ function JobCategorySelector() {
 
   const handleFinalSelection = (jobRoleName) => {
     setDetail(jobRoleName);
+
+    // ✅ 추가: 직무 값을 hidden input에 설정
+    const inputRole = document.getElementById("filter-job-role");
+    if (inputRole) inputRole.value = jobRoleName;
 
     fetch(`/api/occupations/id?jobRoleName=${encodeURIComponent(jobRoleName)}`)
         .then((res) => {
@@ -245,8 +252,8 @@ function JobCategorySelector() {
         .then((data) => {
           const input = document.getElementById("occupationId");
           if (input && data.id) {
-            input.value = data.id;                           // DOM value 설정
-            input.setAttribute("value", data.id);             // HTML 속성 반영
+            input.value = data.id; // DOM value 설정
+            input.setAttribute("value", data.id); // HTML 속성 반영
             console.log("✅ 직무 선택 완료, ID:", data.id);
           }
         })
@@ -255,68 +262,77 @@ function JobCategorySelector() {
         });
   };
 
-
   const colStyle = {
     width: "33%",
     maxHeight: "300px",
     overflowY: "auto",
     border: "1px solid #ccc",
     padding: "10px",
-    backgroundColor: "#fff"
+    backgroundColor: "#fff",
   };
 
   const labelStyle = {
     fontWeight: "bold",
     marginBottom: "8px",
-    fontSize: "16px"
+    fontSize: "16px",
   };
 
   const renderList = (items, selected, setSelected) =>
-    items.map((item) =>
-      React.createElement(
-        "div",
-        {
-          key: item,
-          onClick: () => setSelected(item),
-          style: {
-            cursor: "pointer",
-            padding: "8px",
-            backgroundColor: selected === item ? "#cce5ff" : "#f8f9fa",
-            borderRadius: "5px",
-            marginBottom: "5px"
-          }
-        },
-        item
-      )
-    );
+      items.map((item) =>
+          React.createElement(
+              "div",
+              {
+                key: item,
+                onClick: () => setSelected(item),
+                style: {
+                  cursor: "pointer",
+                  padding: "8px",
+                  backgroundColor: selected === item ? "#cce5ff" : "#f8f9fa",
+                  borderRadius: "5px",
+                  marginBottom: "5px",
+                },
+              },
+              item
+          )
+      );
 
   return React.createElement(
-    "div",
-    { style: { display: "flex", gap: "10px" } },
-    // 직군
-    React.createElement("div", { style: colStyle }, [
-      React.createElement("div", { key: "label1", style: labelStyle }, "직군"),
-      ...renderList(Object.keys(jobData), main, (key) => {
-        setMain(key);
-        setSub(null);
-        setDetail(null);
-      })
-    ]),
-    // 직종
-    React.createElement("div", { style: colStyle }, [
-      React.createElement("div", { key: "label2", style: labelStyle }, "직종"),
-      ...(main ? renderList(jobData[main], sub, (item) => {
-        setSub(item);
-        setDetail(null);
-      }) : [])
-    ]),
-    // 직무
-    React.createElement("div", { style: colStyle }, [
-      React.createElement("div", { key: "label3", style: labelStyle }, "직무"),
-      ...(sub && detailMap[sub]
-          ? renderList(detailMap[sub], detail, handleFinalSelection)
-          : [])
-    ])
+      "div",
+      { style: { display: "flex", gap: "10px" } },
+      // 직군
+      React.createElement("div", { style: colStyle }, [
+        React.createElement("div", { key: "label1", style: labelStyle }, "직군"),
+        ...renderList(Object.keys(jobData), main, (key) => {
+          setMain(key);
+          setSub(null);
+          setDetail(null);
+
+          // ✅ 추가: 직군 값을 hidden input에 설정
+          const inputGroup = document.getElementById("filter-job-group");
+          if (inputGroup) inputGroup.value = key;
+        }),
+      ]),
+      // 직종
+      React.createElement("div", { style: colStyle }, [
+        React.createElement("div", { key: "label2", style: labelStyle }, "직종"),
+        ...(main
+            ? renderList(jobData[main], sub, (item) => {
+              setSub(item);
+              setDetail(null);
+
+              // ✅ 추가: 직종 값을 hidden input에 설정
+              const inputType = document.getElementById("filter-job-type");
+              if (inputType) inputType.value = item;
+            })
+            : []),
+      ]),
+      // 직무
+      React.createElement("div", { style: colStyle }, [
+        React.createElement("div", { key: "label3", style: labelStyle }, "직무"),
+        ...(sub && detailMap[sub]
+            ? renderList(detailMap[sub], detail, handleFinalSelection)
+            : []),
+      ])
   );
 }
 

@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 @Service
 public class CompanyService {
 
-
     @Autowired
     private CompanyRepository companyRepository;
 
@@ -60,6 +59,8 @@ public class CompanyService {
         company.setAnnualRevenue(dto.getAnnualRevenue());
         company.setOperatingIncome(dto.getOperatingIncome());
         company.setJobsLastYear(dto.getJobsLastYear());
+        company.setAgreeMarketing(dto.getAgreeMarketing());
+        company.setAgreeThirdParty(dto.getAgreeThirdParty());
 
         companyRepository.save(company);
     }

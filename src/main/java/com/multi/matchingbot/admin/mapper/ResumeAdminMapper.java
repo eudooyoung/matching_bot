@@ -14,7 +14,7 @@ public interface ResumeAdminMapper {
     @Mapping(target = "formattedId", expression = "java(ResumeAdminMapper.formatId(resume.getId()))")
     @Mapping(target = "title", source = "title")
     @Mapping(target = "skillKeywords", source = "skillKeywords")
-    @Mapping(target = "talentKeywords", source = "talentKeywords")
+    @Mapping(target = "traitKeywords", source = "traitKeywords")
     @Mapping(target = "keywordsStatus", source = "keywordsStatus")
     @Mapping(target = "desiredOccupation", source = "occupation.jobRoleName")
     @Mapping(target = "createdBy", source = "createdBy")
@@ -24,7 +24,7 @@ public interface ResumeAdminMapper {
     ResumeAdminView toResumeAdminView(Resume resume);
 
     static String formatId(Long id) {
-            return String.format("R%05d", id);
+        return String.format("R%05d", id);
     }
 
     public static ResumeDto toDto(Resume resume, boolean bookmarked) {
@@ -34,7 +34,7 @@ public interface ResumeAdminMapper {
                 .skillAnswer(resume.getSkillAnswer())
                 .traitAnswer(resume.getTraitAnswer())
                 .skillKeywords(resume.getSkillKeywords())
-                .talentKeywords(resume.getTalentKeywords())
+                .traitKeywords(resume.getTraitKeywords())
                 .keywordsStatus(resume.getKeywordsStatus().name())
                 .createdAt(resume.getCreatedAt())
                 .bookmarked(bookmarked);

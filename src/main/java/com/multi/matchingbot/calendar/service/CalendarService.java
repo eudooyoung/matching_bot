@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CalendarService {
@@ -21,8 +20,6 @@ public class CalendarService {
         LocalDate start = LocalDate.of(year, month, 1);
         LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
 
-        return calendarJobRepository.findByEndDateBetween(start, end).stream()
-                .map(job -> new CalendarDto(job.getId(), job.getTitle(), job.getEndDate()))
-                .collect(Collectors.toList());
+        return calendarJobRepository.findJobsByEndDateBetween(start, end);
     }
 }

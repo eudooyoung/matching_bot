@@ -30,6 +30,8 @@ security:
       - /jobs/**
       - /community/**
       - /calendar
+      - /job/**
+#      - /job/detail/**
 
       - /community/detail/**
       - /api/v1/chatbot/**

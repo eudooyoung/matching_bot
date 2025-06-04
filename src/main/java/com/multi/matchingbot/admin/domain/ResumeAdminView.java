@@ -10,7 +10,7 @@ public class ResumeAdminView extends BaseAuditDto {
     private String formattedId;
     private String title;
     private String skillKeywords;
-    private String talentKeywords;
+    private String traitKeywords;
     private String desiredOccupation;
     private Yn keywordsStatus;
 }

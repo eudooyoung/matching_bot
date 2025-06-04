@@ -19,8 +19,8 @@ public class CalendarApiController {
         this.calendarService = calendarService;
     }
 
-    @GetMapping("/api/calendar")
-    public List<CalendarDto> getJobsByMonth(@RequestParam int year, @RequestParam int month) {
+    @GetMapping
+    public List<CalendarDto> getJobsByMonth(@RequestParam(name = "year") int year, @RequestParam(name = "month") int month) {
         return calendarService.getJobsByDeadline(year, month);
     }
 }

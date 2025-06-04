@@ -4,7 +4,7 @@ let jobPostings = [];
 
 async function fetchJobs(month) {
     try {
-        const res = await fetch(`/api/jobs?year=${year}&month=${month + 1}`);
+        const res = await fetch(`/api/calendar?year=${year}&month=${month + 1}`);
         if (!res.ok) throw new Error("채용 공고 불러오기 실패");
         jobPostings = await res.json();
     } catch (error) {
@@ -20,7 +20,7 @@ function renderCalendar(month) {
     const datesContainer = document.getElementById("dates");
     const monthYear = document.getElementById("monthYear");
 
-    const today = new Date(); // ✅ 오늘 날짜 가져오기
+    const today = new Date();
 
     monthYear.textContent = `${year}년 ${month + 1}월`;
     datesContainer.innerHTML = '';
@@ -36,7 +36,6 @@ function renderCalendar(month) {
         const cell = document.createElement("div");
         cell.classList.add("calendar-cell");
 
-        // ✅ 오늘 날짜면 강조 클래스 추가
         if (
             year === today.getFullYear() &&
             month === today.getMonth() &&
@@ -50,10 +49,25 @@ function renderCalendar(month) {
         dateText.textContent = i;
         cell.appendChild(dateText);
 
-        const postingsToday = jobPostings.filter(post => post.deadline === thisDeadline);
+        const postingsToday = jobPostings.filter(post => post.endDate?.slice(0, 10) === thisDeadline);
+
         postingsToday.forEach(post => {
             const jobTitle = document.createElement("div");
             jobTitle.className = "job-title";
+
+            const deadline = new Date(post.endDate);
+            const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            const diffTime = deadline - todayMidnight;
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+            if (diffDays < 0) {
+                jobTitle.classList.add("expired");
+            } else if (diffDays <= 4) {
+                jobTitle.classList.add("closing-soon");
+            } else {
+                jobTitle.classList.add("default");
+            }
+
             jobTitle.textContent = post.title;
             jobTitle.onclick = () => {
                 window.location.href = `/job/${post.id}`;

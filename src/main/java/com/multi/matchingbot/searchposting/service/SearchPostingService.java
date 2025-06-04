@@ -16,8 +16,8 @@ public class SearchPostingService {
 
     private final SearchPostingRepository searchPostingRepository;
 
-    public List<SearchPostingDto> searchJobs(String keyword, String title, String regionMain, String regionSub) {
-        List<Job> postings = searchPostingRepository.searchByFilters(keyword, title, regionMain, regionSub);
+    public List<SearchPostingDto> searchJobs(String jobGroup, String jobType,String jobRole, String regionMain, String regionSub) {
+        List<Job> postings = searchPostingRepository.searchByFilters(jobGroup, jobType, jobRole, regionMain, regionSub);
         return postings.stream()
                 .map(SearchPostingDto::fromEntity)
                 .collect(Collectors.toList());

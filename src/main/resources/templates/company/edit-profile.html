@@ -117,6 +117,18 @@
             </div>
         </div>
 
+        <label>마케팅 동의</label>
+        <select th:field="*{agreeMarketing}">
+            <option value="Y" th:selected="${company.agreeMarketing == 'Y'}">동의</option>
+            <option value="N" th:selected="${company.agreeMarketing == 'N'}">비동의</option>
+        </select>
+
+        <label>제3자 제공 동의</label>
+        <select th:field="*{agreeThirdParty}">
+            <option value="Y" th:selected="${company.agreeThirdParty == 'Y'}">동의</option>
+            <option value="N" th:selected="${company.agreeThirdParty == 'N'}">비동의</option>
+        </select>
+
         <div class="button-wrapper">
             <div class="button-area">
                 <button type="submit" class="submit-button">수정하기</button>
@@ -128,7 +140,7 @@
                     th:attr="data-company-id=${company.id}">
                 AI평가 갱신하기
             </button>
-        </div>
+
     </form>
 </div>
 
