@@ -16,11 +16,11 @@ public class SearchPostingController {
 
     @GetMapping("/job")
     public List<SearchPostingDto> searchJobs(
-            @RequestParam(required = false) String jobGroup,
-            @RequestParam(required = false) String jobType,
-            @RequestParam(required = false) String jobRole,
-            @RequestParam(required = false) String regionMain,
-            @RequestParam(required = false) String regionSub
+            @RequestParam(name = "jobGroup", required = false) String jobGroup,
+            @RequestParam(name = "jobType", required = false) String jobType,
+            @RequestParam(name = "jobRole", required = false) String jobRole,
+            @RequestParam(name = "regionMain", required = false) String regionMain,
+            @RequestParam(name = "regionSub", required = false) String regionSub
     ) {
         return searchPostingService.searchJobs(jobGroup, jobType, jobRole, regionMain, regionSub);
     }
