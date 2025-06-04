@@ -30,12 +30,12 @@ public class RegisterController {
     public String registerUser(@ModelAttribute("memberDto") MemberRegisterDto dto, Model model) {
         try {
             memberService.register(dto);
-            return "redirect:/auth/login";  // 성공 시 로그인 페이지로 이동
+            return "redirect:/auth/login"; // 성공 시 로그인 페이지로 이동
         } catch (Exception e) {
             e.printStackTrace(); // 예외 로그
-            model.addAttribute("error", e.getMessage());
+            model.addAttribute("memberDto", dto); // 입력값 보존
+            model.addAttribute("error", e.getMessage()); // 오류 메시지 표시
             return "auth/register"; // 실패 시 다시 폼 보여줌
         }
-
     }
 }

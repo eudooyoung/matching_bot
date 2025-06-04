@@ -2,6 +2,8 @@ package com.multi.matchingbot.member.controller;
 
 
 import com.multi.matchingbot.admin.service.ResumeAdminService;
+import com.multi.matchingbot.job.service.OccupationService;
+import com.multi.matchingbot.member.domain.dtos.ResumeViewLogDto;
 import com.multi.matchingbot.member.domain.entities.Member;
 import com.multi.matchingbot.member.domain.entities.Resume;
 import com.multi.matchingbot.member.service.MemberService;
@@ -23,6 +25,7 @@ public class ResumeController {
     private final ResumeService resumeService;
     private final ResumeAdminService resumeAdminService;
     private final MemberService memberService;
+    private final OccupationService occupationService;
 
     // 목록
     @GetMapping
@@ -50,14 +53,16 @@ public class ResumeController {
 
     @GetMapping("/edit/{id}")
     public String editForm(@PathVariable("id") Long id, Model model) {
-        Resume resume = resumeService.findById(id);
+        Resume resume = resumeService.findByIdWithOccupation(id);
         model.addAttribute("resume", resume);
+        model.addAttribute("occupationId", resume.getOccupation().getId()); // 추가
         return "/member/resume-edit";
     }
 
     @PostMapping("/edit/{id}")
-    public String update(@PathVariable("id") Long id, @ModelAttribute Resume resume) {
-        resumeService.updateResume(id, resume);
+    public String update(@PathVariable("id") Long id,
+                         @ModelAttribute Resume resumeForm) {
+        resumeService.updateResume(id, resumeForm);
         return "redirect:/member/view/" + id;
     }
 
@@ -82,13 +87,30 @@ public class ResumeController {
     }
 
     @PostMapping("/insert")
-    public String insert(@ModelAttribute Resume resume) {
+    public String insert(@ModelAttribute Resume resume,
+                         @RequestParam("occupation.id") Long occupationId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Member member = memberService.findByUsername(email);
         resume.setMember(member);
 
+        // 👉 occupation 수동 설정
+        resume.setOccupation(occupationService.findById(occupationId));
+
         resumeService.save(resume);
         return "redirect:/member";
+    }
+
+    @GetMapping("/history")
+    public String resumeViewLog(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        Member member = memberService.findByUsername(email);
+        Long memberId = member.getId();
+
+        List<ResumeViewLogDto> viewLogs = resumeService.getResumeViewLogs(memberId);
+        model.addAttribute("viewLogs", viewLogs);
+        return "member/resume-history";
     }
 }

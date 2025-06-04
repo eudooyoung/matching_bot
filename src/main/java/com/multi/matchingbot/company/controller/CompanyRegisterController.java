@@ -33,7 +33,7 @@ public class CompanyRegisterController {
                                   Model model) {
 
         if (bindingResult.hasErrors()) {
-            // 입력값 검증 실패: 다시 등록 페이지로 이동하면서 에러 출력
+            model.addAttribute("companyDto", dto); // <- 입력 값 유지
             return "auth/register-company";
         }
 
