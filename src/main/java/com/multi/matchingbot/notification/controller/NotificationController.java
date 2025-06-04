@@ -22,25 +22,6 @@ public class NotificationController {
         this.notificationService = notificationService;
     }
 
-//    @GetMapping("/notifications")
-//    public String showNotifications(@RequestParam(name = "tab", defaultValue = "unread") String tab,
-//                                    @AuthenticationPrincipal MBotUserDetails userDetails,
-//                                    Model model) {
-//        Long memberId = userDetails.getId(); // 여기서 로그인한 사용자의 ID 얻기
-//
-//        NotificationStatus status = tab.equals("read") ? NotificationStatus.READ : NotificationStatus.UNREAD;
-//        List<Notification> notifications = notificationService.getNotificationsByStatus(memberId, status);
-//
-//        model.addAttribute("notifications", notifications);
-//        model.addAttribute("tab", tab);
-//
-//        System.out.println("현재 로그인한 사용자 ID: " + memberId);
-//        System.out.println("탭 상태: " + tab);
-//        System.out.println("알림 수: " + notifications.size());
-//
-//        return "notification/notification";
-//    }
-
     @GetMapping("/notifications")
     public String showAllNotifications(@AuthenticationPrincipal MBotUserDetails userDetails,
                                        Model model) {

@@ -10,10 +10,18 @@
 
 <div th:replace="fragments/header :: header(role=${role})"></div>
 
-<h2 th:text="${notification.title}">제목</h2>
-<p th:text="${notification.content}">내용</p>
-<p><strong>보낸 기업:</strong> <span th:text="${companyName}">기업명</span></p>
-<a th:href="@{/notification(tab='read')}">← 돌아가기</a>
+<div class="container">
+    <h2>받은 알림</h2>
+    <strong>제목</strong>
+    <p th:text="${notification.title}">제목</p>
+    <br>
+    <strong>내용</strong>
+    <p th:text="${notification.content}">내용</p>
+    <br>
+    <p><strong>보낸 기업:</strong> <span th:text="${companyName}">기업명</span></p>
+    <p><strong>보낸 시간:</strong> <span th:text="${notification.createdAt}">보낸 시간</span></p>
+    <button class="nav-button" onclick="history.back()">← 돌아가기</button>
+</div>
 
 <div th:replace="~{fragments/footer :: footer}"></div>
 
