@@ -43,7 +43,13 @@
     <h2 class="text-center mb-4">커뮤니티 게시글 목록</h2>
 
     <!-- ✅ 카테고리 필터 -->
-    <form method="get" action="/community/list" class="text-center mb-4">
+    <option th:each="category : ${categories}"
+            th:value="${category.id}"
+            th:selected="${category.id == param.categoryId}"
+            th:text="${category.name}">
+    </option>
+
+        <form method="get" action="/community/list" class="text-center mb-4">
       <select name="categoryId" class="form-select w-auto d-inline-block me-2">
         <option value="">전체</option>
         <option th:each="category : ${categories}"
@@ -67,6 +73,27 @@
         </div>
       </div>
     </div>
+    <!-- ✅ 페이징 처리 -->
+    <nav class="mt-4">
+      <ul class="pagination justify-content-center">
+        <li class="page-item" th:classappend="${postPage.first} ? 'disabled'">
+          <a class="page-link"
+             th:href="@{/community/list(page=${postPage.number - 1}, categoryId=${param.categoryId})}">이전</a>
+        </li>
+
+        <li class="page-item" th:each="i : ${#numbers.sequence(0, postPage.totalPages - 1)}"
+            th:classappend="${postPage.number == i} ? 'active'">
+          <a class="page-link"
+             th:href="@{/community/list(page=${i}, categoryId=${param.categoryId})}"
+             th:text="${i + 1}">1</a>
+        </li>
+
+        <li class="page-item" th:classappend="${postPage.last} ? 'disabled'">
+          <a class="page-link"
+             th:href="@{/community/list(page=${postPage.number + 1}, categoryId=${param.categoryId})}">다음</a>
+        </li>
+      </ul>
+    </nav>
 
     <!-- ✅ 글쓰기 버튼 -->
     <!-- ✍ 로그인한 사용자만 보이는 글쓰기 버튼 -->
