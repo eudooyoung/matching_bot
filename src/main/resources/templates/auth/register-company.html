@@ -5,6 +5,7 @@
     <title>기업 회원가입</title>
     <link rel="stylesheet" type="text/css" href="/css/register.css">
     <link rel="stylesheet" th:href="@{/css/layout.css}" href="/css/layout.css">
+    <link rel="stylesheet" th:href="@{/css/spinner-chatbot.css}" href="/css/layout.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <style>
@@ -61,55 +62,6 @@
         margin-left: 28px;
         margin-top: -6px;
         margin-bottom: 10px;
-    }
-</style>
-<style>
-    .overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background: rgba(0, 0, 0, 0.6); /* 어두운 배경 */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        z-index: 9999;
-        color: #fff;
-        font-family: 'Pretendard', sans-serif;
-        font-size: 18px;
-        font-weight: 500;
-        letter-spacing: 0.2px;
-        animation: fadeIn 0.3s ease-in-out;
-    }
-
-    .spinner {
-        border: 6px solid rgba(255, 255, 255, 0.2);
-        border-top: 6px solid #ffffff;
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        animation: spin 1s linear infinite;
-        margin-bottom: 18px;
-    }
-
-    @keyframes spin {
-        0% {
-            transform: rotate(0deg);
-        }
-        100% {
-            transform: rotate(360deg);
-        }
-    }
-
-    @keyframes fadeIn {
-        0% {
-            opacity: 0;
-        }
-        100% {
-            opacity: 1;
-        }
     }
 </style>
 
@@ -341,6 +293,7 @@
 
         let num = document.getElementById('businessNo').value;
 
+        // TODO: 배포시 주석 혹은 삭제
         if (num === '1234567890') {
             alert("사업자 인증에 성공했습니다. (테스트)");
             // form.submit();
@@ -362,9 +315,10 @@
                     if (form.checkVisibility()) {
 
                         // form.submit();
-                        if (form.checkVisibility()) {
+                        // TODO: 배포시 활성화
+                        /*if (form.checkVisibility()) {
                             showLoadingAndSubmit(form);
-                        }
+                        }*/
                     } else {
                         form.reportValidity();
                     }
