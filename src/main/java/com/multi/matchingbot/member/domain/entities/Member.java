@@ -86,14 +86,14 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Yn agreeMarketing;
 
-    @NotNull
+
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column
     private Yn alertBookmark;
 
-    @NotNull
+
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column
     private Yn alertResume;
 
     @NotNull
