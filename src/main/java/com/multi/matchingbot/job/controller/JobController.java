@@ -81,40 +81,20 @@ public class JobController {
             return "job/job-new";
         }
 
-        // System.out.println("Principal (로그인된 사용자): " + userDetails.getCompanyId());
-
         Company company = companyService.findById(userDetails.getCompanyId());
-        // System.out.println("조회된 CompanyId: " + company);
-
-        // System.out.println("넘어온 occupationId: " + jobDto.getOccupationId());
         Occupation occupation = occupationService.findById(jobDto.getOccupationId());
-        // System.out.println("조회된 Occupation: " + occupation);
-
-        // System.out.println("등록할 JobDto 정보:");
-        // System.out.println(jobDto);
-
         Job job = JobMapper.toEntity(jobDto, company, occupation);
 
-        // ✅ 추출된 키워드 문자열 추가 설정
         job.setSkillKeywords(jobDto.getSkillKeywordsConcat());
         job.setTraitKeywords(jobDto.getTraitKeywordsConcat());
-        // System.out.println("실제 저장될 Job entity:");
-        // System.out.println(job);
 
-        jobRepository.save(job);
+        jobService.createJob(job); // 위도, 경도 불러서 저장
 
-        // System.out.println("✅ 저장 성공!");
         return "redirect:/job/manage-jobs";
     }
 
 
-    /* //공고 수정 페이지
-    @GetMapping("/{id:[0-9]+}/edit")
-    public String editJobForm(@PathVariable("id") Long id, Model model) {
-        JobDto dto = jobService.getById(id);
-        model.addAttribute("job", dto);
-        return "job/job-edit";
-    }*/
+    // 공고 수정 페이지
     @GetMapping("/{id}/edit")
     public String showEditForm(@PathVariable("id") Long id, Model model) {
         Job job = jobRepository.findById(id).orElseThrow(() -> new RuntimeException("Job not found"));

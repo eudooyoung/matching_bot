@@ -2,6 +2,10 @@ package com.multi.matchingbot.member.service;
 
 
 import com.multi.matchingbot.member.domain.dtos.MemberUpdateDto;
+import com.multi.matchingbot.common.domain.enums.Gender;
+import com.multi.matchingbot.common.domain.enums.Role;
+import com.multi.matchingbot.common.domain.enums.Yn;
+import com.multi.matchingbot.member.domain.dtos.MemberRegisterDto;
 import com.multi.matchingbot.member.domain.entities.Member;
 import com.multi.matchingbot.member.mapper.MemberMapper;
 import com.multi.matchingbot.member.repository.MemberRepository;
@@ -11,6 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
@@ -36,11 +42,11 @@ public class MemberService {
         member.setUpdatedAt(LocalDateTime.now());
         return MemberMapper.toDto(memberRepository.save(member));
     }
-    
+
     public void deleteMember(Long id) {
         memberRepository.deleteById(id);
     }
-    
+
     /*public void update(MemberRegisterDto dto) {
         if (memberRepository.existsByEmail(dto.getEmail())) {
             throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
@@ -84,6 +90,14 @@ public class MemberService {
     public Member findByUsername(String username) {
         return memberRepository.findByEmail(username)
                 .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다: " + username));
+    }
+
+    @Transactional(readOnly = true)
+    public Long findIdByPrincipal(Principal principal) {
+        if (principal == null) {
+            throw new IllegalStateException("로그인된 사용자가 없습니다.");
+        }
+        return findByUsername(principal.getName()).getId();
     }
 
     public Member findById(Long memberId) {
