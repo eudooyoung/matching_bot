@@ -123,7 +123,7 @@ public class JobController {
         return "redirect:/job/manage-jobs";
     }
 
-     //공고 상세 보기 세빈코드
+    //공고 상세 보기 세빈코드
 //    @GetMapping("/{id}")
 //    public String getJobDetail(@PathVariable("id") Long id, Model model, @AuthenticationPrincipal MBotUserDetails userDetails) {
 //        Long companyId = userDetails.getCompanyId();
@@ -141,7 +141,7 @@ public class JobController {
     @GetMapping("/{id}")
     public String getJobDetail(@PathVariable("id") Long id, Model model, @AuthenticationPrincipal MBotUserDetails userDetails) {
 
-        Long companyId = null;
+       /* Long companyId = null;
         String role = null;
 
         if (userDetails != null) {
@@ -153,8 +153,22 @@ public class JobController {
         model.addAttribute("job", job);
         model.addAttribute("role", role);
         model.addAttribute("companyId", companyId);
+       return "job/job-detail";*/
+
+        String role = null;
+        if (userDetails != null) {
+            role = userDetails.getRole().name();
+        }
+
+        Job job = jobService.findById(id);
+        Long postingCompanyId = job.getCompany().getId(); // ✅ 공고 등록 기업 ID
+
+        model.addAttribute("job", job);
+        model.addAttribute("role", role);
+        model.addAttribute("companyId", postingCompanyId); // ✅ 수정된 부분
 
         return "job/job-detail";
+
     }
 
 
