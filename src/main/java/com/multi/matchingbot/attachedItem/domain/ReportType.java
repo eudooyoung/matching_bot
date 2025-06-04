@@ -16,7 +16,7 @@ public enum ReportType {
     SUMMARY("chatbot/evaluation-summary",
             ItemType.SUMMARY,
             "report-summary",
-            800);
+            1350);
 
     /**
      * 타입 분기 변수
@@ -30,6 +30,9 @@ public enum ReportType {
     private final String filePrefix;
     private final int cropBottom;
 
-    public static final int DPI = 200;      // 화질
+    public static final int DPI = 300;      // 화질
     public static final int CROP_TOP = 60;      // 상단 삭제
+    public static final int CROP_LEFT = 60;      // 좌측 삭제
+    public static final int CROP_RIGHT = 60;      // 우측 삭제
+
 }

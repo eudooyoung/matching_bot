@@ -17,11 +17,11 @@ public class SearchPostingPageController {
     private final SearchPostingService searchPostingService;
 
     @GetMapping("/search-page")
-    public String searchPage(@RequestParam(required = false) String jobGroup,
-                             @RequestParam(required = false) String jobType,
-                             @RequestParam(required = false) String jobRole,
-                             @RequestParam(required = false) String regionMain,
-                             @RequestParam(required = false) String regionSub,
+    public String searchPage(@RequestParam(name="jobGroup", required = false) String jobGroup,
+                             @RequestParam(name="jobType",required = false) String jobType,
+                             @RequestParam(name="jobRole",required = false) String jobRole,
+                             @RequestParam(name="regionMain",required = false) String regionMain,
+                             @RequestParam(name="regionSub",required = false) String regionSub,
                              Model model) {
 
         List<SearchPostingDto> jobList = searchPostingService.searchJobs(jobGroup, jobType, jobRole, regionMain, regionSub);

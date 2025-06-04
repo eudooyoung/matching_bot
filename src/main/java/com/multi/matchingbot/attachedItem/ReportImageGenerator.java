@@ -1,4 +1,4 @@
-package com.multi.matchingbot.attachedItem.util;
+package com.multi.matchingbot.attachedItem;
 
 import com.multi.matchingbot.attachedItem.domain.ReportType;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
@@ -24,10 +24,9 @@ public class ReportImageGenerator {
     private final TemplateEngine templateEngine;
 
     /**
-     *
      * @param reportData json형식으로 전처리된 AI 응답
      * @param reportType 보고서 형식: 전체 || 요약
-     * @return  이미지
+     * @return 이미지
      * @throws Exception 예외처리
      */
     public BufferedImage convertReportToImage(Map<String, Object> reportData, ReportType reportType) throws Exception {
@@ -58,9 +57,17 @@ public class ReportImageGenerator {
             // ✅ 위쪽, 아래쪽 잘라내기
             int cropTop = ReportType.CROP_TOP;
             int cropBottom = reportType.getCropBottom();
-            int croppedHeight = fullImage.getHeight() - cropTop - cropBottom;
+            int cropLeft = ReportType.CROP_LEFT;
+            int cropRight = ReportType.CROP_RIGHT;
+            int croppedHeight = fullImage.getHeight() - (cropTop + cropBottom);
+            int croppedWidth = fullImage.getWidth() - (cropLeft + cropRight);
 
-            BufferedImage image = fullImage.getSubimage(0, cropTop, fullImage.getWidth(), croppedHeight);
+            BufferedImage image = fullImage.getSubimage(
+                    cropLeft, // x시작 위치
+                    cropTop, // y 시작위치
+                    croppedWidth, // 잘라낼 너비
+                    croppedHeight // 잘라낼 높이
+            );
 
             log.info("리포트 이미지 생성 성공 (w={}px, h={}px)", image.getWidth(), image.getHeight());
             return image;

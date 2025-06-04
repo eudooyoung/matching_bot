@@ -24,8 +24,8 @@ public class MainPageController {
 
     @GetMapping({"/", "/main"})
     public String mainPage(
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "6") int size,
+            @RequestParam(name = "page", defaultValue = "1") int page,
+            @RequestParam(name = "size", defaultValue = "6") int size,
             Model model,
             @AuthenticationPrincipal MBotUserDetails user) {
 
