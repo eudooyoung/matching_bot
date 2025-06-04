@@ -1,4 +1,4 @@
-package com.multi.matchingbot.attachedItem;
+package com.multi.matchingbot.attachedItem.controller;
 
 import com.multi.matchingbot.attachedItem.service.AttachedItemService;
 import com.multi.matchingbot.company.domain.CompanyUpdateReportDto;
