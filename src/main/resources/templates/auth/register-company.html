@@ -63,12 +63,68 @@
         margin-bottom: 10px;
     }
 </style>
+<style>
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.6); /* 어두운 배경 */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        z-index: 9999;
+        color: #fff;
+        font-family: 'Pretendard', sans-serif;
+        font-size: 18px;
+        font-weight: 500;
+        letter-spacing: 0.2px;
+        animation: fadeIn 0.3s ease-in-out;
+    }
 
+    .spinner {
+        border: 6px solid rgba(255, 255, 255, 0.2);
+        border-top: 6px solid #ffffff;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+        margin-bottom: 18px;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+</style>
 
 <body>
 
 <div class="wrapper">
-        <div th:replace="fragments/header :: header(role=${role})"></div>
+    <div th:replace="fragments/header :: header(role=${role})"></div>
+
+    <div id="loadingOverlay" class="overlay" style="display: none;">
+        <div class="spinner"></div>
+        <p>
+            AI가 기업 정보를 분석하고 있습니다.<br>
+            잠시만 기다려 주세요...
+        </p>
+    </div>
 
     <main class="main-content">
         <div class="container">
@@ -287,7 +343,8 @@
 
         if (num === '1234567890') {
             alert("사업자 인증에 성공했습니다. (테스트)");
-            form.submit();
+            // form.submit();
+            showLoadingAndSubmit(form);
             return;
         }
 
@@ -303,8 +360,12 @@
                 if (valid === '01') {
                     alert("사업자 인증에 성공했습니다.");
                     if (form.checkVisibility()) {
-                        form.submit();
-                    }else {
+
+                        // form.submit();
+                        if (form.checkVisibility()) {
+                            showLoadingAndSubmit(form);
+                        }
+                    } else {
                         form.reportValidity();
                     }
                 } else {
@@ -315,6 +376,12 @@
                 alert("인증 처리 중 에러 발생");
             }
         });
+    }
+</script>
+<script>
+    function showLoadingAndSubmit(form) {
+        document.getElementById("loadingOverlay").style.display = "flex";
+        form.submit();
     }
 </script>
 <script th:src="@{/js/dropdown.js}"></script>
