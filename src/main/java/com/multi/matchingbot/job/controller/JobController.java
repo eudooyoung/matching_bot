@@ -108,23 +108,23 @@ public class JobController {
     }
 
 
-    // 공고 수정 페이지
-//    @GetMapping("/{id:[0-9]+}/edit")
-//    public String editJobForm(@PathVariable("id") Long id, Model model) {
-//        JobDto dto = jobService.getById(id);
-//        model.addAttribute("job", dto);
-//        return "job/job-edit";
-//    }
-        @GetMapping("/{id}/edit")
-        public String showEditForm(@PathVariable("id") Long id, Model model) {
-            Job job = jobRepository.findById(id).orElseThrow(() -> new RuntimeException("Job not found"));
-            JobDto dto = JobMapper.toDto(job);
-            model.addAttribute("job", dto);
+    /* //공고 수정 페이지
+    @GetMapping("/{id:[0-9]+}/edit")
+    public String editJobForm(@PathVariable("id") Long id, Model model) {
+        JobDto dto = jobService.getById(id);
+        model.addAttribute("job", dto);
+        return "job/job-edit";
+    }*/
+    @GetMapping("/{id}/edit")
+    public String showEditForm(@PathVariable("id") Long id, Model model) {
+        Job job = jobRepository.findById(id).orElseThrow(() -> new RuntimeException("Job not found"));
+        JobDto dto = JobMapper.toDto(job);
+        model.addAttribute("job", dto);
 
-            model.addAttribute("occupationId", dto.getOccupationId());
+        model.addAttribute("occupationId", dto.getOccupationId());
 
-            return "job/job-edit";
-        }
+        return "job/job-edit";
+    }
 
     // 공고 수정 처리
     @PostMapping("/{id}/edit")

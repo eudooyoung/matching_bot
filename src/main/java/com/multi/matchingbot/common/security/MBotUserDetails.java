@@ -71,4 +71,8 @@ public class MBotUserDetails implements UserDetails {
     public Long getCompanyId() {
         return this.id;
     }
+
+    public Long getMemberId() {
+        return this.id;
+    }
 }

@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 @Service
 public class CompanyService {
 
-
     @Autowired
     private CompanyRepository companyRepository;
 

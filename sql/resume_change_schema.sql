@@ -3,7 +3,7 @@
 -- use hr;
 use matching_bot;
 
--- 1. 외래키 제약 조건 해제
+/*-- 1. 외래키 제약 조건 해제
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `attached_item`;
 DROP TABLE IF EXISTS `career`;
@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `region`;
 DROP TABLE IF EXISTS `refresh_token`;
 
 -- 3. 외래키 제약 조건 다시 활성화
-SET FOREIGN_KEY_CHECKS = 1;
+SET FOREIGN_KEY_CHECKS = 1;*/
 
 CREATE TABLE member (
     id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '회원 ID',
@@ -239,7 +239,7 @@ CREATE TABLE resume (
     skill_answer VARCHAR(255) NOT NULL,
     trait_answer VARCHAR(255),
     skill_keywords VARCHAR(100),
-    talent_keywords VARCHAR(100),
+    trait_keywords VARCHAR(100),
     keywords_status ENUM('Y', 'N') NOT NULL DEFAULT 'N' COMMENT '키워드 추출 상태',
     created_by VARCHAR(50) NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
