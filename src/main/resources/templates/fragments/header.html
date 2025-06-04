@@ -29,8 +29,17 @@
         <div sec:authorize="hasAnyRole('MEMBER', 'COMPANY')" class="nav">
             <a href="javascript:void(0)" class="nav-link" onclick="logout()">로그아웃</a>
             <a th:href="@{/community/list}" class="nav-link">커뮤니티</a>
-            <!-- 개인회원 전용 마이페이지 -->
-            <a th:href="@{/member/mypage}" class="nav-link" sec:authorize="hasRole('MEMBER')">개인페이지</a>
+
+            <!-- 개인회원 전용 마이페이지 + 알림 아이콘 -->
+            <div style="display: flex; align-items: center; gap: 6px;" sec:authorize="hasRole('MEMBER')">
+                <a th:href="@{/member/mypage}" class="nav-link">개인페이지</a>
+
+                <a th:href="@{/notification/notifications}" class="notification-container" style="text-decoration: none;">
+                    <span class="notification-bell">🔔</span>
+                    <span class="notification-dot" th:if="${hasUnreadNotification}"></span>
+                </a>
+            </div>
+
             <!-- 기업회원 전용 마이페이지 -->
             <a th:href="@{/company/}" class="nav-link" sec:authorize="hasRole('COMPANY')">기업페이지</a>
         </div>

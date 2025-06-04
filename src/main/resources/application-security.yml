@@ -29,12 +29,19 @@ security:
       - /search-page/**
       - /jobs/**
       - /community/**
+      - /calendar
       - /job/**
 #      - /job/detail/**
 
       - /community/detail/**
       - /api/v1/chatbot/**
       - /api/calendar/**
+
+      - /swagger-ui/**
+      - /v3/api-docs
+      - /v3/api-docs/**
+    authenticated-paths:      #authenticated
+      - /api/**
     member-paths:
       - /api/maps/**
       - /member/**
@@ -42,7 +49,6 @@ security:
       - /community/edit/**
       - /community/delete/**
       - /community/**
-#      - /job/**
     company-paths:
       - /company/**
       - /job/**

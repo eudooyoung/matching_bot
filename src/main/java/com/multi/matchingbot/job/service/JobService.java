@@ -1,6 +1,5 @@
 package com.multi.matchingbot.job.service;
 
-
 import com.multi.matchingbot.job.domain.dto.JobDto;
 import com.multi.matchingbot.job.domain.entity.Job;
 import com.multi.matchingbot.job.mapper.JobMapper;
@@ -18,9 +17,11 @@ import java.util.stream.Collectors;
 public class JobService {
 
     private final JobRepository repository;
+    private final GeoService geoService;
 
-    public JobService(JobRepository repository) {
+    public JobService(JobRepository repository, GeoService geoService) {
         this.repository = repository;
+        this.geoService = geoService;
     }
 
     public Page<JobDto> getByCompanyIdPaged(Long companyId, Pageable pageable) {
@@ -50,6 +51,17 @@ public class JobService {
     @Transactional
     public void delete(Long id) {
         repository.deleteById(id);
+    }
+
+    @Transactional
+    public void createJob(Job job) {
+        if (job.getAddress() != null && !job.getAddress().isBlank()) {
+            double[] latLon = geoService.getLatLngFromAddress(job.getAddress()); // geoService에서 위도, 경도 얻어옴
+            job.setLatitude(latLon[0]);
+            job.setLongitude(latLon[1]);
+        }
+
+        repository.save(job);
     }
 
     private JobDto convertToDto(Job job) {

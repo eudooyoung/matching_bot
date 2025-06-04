@@ -49,6 +49,12 @@ public class AdminBoardController {
         return "members/profile";
     }
 
+    /**
+     *
+     * @param condition
+     * @param model
+     * @return
+     */
     @GetMapping("/companies")
     public String companies(@ModelAttribute AdminSearchCondition condition, Model model) {
         log.warn("statusParam = [{}]", condition.getStatus());
@@ -75,6 +81,12 @@ public class AdminBoardController {
         return "company/edit-profile";
     }
 
+    /**
+     *
+     * @param condition 검색조건
+     * @param model
+     * @return
+     */
     @GetMapping("/resumes")
     public String resumes(@ModelAttribute AdminSearchCondition condition, Model model) {
         log.warn("statusParam = [{}]", condition.getKeywordsStatus());
@@ -87,6 +99,12 @@ public class AdminBoardController {
         return "/admin/board-resumes";
     }
 
+    /**
+     *
+     * @param resumeId
+     * @param model
+     * @return
+     */
     @GetMapping("/resumes/{resumeId}")
     public String adminResumeDetail(@PathVariable(name = "resumeId") Long resumeId, Model model) {
         Resume resume = resumeService.findById(resumeId);

@@ -57,7 +57,7 @@ public class ResumeService {
                 .skillAnswer(resume.getSkillAnswer())
                 .traitAnswer(resume.getTraitAnswer())
                 .skillKeywords(resume.getSkillKeywords())
-                .talentKeywords(resume.getTalentKeywords())
+                .traitKeywords(resume.getTraitKeywords())
                 .keywordsStatus(resume.getKeywordsStatus().name())
                 .createdAt(resume.getCreatedAt())
                 .memberName(resume.getMember().getName())  // join 필요
@@ -65,12 +65,20 @@ public class ResumeService {
                 .build();
     }
 
-    public void updateResume(Long id, Resume updatedResume) {
+    @Transactional
+    public void update(Long id, Resume updatedResume) {
+        Resume resume = resumeRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("이력서를 찾을 수 없습니다."));
+
+        resume.updateFrom(updatedResume); // 아래와 같이 정의 필요
+    }
+
+    /*public void updateResume(Long id, Resume updatedResume) {
         Resume resume = findById(id);
         resume.setTitle(updatedResume.getTitle());
         resume.setSkillAnswer(updatedResume.getSkillAnswer());
         resume.setTraitAnswer(updatedResume.getTraitAnswer());
         resumeRepository.save(resume);
-    }
+    }*/
 
 }

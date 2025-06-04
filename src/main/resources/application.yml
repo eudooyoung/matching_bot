@@ -9,7 +9,7 @@ spring:
 
   datasource:
     url: jdbc:mysql://localhost:${JDBC_PORT}/${JDBC_DATABASE}?serverTmeZone=Asia/Seoul
-#    url: jdbc:mysql://localhost:3306/matching_bot
+    #    url: jdbc:mysql://localhost:3306/matching_bot
     username: scott
     password: tiger
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -59,3 +59,16 @@ kakao:
 od:
   cloud:
     key: ${OD_CLOUD_KEY}
+
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: alpha  # 메서드 정렬
+    tags-sorter: alpha        # 태그 정렬
+    display-request-duration: true  # 요청 시간 표시
+    try-it-out-enabled: true
+    syntax-highlight:
+      theme: monokai

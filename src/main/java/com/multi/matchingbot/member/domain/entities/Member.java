@@ -14,6 +14,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "member")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -80,6 +81,10 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Yn agreeLocation;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Yn agreeMarketing;
 
     @NotNull
     @Enumerated(EnumType.STRING)

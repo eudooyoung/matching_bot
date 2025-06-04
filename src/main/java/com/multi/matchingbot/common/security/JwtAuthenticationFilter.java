@@ -37,6 +37,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // 절대 경로
             "/health-check",
             "/favicon.ico",
+            "/v3/api-docs",
 
             // 포괄 경로
             "/auth/**",
@@ -45,6 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             "/css/**",
             "/images/**",
             "/.well-known/**",
+            "/v3/api-docs/**",
 //            "/error/**"
     };
 
