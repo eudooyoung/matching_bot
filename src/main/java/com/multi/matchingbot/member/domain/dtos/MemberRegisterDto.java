@@ -1,25 +1,54 @@
 package com.multi.matchingbot.member.domain.dtos;
 
+import com.multi.matchingbot.common.domain.enums.Yn;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
+
+@Data
 public class MemberRegisterDto {
+
+    @NotBlank(message = "이메일을 입력하세요.")
+    @Email(message = "유효한 이메일 형식이어야 합니다.")
     private String email;
+
+    @NotBlank(message = "비밀번호를 입력하세요.")
+    @Size(min = 8, max = 20, message = "비밀번호는 8자 이상 20자 이하여야 합니다.")
     private String password;
+
+    @NotBlank(message = "이름을 입력하세요.")
     private String name;
+
+    @NotBlank(message = "주소를 입력하세요.")
     private String address;
+
+    @NotBlank(message = "생년을 입력하세요.")
     private int year;
+    @NotBlank(message = "생월을 입력하세요.")
     private int month;
+    @NotBlank(message = "생일을 입력하세요.")
     private int day;
+
+    @NotBlank(message = "성별을 선택하세요.")
     private String gender;
     private String phone1;
     private String phone2;
     private String phone3;
 
-    private boolean termsRequired;
-    private boolean privacyRequired;
-    private boolean locationRequired;
-    private boolean marketingEmail;
-    private boolean marketingSms;
+    @NotNull(message = "이용약관 동의는 필수입니다.")
+    private Yn agreeService;
 
-    public String getAddress() {
+    @NotNull(message = "개인정보 처리방침 동의는 필수입니다.")
+    private Yn agreePrivacy;
+
+    private Yn agreeMarketing;
+    private Yn agreeLocation;
+    private Yn alertBookmark;
+    private Yn alertResume;
+
+    /*public String getAddress() {
         return address;
     }
 
@@ -144,5 +173,6 @@ public class MemberRegisterDto {
 
     public void setYear(int year) {
         this.year = year;
-    }
+    }*/
+
 }

@@ -28,10 +28,10 @@ public class CommunityPost {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Size(max =30)
+    @Size(max =100)
     private String title;
 
-    @Size(max =100)
+    @Size(max =500)
     private String content;
     private int views;
     private String createdBy;

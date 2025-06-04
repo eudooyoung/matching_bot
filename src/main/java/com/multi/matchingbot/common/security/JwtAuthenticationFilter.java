@@ -47,6 +47,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             "/images/**",
             "/.well-known/**",
             "/v3/api-docs/**",
+            "/upload/**",
 //            "/error/**"
     };
 

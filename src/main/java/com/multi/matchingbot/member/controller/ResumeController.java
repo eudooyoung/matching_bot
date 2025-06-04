@@ -2,23 +2,28 @@ package com.multi.matchingbot.member.controller;
 
 
 import com.multi.matchingbot.admin.service.ResumeAdminService;
+import com.multi.matchingbot.common.security.MBotUserDetails;
+import com.multi.matchingbot.job.domain.entity.Occupation;
 import com.multi.matchingbot.job.service.OccupationService;
-import com.multi.matchingbot.member.domain.dtos.ResumeViewLogDto;
+import com.multi.matchingbot.member.domain.dtos.ResumeDto;
 import com.multi.matchingbot.member.domain.entities.Member;
 import com.multi.matchingbot.member.domain.entities.Resume;
+import com.multi.matchingbot.member.mapper.ResumeMapper;
 import com.multi.matchingbot.member.service.MemberService;
 import com.multi.matchingbot.member.service.ResumeService;
-import lombok.RequiredArgsConstructor;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
-@RequiredArgsConstructor
 @RequestMapping("/member")
 public class ResumeController {
 
@@ -26,6 +31,14 @@ public class ResumeController {
     private final ResumeAdminService resumeAdminService;
     private final MemberService memberService;
     private final OccupationService occupationService;
+
+    @Autowired
+    public ResumeController(ResumeService resumeService, ResumeAdminService resumeAdminService, MemberService memberService, OccupationService occupationService){
+        this.resumeService = resumeService;
+        this.resumeAdminService = resumeAdminService;
+        this.memberService = memberService;
+        this.occupationService = occupationService;
+    }
 
     // 목록
     @GetMapping
@@ -53,16 +66,22 @@ public class ResumeController {
 
     @GetMapping("/edit/{id}")
     public String editForm(@PathVariable("id") Long id, Model model) {
-        Resume resume = resumeService.findByIdWithOccupation(id);
+        Resume resume = resumeService.findById(id);
         model.addAttribute("resume", resume);
-        model.addAttribute("occupationId", resume.getOccupation().getId()); // 추가
         return "/member/resume-edit";
     }
 
     @PostMapping("/edit/{id}")
     public String update(@PathVariable("id") Long id,
-                         @ModelAttribute Resume resumeForm) {
-        resumeService.updateResume(id, resumeForm);
+                         @Valid @ModelAttribute("resume") ResumeDto dto,
+                         BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "/member/resume-edit";
+        }
+        Occupation occupation = occupationService.findById(dto.getOccupationId());
+        Resume updatedResume = dto.toEntityWithOccupation(occupation);
+
+        resumeService.update(id, updatedResume);
         return "redirect:/member/view/" + id;
     }
 
@@ -80,37 +99,40 @@ public class ResumeController {
         return "redirect:/member";
     }
 
+    //이력서 등록 페이지
     @GetMapping("/insert")
-    public String insertForm(Model model) {
-        model.addAttribute("resume", new Resume()); // 혹은 ResumeDto 사용
+    public String insertForm(Model model, @AuthenticationPrincipal MBotUserDetails userDetails) {
+        ResumeDto dto = new ResumeDto();
+        dto.setMemberId(userDetails.getMemberId());
+        model.addAttribute("resume", dto);
+
         return "member/resume-insert";
     }
 
     @PostMapping("/insert")
-    public String insert(@ModelAttribute Resume resume,
-                         @RequestParam("occupation.id") Long occupationId) {
+    public String insert(@Valid @ModelAttribute("resume") ResumeDto resumeDto,
+                         BindingResult bindingResult,
+                         @AuthenticationPrincipal MBotUserDetails userDetails) {
+        if (bindingResult.hasErrors()) {
+            System.out.println("📌 Binding Error 발생:");
+            bindingResult.getAllErrors().forEach(e -> System.out.println("  - " + e));
+            return "member/resume-insert";
+        }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        Member member = memberService.findByUsername(email);
-        resume.setMember(member);
+//        Member member = memberService.findByUsername(email);
 
-        // 👉 occupation 수동 설정
-        resume.setOccupation(occupationService.findById(occupationId));
+        Member member = memberService.findById(userDetails.getMemberId());
+        Occupation occupation = occupationService.findById(resumeDto.getOccupationId());
+
+        Resume resume = ResumeMapper.toEntity(resumeDto, member, occupation);
+
+        // ✅ 추출된 키워드 문자열 추가 설정
+        resume.setSkillKeywords(resumeDto.getSkillKeywordsConcat());
+        resume.setTraitKeywords(resumeDto.getTraitKeywordsConcat());
 
         resumeService.save(resume);
-        return "redirect:/member";
-    }
 
-    @GetMapping("/history")
-    public String resumeViewLog(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-
-        Member member = memberService.findByUsername(email);
-        Long memberId = member.getId();
-
-        List<ResumeViewLogDto> viewLogs = resumeService.getResumeViewLogs(memberId);
-        model.addAttribute("viewLogs", viewLogs);
-        return "member/resume-history";
+        return "member/member-resume-list";
     }
 }

@@ -1,34 +1,40 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <title>공고 상세보기</title>
     <link rel="stylesheet" th:href="@{/css/company-job.css}">
     <link rel="stylesheet" th:href="@{/css/layout.css}">
+
     <style>
         .container {
             max-width: 900px;
             margin: 60px auto;
             padding: 20px;
         }
+
         .job-box {
             background-color: #f9f9f9;
             border-radius: 10px;
             padding: 30px;
         }
+
         .job-title {
             font-size: 28px;
             font-weight: bold;
             color: #103254;
             margin-bottom: 10px;
         }
+
         .section {
             margin-bottom: 16px;
         }
+
         .section h4 {
             margin-bottom: 5px;
             color: #333;
         }
+
         .section p {
             margin: 0;
         }
@@ -94,6 +100,19 @@
             <p th:text="${job.notice}">지원 시 유의 사항</p>
         </div>
 
+        <div id="tab-report" class="tab-content active">
+            <div class="report-box">
+                <div class="report-image-wrapper">
+                    <img id="summaryImage"
+                         th:attr="data-company-id=${companyId}"
+                         src="/img/loading.jpg"
+                         alt="기업 평가 요약"
+                         loading="lazy"
+                         class="report-image"/>
+                </div>
+            </div>
+        </div>
+
         <div style="margin-top: 30px; text-align: center;">
             <button onclick="location.href='/job/manage-jobs'" class="nav-button">돌아가기</button>
         </div>
@@ -104,6 +123,8 @@
 
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>
+<script th:src="@{/js/auth/fetchWithAuth.js}"></script>
+<script th:src="@{/js/chatbot/loadSummaryImage.js}"></script>
 
 </body>
 </html>

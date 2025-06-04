@@ -51,15 +51,28 @@ public class SearchPostingRepositoryImpl implements SearchPostingRepository {
 
 
     @Override
-    public List<Job> searchByFilters(String keyword, String title, String regionMain, String regionSub) {
-        String jpql = "SELECT m FROM Job m WHERE 1=1";
+    public List<Job> searchByFilters(String jobGroup, String jobType, String jobRole, String regionMain, String regionSub) {
+        String jpql = "SELECT m FROM Job m JOIN m.occupation o WHERE 1=1";
 
-        if (keyword != null && !keyword.isEmpty()) {
-            jpql += " AND (m.title LIKE CONCAT('%', :keyword, '%') OR m.requiredSkills LIKE CONCAT('%', :keyword, '%'))";
+
+//        if (keyword != null && !keyword.isEmpty()) {
+//            jpql += " AND (m.title LIKE CONCAT('%', :keyword, '%') OR m.requiredSkills LIKE CONCAT('%', :keyword, '%'))";
+//        }
+//
+//        if (title != null && !title.isEmpty()) {
+//            jpql += " AND m.category = :title";
+//        }
+
+
+
+        if (jobGroup != null && !jobGroup.isEmpty()) {
+            jpql += " AND o.jobGroupName = :jobGroup";
         }
-
-        if (title != null && !title.isEmpty()) {
-            jpql += " AND m.category = :title";  // 카테고리 조건은 m.title이 아니라 m.category일 가능성이 높음 (확인 필요)
+        if (jobType != null && !jobType.isEmpty()) {
+            jpql += " AND o.jobTypeName = :jobType";
+        }
+        if (jobRole != null && !jobRole.isEmpty()) {
+            jpql += " AND o.jobRoleName = :jobRole";
         }
 
         if (regionMain != null && !regionMain.isEmpty()) {
@@ -73,14 +86,12 @@ public class SearchPostingRepositoryImpl implements SearchPostingRepository {
 
         TypedQuery<Job> query = em.createQuery(jpql, Job.class);
 
-        if (keyword != null && !keyword.isEmpty()) {
-            query.setParameter("keyword", keyword);
-        }
-
-        if (title != null && !title.isEmpty()) {
-            query.setParameter("title", title);
-        }
-
+//        if (keyword != null && !keyword.isEmpty()) {
+//            query.setParameter("keyword", keyword);
+//        }
+//        if (title != null && !title.isEmpty()) {
+//            query.setParameter("title", title);
+//        }
         if (regionMain != null && !regionMain.isEmpty()) {
             query.setParameter("regionMain", regionMain);
         }
@@ -88,6 +99,15 @@ public class SearchPostingRepositoryImpl implements SearchPostingRepository {
             query.setParameter("regionSub", regionSub);
         }
 
+        if (jobGroup != null && !jobGroup.isEmpty()) {
+            query.setParameter("jobGroup", jobGroup);
+        }
+        if (jobType != null && !jobType.isEmpty()) {
+            query.setParameter("jobType", jobType);
+        }
+        if (jobRole != null && !jobRole.isEmpty()) {
+            query.setParameter("jobRole", jobRole);
+        }
 
         return query.getResultList();
     }

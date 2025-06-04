@@ -1,6 +1,5 @@
 package com.multi.matchingbot.company.controller;
 
-import com.multi.matchingbot.attachedItem.domain.AttachedItem;
 import com.multi.matchingbot.attachedItem.service.AttachedItemService;
 import com.multi.matchingbot.common.security.MBotUserDetails;
 import com.multi.matchingbot.company.domain.Company;
@@ -16,8 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/company")
@@ -44,16 +41,6 @@ public class CompanyController {
 
         Page<JobDto> jobPage = jobService.getByCompanyIdPaged(companyId, PageRequest.of(0, 20));
         model.addAttribute("jobPage", jobPage);
-
-        /*평가 보고서*/
-        Optional<AttachedItem> reportImageOpt =
-                attachedItemService.findReportForCompany(companyId);
-
-        if (reportImageOpt.isPresent()) {
-            AttachedItem report = reportImageOpt.get();
-            String url = "/" + report.getPath();
-            model.addAttribute("reportImageUrl", url);
-        }
 
         return "company/index";
     }
@@ -112,5 +99,24 @@ public class CompanyController {
         companyService.update(companyDto, userDetails.getCompanyId());
         return "redirect:/company/mypage";
     }
+
+//    // 개인정보 수정 처리
+//    @PostMapping("/edit-profile")
+//    public String updateProfile(@RequestParam("phone1") String phone1,
+//                                @RequestParam("phone2") String phone2,
+//                                @RequestParam("phone3") String phone3,
+//                                @ModelAttribute("company") CompanyUpdateDto companyDto,
+//                                BindingResult bindingResult,
+//                                @AuthenticationPrincipal MBotUserDetails userDetails) {
+//
+//        companyDto.setPhone(phone1 + phone2 + phone3);  // 조합하여 저장
+//
+//        if (bindingResult.hasErrors()) {
+//            return "company/edit-profile";
+//        }
+//
+//        companyService.update(companyDto, userDetails.getCompanyId());
+//        return "redirect:/company/mypage";
+//    }
 
 }

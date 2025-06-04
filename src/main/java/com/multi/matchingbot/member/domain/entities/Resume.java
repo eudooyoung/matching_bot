@@ -4,20 +4,18 @@ import com.multi.matchingbot.common.domain.entity.BaseEntity;
 import com.multi.matchingbot.common.domain.enums.Yn;
 import com.multi.matchingbot.job.domain.entity.Occupation;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "resume")
-@Data
-@Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Resume extends BaseEntity {
 
     @Id
@@ -38,26 +36,34 @@ public class Resume extends BaseEntity {
     @Column(nullable = false, length = 50)
     private String title;
 
-    @Column
+    @Column(name = "skill_answer", nullable = false, length = 255)
     private String skillAnswer;
 
-    @Column
+    @Column(name = "trait_answer", nullable = false, length = 255)
     private String traitAnswer;
 
-    @Column(nullable = false, length = 100)
+    @Column(name = "skill_keywords", length = 100)
     private String skillKeywords;
 
-    @Column(nullable = false, length = 100)
-    private String talentKeywords;
+    @Column(name = "trait_keywords", length = 100)
+    private String traitKeywords;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 1)
     @Builder.Default
     private Yn keywordsStatus = Yn.N;
 
+    public void updateFrom(Resume updatedResume) {
+        this.title = title;
+        this.skillAnswer = skillAnswer;
+        this.traitAnswer = traitAnswer;
+        this.skillKeywords = skillKeywords;
+        this.traitKeywords = traitKeywords;
+    }
+
     @PreUpdate
     public void updateKeywordsStatus() {
-        if (skillKeywords == null || talentKeywords == null) {
+        if (skillKeywords == null || traitKeywords == null) {
             this.keywordsStatus = Yn.N;
         } else {
             this.keywordsStatus = Yn.Y;
