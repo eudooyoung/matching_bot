@@ -5,6 +5,8 @@
     <title>회원정보 수정</title>
     <link rel="stylesheet" th:href="@{/css/company-job.css}">
     <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/spinner-chatbot.css}">
+    <link rel="stylesheet" th:href="@{/css/report-refresh.css}">
     <style>
         .readonly {
             background-color: #e0e0e0;
@@ -24,7 +26,7 @@
 <div class="form-container">
     <h2 class="form-title">회원정보 수정</h2>
 
-    <form method="post" th:object="${company}">
+    <form id="companyEditForm" method="post" th:object="${company}">
         <input type="hidden" th:field="*{id}"/>
 
         <label>이메일</label>
@@ -129,19 +131,43 @@
             <option value="N" th:selected="${company.agreeThirdParty == 'N'}">비동의</option>
         </select>
 
-        <div class="button-wrapper">
-            <div class="button-area">
-                <button type="submit" class="submit-button">수정하기</button>
-            </div>
+        <!--        <div class="button-wrapper">-->
+        <div class="button-area">
+            <button type="submit" class="submit-button">수정하기</button>
+        </div>
 
-            <button type="button"
-                    id="refreshReportBtn"
-                    class="submit-button"
-                    th:attr="data-company-id=${company.id}">
-                AI평가 갱신하기
-            </button>
-
+        <!--            <button type="button"-->
+        <!--                    id="refreshReportBtn"-->
+        <!--                    class="submit-button"-->
+        <!--                    th:attr="data-company-id=${company.id}">-->
+        <!--                AI평가 갱신하기-->
+        <!--            </button>-->
+        <!--        </div>-->
     </form>
+</div>
+
+<div id="loadingOverlay" class="overlay" style="display: none;">
+    <div class="spinner"></div>
+    <p>
+        AI가 기업 정보를 분석하고 있습니다.<br>
+        잠시만 기다려 주세요...
+    </p>
+</div>
+
+<div id="confirmModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <p>AI 평가 리포트를 함께 갱신하시겠습니까?</p>
+        <div class="modal-buttons">
+            <button
+                    id="refreshReportBtn"
+                    th:attr="data-company-id=${company.id}"
+                    onclick="submitWithAI()">
+                AI 갱신하고 저장
+            </button>
+            <button id="submitWithoutAiBtn" onclick="submitWithoutAI()">그냥 저장</button>
+            <button id="cancelBtn" onclick="closeModal()">취소</button>
+        </div>
+    </div>
 </div>
 
 <div th:replace="~{fragments/footer :: footer}"></div>
