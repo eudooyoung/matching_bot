@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>이력서 열람 기록</title>
+  <link rel="stylesheet" th:href="@{/css/layout.css}">
+  <style>
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      font-size: 22px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th, td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    th {
+      background-color: #f1f1f1;
+    }
+
+    tr:hover {
+      background-color: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+<div th:replace="fragments/header :: header(role=${role})"></div>
+
+<div class="container">
+  <h2>이력서 열람 기록</h2>
+
+  <table>
+    <thead>
+    <tr>
+      <th>기업명</th>
+      <th>업종</th>
+      <th>열람일</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="log : ${viewLogs}">
+      <td th:text="${log.companyName}">기업명</td>
+      <td th:text="${log.industry}">업종</td>
+      <td th:text="${#temporals.format(log.viewedAt, 'yyyy년 MM월 dd일')}">날짜</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
+<script th:src="@{/js/dropdown.js}"></script>
+<script th:src="@{/js/logout.js}"></script>
+</body>
+</html>
