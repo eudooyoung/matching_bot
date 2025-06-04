@@ -8,6 +8,7 @@ import com.multi.matchingbot.member.domain.entities.Member;
 import com.multi.matchingbot.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,14 +32,24 @@ public class CommunityController {
     }
 
     @GetMapping("/list")
-    public String list(@RequestParam(required = false) Long categoryId, Model model, Authentication authentication) {
-        log.info("📌 list() 진입 - categoryId: {}", categoryId);
+    public String list(@RequestParam(required = false, defaultValue = "") Long categoryId,
+                       @RequestParam(defaultValue = "0") int page,
+                       @RequestParam(defaultValue = "9") int size,
+                       Model model,
+                       Authentication authentication) {
+
+        log.info("📌 list() 진입 - categoryId: {}, page: {}, size: {}", categoryId, page, size);
+
 
         List<CommunityCategory> categories = communityService.getAllCategories();
-        List<CommunityPostDto> postList = communityService.getPostsByCategory(categoryId);
+        Page<CommunityPostDto> postPage = communityService.getPagedPosts(categoryId, page, size);
 
         model.addAttribute("categories", categories);
-        model.addAttribute("postList", postList);
+        model.addAttribute("postPage", postPage);
+        model.addAttribute("postList", postPage.getContent()); // 페이지 내용만 따로도 제공
+
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", postPage.getTotalPages());
 
         if (authentication != null) {
             model.addAttribute("currentUser", authentication.getName());
@@ -48,6 +59,7 @@ public class CommunityController {
 
         return "community/community-list";
     }
+
 
     @GetMapping("/write")
     public String writeForm(Model model) {
@@ -180,6 +192,30 @@ public class CommunityController {
         Long postId = communityService.getPostIdByCommentId(id);
         return "redirect:/community/detail/" + postId;
     }
+
+
+    @PostMapping("/comment/{id}/delete")
+    public String deleteComment(@PathVariable(name = "id") Long commentId,
+                                Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/login";
+        }
+
+        Member member = memberService.findByUsername(authentication.getName());
+        Long memberId = member.getId();
+
+        // ✅ 댓글 삭제 전, 해당 댓글이 달린 게시글 ID 조회
+        Long postId = communityService.getPostIdByCommentId(commentId);
+
+        communityService.deleteComment(commentId, memberId);
+        log.info("🔁 댓글 삭제 후 이동할 게시글 ID: {}", postId);
+
+        return "redirect:/community/detail/" + postId;
+
+    }
+
+
+
 
     @PostMapping("/comment/{id}/update")
     public String updateComment(@PathVariable("id") Long id,

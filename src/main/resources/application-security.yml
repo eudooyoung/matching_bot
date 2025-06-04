@@ -29,6 +29,8 @@ security:
       - /search-page/**
       - /jobs/**
       - /community/**
+      - /job/**
+#      - /job/detail/**
 
       - /community/detail/**
       - /api/v1/chatbot/**
@@ -40,6 +42,7 @@ security:
       - /community/edit/**
       - /community/delete/**
       - /community/**
+#      - /job/**
     company-paths:
       - /company/**
       - /job/**
