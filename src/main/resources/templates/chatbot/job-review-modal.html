@@ -1,0 +1,26 @@
+<div th:fragment="jobReviewModal" id="jobReviewModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <h3>공고 AI 분석 결과</h3>
+        <table class="review-table">
+            <colgroup>
+                <col style="width: 10%;">
+                <col style="width: 45%;"> <!-- 기존 입력값 -->
+                <col style="width: 45%;"> <!-- AI 제안안 -->
+            </colgroup>
+            <thead>
+            <tr>
+                <th>항목</th>
+                <th>기존 입력값</th>
+                <th>AI 제안</th>
+            </tr>
+            </thead>
+            <tbody id="reviewComparisonBody">
+            <!-- JS에서 채워 넣음 -->
+            </tbody>
+        </table>
+        <div class="modal-buttons">
+            <button class = "apply-button" onclick="applyReview()">적용하기</button>
+            <button class = "cancel-button" onclick="closeReviewModal()">닫기</button>
+        </div>
+    </div>
+</div>

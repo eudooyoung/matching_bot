@@ -45,7 +45,29 @@
 <div th:replace="~{fragments/header :: header(role=${role})}"></div>
 
 <div class="container">
-    <h2>공고 상세보기</h2>
+    <!-- 유사도 비교용 키워드 (Spring에서 렌더링) -->
+    <!--<div id="similarity-data"
+         th:data-job-skill="${job.skillKeywords}"
+         th:data-resume-skill="${resume.skillKeywords}">
+    </div>-->
+    <div id="similarity-data"
+         th:data-job-skill="${job.skillKeywords}"
+         th:data-resume-skill="${resume != null ? resume.skillKeywords : ''}">
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 8px;">
+        <h2>
+            공고 상세보기
+            <span id="similarity-score" style="font-size: 1rem; color: #555; margin-left: 10px;">| 유사도 계산 중...</span>
+        </h2>
+        <div class="tooltip-wrapper">
+            <button class="help-icon-button">?</button>
+            <div class="tooltip-box">
+                본인의 이력서를 선택해 현재 공고와 키워드<br>
+                유사도를 계산하여 % 로 나타냅니다.
+            </div>
+        </div>
+    </div>
 
     <div class="job-box">
         <div class="job-title" th:text="${job.title}">채용 제목</div>
@@ -127,6 +149,51 @@
 <script th:src="@{/js/logout.js}"></script>
 <script th:src="@{/js/auth/fetchWithAuth.js}"></script>
 <script th:src="@{/js/chatbot/loadSummaryImage.js}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const el = document.getElementById("similarity-data");
+        const jobSkillRaw = el.dataset.jobSkill;
+        const resumeSkillRaw = el.dataset.resumeSkill;
+        console.log("jobSkillRaw", jobSkillRaw);
+        console.log("resumeSkillRaw",resumeSkillRaw);
+        // 로그인된 사용자에 resume가 없는 경우
+        if (!resumeSkillRaw || resumeSkillRaw.trim() === "") {
+            document.getElementById("similarity-score").textContent = " | 유사도: - (이력서 없음)";
+            return;
+        }
+
+        // 문자열 → 배열 변환
+        const jobSkills = jobSkillRaw.split(',').map(s => s.trim()).filter(Boolean);
+        const resumeSkills = resumeSkillRaw.split(',').map(s => s.trim()).filter(Boolean);
+        console.log("jobSkills:", jobSkills);
+        console.log("resumeSkills:", resumeSkills);
+        try {
+            const response = await fetch("http://localhost:8081/calculate-similarity", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    job_skill_keys: jobSkills,
+                    resume_skill_keys: resumeSkills
+                })
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                const percent = Math.round(result.similarity * 100);
+                document.getElementById("similarity-score").textContent = ` | 유사도: ${percent}%`;
+            } else {
+                document.getElementById("similarity-score").textContent = " | 유사도 불러오기 실패";
+            }
+        } catch (e) {
+            console.error("유사도 계산 오류:", e);
+            document.getElementById("similarity-score").textContent = " | 유사도 계산 실패";
+        }
+    });
+</script>
+
+
 
 </body>
 </html>
