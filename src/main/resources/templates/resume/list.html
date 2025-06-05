@@ -52,7 +52,16 @@
         <div class="card h-100 resume-card" th:onclick="|location.href='@{/resumes/{id}(id=${resume.id})}'|"
              style="cursor: pointer;">
           <div class="card-body">
-            <h5 class="card-title" th:text="${resume.memberName} ?: '이름 없음'">지원자 이름</h5>
+            <div class="resume-card-header">
+              <h5 class="card-title" th:text="${resume.memberName} ?: '이름 없음'">지원자 이름</h5>
+              <button
+                      class="star-button"
+                      th:classappend="${resume.bookmarked} ? 'filled' : ''"
+                      onclick="toggleStar(this, [[${resume.id}]], event)"
+                      sec:authorize="hasRole('COMPANY')">
+                <span th:text="${resume.bookmarked} ? '★' : '☆'">☆</span>
+              </button>
+            </div>
             <p class="card-text"><strong>이력서 제목:</strong> <span th:text="${resume.title} ?: '제목 없음'"></span></p>
             <p class="card-text"><strong>기술 소개:</strong> <span th:text="${resume.skillAnswer} ?: '기술 소개 없음'"></span></p>
             <p class="card-text"><strong>성향 소개:</strong> <span th:text="${resume.traitAnswer} ?: '성향 소개 없음'"></span></p>
@@ -128,15 +137,42 @@
       window.React = React;
       window.createRoot = createRoot;
     </script>
-
-
-
   </main>
 
   <div th:insert="~{fragments/footer :: footer}"></div>
 </div>
-<script th:src="@{/js/logout.js}"></script>
 
+<script>
+  function toggleStar(button, resumeId, event) {
+    event.stopPropagation(); // 카드 클릭 이벤트 중단
+
+    const isBookmarked = button.classList.contains('filled');
+    const method = isBookmarked ? 'DELETE' : 'POST';
+    const companyId = window.loggedInCompanyId;
+
+    fetch(`/job/resume-bookmark/${resumeId}/company/${companyId}`, {
+      method: method,
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': getCsrfToken()
+      }
+    })
+            .then(response => {
+              if (response.ok) {
+                button.classList.toggle('filled');
+                button.textContent = button.classList.contains('filled') ? '★' : '☆';
+              } else {
+                alert('즐겨찾기 처리 중 오류가 발생했습니다.');
+              }
+            })
+            .catch(() => {
+              alert('서버 통신에 실패했습니다.');
+            });
+  }
+</script>
+
+
+<script th:src="@{/js/logout.js}"></script>
 
 </body>
 </html>

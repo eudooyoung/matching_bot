@@ -1,6 +1,8 @@
 package com.multi.matchingbot.job.controller;
 
+import com.multi.matchingbot.company.domain.Company;
 import com.multi.matchingbot.job.service.ResumeBookmarkService;
+import com.multi.matchingbot.member.domain.entities.Resume;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +15,13 @@ import java.util.List;
 public class ResumeBookmarkController {
 
     private final ResumeBookmarkService resumeBookmarkService;
+
+    @PostMapping("/{resumeId}/company/{companyId}")
+    public ResponseEntity<Void> addBookmark(@PathVariable("resumeId") Resume resumeId,
+                                            @PathVariable("companyId") Company companyId) {
+        resumeBookmarkService.addBookmark(resumeId, companyId);
+        return ResponseEntity.ok().build();
+    }
 
     @DeleteMapping("/{resumeId}/company/{companyId}")
     public ResponseEntity<Void> deleteBookmark(@PathVariable("resumeId") Long resumeId, @PathVariable("companyId") Long companyId) {

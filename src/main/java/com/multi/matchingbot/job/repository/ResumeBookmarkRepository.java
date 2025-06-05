@@ -1,7 +1,9 @@
 package com.multi.matchingbot.job.repository;
 
+import com.multi.matchingbot.company.domain.Company;
 import com.multi.matchingbot.job.domain.entity.ResumeBookmark;
 import com.multi.matchingbot.member.domain.dtos.ResumeDto;
+import com.multi.matchingbot.member.domain.entities.Resume;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,4 +25,6 @@ public interface ResumeBookmarkRepository extends JpaRepository<ResumeBookmark, 
             "JOIN r.member m " +
             "WHERE b.company.id = :companyId")
     Page<ResumeDto> findResumeDtosByCompanyId(@Param("companyId") Long companyId, Pageable pageable);
+
+    boolean existsByResumeIdAndCompanyId(Resume resumeId, Company companyId);
 }

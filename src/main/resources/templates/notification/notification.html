@@ -23,7 +23,7 @@
         <div th:each="noti : ${unreadNotifications}"
              th:onclick="|location.href='/notification/detail/${noti.id}'|"
              class="notification-item">
-            <span th:text="${noti.title}"></span>
+            <span th:text="${noti.content}"></span>
         </div>
     </div>
 
@@ -32,7 +32,7 @@
         <div th:each="noti : ${readNotifications}"
              th:onclick="|location.href='/notification/detail/${noti.id}'|"
              class="notification-item read">
-            <span th:text="${noti.title}"></span>
+            <span th:text="${noti.content}"></span>
         </div>
     </div>
 </div>
