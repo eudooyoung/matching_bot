@@ -42,6 +42,16 @@ public class CompanyController {
         Page<JobDto> jobPage = jobService.getByCompanyIdPaged(companyId, PageRequest.of(0, 20));
         model.addAttribute("jobPage", jobPage);
 
+        /*평가 보고서*/
+//        Optional<AttachedItem> reportImageOpt =
+//                attachedItemService.findReportForCompany(companyId);
+//
+//        if (reportImageOpt.isPresent()) {
+//            AttachedItem report = reportImageOpt.get();
+//            String url = "/" + report.getPath();
+//            model.addAttribute("reportImageUrl", url);
+//        }
+
         return "company/index";
     }
 

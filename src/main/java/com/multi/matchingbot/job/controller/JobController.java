@@ -12,6 +12,7 @@ import com.multi.matchingbot.job.service.JobService;
 import com.multi.matchingbot.job.service.OccupationService;
 import com.multi.matchingbot.job.service.ResumeBookmarkService;
 import com.multi.matchingbot.member.domain.dtos.ResumeDto;
+import com.multi.matchingbot.notification.service.NotificationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,14 +33,16 @@ public class JobController {
 
     private final CompanyService companyService;
     private final JobService jobService;
+    private final NotificationService notificationService;
     private final JobRepository jobRepository;
     private final OccupationService occupationService;
     private final ResumeBookmarkService resumeBookmarkService;
 
     @Autowired
-    public JobController(CompanyService companyService, JobService jobService, JobRepository jobRepository, OccupationService occupationService, ResumeBookmarkService resumeBookmarkService) {
+    public JobController(CompanyService companyService, JobService jobService, NotificationService notificationService, JobRepository jobRepository, OccupationService occupationService, ResumeBookmarkService resumeBookmarkService) {
         this.companyService = companyService;
         this.jobService = jobService;
+        this.notificationService = notificationService;
         this.jobRepository = jobRepository;
         this.occupationService = occupationService;
         this.resumeBookmarkService = resumeBookmarkService;
@@ -90,6 +93,12 @@ public class JobController {
 
         jobService.createJob(job); // 위도, 경도 불러서 저장
 
+        notificationService.sendJobNotificationToBookmarkedMembers(
+                company.getId(),
+                company.getName(),
+                job.getTitle()
+        );
+
         return "redirect:/job/manage-jobs";
     }
 
@@ -125,7 +134,7 @@ public class JobController {
 
 
 
-    //공고 상세보기 형찬코드
+    // 공고 상세보기 형찬코드
     @GetMapping("/{id}")
     public String getJobDetail(@PathVariable("id") Long id, Model model, @AuthenticationPrincipal MBotUserDetails userDetails) {
 

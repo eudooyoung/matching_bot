@@ -66,4 +66,19 @@ public class ResumeDto {
         this.createdAt = createdAt;
         this.memberName = memberName;
     }
+    public static ResumeDto fromEntity(Resume resume) {
+        return ResumeDto.builder()
+                .id(resume.getId())
+                .title(resume.getTitle())
+                .skillAnswer(resume.getSkillAnswer())
+                .traitAnswer(resume.getTraitAnswer())
+                .skillKeywords(resume.getSkillKeywords())
+                .traitKeywords(resume.getTraitKeywords())
+                .keywordsStatus(resume.getKeywordsStatus() != null ? resume.getKeywordsStatus().name() : null)
+                .createdAt(resume.getCreatedAt())
+                .memberName(resume.getMember() != null ? resume.getMember().getName() : null)
+                .bookmarked(false)
+                .build();
+    }
+
 }

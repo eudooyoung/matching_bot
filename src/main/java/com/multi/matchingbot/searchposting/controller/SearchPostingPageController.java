@@ -22,9 +22,11 @@ public class SearchPostingPageController {
                              @RequestParam(name="jobRole",required = false) String jobRole,
                              @RequestParam(name="regionMain",required = false) String regionMain,
                              @RequestParam(name="regionSub",required = false) String regionSub,
+                             @RequestParam(name="companyName",required = false) String companyName,
+
                              Model model) {
 
-        List<SearchPostingDto> jobList = searchPostingService.searchJobs(jobGroup, jobType, jobRole, regionMain, regionSub);
+        List<SearchPostingDto> jobList = searchPostingService.searchJobs(jobGroup, jobType, jobRole, regionMain, regionSub,companyName);
 
         model.addAttribute("jobList", jobList);
 
