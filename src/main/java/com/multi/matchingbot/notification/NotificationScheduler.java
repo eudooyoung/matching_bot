@@ -16,7 +16,7 @@ public class NotificationScheduler {
     }
 
     // 테스트용
-//    @Scheduled(fixedDelay = 60000) // 1분마다 실행
+//    @Scheduled(fixedDelay = 600000) // 1분마다 실행
 //    public void sendDeadlineAlert() {
 //        notificationService.sendDeadlineApproachingNotifications();
 //    }
@@ -28,7 +28,7 @@ public class NotificationScheduler {
     }
 
     // 테스트용: 읽음 알림을 1분 후 삭제
-//    @Scheduled(fixedDelay = 60000) // 1분마다 실행
+//    @Scheduled(fixedDelay = 600000) // 1분마다 실행
 //    public void deleteReadNotificationsAfter1Minute() {
 //        notificationService.deleteReadNotificationsOlderThan(Duration.ofMinutes(1));
 //    }

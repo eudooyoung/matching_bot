@@ -11,9 +11,9 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     List<Notification> findByMemberIdAndStatusOrderByCreatedAtDesc(Long memberId, NotificationStatus status);
 
     // 테스트 용도
-//    void deleteByStatusAndCreatedAtBefore(NotificationStatus status, LocalDateTime time);
+    void deleteByStatusAndCreatedAtBefore(NotificationStatus status, LocalDateTime time);
 
-    void deleteByStatusAndCreatedAtBefore(NotificationStatus status, LocalDateTime beforeTime);
+//    void deleteByStatusAndCreatedAtBefore(NotificationStatus status, LocalDateTime beforeTime);
 
     boolean existsByMemberIdAndStatus(Long memberId, NotificationStatus notificationStatus);
 }
