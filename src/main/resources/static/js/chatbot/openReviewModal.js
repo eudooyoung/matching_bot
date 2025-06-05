@@ -74,6 +74,6 @@ export function applyReview() {
     console.log("✅ 모달 닫기 시도");
     closeReviewModal();
     console.log("✅ 알림 및 복원버튼 노출");
-    alert("AI 제안안이 적용되었습니다.");
+    alert("AI 제안이 적용되었습니다.");
     document.getElementById("restoreBtn").style.display = "inline-block";
 }

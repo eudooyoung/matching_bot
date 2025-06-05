@@ -1,9 +1,10 @@
-import { openReviewModal } from './openReviewModal.js';
+import {openReviewModal} from './openReviewModal.js';
 
 let originalFormData = null;
 
 export async function analyzeJob() {
     console.log("analyzeJob호출")
+
     const form = document.querySelector("form");
     const formData = new FormData(form);
     const json = {};
@@ -14,7 +15,14 @@ export async function analyzeJob() {
         else json[key] = [json[key], val];
     });
 
-    originalFormData = { ...json };
+    originalFormData = {...json};
+
+   /* document.getElementById("jobReviewModal").style.display = "block";
+    const spinner = document.getElementById("reviewSpinner");
+    if (spinner) spinner.style.display = "block";
+*/
+    document.getElementById("globalLoadingOverlay").style.display = "flex";
+
 
     try {
         const res = await fetchWithAuth("/api/v1/chatbot/law-review", {
@@ -24,20 +32,14 @@ export async function analyzeJob() {
         const response = await res.json();
         console.log("🧪 AI 응답:", response);
 
-
-        // form 값 덮어쓰기
-        /*document.querySelector("[name='title']").value = review["공고 제목"]?.suggest || "";
-        document.querySelector("[name='description']").value = review["설명"]?.suggest || "";
-        document.querySelector("[name='mainTask']").value = review["주요 업무"]?.suggest || "";
-        document.querySelector("[name='requiredSkills']").value = review["필요 역량"]?.suggest || "";
-        document.querySelector("[name='requiredTraits']").value = review["인재상"]?.suggest || "";
-        document.querySelector("[name='notice']").value = review["안내사항"]?.suggest || "";*/
+        document.getElementById("globalLoadingOverlay").style.display = "none";
 
         openReviewModal(originalFormData, response);
         document.getElementById("restoreBtn").style.display = "inline-block";
         // alert("✅ AI 제안안이 반영되었습니다.");
     } catch (err) {
         console.error("AI 분석 실패", err);
+        document.getElementById("globalLoadingOverlay").style.display = "none";
         alert("AI 분석 실패");
     }
 }

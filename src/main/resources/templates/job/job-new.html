@@ -6,6 +6,7 @@
     <link rel="stylesheet" th:href="@{/css/company-job.css}"/>
     <link rel="stylesheet" th:href="@{/css/job-new.css}"/>
     <link rel="stylesheet" th:href="@{/css/job-review-modal.css}"/>
+    <link rel="stylesheet" th:href="@{/css/spinner-chatbot.css}"/>
 </head>
 <body>
 
@@ -143,6 +144,10 @@
     </form>
 </div>
 
+<div id="globalLoadingOverlay" class="overlay" style="display: none;">
+    <div class="spinner"></div>
+    <div>AI 제안 불러오는 중...</div>
+</div>
 <div th:replace="~{fragments/footer :: footer}"></div>
 
 <!-- 🔽 하단에 script 위치 (기존 위치와 같게 유지) -->
@@ -361,15 +366,15 @@
 
 <script th:src="@{/js/auth/fetchWithAuth.js}"></script>
 <script type="module">
-  import { analyzeJob, restoreOriginalJob } from '/js/chatbot/reviewJobLaw.js';
-  import { openReviewModal, applyReview, closeReviewModal } from '/js/chatbot/openReviewModal.js';
+    import {analyzeJob, restoreOriginalJob} from '/js/chatbot/reviewJobLaw.js';
+    import {openReviewModal, applyReview, closeReviewModal} from '/js/chatbot/openReviewModal.js';
 
-  // 전역 등록
-  window.analyzeJob = analyzeJob;
-  window.restoreOriginalJob = restoreOriginalJob;
-  window.openReviewModal = openReviewModal;
-  window.applyReview = applyReview;
-  window.closeReviewModal = closeReviewModal;
+    // 전역 등록
+    window.analyzeJob = analyzeJob;
+    window.restoreOriginalJob = restoreOriginalJob;
+    window.openReviewModal = openReviewModal;
+    window.applyReview = applyReview;
+    window.closeReviewModal = closeReviewModal;
 </script>
 
 </body>
