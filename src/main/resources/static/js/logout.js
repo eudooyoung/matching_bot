@@ -17,3 +17,5 @@ async function logout() {
     localStorage.removeItem("refreshToken");
     window.location.href = "/"; // 홈으로 이동
 }
+
+window.logout= logout;

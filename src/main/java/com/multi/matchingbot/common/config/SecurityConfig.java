@@ -24,7 +24,7 @@ import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
-@EnableMethodSecurity
+@EnableMethodSecurity(prePostEnabled = true) //형찬추가
 public class SecurityConfig {
 
     private final CorsConfigurationSource corsConfigurationSource;

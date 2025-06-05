@@ -54,6 +54,7 @@ security:
       - /community/delete/**
       - /community/**
     company-paths:
+      - /resumes/**
       - /company/**
       - /job/**
       - /api/occupations/**
