@@ -112,39 +112,17 @@
                         jobMarkers.push(jobMarker);
 
                         const content = `
-  <div style="
-      font-family: 'Arial', sans-serif;
-      font-size: 13px;
-      line-height: 1.5;
-      padding: 10px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      background-color: #ffffff;
-      width: 230px;
-  ">
-    <div style="margin-bottom: 6px;">
-      <strong style="font-size: 14px; color: #103254;">회사명:</strong>
-      <span style="font-weight: 600;">${job.companyName || "미정"}</span>
-    </div>
-    <div><strong>직무:</strong> ${job.title}</div>
-    <div><strong>언어:</strong> ${job.requiredSkills || "정보 없음"}</div>
-    <div><strong>연봉:</strong> ${job.salary || "협의"}</div>
-    <button onclick="window.location.href='/job/${job.id}'"
-        style="
-          margin-top: 10px;
-          padding: 6px 10px;
-          font-size: 13px;
-          background-color: #103254;
-          color: #fff;
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;
-        ">
-      상세보기
-    </button>
-  </div>
-`;
-
+              <div style="padding:5px; font-size:14px;">
+                <strong>회사명: ${job.companyName || "미정"}</strong><br/>
+                직무: ${job.title}<br/>
+                언어: ${job.requiredSkills || "정보 없음"}<br/>
+                연봉: ${job.salary || "협의"}<br/>
+                <button onclick="window.location.href='/jobs/${job.id}'"
+                        style="margin-top:5px; padding:3px 6px; font-size:13px;">
+                  상세보기
+                </button>
+              </div>
+            `;
                         const infowindow = new kakao.maps.InfoWindow({ content });
                         kakao.maps.event.addListener(jobMarker, 'click', () => {
                             if (currentInfowindow) currentInfowindow.close();
