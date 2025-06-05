@@ -1,27 +1,33 @@
-package com.multi.matchingbot.chatbot;
+package com.multi.matchingbot.chatbot.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.TemplateEngine;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class ChatbotReportService {
 
+    /*@Autowired
     @Qualifier("evaluationChatClient")
-    private final ChatClient evaluationClient;
+    private ChatClient evaluationClient;
 
-    private final TemplateEngine templateEngine;
+    private final ObjectMapper objectMapper;*/
+
+    private final ChatClient evaluationClient;
+    private final ObjectMapper objectMapper;
+
+    public ChatbotReportService(@Qualifier("evaluationChatClient") ChatClient evaluationClient, ObjectMapper objectMapper) {
+        this.evaluationClient = evaluationClient;
+        this.objectMapper = objectMapper;
+    }
 
     // text 생성
     private static final String TEMPLATE = """
@@ -118,107 +124,12 @@ public class ChatbotReportService {
             }
 
             // json -> map parsing
-            ObjectMapper mapper = new ObjectMapper();
-            return mapper.readValue(raw, new TypeReference<>() {
+//            ObjectMapper mapper = new ObjectMapper();
+            return objectMapper.readValue(raw, new TypeReference<>() {
             });
         } catch (Exception e) {
             log.error("!! AI 리포트 생성 실패: {}", e.getMessage(), e);
             return new HashMap<>();
         }
     }
-
-
-    // 리팩토링 완료
-   /* // 이미지 변환
-    public File convertReportToImage(Map<String, Object> reportData, String companyId) throws Exception {
-        // html 렌더링
-        Context context = new Context();
-        context.setVariables(reportData);
-        String html = templateEngine.process("chatbot/evaluation-report", context);
-
-        // html -> pdf
-        ByteArrayOutputStream pdfOutPut = new ByteArrayOutputStream();
-        PdfRendererBuilder builder = new PdfRendererBuilder();
-        File fontFile = new File(getClass().getClassLoader().getResource("fonts/NanumGothic.ttf").toURI());
-        System.out.println("✅ 폰트 파일 존재? " + fontFile.exists());
-        System.out.println("✅ 경로: " + fontFile.getAbsolutePath());
-        builder.useFont(fontFile, "NanumGothic");
-        builder.useFastMode();
-        builder.withHtmlContent(html, null);
-        builder.toStream(pdfOutPut);
-        builder.run();
-
-        // pdf -> image
-        BufferedImage image;
-        try (PDDocument document = PDDocument.load(new ByteArrayInputStream(pdfOutPut.toByteArray()))) {
-            PDFRenderer renderer = new PDFRenderer(document);
-            BufferedImage fullImage = renderer.renderImageWithDPI(0, 200);  // 화질 제어
-            log.info("PDF 페이지 높이: {}px", fullImage.getHeight());
-            log.info("PDF 페이지 너비: {}px", fullImage.getWidth());
-
-            // ✅ 위쪽, 아래쪽 잘라내기
-            int cropTop = 60;
-            int cropBottom = 100;
-            int croppedHeight = fullImage.getHeight() - cropTop - cropBottom;
-
-            image = fullImage.getSubimage(0, cropTop, fullImage.getWidth(), croppedHeight);
-//            image = fullImage;
-        }
-
-        // 이미지 저장
-        String relativePath = "/upload/report/";
-        String baseName = "report-" + companyId;
-        String uuid = UUID.randomUUID().toString().substring(0, 8);
-        String extension = ".png";
-
-        String originalName = baseName + extension;
-        String systemName = baseName + "-" + uuid + extension;
-
-        String basePath = new File("src/main/resources/static" + relativePath).getAbsolutePath();
-        new File(basePath).mkdirs();
-
-        File output = new File(basePath, systemName);
-        ImageIO.write(image, "png", output);
-        log.info("이미지 생성 성공");
-        return output;
-    }*/
-
-    /*public File generateFullReportImage(CompanyRegisterDto dto, Long companyId) {
-        try {
-            Map<String, Object> reportData = ReportDataBuilder.fromCompany(dto);
-
-            // 리포트 생성
-            String aiResponse = generateReport(reportData);
-
-            // 응답 유효성 검사
-            String raw = aiResponse != null ? aiResponse.trim() : null;
-            if (raw == null || raw.isBlank()) {
-                log.warn("!! AI 응답 비어있음");
-                return null;
-            }
-
-            if (raw.startsWith("```")) {
-                int start = raw.indexOf("{");
-                int end = raw.lastIndexOf("}");
-                if (start != -1 && end != -1) {
-                    raw = raw.substring(start, end + 1);
-                } else {
-                    log.warn("!! Ai응답 Json 형식 오류");
-                    return null;
-                }
-            }
-
-            // json -> map parsing
-            ObjectMapper objectMapper = new ObjectMapper();
-            Map<String, Object> parsed = objectMapper.readValue(raw, new TypeReference<>() {
-            });
-            reportData.putAll(parsed);
-            return convertReportToImage(reportData, String.valueOf(companyId));
-        } catch (Exception e) {
-            System.err.println("AI 평가 이미지 생성 실패: " + e.getMessage());
-            return null;
-        }
-    }*/
-
-
 }

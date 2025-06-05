@@ -103,12 +103,14 @@
         <div id="tab-report" class="tab-content active">
             <div class="report-box">
                 <div class="report-image-wrapper">
-                    <img id="summaryImage"
-                         th:attr="data-company-id=${companyId}"
-                         src="/img/loading.jpg"
-                         alt="기업 평가 요약"
-                         loading="lazy"
-                         class="report-image"/>
+                    <a th:href="@{/attached/company/{id}(id=${companyId})}">
+                        <img id="summaryImage"
+                             th:attr="data-company-id=${companyId}"
+                             src="/img/loading.jpg"
+                             alt="기업 평가 요약"
+                             loading="lazy"
+                             class="report-image"/>
+                    </a>
                 </div>
             </div>
         </div>

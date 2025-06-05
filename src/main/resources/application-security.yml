@@ -44,6 +44,7 @@ security:
       - /v3/api-docs
       - /v3/api-docs/**
       - /upload/**
+      - /attached/company/**
     authenticated-paths:      #authenticated
       - /api/**
     member-paths:
