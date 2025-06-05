@@ -1,0 +1,63 @@
+.modal {
+  position: fixed;
+  z-index: 10000;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 24px 32px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  text-align: center;
+  max-width: 360px;
+  width: 90%;
+}
+
+.modal-buttons {
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.modal-buttons button {
+  width: 130px;                  /* ✅ 너비 고정 */
+  height: 40px;                  /* ✅ 높이 고정 */
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+/*.modal-buttons button:hover {*/
+/*  background-color: #3367d6;*/
+/*}*/
+
+@keyframes fadeIn {
+  from { opacity: 0 }
+  to { opacity: 1 }
+}
+
+#refreshReportBtn {
+  background-color: #b2fd83;
+  color: #103254;
+}
+
+#cancelBtn {
+  background-color: #888;
+}
+
+#submitWithoutAiBtn {
+  background-color: #103254;
+}
+

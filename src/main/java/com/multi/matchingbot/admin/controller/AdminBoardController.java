@@ -2,6 +2,7 @@ package com.multi.matchingbot.admin.controller;
 
 import com.multi.matchingbot.admin.domain.*;
 import com.multi.matchingbot.admin.service.AdminBoardService;
+import com.multi.matchingbot.company.domain.Company;
 import com.multi.matchingbot.company.service.CompanyService;
 import com.multi.matchingbot.job.domain.dto.JobDto;
 import com.multi.matchingbot.job.service.JobService;
@@ -50,7 +51,6 @@ public class AdminBoardController {
     }
 
     /**
-     *
      * @param condition
      * @param model
      * @return
@@ -70,6 +70,10 @@ public class AdminBoardController {
     @GetMapping("/companies/{companyId}")
     public String adminCompanyHome(@PathVariable(name = "companyId") Long companyId, Model model) {
         model.addAttribute("companyId", companyId);
+
+        Company company = companyService.findById(companyId);
+        model.addAttribute("company", company);
+
         Page<JobDto> jobPage = jobService.getByCompanyIdPaged(companyId, PageRequest.of(0, 20));
         model.addAttribute("jobPage", jobPage);
         return "company/index";
@@ -82,7 +86,6 @@ public class AdminBoardController {
     }
 
     /**
-     *
      * @param condition 검색조건
      * @param model
      * @return
@@ -100,7 +103,6 @@ public class AdminBoardController {
     }
 
     /**
-     *
      * @param resumeId
      * @param model
      * @return

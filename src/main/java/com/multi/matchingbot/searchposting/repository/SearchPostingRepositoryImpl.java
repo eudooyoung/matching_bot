@@ -51,8 +51,12 @@ public class SearchPostingRepositoryImpl implements SearchPostingRepository {
 
 
     @Override
-    public List<Job> searchByFilters(String jobGroup, String jobType, String jobRole, String regionMain, String regionSub) {
-        String jpql = "SELECT m FROM Job m JOIN m.occupation o WHERE 1=1";
+    public List<Job> searchByFilters(String jobGroup, String jobType, String jobRole, String regionMain, String regionSub,String companyName) {
+        String jpql = "SELECT m FROM Job m " +
+                "JOIN m.occupation o " +
+                "JOIN m.company c " +
+                "WHERE 1=1";
+
 
 
 //        if (keyword != null && !keyword.isEmpty()) {
@@ -82,6 +86,10 @@ public class SearchPostingRepositoryImpl implements SearchPostingRepository {
         if (regionSub != null && !regionSub.isEmpty() && !regionSub.equals("전지역")) {
             jpql += " AND m.address LIKE CONCAT('%', :regionSub, '%')";
         }
+        if (companyName != null && !companyName.isEmpty()) {
+            jpql += " AND c.name LIKE CONCAT('%', :companyName, '%')";
+
+        }
 
 
         TypedQuery<Job> query = em.createQuery(jpql, Job.class);
@@ -108,6 +116,8 @@ public class SearchPostingRepositoryImpl implements SearchPostingRepository {
         if (jobRole != null && !jobRole.isEmpty()) {
             query.setParameter("jobRole", jobRole);
         }
+        if (companyName != null && !companyName.isEmpty()) query.setParameter("companyName", companyName);
+
 
         return query.getResultList();
     }

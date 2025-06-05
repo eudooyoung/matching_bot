@@ -127,13 +127,19 @@
             </div>
         </div>
 
-        <label>채용 시작일</label>
-        <input type="date" th:field="*{startDate}" required />
-        <div th:if="${#fields.hasErrors('startDate')}" class="error-message" th:errors="*{startDate}"></div>
-
-        <label>채용 마감일</label>
-        <input type="date" th:field="*{endDate}" required />
-        <div th:if="${#fields.hasErrors('endDate')}" class="error-message" th:errors="*{endDate}"></div>
+        <div class="form-group">
+            <label style="display: block; font-weight: bold;">채용 기간</label>
+            <div style="display: flex; gap: 20px;">
+                <div style="flex: 1;">
+                    <input type="date" onclick="this.showPicker()" th:field="*{startDate}" class="form-control" style="width: 100%; cursor: pointer;" required />
+                    <div th:if="${#fields.hasErrors('startDate')}" class="error-message" th:errors="*{startDate}"></div>
+                </div>
+                <div style="flex: 1;">
+                    <input type="date" onclick="this.showPicker()" th:field="*{endDate}" class="form-control" style="width: 100%; cursor: pointer;" required />
+                    <div th:if="${#fields.hasErrors('endDate')}" class="error-message" th:errors="*{endDate}"></div>
+                </div>
+            </div>
+        </div>
 
         <label>지원 이메일</label>
         <input type="email" th:field="*{enrollEmail}" required />

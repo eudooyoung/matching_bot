@@ -90,6 +90,29 @@
         }
     }
 
+    // 로그인 처리 공통 함수 형찬
+    function handleLogin(emailId, passwordId, errorMsgId, role) {
+        const email = document.getElementById(emailId).value;
+        const password = document.getElementById(passwordId).value;
+        const errorBox = document.getElementById(errorMsgId);
+
+        fetch("/api/v1/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password, role })
+        })
+            .then(res => {
+                if (!res.ok) throw new Error("이메일 또는 비밀번호가 올바르지 않습니다.");
+                return res.text();  // 응답으로 받은 redirect URL
+            })
+            .then(redirectPath => {
+                window.location.href = redirectPath;  // ✅ 이동
+            })
+            .catch(err => {
+                errorBox.innerText = err.message;
+            });
+    }
+
     document.getElementById("member-form").addEventListener("submit", function (e) {
         e.preventDefault();
         handleLogin("email", "password", "error-msg", "MEMBER");
@@ -102,6 +125,6 @@
 </script>
 
 <script th:src="@{/js/dropdown.js}"></script>
-<script th:src="@{/js/auth/loginHandler.js}"></script>
+
 </body>
 </html>

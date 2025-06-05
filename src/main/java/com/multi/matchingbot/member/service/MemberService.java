@@ -64,8 +64,6 @@ public class MemberService {
                 .birth(LocalDate.of(dto.getYear(), dto.getMonth(), dto.getDay()))
                 .gender(Gender.valueOf(dto.getGender())) // enum 처리
                 .phone(dto.getPhone1() + "-" + dto.getPhone2() + "-" + dto.getPhone3())
-//                .agreeService(dto.isTermsRequired() ? Yn.Y : Yn.N)
-//                .agreePrivacy(dto.isPrivacyRequired() ? Yn.Y : Yn.N)
                 .agreeService(Yn.Y)
                 .agreePrivacy(Yn.Y)
                 .agreeLocation(dto.isLocationRequired() ? Yn.Y : Yn.N)

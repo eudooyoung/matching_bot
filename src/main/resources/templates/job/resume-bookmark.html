@@ -53,7 +53,7 @@
             <td th:text="${resume.memberName}">작성자</td>
             <td th:text="${resume.title}">이력서 제목</td>
             <td th:text="${#temporals.format(resume.createdAt, 'yyyy-MM-dd')}">작성일</td>
-            <td><a th:href="@{/resume/detail/{id}(id=${resume.id})}">상세보기</a></td>
+            <td><a th:href="@{/templates/resume/detail/{id}(id=${resume.id})}">상세보기</a></td>
             <td>
                 <button class="bookmark-button"
                         th:data-resume-id="${resume.id}"

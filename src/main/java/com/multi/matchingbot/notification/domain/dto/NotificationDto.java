@@ -1,5 +1,6 @@
 package com.multi.matchingbot.notification.domain.dto;
 
+import com.multi.matchingbot.notification.domain.enums.NotificationStatus;
 import lombok.*;
 
 @Getter
@@ -13,6 +14,7 @@ public class NotificationDto {
     private Long memberId;
     private String title;
     private String content;
-    private String status; // "UNREAD" 또는 "READ"
+    private String companyName;
+    private NotificationStatus status;
 
 }
