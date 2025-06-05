@@ -82,11 +82,8 @@
         </section>
 
         <!-- ✅ 채용공고 목록 -->
-        <!-- 개인 회원(MEMBER) 또는 비회원(null)일 때만 채용공고 표시 -->
-        <!-- ✅ 뷰에서는 이렇게 -->
         <div class="row" th:if="${role == null or role == 'MEMBER'}">
-
-        <div class="col-md-4" th:each="job : ${jobList}">
+            <div class="col-md-4" th:each="job : ${jobList}">
                 <div class="card h-100">
                     <div class="card-body">
                         <h5 class="card-title" th:text="${job.title}">채용 제목</h5>
@@ -98,7 +95,6 @@
                 </div>
             </div>
         </div>
-
 
         <!-- ✅ 페이징 처리 -->
         <nav class="mt-4">
@@ -132,12 +128,14 @@
 
         const searchInput = document.getElementById("search-input");
         const filterSection = document.getElementById("search-filters");
-        searchInput.addEventListener("focus", () => {
-            filterSection.style.display = "block";
-        });
+        if (searchInput && filterSection) {
+            searchInput.addEventListener("focus", () => {
+                filterSection.style.display = "block";
+            });
+        }
 
         document.getElementById("search-button").addEventListener("click", () => {
-            const companyName = document.getElementById("search-input").value; //회사이름검색
+            const companyName = document.getElementById("search-input").value;
             const jobGroup = document.getElementById("filter-job-group").value;
             const jobType = document.getElementById("filter-job-type").value;
             const jobRole = document.getElementById("filter-job-role").value;
@@ -173,5 +171,3 @@
 
 </body>
 </html>
-
-

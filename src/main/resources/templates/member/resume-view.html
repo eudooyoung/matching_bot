@@ -4,8 +4,69 @@
     <meta charset="UTF-8">
     <title>이력서 보기</title>
     <link rel="stylesheet" th:href="@{/css/layout.css}" />
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .resume-box {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .resume-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .section {
+            margin-bottom: 25px;
+        }
+
+        .section h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #103254;
+        }
+
+        .section p,
+        .section pre {
+            font-size: 1rem;
+            color: #333;
+            white-space: pre-wrap;
+        }
+
+        .nav-button {
+            padding: 10px 25px;
+            background-color: #103254;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .nav-button:hover {
+            background-color: #0c2c48;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+    </style>
 </head>
 <body>
+
+<!-- ✅ Header -->
 <div th:replace="fragments/header :: header(role=${role})"></div>
 
 <main class="main-content">
@@ -17,52 +78,42 @@
 
             <div class="section">
                 <h4>이름</h4>
-                <p th:text="${resume.member.name}">홍길동</p>
+                <p th:text="${resume.memberName}">홍길동</p>
             </div>
 
             <div class="section">
-                <h4>이메일</h4>
-                <p th:text="${resume.member.email}">email@example.com</p>
+                <h4>핵심 기술</h4>
+                <pre th:text="${resume.skillKeywords}">핵심 기술</pre>
             </div>
 
             <div class="section">
-                <h4>생년월일</h4>
-                <p th:text="${resume.member.birth}">1999-01-01</p>
-            </div>
-
-            <div class="section">
-                <h4>주소</h4>
-                <p th:text="${resume.member.address}">서울시 강남구</p>
-            </div>
-
-            <div class="section">
-                <h4>관심 직무</h4>
-                <p>
-                    <span th:if="${resume.occupation != null}" th:text="'1차: ' + ${resume.occupation.jobGroupName}">직군</span><br/>
-                    <span th:if="${resume.occupation != null}" th:text="'2차: ' + ${resume.occupation.jobTypeName}">직종</span><br/>
-                    <span th:if="${resume.occupation != null}" th:text="'3차: ' + ${resume.occupation.jobRoleName}">직무</span>
-                </p>
-            </div>
-
-            <div class="section">
-                <h4>자기소개서 - 기술 중심</h4>
+                <h4>기술 중심</h4>
                 <pre th:text="${resume.skillAnswer}">기술 기반 자기소개 내용</pre>
             </div>
 
             <div class="section">
-                <h4>자기소개서 - 인성 중심</h4>
+                <h4>인성 중심</h4>
                 <pre th:text="${resume.traitAnswer}">인성 기반 자기소개 내용</pre>
             </div>
 
-            <div style="margin-top: 30px; text-align: center;">
-                <button onclick="location.href='/member'" class="nav-button">목록으로</button>
+            <div class="section">
+                <h4>작성 날짜</h4>
+                <pre th:text="${resume.createdAt}">작성 날짜</pre>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button onclick="location.href='/resumes'" class="nav-button">목록으로</button>
             </div>
         </div>
     </div>
 </main>
 
+<!-- ✅ Footer -->
 <div th:replace="fragments/footer :: footer"></div>
+
+<!-- ✅ JS -->
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>
+
 </body>
 </html>
