@@ -41,6 +41,57 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return userDetails;
     }
 
+//두영소스
+//    @Override
+//    @Transactional
+//    public ResponseEntity<?> generateLoginResponse(UserDetails userDetails) {
+//
+//        log.warn("AuthenticationService - generateToken 호출됨");
+//
+//        MBotUserDetails mBotUserDetails = (MBotUserDetails) userDetails;
+//        String email = mBotUserDetails.getUsername();
+//        Role role = mBotUserDetails.getRole();
+//        String accessToken = tokenProvider.generateAccessToken(userDetails);
+//        String refreshToken = tokenProvider.generateRefreshToken(userDetails);
+//        LocalDateTime issuedAt = tokenProvider.getRefreshTokenIssuedDate();
+//        LocalDateTime expiredAt = tokenProvider.getRefreshTokenExpireDate();
+//
+//
+//        // refresh token 저장
+//        RefreshToken tokenEntity = refreshTokenRepository.findByEmailAndRole(email, role)
+//                .map(existing -> {
+//                    existing.update(refreshToken, issuedAt, expiredAt);
+//                    return existing;
+//                })
+//                .orElse(new RefreshToken(null, email, role, refreshToken, expiredAt, issuedAt));
+//
+//        refreshTokenRepository.save(tokenEntity);
+//
+//        log.warn("Access, Refresh 토큰 생성 성공");
+//
+//        //쿠키 생성
+//        ResponseCookie accessCookie = ResponseCookie.from("accessToken", accessToken)
+//                .httpOnly(true)
+//                .secure(false) // !!!!배포시 true로 전환!!!!!
+//                .path("/")
+//                .maxAge(tokenProvider.getAccessTokenExpireTime())
+//                .build();
+//
+//        ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", refreshToken)
+//                .httpOnly(true)
+//                .secure(false) // !!!!배포시 true로 전환!!!!!
+//                .path("/")
+//                .maxAge(tokenProvider.getRefreshTokenExpireTime())
+//                .build();
+//
+//        log.warn("쿠키 생성 완료");
+//
+//        //쿠키 포함 응답 반환
+//        return ResponseEntity.ok()
+//                .header("Set-Cookie", accessCookie.toString())
+//                .header("Set-Cookie", refreshCookie.toString())
+//                .body("OK"); // 또는 return ResponseEntity.noContent().build();
+//    }
 
     @Override
     @Transactional
@@ -56,7 +107,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         LocalDateTime issuedAt = tokenProvider.getRefreshTokenIssuedDate();
         LocalDateTime expiredAt = tokenProvider.getRefreshTokenExpireDate();
 
-
         // refresh token 저장
         RefreshToken tokenEntity = refreshTokenRepository.findByEmailAndRole(email, role)
                 .map(existing -> {
@@ -64,34 +114,41 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     return existing;
                 })
                 .orElse(new RefreshToken(null, email, role, refreshToken, expiredAt, issuedAt));
-
         refreshTokenRepository.save(tokenEntity);
 
         log.warn("Access, Refresh 토큰 생성 성공");
 
-        //쿠키 생성
+        // 쿠키 생성
         ResponseCookie accessCookie = ResponseCookie.from("accessToken", accessToken)
                 .httpOnly(true)
-                .secure(false) // !!!!배포시 true로 전환!!!!!
+                .secure(false) // 🚨 배포 시 true로 전환
                 .path("/")
                 .maxAge(tokenProvider.getAccessTokenExpireTime())
                 .build();
 
         ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", refreshToken)
                 .httpOnly(true)
-                .secure(false) // !!!!배포시 true로 전환!!!!!
+                .secure(false)
                 .path("/")
                 .maxAge(tokenProvider.getRefreshTokenExpireTime())
                 .build();
 
         log.warn("쿠키 생성 완료");
 
-        //쿠키 포함 응답 반환
+        // ✅ role 기반 redirect 경로 설정
+        String redirectUrl = switch (role) {
+            case COMPANY -> "/resumes";
+            case MEMBER -> "/main";
+            case ADMIN -> "/admin";
+            default -> "/main";
+        };
+
         return ResponseEntity.ok()
                 .header("Set-Cookie", accessCookie.toString())
                 .header("Set-Cookie", refreshCookie.toString())
-                .body("OK"); // 또는 return ResponseEntity.noContent().build();
+                .body(redirectUrl); // ✅ 프론트에서 window.location.href 로 사용
     }
+
 
     @Transactional
     @Override

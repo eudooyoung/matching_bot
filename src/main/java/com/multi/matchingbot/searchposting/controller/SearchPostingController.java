@@ -20,9 +20,10 @@ public class SearchPostingController {
             @RequestParam(name = "jobType", required = false) String jobType,
             @RequestParam(name = "jobRole", required = false) String jobRole,
             @RequestParam(name = "regionMain", required = false) String regionMain,
-            @RequestParam(name = "regionSub", required = false) String regionSub
+            @RequestParam(name = "regionSub", required = false) String regionSub,
+            @RequestParam(name = "companyName", required = false) String companyName
     ) {
-        return searchPostingService.searchJobs(jobGroup, jobType, jobRole, regionMain, regionSub);
+        return searchPostingService.searchJobs(companyName,jobGroup, jobType, jobRole, regionMain, regionSub);
     }
 
 }

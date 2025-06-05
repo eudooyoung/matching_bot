@@ -81,4 +81,11 @@ public class ResumeService {
         resumeRepository.save(resume);
     }*/
 
+
+    public Page<ResumeDto> getPageResumes(Pageable pageable) {
+        Page<Resume> resumePage = resumeRepository.findAll(pageable);
+        return resumePage.map(ResumeDto::fromEntity); // 여기가 실제 매핑 핵심
+    }
+
+
 }
