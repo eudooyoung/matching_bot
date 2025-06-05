@@ -42,6 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // 포괄 경로
             "/auth/**",
             "/swagger-ui/**",
+            "img/**",
             "/js/**",
             "/css/**",
             "/images/**",

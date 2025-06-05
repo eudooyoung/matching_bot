@@ -73,20 +73,27 @@
                 <input type="text" th:field="*{title}" placeholder="이력서 제목"/>
             </div>
 
-            <!-- 관심 직무 -->
-            <div class="form-group">
-                <label>직군</label>
-                <input type="text" th:value="${resume.occupation?.jobGroupName}" readonly />
-            </div>
+<!--            &lt;!&ndash; 관심 직무 &ndash;&gt;-->
+<!--            <div class="form-group">-->
+<!--                <label>직군</label>-->
+<!--                <input type="text" th:value="${resume.occupation?.jobGroupName}" readonly />-->
+<!--            </div>-->
+
+<!--            <div class="form-group">-->
+<!--                <label>직종</label>-->
+<!--                <input type="text" th:value="${resume.occupation?.jobTypeName}" readonly />-->
+<!--            </div>-->
+
+<!--            <div class="form-group">-->
+<!--                <label>직무</label>-->
+<!--                <input type="text" th:value="${resume.occupation?.jobRoleName}" readonly />-->
+<!--            </div>-->
 
             <div class="form-group">
-                <label>직종</label>
-                <input type="text" th:value="${resume.occupation?.jobTypeName}" readonly />
-            </div>
-
-            <div class="form-group">
-                <label>직무</label>
-                <input type="text" th:value="${resume.occupation?.jobRoleName}" readonly />
+                <label>관심 직무</label>
+                <input type="hidden" th:field="*{occupation.id}" id="occupationId" />
+                <div id="react-job-category-selector"></div>
+                <div th:if="${#fields.hasErrors('occupation.id')}" class="error-message" th:errors="*{occupation.id}"></div>
             </div>
 
             <!-- 자기소개서: 기술 중심 -->
@@ -111,6 +118,25 @@
 </main>
 
 <div th:replace="fragments/footer :: footer"></div>
+
+<script type="module">
+    import React from "https://cdn.jsdelivr.net/npm/react@18.2.0/+esm";
+    import { createRoot } from "https://cdn.jsdelivr.net/npm/react-dom@18.2.0/client/+esm";
+
+    window.React = React;
+    window.createRoot = createRoot;
+
+    document.addEventListener("DOMContentLoaded", () => {
+        import("/js/JobCategorySelector.js").then((mod) => {
+            const container = document.getElementById("react-job-category-selector");
+            if (container) {
+                const root = createRoot(container);
+                root.render(React.createElement(mod.default));
+            }
+        });
+    });
+</script>
+
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>
 </body>

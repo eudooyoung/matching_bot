@@ -24,12 +24,12 @@ public class MemberRegisterDto {
     @NotBlank(message = "주소를 입력하세요.")
     private String address;
 
-    @NotBlank(message = "생년을 입력하세요.")
-    private int year;
-    @NotBlank(message = "생월을 입력하세요.")
-    private int month;
-    @NotBlank(message = "생일을 입력하세요.")
-    private int day;
+    @NotNull(message = "생년을 입력하세요.")
+    private Integer  year;
+    @NotNull(message = "생월을 입력하세요.")
+    private Integer  month;
+    @NotNull(message = "생일을 입력하세요.")
+    private Integer  day;
 
     @NotBlank(message = "성별을 선택하세요.")
     private String gender;
@@ -47,6 +47,16 @@ public class MemberRegisterDto {
     private Yn agreeLocation;
     private Yn alertBookmark;
     private Yn alertResume;
+
+    public boolean isLocationRequired() {
+        return agreeLocation == Yn.Y || agreeLocation == Yn.N;
+    }
+
+    public boolean isMarketingEmail() {
+        return agreeMarketing == Yn.Y || agreeMarketing == Yn.N;
+    }
+
+
 
     /*public String getAddress() {
         return address;
