@@ -1,50 +1,55 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <title>공고 등록</title>
-    <link rel="stylesheet" th:href="@{/css/company-job.css}" />
-    <link rel="stylesheet" th:href="@{/css/job-new.css}" />
+    <link rel="stylesheet" th:href="@{/css/company-job.css}"/>
+    <link rel="stylesheet" th:href="@{/css/job-new.css}"/>
+    <link rel="stylesheet" th:href="@{/css/job-review-modal.css}"/>
+    <link rel="stylesheet" th:href="@{/css/spinner-chatbot.css}"/>
 </head>
 <body>
 
 <div th:replace="~{fragments/header :: header(role=${role})}"></div>
 
+<div th:replace="~{chatbot/job-review-modal :: jobReviewModal}"></div>
+
+
 <div class="container">
     <h2>채용 공고 등록</h2>
 
     <form th:action="@{/job/new}" method="post" th:object="${job}">
-        <input type="hidden" name="skillKeywordsConcat" id="skillKeywordsConcat" />
-        <input type="hidden" name="traitKeywordsConcat" id="traitKeywordsConcat" />
+        <input type="hidden" name="skillKeywordsConcat" id="skillKeywordsConcat"/>
+        <input type="hidden" name="traitKeywordsConcat" id="traitKeywordsConcat"/>
 
         <div class="form-group">
             <label>관심 직무</label>
-            <input type="hidden" th:field="*{occupationId}" id="occupationId" />
+            <input type="hidden" th:field="*{occupationId}" id="occupationId"/>
             <div id="react-job-category-selector"></div>
             <div th:if="${#fields.hasErrors('occupationId')}" class="error-message" th:errors="*{occupationId}"></div>
         </div>
 
         <div class="form-group">
             <label>제목</label>
-            <input type="text" th:field="*{title}" required />
+            <input type="text" th:field="*{title}" required/>
             <div th:if="${#fields.hasErrors('title')}" class="error-message" th:errors="*{title}"></div>
         </div>
 
         <div class="form-group">
             <label>설명</label>
-            <textarea th:field="*{description}" rows="5" required ></textarea>
+            <textarea th:field="*{description}" rows="5" required></textarea>
             <div th:if="${#fields.hasErrors('description')}" class="error-message" th:errors="*{description}"></div>
         </div>
 
         <div class="form-group">
             <label>주소</label>
-            <input type="text" th:field="*{address}" required />
+            <input type="text" th:field="*{address}" required/>
             <div th:if="${#fields.hasErrors('address')}" class="error-message" th:errors="*{address}"></div>
         </div>
 
         <div class="form-group">
             <label>주요 업무</label>
-            <textarea th:field="*{mainTask}" rows="2" required ></textarea>
+            <textarea th:field="*{mainTask}" rows="2" required></textarea>
             <div th:if="${#fields.hasErrors('mainTask')}" class="error-message" th:errors="*{mainTask}"></div>
         </div>
 
@@ -56,7 +61,8 @@
                     👇키워드 추출하기👇
                 </button>
             </div>
-            <textarea id="requiredSkills" name="requiredSkills" class="form-control" rows="3" th:field="*{requiredSkills}"></textarea>
+            <textarea id="requiredSkills" name="requiredSkills" class="form-control" rows="3"
+                      th:field="*{requiredSkills}"></textarea>
         </div>
 
         <!-- 필요 성향 -->
@@ -67,14 +73,15 @@
                     👇키워드 추출하기👇
                 </button>
             </div>
-            <textarea id="requiredTraits" name="requiredTraits" class="form-control" rows="3" th:field="*{requiredTraits}"></textarea>
+            <textarea id="requiredTraits" name="requiredTraits" class="form-control" rows="3"
+                      th:field="*{requiredTraits}"></textarea>
         </div>
 
         <div>
             <label><strong>기술 키워드</strong></label>
             <div id="skill-keyword-wrapper" class="keyword-wrapper">
                 <div class="keyword-input">
-                    <input type="text" name="skill_keywords[]" placeholder="기술 키워드" />
+                    <input type="text" name="skill_keywords[]" placeholder="기술 키워드"/>
                     <button type="button" onclick="addSkillKeyword()">+</button>
                 </div>
             </div>
@@ -84,25 +91,27 @@
             <label><strong>성향 키워드</strong></label>
             <div id="trait-keyword-wrapper" class="keyword-wrapper">
                 <div class="keyword-input">
-                    <input type="text" name="trait_keywords[]" placeholder="성향 키워드" />
+                    <input type="text" name="trait_keywords[]" placeholder="성향 키워드"/>
                     <button type="button" onclick="addTraitKeyword()">+</button>
                 </div>
             </div>
             <br>
         </div>
 
-        <input type="hidden" th:field="*{latitude}" value="37.5665" />
-        <input type="hidden" th:field="*{longitude}" value="126.9780" />
+        <input type="hidden" th:field="*{latitude}" value="37.5665"/>
+        <input type="hidden" th:field="*{longitude}" value="126.9780"/>
 
         <div class="form-group">
             <label style="display: block; font-weight: bold;">채용 기간</label>
             <div style="display: flex; gap: 20px;">
                 <div style="flex: 1;">
-                    <input type="date" onclick="this.showPicker()" th:field="*{startDate}" class="form-control" style="width: 100%; cursor: pointer;" required />
+                    <input type="date" onclick="this.showPicker()" th:field="*{startDate}" class="form-control"
+                           style="width: 100%; cursor: pointer;" required/>
                     <div th:if="${#fields.hasErrors('startDate')}" class="error-message" th:errors="*{startDate}"></div>
                 </div>
                 <div style="flex: 1;">
-                    <input type="date" onclick="this.showPicker()" th:field="*{endDate}" class="form-control" style="width: 100%; cursor: pointer;" required />
+                    <input type="date" onclick="this.showPicker()" th:field="*{endDate}" class="form-control"
+                           style="width: 100%; cursor: pointer;" required/>
                     <div th:if="${#fields.hasErrors('endDate')}" class="error-message" th:errors="*{endDate}"></div>
                 </div>
             </div>
@@ -110,7 +119,7 @@
 
         <div class="form-group">
             <label>이메일</label>
-            <input type="email" th:field="*{enrollEmail}" required />
+            <input type="email" th:field="*{enrollEmail}" required/>
             <div th:if="${#fields.hasErrors('enrollEmail')}" class="error-message" th:errors="*{enrollEmail}"></div>
         </div>
 
@@ -119,19 +128,26 @@
             <textarea th:field="*{notice}" rows="2"></textarea>
         </div>
 
-<!--        <div class="form-group">-->
-<!--            <label for="attachment">첨부파일</label>-->
-<!--            <input type="file" id="attachment" name="attachment" class="form-control" />-->
-<!--        </div>-->
-
-        <div class="button-group" style="margin-top: 20px; display: flex; gap: 16px;">
+        <!--<div class="button-group" style="margin-top: 20px; display: flex; gap: 16px;">
             <button type="submit" class="btn btn-primary">등록</button>
             <button type="button" class="btn btn-primary" onclick="location.href='/job/manage-jobs'">등록 취소</button>
             <button type="button" class="btn btn-secondary" onclick="analyzeJob()">AI 공고분석</button>
+        </div>-->
+        <div class="button-group" style="margin-top: 20px; display: flex; gap: 16px;">
+            <button type="submit" class="btn btn-primary">등록</button>
+            <button type="button" class="btn btn-primary" onclick="location.href='/job/manage-jobs'">등록 취소</button>
+            <button type="button" class="btn btn-chatbot" onclick="analyzeJob()">AI 공고분석</button>
+            <button type="button" class="btn btn-outline-secondary" id="restoreBtn" style="display: none;"
+                    onclick="restoreOriginalJob()">되돌리기
+            </button>
         </div>
     </form>
 </div>
 
+<div id="globalLoadingOverlay" class="overlay" style="display: none;">
+    <div class="spinner"></div>
+    <div>AI 제안 불러오는 중...</div>
+</div>
 <div th:replace="~{fragments/footer :: footer}"></div>
 
 <!-- 🔽 하단에 script 위치 (기존 위치와 같게 유지) -->
@@ -141,7 +157,7 @@
 <!-- React + ReactDOM CDN -->
 <script type="module">
     import React from "https://cdn.jsdelivr.net/npm/react@18.2.0/+esm";
-    import { createRoot } from "https://cdn.jsdelivr.net/npm/react-dom@18.2.0/client/+esm";
+    import {createRoot} from "https://cdn.jsdelivr.net/npm/react-dom@18.2.0/client/+esm";
 
     window.React = React;
     window.createRoot = createRoot;
@@ -348,6 +364,18 @@
     });
 </script>
 
+<script th:src="@{/js/auth/fetchWithAuth.js}"></script>
+<script type="module">
+    import {analyzeJob, restoreOriginalJob} from '/js/chatbot/reviewJobLaw.js';
+    import {openReviewModal, applyReview, closeReviewModal} from '/js/chatbot/openReviewModal.js';
+
+    // 전역 등록
+    window.analyzeJob = analyzeJob;
+    window.restoreOriginalJob = restoreOriginalJob;
+    window.openReviewModal = openReviewModal;
+    window.applyReview = applyReview;
+    window.closeReviewModal = closeReviewModal;
+</script>
 
 </body>
 </html>

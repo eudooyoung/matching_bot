@@ -39,13 +39,17 @@ public class ChatbotJobReviewService {
         try {
             String prompt = promptBuilder.build(request);
             String aiResponse = chatClient.prompt().user(prompt).call().content();
-
             String raw = aiResponse != null ? aiResponse.trim() : "";
 
-            if (raw.startsWith("```")) {
-                int start = raw.indexOf("{");
-                int end = raw.lastIndexOf("}");
-                raw = (start != -1 && end != -1) ? raw.substring(start, end + 1) : "{}";
+            // GPT 응답 전처리
+            if (raw.contains("```")) {
+                raw = raw.replaceAll("(?s)```(json)?", "").trim();
+            }
+
+            // 앞에 설명 텍스트 제거
+            int braceIndex = raw.indexOf("{");
+            if (braceIndex > 0) {
+                raw = raw.substring(braceIndex);
             }
 
             return objectMapper.readValue(raw, new TypeReference<>() {

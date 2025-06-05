@@ -12,9 +12,8 @@ import com.multi.matchingbot.job.service.JobService;
 import com.multi.matchingbot.job.service.OccupationService;
 import com.multi.matchingbot.job.service.ResumeBookmarkService;
 import com.multi.matchingbot.member.domain.dtos.ResumeDto;
-import com.multi.matchingbot.notification.service.NotificationService;
-import com.multi.matchingbot.member.domain.entities.Resume;
 import com.multi.matchingbot.member.service.ResumeService;
+import com.multi.matchingbot.notification.service.NotificationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -160,16 +159,16 @@ public class JobController {
         Job job = jobService.findById(id);
         Long postingCompanyId = job.getCompany().getId(); // ✅ 공고 등록 기업 ID
 
-        Resume resume = null;
-        System.out.println("userDetails.getMemberId(): " + userDetails.getMemberId());
-        List<Resume> resumes = resumeService.findByMemberId(userDetails.getMemberId());
-        System.out.println("resumes: " + resumes);
-        if (!resumes.isEmpty()) {
-            resume = resumes.get(0); // 첫 번째 이력서 사용
-        }
+//        Resume resume = null;
+//        System.out.println("userDetails.getMemberId(): " + userDetails.getMemberId());
+//        List<Resume> resumes = resumeService.findByMemberId(userDetails.getMemberId());
+//        System.out.println("resumes: " + resumes);
+//        if (!resumes.isEmpty()) {
+//            resume = resumes.get(0); // 첫 번째 이력서 사용
+//        }
 
         model.addAttribute("job", job);
-        model.addAttribute("resume", resume);
+//        model.addAttribute("resume", resume);
         model.addAttribute("role", role);
         model.addAttribute("companyId", postingCompanyId); // ✅ 수정된 부분
 

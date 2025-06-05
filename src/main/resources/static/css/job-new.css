@@ -208,6 +208,16 @@ body {
     text-align: center;
 }
 
+.btn-chatbot {
+    background-color: #b2fd83 !important;
+    color: #103254 !important;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    text-align: center;
+}
+
 .input-group {
     display: flex;
     gap: 5px;

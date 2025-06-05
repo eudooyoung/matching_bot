@@ -46,9 +46,13 @@
 
 <div class="container">
     <!-- 유사도 비교용 키워드 (Spring에서 렌더링) -->
-    <div id="similarity-data"
+    <!--<div id="similarity-data"
          th:data-job-skill="${job.skillKeywords}"
          th:data-resume-skill="${resume.skillKeywords}">
+    </div>-->
+    <div id="similarity-data"
+         th:data-job-skill="${job.skillKeywords}"
+         th:data-resume-skill="${resume != null ? resume.skillKeywords : ''}">
     </div>
 
     <div style="display: flex; align-items: center; gap: 8px;">
