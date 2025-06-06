@@ -5,6 +5,7 @@
     <title>회원가입 - MatchingBot</title>
     <link rel="stylesheet" th:href="@{/css/register.css}" href="/css/register.css">
     <link rel="stylesheet" th:href="@{/css/layout.css}" href="/css/layout.css">
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 </head>
 
 <body>
@@ -21,10 +22,11 @@
                 <p th:text="${error}">회원가입 중 오류가 발생했습니다.</p>
             </div>
 
-            <form id="userForm" action="/auth/register-member" method="post">
+            <form id="userForm" action="/auth/register-member" th:object="${memberDto}" method="post">
 
                 <label for="email">* 이메일</label>
-                <input type="email" id="email" name="email" placeholder="email@matchingbot.co.kr" required>
+                <input type="email" id="email" th:field="*{email}" name="email" placeholder="email@matchingbot.co.kr"
+                       required>
 
                 <label for="password">* PW</label>
                 <input type="password" id="password" name="password"
@@ -38,54 +40,75 @@
                 <input type="text"
                        id="name"
                        name="name"
+                       th:field="*{name}"
                        placeholder="이름을 입력해주세요"
                        required
                        minlength="2"
                        maxlength="10">
 
-                <!--<label for="address">* 주소</label>
-                <input type="text" id="address" name="address" required maxlength="50">-->
-
-                <label for="address">* 주소</label>
-                <input type="text" id="address" name="address" class="address-input"
-                       placeholder="주소를 입력해주세요" required maxlength="50">
+                <label>* 주소</label>
+                <div class="address-wrapper">
+                    <input type="text" id="addressRegion" th:field="*{addressRegion}" name="addressRegion"
+                           class="address-input"
+                           placeholder="주소를 입력해주세요"
+                           readonly required maxlength="50">
+                    <button type="button" class="address-btn" data-target="addressRegion">주소 찾기</button>
+                    <input type="text" id="addressDetail" th:field="*{addressDetail}" name="addressDetail"
+                           class="address-input"
+                           placeholder="상세 주소 (예: 아파트 동/호수 등)" maxlength="50">
+                </div>
 
                 <!-- 생년월일 / 성별 -->
                 <div class="section-title">* 생년월일 / 성별</div>
 
                 <div class="birth-gender">
-                    <select name="year" id="year" required>
+                    <select th:field="*{year}" id="year" required>
                         <option value="">출생 연도</option>
+                        <option th:each="y : ${#numbers.sequence(1900, 2030)}"
+                                th:value="${y}" th:text="${y + '년'}"></option>
                     </select>
-                    <select name="month" id="month" required>
+
+                    <select th:field="*{month}" id="month" required>
                         <option value="">월</option>
+                        <option th:each="m : ${#numbers.sequence(1, 12)}"
+                                th:value="${m}" th:text="${m + '월'}"></option>
                     </select>
-                    <select name="day" id="day" required>
+
+                    <select th:field="*{day}" id="day" required>
                         <option value="">일</option>
+                        <option th:each="d : ${#numbers.sequence(1, 31)}"
+                                th:value="${d}" th:text="${d + '일'}"></option>
                     </select>
                 </div>
 
                 <div class="gender-options">
                     <label>
-                        <input type="radio" name="gender" value="M" required> 남성
+                        <input type="radio" th:field="*{gender}" name="gender" value="M" required> 남성
                     </label>
                     <label>
-                        <input type="radio" name="gender" value="F"> 여성
+                        <input type="radio" th:field="*{gender}" name="gender" value="F"> 여성
                     </label>
                 </div>
 
                 <label>* 휴대전화번호</label>
                 <div class="phone-input">
-                    <input type="tel" name="phoneFront" class="phone-segment" maxlength="3"
-                           pattern="\d{3}" title="숫자 3자리를 입력하세요" required>
-                    <input type="tel" name="phoneMiddle" class="phone-segment" maxlength="4"
+                    <select th:field="*{phone1}" name="phone1" class="phone-segment" required>
+                        <option value="">선택</option>
+                        <option value="010">010</option>
+                        <option value="011">011</option>
+                        <option value="016">016</option>
+                        <option value="017">017</option>
+                        <option value="018">018</option>
+                        <option value="019">019</option>
+                    </select>
+                    <input type="tel" th:field="*{phone2}" name="phone2" class="phone-segment" maxlength="4"
                            pattern="\d{3,4}" title="숫자 3~4자리를 입력하세요" required>
-                    <input type="tel" name="phoneBack" class="phone-segment" maxlength="4"
+                    <input type="tel" th:field="*{phone3}" name="phone3" class="phone-segment" maxlength="4"
                            pattern="\d{4}" title="숫자 4자리를 입력하세요" required>
                 </div>
 
 
-
+                <!-- 약관동의 -->
                 <!-- 약관동의 -->
                 <div class="section-title">* 약관동의</div>
                 <div class="agreement-box">
@@ -94,20 +117,27 @@
                             <input type="checkbox" name="agree_all">
                             <span>전체 동의</span>
                         </label>
+
                         <label class="checkbox-item">
-                            <input type="checkbox" name="agreeService" value="Y" required>
+                            <input type="checkbox" th:field="*{agreeService}" name="agreeService" value="Y" required>
                             <span>(필수) 서비스 이용약관 동의</span>
+                            <a href="#" onclick="openAgreementModal('terms'); return false;">[보기]</a>
                         </label>
+
                         <label class="checkbox-item">
-                            <input type="checkbox" name="agreePrivacy" value="Y" required>
+                            <input type="checkbox" th:field="*{agreePrivacy}" name="agreePrivacy" value="Y" required>
                             <span>(필수) 개인정보 수집 및 이용 동의</span>
+                            <a href="#" onclick="openAgreementModal('privacy'); return false;">[보기]</a>
                         </label>
+
                         <label class="checkbox-item">
-                            <input type="checkbox" name="agreeLocation" value="Y" required>
+                            <input type="checkbox" th:field="*{agreeLocation}" name="agreeLocation" value="Y" required>
                             <span>(필수) 위치기반 서비스 이용약관 동의</span>
+                            <a href="#" onclick="openAgreementModal('location'); return false;">[보기]</a>
                         </label>
+
                         <label class="checkbox-item">
-                            <input type="checkbox" name="agreeMarketing" value="Y">
+                            <input type="checkbox" th:field="*{agreeMarketing}" name="agreeMarketing" value="Y">
                             <span>(선택) 마케팅 정보 수신 동의 - 이메일</span>
                         </label>
                     </div>
@@ -118,65 +148,28 @@
             </form>
         </div>
     </main>
+    <!-- 약관 모달 -->
+    <div id="agreementModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">서비스 이용약관</h2>
+            <div class="modal-body" id="modalContent">
+                <!-- JS에서 삽입할 내용 -->
+            </div>
+        </div>
+    </div>
     <!-- 공통 푸터 -->
     <div th:replace="~{fragments/footer :: footer}"></div>
 </div>
 
-<script>
-    const yearEl = document.getElementById("year");
-    for (let i = 2030; i >= 1900; i--) {
-        yearEl.innerHTML += `<option value="${i}">${i}년</option>`;
-    }
-
-    const monthEl = document.getElementById("month");
-    for (let i = 1; i <= 12; i++) {
-        monthEl.innerHTML += `<option value="${i}">${i}월</option>`;
-    }
-
-    const dayEl = document.getElementById("day");
-    for (let i = 1; i <= 31; i++) {
-        dayEl.innerHTML += `<option value="${i}">${i}일</option>`;
-    }
-
-    document.querySelector("input[name='agree_all']").addEventListener('change', function () {
-        const checked = this.checked;
-        document.querySelectorAll(".checkbox-group input[type='checkbox']")
-            .forEach(chk => {
-                if (chk !== this) chk.checked = checked;
-            });
-    });
-
-    // 숫자만 허용
-     document.addEventListener("DOMContentLoaded", () => {
-       document.querySelectorAll(".phone-segment").forEach(input => {
-         input.addEventListener("input", e => {
-           e.target.value = e.target.value.replace(/[^0-9]/g, "");
-         });
-       });
-     });
-
-    // 비밀번호 유효성 검사 함수
-    function validatePassword(password) {
-        const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+=-]).{8,16}$/;
-        return regex.test(password);
-    }
-
-    document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById("userForm").addEventListener("submit", function (e) {
-            const passwordInput = document.getElementById("password");
-            const password = passwordInput.value;
-
-            if (!validatePassword(password)) {
-                e.preventDefault();
-                alert("비밀번호는 8~16자이며, 영문자/숫자/특수문자를 모두 포함해야 합니다.");
-                passwordInput.focus();
-            }
-        });
-    });
-
-</script>
-
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>
+<script th:src="@{/js/auth/postcode.js}"></script>
+<!--<script th:src="@{/js/auth/form-address.js}"></script>
+<script>
+    bindFullAddress("userForm", "addressRegion", "addressDetail", "address");
+</script>-->
+<script type="module" th:src="@{/js/auth/member-terms-modal.js}"></script>
+<script type="module" th:src="@{/js/auth/register-member.js}"></script>
 </body>
 </html>

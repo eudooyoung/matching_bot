@@ -40,6 +40,10 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
+    @Size(min = 2, max = 10, message = "닉네임은 2~10자 사이여야 합니다.")
+    @Column(nullable = false, length = 5, unique = true)
+    private String nickname;
+
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Resume> resumes = new ArrayList<>();
 

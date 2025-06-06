@@ -1,8 +1,7 @@
 package com.multi.matchingbot.member.controller;
 
-import com.multi.matchingbot.member.service.AuthMemberRegistService;
-import com.multi.matchingbot.member.service.MemberService;
 import com.multi.matchingbot.member.domain.dtos.MemberRegisterDto;
+import com.multi.matchingbot.member.service.AuthMemberRegistService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -25,13 +24,13 @@ public class RegisterController {
     public String showRegisterForm(Model model) {
         model.addAttribute("memberDto", new MemberRegisterDto());
         return "auth/register";
-
     }
 
     @PostMapping("/register-member")
     public String registerUser(@Valid @ModelAttribute("memberDto") MemberRegisterDto dto,
                                BindingResult bindingResult,
                                Model model) {
+        System.out.println(dto.toString());
         if (bindingResult.hasErrors()) {
             bindingResult.getFieldErrors().forEach(error ->
                     System.out.println("Field error in: " + error.getField() + " - " + error.getDefaultMessage())

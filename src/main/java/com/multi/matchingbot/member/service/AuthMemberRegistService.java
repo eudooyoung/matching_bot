@@ -35,13 +35,20 @@ public class AuthMemberRegistService {
             throw new IllegalArgumentException("성별은 필수 입력입니다.");
         }
 
+        if (authMemberRepository.existsByPhone(dto.getPhone1() + "-" + dto.getPhone2() + "-" + dto.getPhone3())) {
+            throw new IllegalArgumentException("이미 등록된 휴대폰 번호입니다.");
+        }
+
         Member member = Member.builder()
                 .role(Role.MEMBER)
                 .name(dto.getName())
                 .birth(LocalDate.of(dto.getYear(), dto.getMonth(), dto.getDay()))
                 .gender(Gender.valueOf(dto.getGender())) // enum 처리
                 .phone(dto.getPhone1() + "-" + dto.getPhone2() + "-" + dto.getPhone3())
-                .address(dto.getAddress())
+                .address(dto.getAddressRegion() +
+                        (dto.getAddressDetail() != null && !dto.getAddressDetail().isBlank()
+                                ? " " + dto.getAddressDetail()
+                                : ""))
                 .email(dto.getEmail())
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .agreeService(Yn.Y)
