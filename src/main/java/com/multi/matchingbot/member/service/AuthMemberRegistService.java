@@ -39,9 +39,14 @@ public class AuthMemberRegistService {
             throw new IllegalArgumentException("이미 등록된 휴대폰 번호입니다.");
         }
 
+        if (authMemberRepository.existsByNickname(dto.getNickname())) {
+            throw new IllegalArgumentException("이미 사용 중인 닉네임입니다.");
+        }
+
         Member member = Member.builder()
                 .role(Role.MEMBER)
                 .name(dto.getName())
+                .nickname(dto.getNickname())
                 .birth(LocalDate.of(dto.getYear(), dto.getMonth(), dto.getDay()))
                 .gender(Gender.valueOf(dto.getGender())) // enum 처리
                 .phone(dto.getPhone1() + "-" + dto.getPhone2() + "-" + dto.getPhone3())

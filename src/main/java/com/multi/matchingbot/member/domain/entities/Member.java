@@ -40,8 +40,8 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
-    @Size(min = 2, max = 10, message = "닉네임은 2~10자 사이여야 합니다.")
-    @Column(nullable = false, length = 5, unique = true)
+    @Column(length = 15, nullable = false, unique = true)
+    @Pattern(regexp = "^[가-힣a-zA-Z0-9_-]{2,15}$", message = "닉네임은 2~15자의 한글, 영문, 숫자, '_', '-'만 사용할 수 있습니다.")
     private String nickname;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)

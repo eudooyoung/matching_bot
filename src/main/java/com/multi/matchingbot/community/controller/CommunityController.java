@@ -32,9 +32,9 @@ public class CommunityController {
     }
 
     @GetMapping("/list")
-    public String list(@RequestParam(required = false, defaultValue = "") Long categoryId,
-                       @RequestParam(defaultValue = "0") int page,
-                       @RequestParam(defaultValue = "9") int size,
+    public String list(@RequestParam(name = "categoryId", required = false, defaultValue = "") Long categoryId,
+                       @RequestParam(name = "page",defaultValue = "0") int page,
+                       @RequestParam(name = "size",defaultValue = "9") int size,
                        Model model,
                        Authentication authentication) {
 
