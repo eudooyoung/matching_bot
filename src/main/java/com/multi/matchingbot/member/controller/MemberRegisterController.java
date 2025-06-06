@@ -30,7 +30,6 @@ public class MemberRegisterController {
     @PostMapping("/register")
     public String registerUser(@Valid @ModelAttribute("memberDto") MemberRegisterDto dto, BindingResult bindingResult,
                                Model model) {
-        System.out.println(dto.toString());
         if (bindingResult.hasErrors()) {
             bindingResult.getFieldErrors().forEach(error ->
                     System.out.println("Field error in: " + error.getField() + " - " + error.getDefaultMessage())

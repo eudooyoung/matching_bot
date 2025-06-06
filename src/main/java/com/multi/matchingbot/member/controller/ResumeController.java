@@ -60,8 +60,9 @@ public class ResumeController {
     @GetMapping("/view/{id}")
     public String view(@PathVariable("id") Long id, Model model) {
         Resume resume = resumeService.findByIdWithOccupation(id);
-        model.addAttribute("resume", resume);
-        return "/member/resume-view";
+        ResumeDto resumeDto = ResumeDto.fromEntity(resume);
+        model.addAttribute("resume", resumeDto);
+        return "member/resume-view";
     }
 
     @GetMapping("/edit/{id}")

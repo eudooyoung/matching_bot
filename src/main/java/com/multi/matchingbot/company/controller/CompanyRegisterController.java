@@ -21,7 +21,9 @@ public class CompanyRegisterController {
 
     @GetMapping("/register")
     public String showCompanyRegisterForm(Model model) {
-        model.addAttribute("companyDto", new CompanyRegisterDto());
+        CompanyRegisterDto dto = new CompanyRegisterDto();
+        dto.setYearFound(1980);
+        model.addAttribute("companyDto", dto);
         return "company/register";
     }
 

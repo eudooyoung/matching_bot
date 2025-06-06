@@ -35,62 +35,67 @@
                 <p th:text="${error}">회원가입 중 오류가 발생했습니다.</p>
             </div>
 
-            <form id="companyForm" action="/auth/register-company" method="post">
+            <form id="companyForm" action="/company/register" th:object="${companyDto}" method="post">
 
                 <label for="email">* 이메일</label>
-                <input type="email" id="email" name="email" placeholder="email@matchingbot.co.kr" required>
+                <input type="email" id="email" name="email" th:field="*{email}" placeholder="email@matchingbot.co.kr"
+                       required>
 
                 <label for="password">* 비밀번호</label>
-                <input type="password" id="password" name="password"
+                <input type="password" th:field="*{password}" id="password" name="password"
                        placeholder="8~16자 / 영문, 숫자, 특수문자 조합"
                        required minlength="8" maxlength="16"
                        pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+=-]).{8,16}$"
                        title="8~16자, 영문/숫자/특수문자를 모두 포함해야 합니다.">
 
                 <label for="name">* 회사명</label>
-                <input type="text" id="name" name="name" placeholder="회사명을 입력해주세요" required minlength="2"
+                <input type="text" id="name" name="name" th:field="*{name}" placeholder="회사명을 입력해주세요" required
+                       minlength="2"
                        maxlength="30">
 
                 <label for="businessNo">* 사업자등록번호</label>
                 <div class="biznum-input">
-                    <input type="text" id="businessNo" name="businessNo" required>
+                    <input type="text" id="businessNo" name="businessNo" th:field="*{businessNo}" required>
                     <button type="button" class="verify-btn" onclick="businessNumber()">인증</button>
                 </div>
                 <div id="regimessage" class="helper-text" style="color: green;"></div>
 
                 <label>* 주소</label>
                 <div class="address-wrapper">
-                    <input type="text" id="addressRegion" name="addressRegion"
+                    <input type="text" th:field="*{addressRegion}"
+                           id="addressRegion" name="addressRegion"
                            class="address-input"
                            placeholder="주소를 입력해주세요"
                            readonly required maxlength="50">
                     <button type="button" class="address-btn" data-target="addressRegion">주소 찾기</button>
-                    <input type="text" id="addressDetail" name="addressDetail"
+                    <input type="text" th:field="*{addressDetail}" id="addressDetail" name="addressDetail"
                            class="address-input"
                            placeholder="상세 주소 (예: 아파트 동/호수 등)" maxlength="50">
                 </div>
 
                 <label for="industry">* 산업군</label>
-                <input type="text" id="industry" name="industry" required maxlength="20">
+                <input type="text" id="industry" name="industry" th:field="*{industry}" required maxlength="20">
 
-                <div class="section-title">* 설립일</div>
+                <div class="section-title">* 설립연도</div>
                 <div class="birth-gender">
-                    <select name="establishedYear" id="establishedYear" required></select>
-                    <select name="establishedMonth" id="establishedMonth" required></select>
-                    <select name="establishedDay" id="establishedDay" required></select>
+                    <select th:field="*{yearFound}" id="yearFound" required>
+                        <option value="">설립 연도</option>
+                        <option th:each="y : ${#numbers.sequence(1900, 2030)}"
+                                th:value="${y}" th:text="${y + '년'}"></option>
+                    </select>
                 </div>
 
                 <label for="headcount">* 직원수</label>
-                <input type="text" id="headcount" name="headcount">
+                <input type="text" th:field="*{headcount}" id="headcount" name="headcount">
 
                 <label for="annualRevenue">* 연매출 (억)</label>
-                <input type="text" id="annualRevenue" name="annualRevenue">
+                <input type="text" th:field="*{annualRevenue}" id="annualRevenue" name="annualRevenue">
 
                 <label for="operatingIncome">* 영업이익 (억)</label>
-                <input type="text" id="operatingIncome" name="operatingIncome">
+                <input type="text" th:field="*{operatingIncome}" id="operatingIncome" name="operatingIncome">
 
                 <label for="jobsLastYear">* 최근 1년 채용공고 수</label>
-                <input type="text" id="jobsLastYear" name="jobsLastYear">
+                <input type="text" th:field="*{jobsLastYear}" id="jobsLastYear" name="jobsLastYear">
 
                 <div class="section-title">* 약관동의</div>
                 <div class="agreement-box">
@@ -101,34 +106,34 @@
                         </label>
 
                         <label class="checkbox-item">
-                            <input type="checkbox" name="agreeTerms" value="Y" required>
+                            <input type="checkbox" th:field="*{agreeTerms}" name="agreeTerms" value="Y" required>
                             <span>(필수) 서비스 이용약관 동의</span>
                             <a href="#" onclick="openAgreementModal('terms'); return false;">[보기]</a>
                         </label>
 
                         <label class="checkbox-item">
-                            <input type="checkbox" name="agreePrivacy" value="Y" required>
+                            <input type="checkbox" th:field="*{agreePrivacy}" name="agreePrivacy" value="Y" required>
                             <span>(필수) 정보 수집 및 이용 동의</span>
                             <a href="#" onclick="openAgreementModal('privacy'); return false;">[보기]</a>
                         </label>
 
                         <label class="checkbox-item">
-                            <input type="checkbox" name="agreeFinance" value="Y" required>
+                            <input type="checkbox" th:field="*{agreeFinance}" name="agreeFinance" value="Y" required>
                             <span>(필수) 정보 제공 동의 (OPEN API 포함)</span>
                             <a href="#" onclick="openAgreementModal('finance'); return false;">[보기]</a>
                         </label>
 
                         <label class="checkbox-item">
-                            <input type="checkbox" name="agreeMarketing" value="Y">
+                            <input type="checkbox" th:field="*{agreeMarketing}" name="agreeMarketing" value="Y">
                             <span>(선택) 마케팅 정보 수신 동의</span>
                             <!-- JS에 구현된 항목은 아니지만, 원하면 아래 줄 주석 해제 -->
-                             <a href="#" onclick="openAgreementModal('marketing'); return false;">[보기]</a>
+                            <a href="#" onclick="openAgreementModal('marketing'); return false;">[보기]</a>
                         </label>
 
                         <label class="checkbox-item">
-                            <input type="checkbox" name="agreeThirdParty" value="Y">
+                            <input type="checkbox" th:field="*{agreeThirdParty}" name="agreeThirdParty" value="Y">
                             <span>(선택) 제3자 정보 제공 동의</span>
-                             <a href="#" onclick="openAgreementModal('thirdparty'); return false;">[보기]</a>
+                            <a href="#" onclick="openAgreementModal('thirdparty'); return false;">[보기]</a>
                         </label>
                     </div>
                 </div>

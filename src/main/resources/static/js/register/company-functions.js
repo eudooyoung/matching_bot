@@ -5,7 +5,7 @@ const currentYear = new Date().getFullYear();
 const yearEl = document.getElementById("establishedYear");
 const monthEl = document.getElementById("establishedMonth");
 const dayEl = document.getElementById("establishedDay");
-
+/*
 for (let i = currentYear; i >= 1900; i--) {
     yearEl.innerHTML += `<option value="${i}">${i}년</option>`;
 }
@@ -14,7 +14,7 @@ for (let i = 1; i <= 12; i++) {
 }
 for (let i = 1; i <= 31; i++) {
     dayEl.innerHTML += `<option value="${i}">${i}일</option>`;
-}
+}*/
 
 // 전체 동의 체크
 const agreeAll = document.querySelector("input[name='agree_all']");
