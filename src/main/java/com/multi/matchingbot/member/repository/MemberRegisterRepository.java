@@ -1,11 +1,11 @@
 package com.multi.matchingbot.member.repository;
 
-import com.multi.matchingbot.member.domain.entities.Member;
+import com.multi.matchingbot.member.domain.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface AuthMemberRepository extends JpaRepository<Member, Long> {
+public interface MemberRegisterRepository extends JpaRepository<Member, Long> {
     boolean existsByEmail(String email);
 
     boolean existsByPhone(String phone);

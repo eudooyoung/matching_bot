@@ -1,7 +1,7 @@
 // CommunityPost.java
 package com.multi.matchingbot.community.domain;
 
-import com.multi.matchingbot.member.domain.entities.Member;
+import com.multi.matchingbot.member.domain.entity.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;

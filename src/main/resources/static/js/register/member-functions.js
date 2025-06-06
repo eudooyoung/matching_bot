@@ -1,19 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // 생년월일 select 채우기
-  /*const yearEl = document.getElementById("year");
-  for (let i = 2030; i >= 1900; i--) {
-    yearEl.innerHTML += `<option value="${i}">${i}년</option>`;
-  }
-
-  const monthEl = document.getElementById("month");
-  for (let i = 1; i <= 12; i++) {
-    monthEl.innerHTML += `<option value="${i}">${i}월</option>`;
-  }
-
-  const dayEl = document.getElementById("day");
-  for (let i = 1; i <= 31; i++) {
-    dayEl.innerHTML += `<option value="${i}">${i}일</option>`;
-  }*/
 
   // 전체 약관 동의 체크 연동
   const agreeAll = document.querySelector("input[name='agree_all']");

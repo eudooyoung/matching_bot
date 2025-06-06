@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>기업 회원가입</title>
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/spinner-chatbot.css}">
+    <link rel="stylesheet" th:href="@{/css/register.css}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+</head>
+
+<body>
+<div class="wrapper">
+    <div th:replace="~{fragments/header :: header(role=${role})}"></div>
+
+    <!-- 로딩 오버레이 -->
+    <div id="loadingOverlay" class="overlay" style="display: none;">
+        <div class="spinner"></div>
+        <p>
+            AI가 기업 정보를 분석하고 있습니다.<br>
+            잠시만 기다려 주세요...
+        </p>
+    </div>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="form-title-row">
+                <h2>회원가입 (기업)</h2>
+                <p class="required-note">* 표시는 필수 입력 항목입니다.</p>
+            </div>
+
+            <!-- 에러 메시지 -->
+            <div th:if="${error}" class="error-message">
+                <p th:text="${error}">회원가입 중 오류가 발생했습니다.</p>
+            </div>
+
+            <form id="companyForm" action="/auth/register-company" method="post">
+
+                <label for="email">* 이메일</label>
+                <input type="email" id="email" name="email" placeholder="email@matchingbot.co.kr" required>
+
+                <label for="password">* 비밀번호</label>
+                <input type="password" id="password" name="password"
+                       placeholder="8~16자 / 영문, 숫자, 특수문자 조합"
+                       required minlength="8" maxlength="16"
+                       pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+=-]).{8,16}$"
+                       title="8~16자, 영문/숫자/특수문자를 모두 포함해야 합니다.">
+
+                <label for="name">* 회사명</label>
+                <input type="text" id="name" name="name" placeholder="회사명을 입력해주세요" required minlength="2"
+                       maxlength="30">
+
+                <label for="businessNo">* 사업자등록번호</label>
+                <div class="biznum-input">
+                    <input type="text" id="businessNo" name="businessNo" required>
+                    <button type="button" class="verify-btn" onclick="businessNumber()">인증</button>
+                </div>
+                <div id="regimessage" class="helper-text" style="color: green;"></div>
+
+                <label>* 주소</label>
+                <div class="address-wrapper">
+                    <input type="text" id="addressRegion" name="addressRegion"
+                           class="address-input"
+                           placeholder="주소를 입력해주세요"
+                           readonly required maxlength="50">
+                    <button type="button" class="address-btn" data-target="addressRegion">주소 찾기</button>
+                    <input type="text" id="addressDetail" name="addressDetail"
+                           class="address-input"
+                           placeholder="상세 주소 (예: 아파트 동/호수 등)" maxlength="50">
+                </div>
+
+                <label for="industry">* 산업군</label>
+                <input type="text" id="industry" name="industry" required maxlength="20">
+
+                <div class="section-title">* 설립일</div>
+                <div class="birth-gender">
+                    <select name="establishedYear" id="establishedYear" required></select>
+                    <select name="establishedMonth" id="establishedMonth" required></select>
+                    <select name="establishedDay" id="establishedDay" required></select>
+                </div>
+
+                <label for="headcount">* 직원수</label>
+                <input type="text" id="headcount" name="headcount">
+
+                <label for="annualRevenue">* 연매출 (억)</label>
+                <input type="text" id="annualRevenue" name="annualRevenue">
+
+                <label for="operatingIncome">* 영업이익 (억)</label>
+                <input type="text" id="operatingIncome" name="operatingIncome">
+
+                <label for="jobsLastYear">* 최근 1년 채용공고 수</label>
+                <input type="text" id="jobsLastYear" name="jobsLastYear">
+
+                <div class="section-title">* 약관동의</div>
+                <div class="agreement-box">
+                    <div class="checkbox-group">
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="agree_all">
+                            <span>전체 동의</span>
+                        </label>
+
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="agreeTerms" value="Y" required>
+                            <span>(필수) 서비스 이용약관 동의</span>
+                            <a href="#" onclick="openAgreementModal('terms'); return false;">[보기]</a>
+                        </label>
+
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="agreePrivacy" value="Y" required>
+                            <span>(필수) 정보 수집 및 이용 동의</span>
+                            <a href="#" onclick="openAgreementModal('privacy'); return false;">[보기]</a>
+                        </label>
+
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="agreeFinance" value="Y" required>
+                            <span>(필수) 정보 제공 동의 (OPEN API 포함)</span>
+                            <a href="#" onclick="openAgreementModal('finance'); return false;">[보기]</a>
+                        </label>
+
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="agreeMarketing" value="Y">
+                            <span>(선택) 마케팅 정보 수신 동의</span>
+                            <!-- JS에 구현된 항목은 아니지만, 원하면 아래 줄 주석 해제 -->
+                             <a href="#" onclick="openAgreementModal('marketing'); return false;">[보기]</a>
+                        </label>
+
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="agreeThirdParty" value="Y">
+                            <span>(선택) 제3자 정보 제공 동의</span>
+                             <a href="#" onclick="openAgreementModal('thirdparty'); return false;">[보기]</a>
+                        </label>
+                    </div>
+                </div>
+
+
+                <button type="submit" class="submit-btn">가입하기</button>
+            </form>
+        </div>
+    </main>
+
+    <div id="agreementModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3 id="modalTitle"></h3>
+            <div id="modalContent" style="margin-top: 10px;"></div>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</div>
+
+<script>
+    function showLoadingAndSubmit(form) {
+        document.getElementById("loadingOverlay").style.display = "flex";
+        form.submit();
+    }
+</script>
+<script th:src="@{/js/dropdown.js}"></script>
+<script th:src="@{/js/logout.js}"></script>
+<script th:src="@{/js/register/postcode.js}"></script>
+<script type="module" th:src="@{/js/register/company-terms-modal.js}"></script>
+<script th:src="@{/js/register/company-functions.js}"></script>
+</body>
+</html>

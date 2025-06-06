@@ -1,9 +1,9 @@
 package com.multi.matchingbot.auth.service;
 
-import com.multi.matchingbot.company.repository.AuthCompanyRepository;
+import com.multi.matchingbot.company.repository.CompanyRegisterRepository;
 import com.multi.matchingbot.auth.domain.dto.ResetPasswordDto;
 import com.multi.matchingbot.company.domain.Company;
-import com.multi.matchingbot.member.domain.entities.Member;
+import com.multi.matchingbot.member.domain.entity.Member;
 import com.multi.matchingbot.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,7 +16,7 @@ import java.util.Optional;
 public class ResetPasswordService {
 
     private final MemberRepository memberRepository;
-    private final AuthCompanyRepository authCompanyRepository;
+    private final CompanyRegisterRepository companyRegisterRepository;
     private final PasswordEncoder passwordEncoder;
 
     public boolean resetPassword(ResetPasswordDto dto) {
@@ -34,13 +34,13 @@ public class ResetPasswordService {
     }
 
     public boolean resetCompanyPassword(ResetPasswordDto dto) {
-        Optional<Company> optionalCompany = authCompanyRepository.findByEmail(dto.getEmail());
+        Optional<Company> optionalCompany = companyRegisterRepository.findByEmail(dto.getEmail());
 
         if (optionalCompany.isPresent()) {
             Company company = optionalCompany.get();
             String encoded = passwordEncoder.encode(dto.getNewPassword());
             company.setPassword(encoded);
-            authCompanyRepository.save(company);
+            companyRegisterRepository.save(company);
             return true;
         }
 

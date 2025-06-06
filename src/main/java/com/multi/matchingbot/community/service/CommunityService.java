@@ -7,7 +7,7 @@ import com.multi.matchingbot.community.domain.CommunityPostDto;
 import com.multi.matchingbot.community.repository.CommunityCategoryRepository;
 import com.multi.matchingbot.community.repository.CommunityCommentRepository;
 import com.multi.matchingbot.community.repository.CommunityPostRepository;
-import com.multi.matchingbot.member.domain.entities.Member;
+import com.multi.matchingbot.member.domain.entity.Member;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

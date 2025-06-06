@@ -4,7 +4,7 @@ import com.multi.matchingbot.community.domain.CommunityCategory;
 import com.multi.matchingbot.community.domain.CommunityCommentDto;
 import com.multi.matchingbot.community.domain.CommunityPostDto;
 import com.multi.matchingbot.community.service.CommunityService;
-import com.multi.matchingbot.member.domain.entities.Member;
+import com.multi.matchingbot.member.domain.entity.Member;
 import com.multi.matchingbot.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

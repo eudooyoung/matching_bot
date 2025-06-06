@@ -1,28 +1,33 @@
 package com.multi.matchingbot.member.service;
 
-import com.multi.matchingbot.attachedItem.service.AttachedItemService;
 import com.multi.matchingbot.common.domain.enums.Gender;
 import com.multi.matchingbot.common.domain.enums.Role;
 import com.multi.matchingbot.common.domain.enums.Yn;
-import com.multi.matchingbot.member.domain.dtos.MemberRegisterDto;
-import com.multi.matchingbot.member.domain.entities.Member;
-import com.multi.matchingbot.member.repository.AuthMemberRepository;
+import com.multi.matchingbot.member.domain.dto.MemberRegisterDto;
+import com.multi.matchingbot.member.domain.entity.Member;
+import com.multi.matchingbot.member.repository.MemberRegisterRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-public class AuthMemberRegistService {
+public class MemberRegisterService {
 
-    private final AuthMemberRepository authMemberRepository;
+    private final MemberRegisterRepository authMemberRepository;
     private final PasswordEncoder passwordEncoder;
 
-    private final AttachedItemService attachedItemService;
 
-    public void register(MemberRegisterDto dto) {
+    /**
+     * 개인 회원 가입 메소드
+     *
+     * @param dto 개인회원 로그인용 디티오
+     */
+    public void registerMember(MemberRegisterDto dto) {
         if (authMemberRepository.existsByEmail(dto.getEmail())) {
             throw new IllegalArgumentException("이미 등록된 이메일입니다.");
         }
@@ -60,13 +65,9 @@ public class AuthMemberRegistService {
                 .agreePrivacy(Yn.Y)
                 .agreeLocation(dto.isLocationRequired() ? Yn.Y : Yn.N)
                 .agreeMarketing(dto.isMarketingEmail() ? Yn.Y : Yn.N)
-//                .alertBookmark(Yn.Y)
-//                .alertResume(Yn.Y)
                 .status(Yn.Y)
                 .build();
 
-
         Member savedMember = authMemberRepository.save(member);
-
     }
 }

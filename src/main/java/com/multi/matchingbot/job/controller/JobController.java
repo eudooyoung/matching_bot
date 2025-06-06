@@ -11,7 +11,7 @@ import com.multi.matchingbot.job.repository.JobRepository;
 import com.multi.matchingbot.job.service.JobService;
 import com.multi.matchingbot.job.service.OccupationService;
 import com.multi.matchingbot.job.service.ResumeBookmarkService;
-import com.multi.matchingbot.member.domain.dtos.ResumeDto;
+import com.multi.matchingbot.member.domain.dto.ResumeDto;
 import com.multi.matchingbot.member.service.ResumeService;
 import com.multi.matchingbot.notification.service.NotificationService;
 import jakarta.validation.Valid;
