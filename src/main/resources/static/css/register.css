@@ -1,43 +1,132 @@
+/* 기본 스타일 - 전역 폰트는 layout.css에서 처리 */
 body {
-    font-family: Arial;
     margin: 20px;
 }
 
-.logo {
-    color: white;
-    text-decoration: none;
-    font-size: 1.5rem;
-    font-weight: bold;
-}
-
+/* 컨테이너 */
 .container {
     max-width: 500px;
     margin: auto;
 }
 
-input, select {
-    width: 100%;
-    margin-bottom: 10px;
-    padding: 8px;
-}
-
+/* 라벨 + 인풋 정렬 */
 label {
     font-weight: bold;
     display: block;
     margin-top: 10px;
 }
 
+label:first-of-type {
+    margin-top: 0;
+}
+
+input,
+select {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+/* 이메일, 이름, 주소 등 input 간 여백 통일용 */
+.address-input,
+.phone-segment {
+    width: 100%;
+}
+
+/* 생년월일 선택 */
 .birth-gender {
     display: flex;
-    gap: 5px;
+    gap: 10px;
     flex-wrap: wrap;
 }
 
+.birth-gender select {
+    flex: 1;
+    min-width: 100px;
+}
+
+/* 성별 선택 */
+.gender-options {
+    display: flex;
+    gap: 20px;
+    align-items: baseline;
+    margin-top: 10px;
+}
+
+.gender-options label {
+    line-height: 32px; /* select 높이 기준 */
+}
+
+/* 전화번호 입력 */
 .phone-input {
     display: flex;
     gap: 5px;
 }
 
+.phone-segment {
+    flex: 1;
+}
+
+/* 섹션 제목 */
+.section-title {
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+/* 약관 동의 박스 */
+.agreement-box {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    margin-top: 10px;
+    font-size: 14px;
+    max-width: 600px;
+}
+
+/* 체크박스 그룹 */
 .checkbox-group {
     margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* 체크박스 항목 */
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.checkbox-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.checkbox-item span {
+    word-break: break-word;
+}
+
+/* 가입 버튼 */
+.submit-btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    font-weight: bold;
+    background-color: #103254;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    background-color: #0d2845;
 }
