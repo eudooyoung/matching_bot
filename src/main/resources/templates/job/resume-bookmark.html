@@ -36,7 +36,7 @@
         <thead>
         <tr>
             <th><input type="checkbox" onclick="toggleAll(this)"/></th>
-            <th>번호</th>
+            <th style="width: 10%;">번호</th>
             <th>작성자</th>
             <th>이력서 제목</th>
             <th>작성 날짜</th>
@@ -53,7 +53,7 @@
             <td th:text="${resume.memberName}">작성자</td>
             <td th:text="${resume.title}">이력서 제목</td>
             <td th:text="${#temporals.format(resume.createdAt, 'yyyy-MM-dd')}">작성일</td>
-            <td><a th:href="@{/templates/resume/detail/{id}(id=${resume.id})}">상세보기</a></td>
+            <td th:onclick="|location.href='@{/resumes/{id}(id=${resume.id})}'|">상세보기</a></td>
             <td>
                 <button class="bookmark-button"
                         th:data-resume-id="${resume.id}"

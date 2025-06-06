@@ -193,3 +193,7 @@ body {
     color: gold;
     cursor: pointer;
 }
+
+.star-button.filled {
+    color: gold;
+}

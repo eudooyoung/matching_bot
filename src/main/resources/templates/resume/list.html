@@ -99,7 +99,8 @@
               <button
                       class="star-button"
                       th:classappend="${resume.bookmarked} ? 'filled' : ''"
-                      onclick="toggleStar(this, [[${resume.id}]], event)"
+                      th:data-resume-id="${resume.id}"
+                      onclick="toggleStar(this, event)"
                       sec:authorize="hasRole('COMPANY')">
                 <span th:text="${resume.bookmarked} ? '★' : '☆'">☆</span>
               </button>
@@ -186,41 +187,44 @@
 <!--<script type="module" src="/js/CareerTypeSelector.js"></script>-->
       window.React = React;
       window.createRoot = createRoot;
-    </script>
-  </main>
+<!--    </script>-->
+<!--  </main>-->
 
-  <div th:insert="~{fragments/footer :: footer}"></div>
-</div>
+<div th:replace="~{fragments/footer :: footer}"></div>
 
+<!-- 이력서 즐겨찾기 -->
 <script>
-  function toggleStar(button, resumeId, event) {
-    event.stopPropagation(); // 카드 클릭 이벤트 중단
+  function toggleStar(button, event) {
+    event.stopPropagation();
+    const resumeId = button.dataset.resumeId;
 
-    const isBookmarked = button.classList.contains('filled');
-    const method = isBookmarked ? 'DELETE' : 'POST';
-    const companyId = window.loggedInCompanyId;
-
-    fetch(`/job/resume-bookmark/${resumeId}/company/${companyId}`, {
-      method: method,
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': getCsrfToken()
-      }
+    fetch(`/job/resume-bookmark/toggle?resumeId=${resumeId}`, {
+      method: 'POST'
     })
             .then(response => {
-              if (response.ok) {
-                button.classList.toggle('filled');
-                button.textContent = button.classList.contains('filled') ? '★' : '☆';
+              if (!response.ok) throw new Error("즐겨찾기 실패");
+              return response.json();
+            })
+            .then(data => {
+              const icon = button.querySelector('span');
+
+              if (data.bookmarked) {
+                button.classList.add('filled');
+                icon.textContent = '★';
+                alert('이력서가 즐겨찾기 되었습니다.');
               } else {
-                alert('즐겨찾기 처리 중 오류가 발생했습니다.');
+                button.classList.remove('filled');
+                icon.textContent = '☆';
+                alert('즐겨찾기가 해제되었습니다.');
               }
             })
-            .catch(() => {
-              alert('서버 통신에 실패했습니다.');
+            .catch(error => {
+              console.error(error);
+              alert('오류가 발생했습니다.');
             });
   }
-</script>
 
+</script>
 
 <script th:src="@{/js/logout.js}"></script>
 

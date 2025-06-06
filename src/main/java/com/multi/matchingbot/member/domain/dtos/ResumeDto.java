@@ -22,7 +22,6 @@ public class ResumeDto {
     private String traitKeywordsConcat;     // 인재상 키워드
     private String keywordsStatus;     // 키워드 추출 상태 (Y/N)
 
-
     private LocalDateTime createdAt;   // 작성일
     private String memberName;         // 작성자 이름 (member 테이블 join 필요)
     private boolean bookmarked;        // 관심 이력서 여부 (join or 별도 체크)

@@ -29,37 +29,28 @@
 
     <!-- 읽은 알림 리스트 -->
     <div id="readList" class="notification-list" style="display: none;">
-        <div th:each="noti : ${readNotifications}"
-             th:onclick="|location.href='/notification/detail/${noti.id}'|"
-             class="notification-item read">
-            <span th:text="${noti.content}"></span>
+
+        <!-- 오른쪽 정렬된 전체 삭제 버튼 -->
+        <div class="delete-all-container" style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
+            <button type="button" onclick="deleteAllReadNotifications()" class="nav-button">전체 삭제</button>
+        </div>
+
+        <!-- 읽은 알림 동적 추가 영역 -->
+        <div id="readNotificationList"></div>
+
+        <!-- 로딩 메시지 -->
+        <div id="readLoading" style="display: none; text-align: center; padding: 10px;">로딩 중...</div>
+
+        <!-- 알림이 더 이상 없을 때 메시지 -->
+        <div id="readEndMessage" style="display: none; text-align: center; color: #888; padding: 10px;">
+            더 이상 알림이 없습니다.
         </div>
     </div>
 </div>
 
 <div th:replace="~{fragments/footer :: footer}"></div>
 
-<script>
-    function showTab(tab) {
-        const unreadTab = document.getElementById('unreadTab');
-        const readTab = document.getElementById('readTab');
-        const unreadList = document.getElementById('unreadList');
-        const readList = document.getElementById('readList');
-
-        if (tab === 'unread') {
-            unreadList.style.display = 'block';
-            readList.style.display = 'none';
-            unreadTab.classList.add('active');
-            readTab.classList.remove('active');
-        } else {
-            unreadList.style.display = 'none';
-            readList.style.display = 'block';
-            readTab.classList.add('active');
-            unreadTab.classList.remove('active');
-        }
-    }
-</script>
-
+<script th:src="@{/js/notification.js}"></script>
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>
 
