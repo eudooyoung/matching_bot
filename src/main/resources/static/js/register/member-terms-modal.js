@@ -1,4 +1,4 @@
-import { termsContent } from '/js/auth/terms-member.js';
+import { termsContent } from '/js/auth/terms-member-functions.js';
 
 function openAgreementModal(type) {
   const modal = document.getElementById("agreementModal");

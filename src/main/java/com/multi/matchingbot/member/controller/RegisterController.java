@@ -22,8 +22,10 @@ public class RegisterController {
 
     @GetMapping("/register-member")
     public String showRegisterForm(Model model) {
-        model.addAttribute("memberDto", new MemberRegisterDto());
-        return "auth/register";
+        MemberRegisterDto dto = new MemberRegisterDto();
+        dto.setYear(2000); // 원하는 기본 연도 (예: 2000년생)
+        model.addAttribute("memberDto", dto);
+        return "register/member";
     }
 
     @PostMapping("/register-member")
@@ -35,7 +37,7 @@ public class RegisterController {
             bindingResult.getFieldErrors().forEach(error ->
                     System.out.println("Field error in: " + error.getField() + " - " + error.getDefaultMessage())
             );
-            return "auth/register";
+            return "register/member";
         }
 
         try {
@@ -45,7 +47,7 @@ public class RegisterController {
             e.printStackTrace(); // 예외 로그
             model.addAttribute("memberDto", dto);
             model.addAttribute("error", e.getMessage());
-            return "auth/register"; // 실패 시 다시 폼 보여줌
+            return "register/member"; // 실패 시 다시 폼 보여줌
         }
 
     }

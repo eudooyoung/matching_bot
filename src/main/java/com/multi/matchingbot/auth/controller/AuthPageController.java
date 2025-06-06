@@ -12,7 +12,7 @@ public class AuthPageController {
 
     @GetMapping("/register-user")
     public String showRegisterPage() {
-        return "auth/register"; // resources/templates/auth/register.html
+        return "auth/register"; // resources/templates/auth/member.html
     }
 
     @GetMapping("/login")

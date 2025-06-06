@@ -1,59 +1,54 @@
-/* 기본 스타일 - 전역 폰트는 layout.css에서 처리 */
+/* 기본 마진만 적용 (폰트는 layout.css에서 처리됨) */
 body {
     margin: 20px;
 }
 
-/* 컨테이너 */
+/* 중앙 정렬된 폼 컨테이너 */
 .container {
     max-width: 500px;
     margin: auto;
 }
 
-/* 라벨 + 인풋 정렬 */
+/* 공통 label */
 label {
     font-weight: bold;
     display: block;
-    margin-top: 10px;
+    margin-top: 12px;
 }
 
-label:first-of-type {
-    margin-top: 0;
-}
-
+/* 인풋 요소 (input, select, textarea 등) */
 input,
 select {
     width: 100%;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     padding: 8px;
     box-sizing: border-box;
 }
 
-/* 이메일, 이름, 주소 등 input 간 여백 통일용 */
+/* 주소, 전화번호 인풋용 클래스 */
 .address-input,
 .phone-segment {
     width: 100%;
 }
 
-/* 생년월일 선택 */
+/* 생년월일 */
 .birth-gender {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
 }
-
 .birth-gender select {
     flex: 1;
     min-width: 100px;
 }
 
-/* 성별 선택 */
+/* 성별 선택 라디오 */
 .gender-options {
     display: flex;
     gap: 20px;
     align-items: baseline;
     margin-top: 10px;
 }
-
 .gender-options label {
     display: inline-flex;
     align-items: center;
@@ -61,120 +56,54 @@ select {
     white-space: nowrap;
     flex-direction: row-reverse;
 }
-
-.gender-options label > input[type="radio"] {
+.gender-options input[type="radio"] {
     position: relative;
-    top: 2px; /* 또는 2px까지 조절 가능 */
+    top: 2px;
 }
 
-/* 전화번호 입력 */
+/* 전화번호 세그먼트 */
+.phone-input select,
+.phone-input input {
+    flex: 1;
+    height: 38px;
+    padding: 8px;
+    box-sizing: border-box;
+    min-width: 0;
+}
 
 .phone-input {
     display: flex;
-    gap: 5px;
+    gap: 10px;
+    width: 100%;
 }
 
-.phone-segment {
-    flex: 1;
-}
-
-.phone-input select.phone-segment {
-    flex: 1;
-    padding: 8px;
-    height: 38px;
-    box-sizing: border-box;
-}
-
-/* 섹션 제목 */
+/* 구분용 제목 */
 .section-title {
     font-weight: bold;
-    margin-top: 20px;
-    margin-bottom: 10px;
+    margin: 20px 0 10px;
     font-size: 15px;
 }
 
-/* 약관 동의 박스 */
-.agreement-box {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 20px;
-    background-color: #f9f9f9;
-    margin-top: 10px;
-    font-size: 14px;
-    max-width: 600px;
-}
-
-/* 체크박스 그룹 */
-.checkbox-group {
-    margin-top: 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-/* 체크박스 항목 */
-.checkbox-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.checkbox-item input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    margin: 0;
-    cursor: pointer;
-    flex-shrink: 0;
-}
-
-.checkbox-item span {
-    word-break: break-word;
-}
-
-.checkbox-item a {
-  text-decoration: none;
-  color: inherit;
-  font-size: 13px; /* 필요하면 조정 */
-  margin-left: 4px;
-}
-
-.checkbox-item a:hover {
-  text-decoration: underline;
-  color: #555;
-}
-
-/* 가입 버튼 */
-.submit-btn {
-    width: 100%;
-    padding: 12px;
-    margin-top: 20px;
-    font-weight: bold;
-    background-color: #103254;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.submit-btn:hover {
-    background-color: #0d2845;
-}
-
+/* 주소 래퍼 */
 .address-wrapper {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    align-items: stretch; /* ✅ 버튼 높이를 input에 강제 맞춤 */
-    margin-bottom: 0;
+    align-items: stretch;
 }
-
 .address-input {
     flex: 1;
-    height: 38px;           /* ✅ 버튼과 동일하게 고정 */
+    height: 38px;
     padding: 8px;
     box-sizing: border-box;
 }
-
+#addressDetail {
+    flex: 1 1 100%;
+    margin-top: 6px;
+    height: 38px;
+    padding: 8px;
+    box-sizing: border-box;
+}
 .address-btn {
     height: 38px;
     padding: 0 14px;
@@ -188,40 +117,122 @@ select {
     font-size: 14px;
     line-height: 1;
     box-sizing: border-box;
-    vertical-align: middle; /* ✅ 불균형 방지 */
+    cursor: pointer;
+    white-space: nowrap;
 }
 
-#addressDetail {
-    flex: 1 1 100%;           /* ✅ 한 줄 전체 차지 */
-    margin-top: 6px;          /* 위 요소와 여백 */
+/* 약관 동의 */
+.agreement-box {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    margin-top: 10px;
+    font-size: 14px;
+    max-width: 600px;
+}
+.checkbox-group {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.checkbox-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.checkbox-item span {
+    word-break: break-word;
+}
+.checkbox-item a {
+    text-decoration: none;
+    color: inherit;
+    font-size: 13px;
+    margin-left: 4px;
+}
+.checkbox-item a:hover {
+    text-decoration: underline;
+    color: #555;
 }
 
+/* 제출 버튼 */
+.submit-btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    font-weight: bold;
+    background-color: #103254;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.submit-btn:hover {
+    background-color: #0d2845;
+}
+
+/* 모달 */
 .modal {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.4);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
 }
 .modal-content {
-  background: #fff;
-  padding: 24px;
-  border-radius: 8px;
-  width: 80%;
-  max-width: 600px;
-  max-height: 80%;
-  overflow-y: auto;
+    background: #fff;
+    padding: 24px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 600px;
+    max-height: 80%;
+    overflow-y: auto;
 }
 .modal .close {
-  float: right;
-  font-size: 24px;
-  cursor: pointer;
+    float: right;
+    font-size: 24px;
+    cursor: pointer;
 }
 
+/* 에러 메시지 */
 .error-message {
     color: red;
-    /*font-weight: bold;*/
     margin-top: 10px;
+}
+input + .error-message,
+select + .error-message {
+    margin-top: -8px;
+    margin-bottom: 6px;
+    font-size: 13px;
+    color: red;
+}
+
+/* 기본 브라우저 검증 시 border 표시 방지 (submit 후만 처리하도록) */
+/*
+input:invalid {
+    border-color: red;
+}
+*/
+.form-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+}
+
+.required-note {
+    font-size: 13px;
+    color: #666;
+    margin: 0;
+    white-space: nowrap;
 }

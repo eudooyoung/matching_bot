@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>회원가입 - MatchingBot</title>
-    <link rel="stylesheet" th:href="@{/css/register.css}" href="/css/register.css">
-    <link rel="stylesheet" th:href="@{/css/layout.css}" href="/css/layout.css">
+    <link rel="stylesheet" th:href="@{/css/register.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
     <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 </head>
 
@@ -15,7 +15,10 @@
 
     <main class="main-content">
         <div class="container">
-            <h2>회원가입 (일반)</h2>
+            <div class="form-title-row">
+                <h2>회원가입 (구직자)</h2>
+                <p class="required-note">* 표시는 필수 입력 항목입니다.</p>
+            </div>
 
             <!-- 에러 메시지 표시 -->
             <div th:if="${error}" class="error-message">
@@ -176,12 +179,8 @@
 
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>
-<script th:src="@{/js/auth/postcode.js}"></script>
-<!--<script th:src="@{/js/auth/form-address.js}"></script>
-<script>
-    bindFullAddress("userForm", "addressRegion", "addressDetail", "address");
-</script>-->
-<script type="module" th:src="@{/js/auth/member-terms-modal.js}"></script>
-<script type="module" th:src="@{/js/auth/register-member.js}"></script>
+<script th:src="@{/js/register/postcode.js}"></script>
+<script type="module" th:src="@{/js/register/member-terms-modal.js}"></script>
+<script type="module" th:src="@{/js/register/member-functions.js}"></script>
 </body>
 </html>

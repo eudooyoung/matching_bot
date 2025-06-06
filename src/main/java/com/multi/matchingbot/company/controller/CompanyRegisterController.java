@@ -22,9 +22,7 @@ public class CompanyRegisterController {
     @GetMapping("/register-company")
     public String showCompanyRegisterForm(Model model) {
         model.addAttribute("companyDto", new CompanyRegisterDto());
-
-        return "auth/register-company";
-
+        return "register/company";
     }
 
     @PostMapping("/register-company")
@@ -34,7 +32,7 @@ public class CompanyRegisterController {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("companyDto", dto); // <- 입력 값 유지
-            return "auth/register-company";
+            return "register/company";
         }
 
         try {
@@ -43,7 +41,7 @@ public class CompanyRegisterController {
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("error", e.getMessage());
-            return "auth/register-company";
+            return "register/company";
         }
 
     }

@@ -1,5 +1,6 @@
 html, body {
     height: 100%;
+
 }
 
 /* 전체 페이지를 세로로 정렬하는 wrapper */
@@ -59,6 +60,8 @@ body {
 /* 메인 콘텐츠는 늘어나게 */
 .main-content {
     flex: 1;
+    padding: 0 16px; /* ✅ 모든 페이지 좌우 여백 */
+        box-sizing: border-box;
 }
 
 /* Footer */
