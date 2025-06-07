@@ -109,5 +109,17 @@ public class ResumeService {
         return resumePage.map(ResumeDto::fromEntity); // 여기가 실제 매핑 핵심
     }
 
+    public Page<ResumeDto> searchResumes(String jobGroup, String jobType, String jobRole, String careerType, String companyName, Pageable pageable) {
+        return resumeRepository.searchWithFilters(jobGroup, jobType, jobRole, careerType, companyName, pageable)
+                .map(ResumeDto::fromEntity);
+    }
+
+//    public List<ResumeDto> searchResumes(String jobGroup, String jobType, String jobRole, String careerType, String companyName) {
+//        // 원하는 필터 조건으로 repository에 쿼리 작성
+//        return resumeRepository.findByFilters(jobGroup, jobType, jobRole, careerType, companyName)
+//                .stream()
+//                .map(ResumeDto::fromEntity)
+//                .collect(Collectors.toList());
+//        }
 
 }

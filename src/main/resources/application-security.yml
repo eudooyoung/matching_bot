@@ -59,6 +59,9 @@ security:
       - /company/**
       - /job/**
       - /api/occupations/**
+      - /community/write
+      - /community/edit/**
+      - /community/delete/**
     admin-paths:
       - /admin/**
     #      - /company/**
