@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <title>공고 수정하기</title>
     <link rel="stylesheet" th:href="@{/css/company-job.css}">
-    <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/job-new.css}">
     <style>
         .form-box {
             background-color: white;
@@ -69,6 +69,9 @@
     </script>
 
     <form th:action="@{/job/{id}/edit(id=${job.id})}" method="post" th:object="${job}" onsubmit="return validateForm();">
+        <input type="hidden" name="skillKeywordsConcat" id="skillKeywordsConcat" />
+        <input type="hidden" name="traitKeywordsConcat" id="traitKeywordsConcat" />
+
         <label>관심 직무</label>
         <input type="hidden" th:field="*{occupationId}" id="occupationId" />
         <div id="react-job-category-selector" th:attr="data-initial-id=${job.occupationId}"></div>
@@ -89,32 +92,54 @@
         <textarea th:field="*{mainTask}" rows="2" required></textarea>
         <div th:if="${#fields.hasErrors('mainTask')}" class="error-message" th:errors="*{mainTask}"></div>
 
+        <!-- 필요 기술 -->
         <label>필요 기술</label>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 4px;">
+            <button type="button" onclick="extractKeywords('skill')" class="btn btn-warning btn-sm">👇키워드 추출하기👇</button>
+        </div>
         <textarea th:field="*{requiredSkills}" rows="2" required></textarea>
-        <div th:if="${#fields.hasErrors('requiredSkills')}" class="error-message" th:errors="*{requiredSkills}"></div>
 
+        <!-- 필요 성향 -->
         <label>필요 성향</label>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 4px;">
+            <button type="button" onclick="extractKeywords('trait')" class="btn btn-warning btn-sm">👇키워드 추출하기👇</button>
+        </div>
         <textarea th:field="*{requiredTraits}" rows="2" required></textarea>
-        <div th:if="${#fields.hasErrors('requiredTraits')}" class="error-message" th:errors="*{requiredTraits}"></div>
 
         <input type="hidden" th:field="*{latitude}" th:value="${latitude != null ? latitude : 37.5665}" />
         <input type="hidden" th:field="*{longitude}" th:value="${longitude != null ? longitude : 126.9780}" />
 
+        <!-- 기술 키워드 -->
         <label>기술 키워드</label>
-        <input type="text" th:field="*{skillKeywords}" />
-        <div th:if="${#fields.hasErrors('skillKeywords')}" class="error-message" th:errors="*{skillKeywords}"></div>
+        <div id="skill-keyword-wrapper" class="keyword-wrapper">
+            <div class="keyword-input">
+                <input type="text" name="skill_keywords[]" placeholder="기술 키워드" />
+                <button type="button" onclick="addSkillKeyword()">+</button>
+            </div>
+        </div>
 
+        <!-- 성향 키워드 -->
         <label>성향 키워드</label>
-        <input type="text" th:field="*{traitKeywords}" />
-        <div th:if="${#fields.hasErrors('traitKeywords')}" class="error-message" th:errors="*{traitKeywords}"></div>
+        <div id="trait-keyword-wrapper" class="keyword-wrapper">
+            <div class="keyword-input">
+                <input type="text" name="trait_keywords[]" placeholder="성향 키워드" />
+                <button type="button" onclick="addTraitKeyword()">+</button>
+            </div>
+        </div>
 
-        <label>채용 시작일</label>
-        <input type="date" th:field="*{startDate}" required />
-        <div th:if="${#fields.hasErrors('startDate')}" class="error-message" th:errors="*{startDate}"></div>
-
-        <label>채용 마감일</label>
-        <input type="date" th:field="*{endDate}" required />
-        <div th:if="${#fields.hasErrors('endDate')}" class="error-message" th:errors="*{endDate}"></div>
+        <div class="form-group">
+            <label style="display: block; font-weight: bold;">채용 기간</label>
+            <div style="display: flex; gap: 20px;">
+                <div style="flex: 1;">
+                    <input type="date" onclick="this.showPicker()" th:field="*{startDate}" class="form-control" style="width: 100%; cursor: pointer;" required />
+                    <div th:if="${#fields.hasErrors('startDate')}" class="error-message" th:errors="*{startDate}"></div>
+                </div>
+                <div style="flex: 1;">
+                    <input type="date" onclick="this.showPicker()" th:field="*{endDate}" class="form-control" style="width: 100%; cursor: pointer;" required />
+                    <div th:if="${#fields.hasErrors('endDate')}" class="error-message" th:errors="*{endDate}"></div>
+                </div>
+            </div>
+        </div>
 
         <label>지원 이메일</label>
         <input type="email" th:field="*{enrollEmail}" required />
@@ -170,6 +195,181 @@
         return true;
     }
 </script>
+<script>
+    const MAX_KEYWORDS = 15;
 
+    function addKeyword(wrapperId, inputName, placeholderText) {
+        const wrapper = document.getElementById(wrapperId);
+        const count = wrapper.querySelectorAll('.keyword-input').length;
+
+        if (count >= MAX_KEYWORDS) return;
+
+        // ✅ 기존 + 버튼 제거 (있다면)
+        const plusButton = Array.from(wrapper.querySelectorAll('button')).find(btn => btn.textContent === '+');
+        if (plusButton) {
+            plusButton.parentElement.remove(); // div.keyword-input 자체 삭제
+        }
+
+        // 🔼 새 키워드 input 추가
+        const inputDiv = document.createElement('div');
+        inputDiv.className = 'keyword-input';
+        inputDiv.innerHTML = `
+        <input type="text" name="${inputName}" placeholder="${placeholderText}" />
+        <button type="button" onclick="removeKeyword(this)">-</button>
+    `;
+        wrapper.appendChild(inputDiv);
+
+        // 🔽 + 버튼 재삽입 (마지막으로)
+        if (wrapper.querySelectorAll('.keyword-input').length < MAX_KEYWORDS) {
+            const plusDiv = document.createElement('div');
+            plusDiv.className = 'keyword-input';
+
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.name = inputName;
+            input.placeholder = placeholderText;
+
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.textContent = '+';
+            button.addEventListener('click', () => {
+                addKeyword(wrapperId, inputName, placeholderText);
+            });
+
+            plusDiv.appendChild(input);
+            plusDiv.appendChild(button);
+            wrapper.appendChild(plusDiv);
+        }
+    }
+
+
+    function addSkillKeyword() {
+        addKeyword('skill-keyword-wrapper', 'skill_keywords[]', '기술 키워드');
+    }
+
+    function addTraitKeyword() {
+        addKeyword('trait-keyword-wrapper', 'trait_keywords[]', '성향 키워드');
+    }
+
+    function removeKeyword(button) {
+        const wrapper = button.closest('.keyword-wrapper');
+        const inputDiv = button.parentElement;
+
+        inputDiv.remove(); // 삭제
+
+        const count = wrapper.querySelectorAll('.keyword-input').length;
+
+        // 이미 + 버튼 있으면 중복 방지
+        const hasPlusButton = Array.from(wrapper.querySelectorAll('button')).some(btn => btn.textContent === '+');
+
+        if (count < 15 && !hasPlusButton) {
+            const isSkill = wrapper.id.includes('skill');
+            const inputName = isSkill ? 'skill_keywords[]' : 'trait_keywords[]';
+            const placeholder = isSkill ? '기술 키워드' : '성향 키워드';
+
+            const plusDiv = document.createElement('div');
+            plusDiv.className = 'keyword-input';
+
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.name = inputName;
+            input.placeholder = placeholder;
+
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.textContent = '+';
+            button.addEventListener('click', () => {
+                if (isSkill) {
+                    addSkillKeyword();
+                } else {
+                    addTraitKeyword();
+                }
+            });
+
+            plusDiv.appendChild(input);
+            plusDiv.appendChild(button);
+            wrapper.appendChild(plusDiv);
+        }
+    }
+
+
+</script>
+<script>
+    async function extractKeywords(type) {
+        const textareaId = type === 'skill' ? 'requiredSkills' : 'requiredTraits';
+        const wrapperId = type === 'skill' ? 'skill-keyword-wrapper' : 'trait-keyword-wrapper';
+        const inputName = type === 'skill' ? 'skill_keywords[]' : 'trait_keywords[]';
+
+        const text = document.getElementById(textareaId).value.trim();
+        if (!text) {
+            alert("내용을 입력해주세요.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("text", text);
+
+        try {
+            const response = await fetch("http://localhost:8081/extract", {
+                method: "POST",
+                body: formData
+            });
+
+            const result = await response.json();
+            let keywords = result.keywords || [];
+
+            keywords = keywords.slice(0, 15);
+
+            const wrapper = document.getElementById(wrapperId);
+            wrapper.innerHTML = ''; // 기존 키워드 input 초기화
+
+            keywords.forEach(kw => {
+                const inputDiv = document.createElement('div');
+                inputDiv.className = 'keyword-input';
+                inputDiv.innerHTML = `
+                    <input type="text" name="${inputName}" value="${kw}" />
+                    <button type="button" onclick="removeKeyword(this)">-</button>
+                `;
+                wrapper.appendChild(inputDiv);
+            });
+            if (keywords.length < 15) {
+                const plusDiv = document.createElement('div');
+                plusDiv.className = 'keyword-input';
+                plusDiv.innerHTML = `
+        <input type="text" name="${inputName}" placeholder="${type === 'skill' ? '기술 키워드' : '성향 키워드'}" />
+        <button type="button" onclick="${type === 'skill' ? 'addSkillKeyword()' : 'addTraitKeyword()'}">+</button>
+    `;
+                wrapper.appendChild(plusDiv);
+            }
+        } catch (err) {
+            console.error("키워드 추출 중 오류:", err);
+            alert("키워드 추출 실패");
+        }
+    }
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const form = document.querySelector("form");
+        if (form) {
+            form.addEventListener("submit", function (e) {
+                const skillInputs = document.querySelectorAll("#skill-keyword-wrapper input[name='skill_keywords[]']");
+                const traitInputs = document.querySelectorAll("#trait-keyword-wrapper input[name='trait_keywords[]']");
+
+                const skillKeywords = Array.from(skillInputs)
+                    .map(input => input.value.trim())
+                    .filter(val => val)
+                    .join(",");
+
+                const traitKeywords = Array.from(traitInputs)
+                    .map(input => input.value.trim())
+                    .filter(val => val)
+                    .join(",");
+
+                document.getElementById("skillKeywordsConcat").value = skillKeywords;
+                document.getElementById("traitKeywordsConcat").value = traitKeywords;
+            });
+        }
+    });
+</script>
 </body>
 </html>

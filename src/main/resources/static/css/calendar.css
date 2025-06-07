@@ -57,7 +57,7 @@
 }
 
 .calendar-cell.today {
-    border: 2px solid #103254;
+    border: 5px solid green;
 }
 
 .date-number {
@@ -101,4 +101,39 @@
 .job-title.default {
     background-color: #e0f4ff;
     color: #103254;
+}
+
+.calendar-legend {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    align-items: center;
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+}
+
+.legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    margin-right: 6px;
+}
+
+/* 색상 클래스 재활용 */
+.legend-color.expired {
+    background-color: #d3d3d3;
+}
+
+.legend-color.closing-soon {
+    background-color: #103254;
+}
+
+.legend-color.default {
+    background-color: #e0f4ff;
+    border: 1px solid #103254;
 }

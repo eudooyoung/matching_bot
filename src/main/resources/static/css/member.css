@@ -1,0 +1,99 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #103254;
+    padding: 1rem 2rem;
+    color: white;
+}
+
+.nav-links a {
+    margin-left: 15px;
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.container {
+    background-color: white;
+    margin: 50px auto;
+    padding-top: 60px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 60px;
+    max-width: 1000px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.nav-button {
+    height: 36px;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-button:hover {
+    background-color: #103254;
+}
+
+.company-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.delete-button {
+    background-color: brown;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.delete-button:hover {
+    background-color: brown;
+}
+
+.company-table th, .company-table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+.company-table th {
+    background-color: #f2f2f2;
+}
+
+.mypage-button {
+    background-color: #103254;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.pag-button {
+    background-color: #103254;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    gap: 10px;
+}

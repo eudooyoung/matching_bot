@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>알림창</title>
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/notification.css}">
+</head>
+<body>
+
+<div th:replace="fragments/header :: header(role=${role})"></div>
+
+<div class="container">
+    <h2>받은 알림</h2>
+    <strong>제목</strong>
+    <p th:text="${notification.title}">제목</p>
+    <br>
+    <strong>내용</strong>
+    <p th:text="${notification.content}">내용</p>
+    <br>
+    <p><strong>받을 회원:</strong> <span th:text="${companyName}">회원명</span></p>
+    <p><strong>보낸 시간:</strong> <span th:text="${notification.createdAt}">보낸 시간</span></p>
+    <button class="nav-button" onclick="history.back()">← 돌아가기</button>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script th:src="@{/js/dropdown.js}"></script>
+<script th:src="@{/js/logout.js}"></script>
+
+</body>
+</html>

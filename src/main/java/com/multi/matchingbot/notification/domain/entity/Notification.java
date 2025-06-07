@@ -1,12 +1,14 @@
 package com.multi.matchingbot.notification.domain.entity;
 
-import com.multi.matchingbot.member.domain.entities.Member;
+import com.multi.matchingbot.member.domain.entity.Member;
 import com.multi.matchingbot.notification.domain.enums.NotificationStatus;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "notification")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,17 +21,16 @@ public class Notification {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
+    @JoinColumn(name = "member_id")
     private Member member;
 
-    @Column(length = 100, nullable = false)
     private String title;
-
-    @Column(length = 255, nullable = false)
     private String content;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 10, nullable = false)
     private NotificationStatus status;
-}
 
+    @Column(name = "created_at", updatable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+}

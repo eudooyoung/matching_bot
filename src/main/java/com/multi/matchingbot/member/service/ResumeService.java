@@ -1,9 +1,10 @@
 package com.multi.matchingbot.member.service;
 
-import com.multi.matchingbot.member.domain.dtos.ResumeDto;
-import com.multi.matchingbot.member.domain.dtos.ResumeViewLogDto;
-import com.multi.matchingbot.member.domain.entities.Resume;
-import com.multi.matchingbot.member.domain.entities.ResumeViewLog;
+import com.multi.matchingbot.job.repository.ResumeBookmarkRepository;
+import com.multi.matchingbot.member.domain.dto.ResumeDto;
+import com.multi.matchingbot.member.domain.dto.ResumeViewLogDto;
+import com.multi.matchingbot.member.domain.entity.Resume;
+import com.multi.matchingbot.member.domain.entity.ResumeViewLog;
 import com.multi.matchingbot.member.repository.ResumeRepository;
 import com.multi.matchingbot.member.repository.ResumeViewLogRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -22,6 +23,7 @@ public class ResumeService {
 
     private final ResumeRepository resumeRepository;
     private final ResumeViewLogRepository resumeViewLogRepository;
+    private final ResumeBookmarkRepository resumeBookmarkRepository;
 
     public List<Resume> findAll() {
         return resumeRepository.findAll();
@@ -103,4 +105,12 @@ public class ResumeService {
         ).collect(Collectors.toList());
     }
 
+    public Page<ResumeDto> getPageResumes(Pageable pageable) {
+        Page<Resume> resumePage = resumeRepository.findAll(pageable);
+        return resumePage.map(ResumeDto::fromEntity); // 여기가 실제 매핑 핵심
+    }
+
+    public List<Long> findBookmarkedResumeIdsByCompanyId(Long companyId) {
+        return resumeBookmarkRepository.findResumeIdsByCompanyId(companyId);
+    }
 }

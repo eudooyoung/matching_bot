@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>관심 공고</title>
+  <link rel="stylesheet" th:href="@{/css/company-job.css}">
+  <link rel="stylesheet" th:href="@{/css/layout.css}">
+  <style>
+    .bookmark-button {
+      background: none;
+      border: none;
+      font-size: 20px;
+      color: gold; /* ★ 색상 */
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .bookmark-button:hover {
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header(role=${role})}"></div>
+
+</body>
+</html>

@@ -29,6 +29,26 @@ public class MainPageController {
             Model model,
             @AuthenticationPrincipal MBotUserDetails user) {
 
+        log.info("mainPage 호출됨. 사용자 정보: {}", user);
+
+        if (user != null) {
+            log.info("user.getRole() 값 직접 확인: '{}'", user.getRole());
+
+
+            if ("COMPANY".equals(user.getRole())) {
+                log.info("기업 회원이므로 /resumes 리다이렉트");
+                return "redirect:/resumes";
+            }
+
+            model.addAttribute("role", user.getRole().name()); // 문자열 "MEMBER", "COMPANY", "ADMIN" 등으로 변환
+
+//            model.addAttribute("role", user.getRole());
+        } else {
+            log.info("비회원 접근");
+            model.addAttribute("role", null);
+        }
+
+        // 👉 개인회원 or 비회원에게만 채용공고 보이게
         int pageIndex = Math.max(0, page - 1);
         Page<Job> jobPage = jobService.getPageJobs(PageRequest.of(pageIndex, size));
 
@@ -36,13 +56,6 @@ public class MainPageController {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", jobPage.getTotalPages());
 
-        if(user != null) {
-            log.info("role: {}", user.getRole());
-            model.addAttribute("role", user.getRole());
-        } else {
-            model.addAttribute("role", null);
-            log.info("비회원 접근");
-        }
         return "main/main";
     }
 
@@ -51,4 +64,3 @@ public class MainPageController {
         return "main/calendar";
     }
 }
-

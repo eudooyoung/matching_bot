@@ -11,7 +11,10 @@ import com.multi.matchingbot.job.repository.JobRepository;
 import com.multi.matchingbot.job.service.JobService;
 import com.multi.matchingbot.job.service.OccupationService;
 import com.multi.matchingbot.job.service.ResumeBookmarkService;
-import com.multi.matchingbot.member.domain.dtos.ResumeDto;
+import com.multi.matchingbot.member.domain.dto.ResumeDto;
+import com.multi.matchingbot.member.domain.entity.Resume;
+import com.multi.matchingbot.member.service.ResumeService;
+import com.multi.matchingbot.notification.service.NotificationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,23 +29,29 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/job")
 public class JobController {
 
     private final CompanyService companyService;
     private final JobService jobService;
+    private final NotificationService notificationService;
     private final JobRepository jobRepository;
     private final OccupationService occupationService;
     private final ResumeBookmarkService resumeBookmarkService;
+    private final ResumeService resumeService;
 
     @Autowired
-    public JobController(CompanyService companyService, JobService jobService, JobRepository jobRepository, OccupationService occupationService, ResumeBookmarkService resumeBookmarkService) {
+    public JobController(CompanyService companyService, JobService jobService, NotificationService notificationService, JobRepository jobRepository, OccupationService occupationService, ResumeBookmarkService resumeBookmarkService, ResumeService resumeService) {
         this.companyService = companyService;
         this.jobService = jobService;
+        this.notificationService = notificationService;
         this.jobRepository = jobRepository;
         this.occupationService = occupationService;
         this.resumeBookmarkService = resumeBookmarkService;
+        this.resumeService = resumeService;
     }
 
     // 공고 목록
@@ -90,9 +99,14 @@ public class JobController {
 
         jobService.createJob(job); // 위도, 경도 불러서 저장
 
+        notificationService.sendJobNotificationToBookmarkedMembers(
+                company.getId(),
+                company.getName(),
+                job.getTitle()
+        );
+
         return "redirect:/job/manage-jobs";
     }
-
 
     // 공고 수정 페이지
     @GetMapping("/{id}/edit")
@@ -118,45 +132,44 @@ public class JobController {
         Occupation occupation = occupationService.findById(dto.getOccupationId());
         Job updatedJob = dto.toEntityWithOccupation(occupation);
 
+        updatedJob.setSkillKeywords(dto.getSkillKeywordsConcat());
+        updatedJob.setTraitKeywords(dto.getTraitKeywordsConcat());
+
         jobService.update(id, updatedJob);
 
         return "redirect:/job/manage-jobs";
     }
 
-     //공고 상세 보기 세빈코드
-//    @GetMapping("/{id}")
-//    public String getJobDetail(@PathVariable("id") Long id, Model model, @AuthenticationPrincipal MBotUserDetails userDetails) {
-//        Long companyId = userDetails.getCompanyId();
-//
-//
-//        Job job = jobService.findById(id);
-//        model.addAttribute("job", job);
-//        model.addAttribute("role", userDetails.getAuthorities());
-//        model.addAttribute("companyId", companyId);
-//
-//        return "job/job-detail";
-//    }
-
-    //공고 상세보기 형찬코드
+    // 공고 상세보기 형찬코드
     @GetMapping("/{id}")
-    public String getJobDetail(@PathVariable("id") Long id, Model model, @AuthenticationPrincipal MBotUserDetails userDetails) {
+    public String getJobDetail(@PathVariable("id") Long id,
+                               Model model,
+                               @AuthenticationPrincipal MBotUserDetails userDetails) {
 
-        Long companyId = null;
         String role = null;
-
+        Resume resume = null;
         if (userDetails != null) {
-            companyId = userDetails.getCompanyId();
             role = userDetails.getRole().name();
-        }
 
+            // 이력서 조회
+            List<Resume> resumes = resumeService.findByMemberId(userDetails.getMemberId());
+            if (!resumes.isEmpty()) {
+                resume = resumes.get(0); // 첫 번째 이력서 사용
+            }
+
+            model.addAttribute("resume", resume); // ✅ 비회원이면 이 값은 안 들어감
+        }
         Job job = jobService.findById(id);
+        Long postingCompanyId = job.getCompany().getId();
+
         model.addAttribute("job", job);
+        model.addAttribute("resume", resume);
         model.addAttribute("role", role);
-        model.addAttribute("companyId", companyId);
+        model.addAttribute("companyId", postingCompanyId);
 
         return "job/job-detail";
-    }
 
+    }
 
     // 관심 이력서 관리(id 포함)
     @GetMapping("/resume-bookmark")

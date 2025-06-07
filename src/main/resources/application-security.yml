@@ -16,6 +16,7 @@ security:
       - /api/occupations/**
       - /css/**
       - /js/**
+      - /img/**
       - /favicon.ico
       - /.well-known
       - /error/**
@@ -26,12 +27,14 @@ security:
       - /map_popup
       - /api/v1/auth/login
       - /api/v1/auth/refresh
+      - /api/v1/attached/report-image-path/**
+      - /api/v1/attached/summary-image-path/**
       - /search-page/**
       - /jobs/**
       - /community/**
       - /calendar
       - /job/**
-#      - /job/detail/**
+      - /job/detail/**
 
       - /community/detail/**
       - /api/v1/chatbot/**
@@ -41,6 +44,9 @@ security:
       - /v3/api-docs
       - /v3/api-docs/**
       - /upload/**
+      - /attached/company/**
+      - /member/register
+      - /company/register
     authenticated-paths:      #authenticated
       - /api/**
     member-paths:
@@ -51,6 +57,7 @@ security:
       - /community/delete/**
       - /community/**
     company-paths:
+      - /resumes/**
       - /company/**
       - /job/**
       - /api/occupations/**
@@ -58,5 +65,3 @@ security:
       - /admin/**
     #      - /company/**
     #      - /job/**
-    api-paths:
-      - /api/**

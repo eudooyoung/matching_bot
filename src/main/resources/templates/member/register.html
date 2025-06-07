@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입 - MatchingBot</title>
+    <link rel="stylesheet" th:href="@{/css/register.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+</head>
+
+<body>
+<div class="wrapper">
+    <div th:replace="~{fragments/header :: header(role=${role})}"></div>
+
+
+    <main class="main-content">
+        <div class="container">
+            <div class="form-title-row">
+                <h2>회원가입 (구직자)</h2>
+                <p class="required-note">* 표시는 필수 입력 항목입니다.</p>
+            </div>
+
+            <!-- 에러 메시지 표시 -->
+            <div th:if="${error}" class="error-message">
+                <p th:text="${error}">회원가입 중 오류가 발생했습니다.</p>
+            </div>
+
+            <form id="userForm" action="/member/register" th:object="${memberDto}" method="post">
+
+                <label for="email">* 이메일</label>
+                <input type="email" id="email" th:field="*{email}" name="email" placeholder="email@matchingbot.co.kr"
+                       required>
+
+                <label for="password">* 비밀번호</label>
+                <input type="password" id="password" name="password"
+                       placeholder="8~16자 / 영문, 숫자, 특수문자 조합"
+                       required minlength="8" maxlength="16"
+                       pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+=-]).{8,16}$"
+                       title="8~16자, 영문/숫자/특수문자를 모두 포함해야 합니다.">
+
+                <!-- 이름 -->
+                <label for="name">* 이름</label>
+                <input type="text"
+                       id="name"
+                       name="name"
+                       th:field="*{name}"
+                       placeholder="이름을 입력해주세요"
+                       required
+                       minlength="2"
+                       maxlength="10">
+
+                <label for="nickname">* 닉네임</label>
+                <input type="text"
+                       id="nickname"
+                       name="nickname"
+                       th:field="*{nickname}"
+                       placeholder="닉네임을 입력해주세요 (2~15자)"
+                       required
+                       minlength="2"
+                       maxlength="15"
+                       pattern="^[가-힣a-zA-Z0-9_-]{2,15}$"
+                       title="닉네임은 2~15자의 한글, 영문, 숫자, '_', '-'만 사용할 수 있습니다.">
+
+                <label>* 주소</label>
+                <div class="address-wrapper">
+                    <input type="text" id="addressRegion" th:field="*{addressRegion}" name="addressRegion"
+                           class="address-input"
+                           placeholder="주소를 입력해주세요"
+                           readonly required maxlength="50">
+                    <button type="button" class="address-btn" data-target="addressRegion">주소 찾기</button>
+                    <input type="text" id="addressDetail" th:field="*{addressDetail}" name="addressDetail"
+                           class="address-input"
+                           placeholder="상세 주소 (예: 아파트 동/호수 등)" maxlength="50">
+                </div>
+
+                <!-- 생년월일 / 성별 -->
+                <div class="section-title">* 생년월일 / 성별</div>
+
+                <div class="birth-gender">
+                    <select th:field="*{year}" id="year" required>
+                        <option value="">출생 연도</option>
+                        <option th:each="y : ${#numbers.sequence(1900, 2030)}"
+                                th:value="${y}" th:text="${y + '년'}"></option>
+                    </select>
+
+                    <select th:field="*{month}" id="month" required>
+                        <option value="">월</option>
+                        <option th:each="m : ${#numbers.sequence(1, 12)}"
+                                th:value="${m}" th:text="${m + '월'}"></option>
+                    </select>
+
+                    <select th:field="*{day}" id="day" required>
+                        <option value="">일</option>
+                        <option th:each="d : ${#numbers.sequence(1, 31)}"
+                                th:value="${d}" th:text="${d + '일'}"></option>
+                    </select>
+                </div>
+
+                <div class="gender-options">
+                    <label>
+                        <input type="radio" th:field="*{gender}" name="gender" value="M" required> 남성
+                    </label>
+                    <label>
+                        <input type="radio" th:field="*{gender}" name="gender" value="F"> 여성
+                    </label>
+                </div>
+
+                <label>* 휴대전화번호</label>
+                <div class="phone-input">
+                    <select th:field="*{phone1}" name="phone1" class="phone-segment" required>
+                        <option value="">선택</option>
+                        <option value="010">010</option>
+                        <option value="011">011</option>
+                        <option value="016">016</option>
+                        <option value="017">017</option>
+                        <option value="018">018</option>
+                        <option value="019">019</option>
+                    </select>
+                    <input type="tel" th:field="*{phone2}" name="phone2" class="phone-segment" maxlength="4"
+                           pattern="\d{3,4}" title="숫자 3~4자리를 입력하세요" required>
+                    <input type="tel" th:field="*{phone3}" name="phone3" class="phone-segment" maxlength="4"
+                           pattern="\d{4}" title="숫자 4자리를 입력하세요" required>
+                </div>
+
+
+                <!-- 약관동의 -->
+                <!-- 약관동의 -->
+                <div class="section-title">* 약관동의</div>
+                <div class="agreement-box">
+                    <div class="checkbox-group">
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="agree_all">
+                            <span>전체 동의</span>
+                        </label>
+
+                        <label class="checkbox-item">
+                            <input type="checkbox" th:field="*{agreeService}" name="agreeService" value="Y" required>
+                            <span>(필수) 서비스 이용약관 동의</span>
+                            <a href="#" onclick="openAgreementModal('terms'); return false;">[보기]</a>
+                        </label>
+
+                        <label class="checkbox-item">
+                            <input type="checkbox" th:field="*{agreePrivacy}" name="agreePrivacy" value="Y" required>
+                            <span>(필수) 개인정보 수집 및 이용 동의</span>
+                            <a href="#" onclick="openAgreementModal('privacy'); return false;">[보기]</a>
+                        </label>
+
+                        <label class="checkbox-item">
+                            <input type="checkbox" th:field="*{agreeLocation}" name="agreeLocation" value="Y" required>
+                            <span>(필수) 위치기반 서비스 이용약관 동의</span>
+                            <a href="#" onclick="openAgreementModal('location'); return false;">[보기]</a>
+                        </label>
+
+                        <label class="checkbox-item">
+                            <input type="checkbox" th:field="*{agreeMarketing}" name="agreeMarketing" value="Y">
+                            <span>(선택) 마케팅 정보 수신 동의 - 이메일</span>
+                            <a href="#" onclick="openAgreementModal('marketing'); return false;">[보기]</a>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">가입하기</button>
+
+            </form>
+        </div>
+    </main>
+    <!-- 약관 모달 -->
+    <div id="agreementModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">서비스 이용약관</h2>
+            <div class="modal-body" id="modalContent">
+                <!-- JS에서 삽입할 내용 -->
+            </div>
+        </div>
+    </div>
+    <!-- 공통 푸터 -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</div>
+
+<script th:src="@{/js/dropdown.js}"></script>
+<script th:src="@{/js/logout.js}"></script>
+<script th:src="@{/js/register/postcode.js}"></script>
+<script type="module" th:src="@{/js/register/member-terms-modal.js}"></script>
+<script type="module" th:src="@{/js/register/member-functions.js}"></script>
+</body>
+</html>
