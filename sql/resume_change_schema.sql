@@ -237,7 +237,7 @@ CREATE TABLE resume (
     occupation_id BIGINT NOT NULL,
     title VARCHAR(50) NOT NULL,
     skill_answer VARCHAR(255) NOT NULL,
-    trait_answer VARCHAR(255),
+    trait_answer VARCHAR(255) NOT NULL,
     skill_keywords VARCHAR(100),
     trait_keywords VARCHAR(100),
     keywords_status ENUM('Y', 'N') NOT NULL DEFAULT 'N' COMMENT '키워드 추출 상태',

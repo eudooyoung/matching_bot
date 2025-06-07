@@ -12,6 +12,7 @@ import com.multi.matchingbot.job.service.JobService;
 import com.multi.matchingbot.job.service.OccupationService;
 import com.multi.matchingbot.job.service.ResumeBookmarkService;
 import com.multi.matchingbot.member.domain.dtos.ResumeDto;
+import com.multi.matchingbot.member.domain.entities.Resume;
 import com.multi.matchingbot.member.service.ResumeService;
 import com.multi.matchingbot.notification.service.NotificationService;
 import jakarta.validation.Valid;
@@ -20,7 +21,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,11 +28,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/job")
@@ -45,7 +42,7 @@ public class JobController {
     private final OccupationService occupationService;
     private final ResumeBookmarkService resumeBookmarkService;
     private final ResumeService resumeService;
-    private final RestTemplate restTemplate = new RestTemplate();
+//    private final RestTemplate restTemplate = new RestTemplate();
 
     @Autowired
     public JobController(CompanyService companyService, JobService jobService, NotificationService notificationService, JobRepository jobRepository, OccupationService occupationService, ResumeBookmarkService resumeBookmarkService, ResumeService resumeService) {
@@ -149,34 +146,36 @@ public class JobController {
 
     // 공고 상세보기 형찬코드
     @GetMapping("/{id}")
-    public String getJobDetail(@PathVariable("id") Long id, Model model, @AuthenticationPrincipal MBotUserDetails userDetails) {
+    public String getJobDetail(@PathVariable("id") Long id,
+                               Model model,
+                               @AuthenticationPrincipal MBotUserDetails userDetails) {
 
         String role = null;
+        Resume resume = null;
         if (userDetails != null) {
             role = userDetails.getRole().name();
+
+            // 이력서 조회
+            List<Resume> resumes = resumeService.findByMemberId(userDetails.getMemberId());
+            if (!resumes.isEmpty()) {
+                resume = resumes.get(0); // 첫 번째 이력서 사용
+            }
+
+            model.addAttribute("resume", resume); // ✅ 비회원이면 이 값은 안 들어감
         }
-
         Job job = jobService.findById(id);
-        Long postingCompanyId = job.getCompany().getId(); // ✅ 공고 등록 기업 ID
-
-//        Resume resume = null;
-//        System.out.println("userDetails.getMemberId(): " + userDetails.getMemberId());
-//        List<Resume> resumes = resumeService.findByMemberId(userDetails.getMemberId());
-//        System.out.println("resumes: " + resumes);
-//        if (!resumes.isEmpty()) {
-//            resume = resumes.get(0); // 첫 번째 이력서 사용
-//        }
+        Long postingCompanyId = job.getCompany().getId();
 
         model.addAttribute("job", job);
-//        model.addAttribute("resume", resume);
+        model.addAttribute("resume", resume);
         model.addAttribute("role", role);
-        model.addAttribute("companyId", postingCompanyId); // ✅ 수정된 부분
+        model.addAttribute("companyId", postingCompanyId);
 
         return "job/job-detail";
 
     }
 
-    @PostMapping("/calculate-similarity")
+    /*@PostMapping("/calculate-similarity")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> calculateSimilarity(@RequestBody Map<String, List<String>> payload) {
         try {
@@ -198,7 +197,7 @@ public class JobController {
             error.put("error", "유사도 계산 실패: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
         }
-    }
+    }*/
 
 
 
