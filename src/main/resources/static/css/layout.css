@@ -179,3 +179,24 @@ body {
     color: #103254;
     text-decoration: none;
 }
+
+.resume-card-header {
+    position: relative;
+    padding-top: 8px;
+    padding-right: 32px; /* 별 버튼이 텍스트 안 가리게 */
+}
+
+.star-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: gold;
+    cursor: pointer;
+}
+
+.star-button.filled {
+    color: gold;
+}

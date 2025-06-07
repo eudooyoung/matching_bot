@@ -26,5 +26,9 @@ public class ResumeBookmark {
     @JoinColumn(name = "resume_id", nullable = false)
     private Resume resume;
 
+    public ResumeBookmark(Company company, Resume resume) {
+        this.company = company;
+        this.resume = resume;
+    }
 }
 

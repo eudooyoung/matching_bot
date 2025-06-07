@@ -11,6 +11,7 @@ import com.multi.matchingbot.job.repository.JobRepository;
 import com.multi.matchingbot.job.service.JobService;
 import com.multi.matchingbot.job.service.OccupationService;
 import com.multi.matchingbot.job.service.ResumeBookmarkService;
+import com.multi.matchingbot.member.domain.dtos.ResumeDto;
 import com.multi.matchingbot.member.domain.dto.ResumeDto;
 import com.multi.matchingbot.member.service.ResumeService;
 import com.multi.matchingbot.notification.service.NotificationService;
@@ -44,18 +45,16 @@ public class JobController {
     private final JobRepository jobRepository;
     private final OccupationService occupationService;
     private final ResumeBookmarkService resumeBookmarkService;
-    private final ResumeService resumeService;
     private final RestTemplate restTemplate = new RestTemplate();
 
     @Autowired
-    public JobController(CompanyService companyService, JobService jobService, NotificationService notificationService, JobRepository jobRepository, OccupationService occupationService, ResumeBookmarkService resumeBookmarkService, ResumeService resumeService) {
+    public JobController(CompanyService companyService, JobService jobService, NotificationService notificationService, JobRepository jobRepository, OccupationService occupationService, ResumeBookmarkService resumeBookmarkService) {
         this.companyService = companyService;
         this.jobService = jobService;
         this.notificationService = notificationService;
         this.jobRepository = jobRepository;
         this.occupationService = occupationService;
         this.resumeBookmarkService = resumeBookmarkService;
-        this.resumeService = resumeService;
     }
 
     // 공고 목록
@@ -112,7 +111,6 @@ public class JobController {
         return "redirect:/job/manage-jobs";
     }
 
-
     // 공고 수정 페이지
     @GetMapping("/{id}/edit")
     public String showEditForm(@PathVariable("id") Long id, Model model) {
@@ -144,8 +142,6 @@ public class JobController {
 
         return "redirect:/job/manage-jobs";
     }
-
-
 
     // 공고 상세보기 형찬코드
     @GetMapping("/{id}")
@@ -199,8 +195,6 @@ public class JobController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
         }
     }
-
-
 
     // 관심 이력서 관리(id 포함)
     @GetMapping("/resume-bookmark")

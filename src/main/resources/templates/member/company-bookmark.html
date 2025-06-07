@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>관심 기업</title>
+  <link rel="stylesheet" th:href="@{/css/member.css}">
+  <link rel="stylesheet" th:href="@{/css/layout.css}">
+  <style>
+    .bookmark-button {
+      background: none;
+      border: none;
+      font-size: 20px;
+      color: gold; /* ★ 색상 */
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .bookmark-button:hover {
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header(role=${role})}"></div>
+
+<div class="container">
+  <h2>관심 기업 관리</h2>
+
+  <button class="delete-button"
+          th:attr="data-member-id=${memberId}"
+          onclick="deleteSelected()">삭제</button>
+
+  <table class="company-table">
+    <thead>
+    <tr>
+      <th><input type="checkbox" onclick="toggleAll(this)"/></th>
+      <th style="width: 10%;">번호</th>
+      <th>기업 이름</th>
+      <th>상세보기</th>
+      <th>즐겨찾기</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="company, iterStat : ${companyPage.content}" th:attr="data-company-id=${company.id}">
+      <td>
+        <input type="checkbox" name="companyIds" th:value="${company.id}"/>
+      </td>
+      <td th:text="${iterStat.index + 1}"></td>
+      <td th:text="${companyName}">기업 이름</td>
+      <td th:onclick="">상세보기</td>
+      <td>
+        <button class="bookmark-button"
+                th:data-resume-id="${company.id}"
+                th:data-company-id="${memberId}"
+                onclick="deleteBookmark(this)">★
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <button class="mypage-button" onclick="location.href='/member/mypage'">돌아가기</button>
+
+  <div class="pagination">
+    <button class="pag-button" th:if="${!companyPage.first}"
+            th:onclick="'location.href=\'/job/company-bookmark?page=' + ${companyPage.number - 1} + '\''">
+      이전
+    </button>
+
+    <span th:text="${companyPage.number + 1}">1</span> /
+    <span th:text="${companyPage.totalPages}">1</span>
+
+    <button class="pag-button" th:if="${!companyPage.last}"
+            th:onclick="'location.href=\'/job/company-bookmark?page=' + ${companyPage.number + 1} + '\''">
+      다음
+    </button>
+  </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script th:src="@{/js/dropdown.js}"></script>
+<script th:src="@{/js/logout.js}"></script>
+
+</body>
+</html>

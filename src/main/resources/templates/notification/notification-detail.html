@@ -18,7 +18,7 @@
     <strong>내용</strong>
     <p th:text="${notification.content}">내용</p>
     <br>
-    <p><strong>보낸 기업:</strong> <span th:text="${companyName}">기업명</span></p>
+    <p><strong>받을 회원:</strong> <span th:text="${companyName}">회원명</span></p>
     <p><strong>보낸 시간:</strong> <span th:text="${notification.createdAt}">보낸 시간</span></p>
     <button class="nav-button" onclick="history.back()">← 돌아가기</button>
 </div>

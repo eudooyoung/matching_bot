@@ -1,15 +1,19 @@
 package com.multi.matchingbot.notification.controller;
 
 import com.multi.matchingbot.common.security.MBotUserDetails;
+import com.multi.matchingbot.notification.domain.dto.NotificationDto;
 import com.multi.matchingbot.notification.domain.entity.Notification;
 import com.multi.matchingbot.notification.domain.enums.NotificationStatus;
 import com.multi.matchingbot.notification.service.NotificationService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -42,5 +46,24 @@ public class NotificationController {
         model.addAttribute("notification", notification);
         model.addAttribute("companyName", notification.getMember().getName());
         return "notification/notification-detail";
+    }
+
+    @DeleteMapping("/delete-read-all")
+    @ResponseBody
+    public ResponseEntity<Void> deleteAllReadNotifications(@AuthenticationPrincipal MBotUserDetails userDetails) {
+        Long memberId = userDetails.getId(); // 로그인 사용자 ID
+        notificationService.deleteAllReadNotifications(memberId);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/read-list")
+    @ResponseBody
+    public Page<NotificationDto> getReadNotifications(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size,
+            @AuthenticationPrincipal MBotUserDetails userDetails) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        return notificationService.getPagedReadNotifications(userDetails.getId(), pageable);
     }
 }
