@@ -1,5 +1,5 @@
-import com.multi.matchingbot.member.domain.dtos.ResumeDto;
-import com.multi.matchingbot.member.domain.entities.Resume;
+import com.multi.matchingbot.member.domain.dto.ResumeDto;
+import com.multi.matchingbot.member.domain.entity.Resume;
 import com.multi.matchingbot.member.service.ResumeService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

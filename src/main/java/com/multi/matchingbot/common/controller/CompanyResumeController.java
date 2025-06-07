@@ -1,9 +1,6 @@
 package com.multi.matchingbot.common.controller;
 
 import com.multi.matchingbot.common.security.MBotUserDetails;
-
-
-import com.multi.matchingbot.common.security.MBotUserDetails;
 import com.multi.matchingbot.member.domain.dto.ResumeDto;
 import com.multi.matchingbot.member.domain.entity.Resume;
 import com.multi.matchingbot.member.service.ResumeService;
@@ -40,9 +37,9 @@ public class CompanyResumeController {
 
         log.info("📄 resumeList() 컨트롤러 도달!");
 
-        if (user != null) {
-            log.info("현재 사용자 ROLE: {}", user.getRole());
-            model.addAttribute("role", user.getRole().name());  // ✅ role 전달
+        if (userDetails != null) {
+            log.info("현재 사용자 ROLE: {}", userDetails.getRole());
+            model.addAttribute("role", userDetails.getRole().name());  // ✅ role 전달
         } else {
             model.addAttribute("role", null);  // 예외적으로 null 처리
         }

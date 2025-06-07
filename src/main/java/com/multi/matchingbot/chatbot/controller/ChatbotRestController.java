@@ -34,8 +34,6 @@ public class ChatbotRestController {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         }
-        Map<String, Object> reviewResult = reviewService.review(request);
-        return ResponseEntity.ok().body(Map.of("review", reviewResult));
 
         Map<String, Object> reviewResult = reviewService.review(request); // 실제 리뷰 결과 리턴
         for (Map.Entry<String, Object> entry : reviewResult.entrySet()) {
@@ -43,7 +41,6 @@ public class ChatbotRestController {
         }
         return ResponseEntity.ok().body(reviewResult);
     }
-
     @PostMapping("/talk")
     public ResponseEntity<?> talkWithGpt(@RequestBody Map<String, String> request) {
         System.out.println("✅ talkWithGpt 호출됨: " + request);
