@@ -2,8 +2,8 @@ package com.multi.matchingbot.member.controller;
 
 import com.multi.matchingbot.admin.mapper.MemberAdminMapper;
 import com.multi.matchingbot.common.security.MBotUserDetails;
-import com.multi.matchingbot.member.domain.dtos.MemberUpdateDto;
-import com.multi.matchingbot.member.domain.entities.Member;
+import com.multi.matchingbot.member.domain.dto.MemberUpdateDto;
+import com.multi.matchingbot.member.domain.entity.Member;
 import com.multi.matchingbot.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

@@ -1,6 +1,6 @@
 package com.multi.matchingbot.notification.domain.entity;
 
-import com.multi.matchingbot.member.domain.entities.Member;
+import com.multi.matchingbot.member.domain.entity.Member;
 import com.multi.matchingbot.notification.domain.enums.NotificationStatus;
 import jakarta.persistence.*;
 import lombok.*;

@@ -7,6 +7,7 @@ import com.multi.matchingbot.job.repository.ResumeBookmarkRepository;
 import com.multi.matchingbot.member.domain.dtos.ResumeDto;
 import com.multi.matchingbot.member.domain.entities.Resume;
 import com.multi.matchingbot.member.repository.ResumeRepository;
+import com.multi.matchingbot.member.domain.dto.ResumeDto;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

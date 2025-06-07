@@ -1,4 +1,4 @@
-package com.multi.matchingbot.member.domain.entities;
+package com.multi.matchingbot.member.domain.entity;
 
 import com.multi.matchingbot.company.domain.Company;
 import jakarta.persistence.*;

@@ -56,7 +56,7 @@ public class CompanyController {
     }
 
     @GetMapping("/{id}")
-    public CompanyUpdateDto getCompany(@PathVariable Long id) {
+    public CompanyUpdateDto getCompany(@PathVariable("id") Long id) {
         return companyService.getCompanyById(id);
     }
 
@@ -66,12 +66,12 @@ public class CompanyController {
     }
 
     @PutMapping("/{id}")
-    public CompanyUpdateDto updateCompany(@PathVariable Long id, @RequestBody CompanyUpdateDto dto) {
+    public CompanyUpdateDto updateCompany(@PathVariable("id") Long id, @RequestBody CompanyUpdateDto dto) {
         return companyService.updateCompany(id, dto);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCompany(@PathVariable Long id) {
+    public void deleteCompany(@PathVariable("id") Long id) {
         companyService.deleteCompany(id);
     }
 
