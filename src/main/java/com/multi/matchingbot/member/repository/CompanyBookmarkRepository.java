@@ -1,6 +1,6 @@
 package com.multi.matchingbot.member.repository;
 
-import com.multi.matchingbot.member.domain.entities.CompanyBookmark;
+import com.multi.matchingbot.member.domain.entity.CompanyBookmark;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

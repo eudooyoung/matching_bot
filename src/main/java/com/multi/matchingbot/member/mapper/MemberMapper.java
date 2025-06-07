@@ -1,7 +1,7 @@
 package com.multi.matchingbot.member.mapper;
 
-import com.multi.matchingbot.member.domain.entities.Member;
-import com.multi.matchingbot.member.domain.dtos.MemberUpdateDto;
+import com.multi.matchingbot.member.domain.entity.Member;
+import com.multi.matchingbot.member.domain.dto.MemberUpdateDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
