@@ -1,7 +1,7 @@
 package com.multi.matchingbot.admin.repository;
 
 import com.multi.matchingbot.common.domain.enums.Yn;
-import com.multi.matchingbot.member.domain.entities.Resume;
+import com.multi.matchingbot.member.domain.entity.Resume;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

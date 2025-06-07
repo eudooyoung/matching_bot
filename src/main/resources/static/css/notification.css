@@ -61,3 +61,9 @@
 .nav-button:hover {
     background-color: #103254;
 }
+
+.delete-all-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}

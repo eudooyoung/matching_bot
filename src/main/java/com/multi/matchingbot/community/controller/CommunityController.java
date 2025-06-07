@@ -6,7 +6,7 @@ import com.multi.matchingbot.community.domain.CommunityPostDto;
 import com.multi.matchingbot.community.service.CommunityService;
 import com.multi.matchingbot.company.domain.Company;
 import com.multi.matchingbot.company.service.CompanyService;
-import com.multi.matchingbot.member.domain.entities.Member;
+import com.multi.matchingbot.member.domain.entity.Member;
 import com.multi.matchingbot.member.service.MemberService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -36,9 +36,9 @@ public class CommunityController {
     }
 
     @GetMapping("/list")
-    public String list(@RequestParam(required = false, defaultValue = "") Long categoryId,
-                       @RequestParam(defaultValue = "0") int page,
-                       @RequestParam(defaultValue = "9") int size,
+    public String list(@RequestParam(name = "categoryId", required = false, defaultValue = "") Long categoryId,
+                       @RequestParam(name = "page",defaultValue = "0") int page,
+                       @RequestParam(name = "size",defaultValue = "9") int size,
                        Model model,
                        Authentication authentication) {
 

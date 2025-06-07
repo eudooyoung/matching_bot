@@ -34,7 +34,7 @@ security:
       - /community/**
       - /calendar
       - /job/**
-#      - /job/detail/**
+      - /job/detail/**
 
       - /community/detail/**
       - /api/v1/chatbot/**
@@ -45,6 +45,8 @@ security:
       - /v3/api-docs/**
       - /upload/**
       - /attached/company/**
+      - /member/register
+      - /company/register
     authenticated-paths:      #authenticated
       - /api/**
     member-paths:

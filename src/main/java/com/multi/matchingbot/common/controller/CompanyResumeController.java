@@ -1,8 +1,11 @@
 package com.multi.matchingbot.common.controller;
 
 import com.multi.matchingbot.common.security.MBotUserDetails;
-import com.multi.matchingbot.member.domain.dtos.ResumeDto;
-import com.multi.matchingbot.member.domain.entities.Resume;
+
+
+import com.multi.matchingbot.common.security.MBotUserDetails;
+import com.multi.matchingbot.member.domain.dto.ResumeDto;
+import com.multi.matchingbot.member.domain.entity.Resume;
 import com.multi.matchingbot.member.service.ResumeService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +21,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @Slf4j
 @Controller
 @RequestMapping("/resumes")
@@ -30,8 +35,8 @@ public class CompanyResumeController {
     @GetMapping
     public String resumeList(@RequestParam(name = "page", defaultValue = "1") int page,
                              @RequestParam(name = "size", defaultValue = "6") int size,
-                             Model model,
-                             @AuthenticationPrincipal MBotUserDetails user) {
+                             @AuthenticationPrincipal MBotUserDetails userDetails,
+                             Model model) {
 
         log.info("📄 resumeList() 컨트롤러 도달!");
 
@@ -44,6 +49,9 @@ public class CompanyResumeController {
 
         int pageIndex = Math.max(0, page - 1);
         Page<ResumeDto> resumePage = resumeService.getPageResumes(PageRequest.of(pageIndex, size));
+        List<Long> bookmarkedIds = resumeService.findBookmarkedResumeIdsByCompanyId(userDetails.getCompanyId());
+
+        resumePage.forEach(dto -> dto.setBookmarked(bookmarkedIds.contains(dto.getId())));
 
         model.addAttribute("resumeList", resumePage.getContent());
         model.addAttribute("currentPage", page);

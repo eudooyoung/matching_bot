@@ -1,7 +1,7 @@
 package com.multi.matchingbot.member.repository;
 
-import com.multi.matchingbot.member.domain.entities.Resume;
 import com.multi.matchingbot.resume.repository.ResumeRepositoryCustom;
+import com.multi.matchingbot.member.domain.entity.Resume;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

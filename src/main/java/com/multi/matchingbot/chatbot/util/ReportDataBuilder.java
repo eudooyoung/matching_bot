@@ -10,7 +10,7 @@ public class ReportDataBuilder {
     public static Map<String, Object> fromCompany(CompanyRegisterDto dto) {
             return buildCommonMap(
                     dto.getName(),
-                    dto.getEstablishedYear(),
+                    dto.getYearFound(),
                     dto.getHeadcount(),
                     dto.getIndustry(),
                     dto.getAnnualRevenue(),

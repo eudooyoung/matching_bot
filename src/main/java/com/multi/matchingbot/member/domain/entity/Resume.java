@@ -1,4 +1,4 @@
-package com.multi.matchingbot.member.domain.entities;
+package com.multi.matchingbot.member.domain.entity;
 
 import com.multi.matchingbot.common.domain.entity.BaseEntity;
 import com.multi.matchingbot.common.domain.enums.Yn;
@@ -30,7 +30,7 @@ public class Resume extends BaseEntity {
     private List<Career> careers = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "occupation_id", nullable = false)
     private Occupation occupation;
 
 //    @Enumerated(EnumType.STRING)
@@ -59,11 +59,11 @@ public class Resume extends BaseEntity {
     private Yn keywordsStatus = Yn.N;
 
     public void updateFrom(Resume updatedResume) {
-        this.title = title;
-        this.skillAnswer = skillAnswer;
-        this.traitAnswer = traitAnswer;
-        this.skillKeywords = skillKeywords;
-        this.traitKeywords = traitKeywords;
+        this.title = updatedResume.getTitle();
+        this.skillAnswer = updatedResume.getSkillAnswer();
+        this.traitAnswer = updatedResume.getTraitAnswer();
+        this.skillKeywords = updatedResume.getSkillKeywords();
+        this.traitKeywords = updatedResume.getTraitKeywords();
     }
 
     @PreUpdate

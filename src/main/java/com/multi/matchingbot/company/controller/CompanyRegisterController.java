@@ -1,7 +1,7 @@
 package com.multi.matchingbot.company.controller;
 
-import com.multi.matchingbot.company.service.AuthCompanyRegistService;
 import com.multi.matchingbot.company.domain.CompanyRegisterDto;
+import com.multi.matchingbot.company.service.CompanyRegisterService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -13,39 +13,37 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/auth")
+@RequestMapping("/company")
 @RequiredArgsConstructor
 public class CompanyRegisterController {
 
-    private final AuthCompanyRegistService authCompanyRegistService;
+    private final CompanyRegisterService registerService;
 
-    @GetMapping("/register-company")
+    @GetMapping("/register")
     public String showCompanyRegisterForm(Model model) {
-        model.addAttribute("companyDto", new CompanyRegisterDto());
-
-        return "auth/register-company";
-
+        CompanyRegisterDto dto = new CompanyRegisterDto();
+        dto.setYearFound(1980);
+        model.addAttribute("companyDto", dto);
+        return "company/register";
     }
 
-    @PostMapping("/register-company")
-    public String registerCompany(@Valid @ModelAttribute("companyDto") CompanyRegisterDto dto,
-                                  BindingResult bindingResult,
+    @PostMapping("/register")
+    public String registerCompany(@Valid @ModelAttribute("companyDto") CompanyRegisterDto dto, BindingResult bindingResult,
                                   Model model) {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("companyDto", dto); // <- 입력 값 유지
-            return "auth/register-company";
+            return "company/register";
         }
 
         try {
-            authCompanyRegistService.register(dto);
+            registerService.registerCompany(dto);
             return "redirect:/auth/login";
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("error", e.getMessage());
-            return "auth/register-company";
+            return "company/register";
         }
 
     }
-
 }

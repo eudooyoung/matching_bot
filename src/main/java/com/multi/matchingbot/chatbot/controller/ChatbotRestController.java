@@ -36,6 +36,12 @@ public class ChatbotRestController {
         }
         Map<String, Object> reviewResult = reviewService.review(request);
         return ResponseEntity.ok().body(Map.of("review", reviewResult));
+
+        Map<String, Object> reviewResult = reviewService.review(request); // 실제 리뷰 결과 리턴
+        for (Map.Entry<String, Object> entry : reviewResult.entrySet()) {
+            System.out.println("key = " + entry.getKey() + ", value = " + entry.getValue());
+        }
+        return ResponseEntity.ok().body(reviewResult);
     }
 
     @PostMapping("/talk")

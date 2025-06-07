@@ -1,6 +1,6 @@
 package com.multi.matchingbot.member.repository;
 
-import com.multi.matchingbot.member.domain.entities.ResumeViewLog;
+import com.multi.matchingbot.member.domain.entity.ResumeViewLog;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

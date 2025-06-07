@@ -2,7 +2,6 @@ package com.multi.matchingbot.job.domain.dto;
 
 import com.multi.matchingbot.job.domain.entity.Job;
 import com.multi.matchingbot.job.domain.entity.Occupation;
-import com.multi.matchingbot.job.domain.entity.Job;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -88,8 +87,8 @@ public class JobDto {
         job.setMainTask(this.mainTask);
         job.setRequiredSkills(this.requiredSkills);
         job.setRequiredTraits(this.requiredTraits);
-        job.setSkillKeywords(this.skillKeywords);
-        job.setTraitKeywords(this.traitKeywords);
+        job.setSkillKeywords(this.skillKeywordsConcat);
+        job.setTraitKeywords(this.traitKeywordsConcat);
         job.setStartDate(this.startDate);
         job.setEndDate(this.endDate);
         job.setEnrollEmail(this.enrollEmail);

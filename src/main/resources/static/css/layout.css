@@ -59,6 +59,9 @@ body {
 /* 메인 콘텐츠는 늘어나게 */
 .main-content {
     flex: 1;
+    width: 100%;
+    padding: 0 16px; /* ✅ 모든 페이지 좌우 여백 */
+    box-sizing: border-box;
 }
 
 /* Footer */
@@ -175,4 +178,25 @@ body {
     background-color: #a8a8a8;
     color: #103254;
     text-decoration: none;
+}
+
+.resume-card-header {
+    position: relative;
+    padding-top: 8px;
+    padding-right: 32px; /* 별 버튼이 텍스트 안 가리게 */
+}
+
+.star-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: gold;
+    cursor: pointer;
+}
+
+.star-button.filled {
+    color: gold;
 }

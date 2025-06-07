@@ -45,25 +45,6 @@
 </div>
 
 <script>
-    /*function showForm(type) {
-        const memberTab = document.getElementById("member-tab");
-        const companyTab = document.getElementById("company-tab");
-        const memberForm = document.getElementById("member-form");
-        const companyForm = document.getElementById("company-form");
-
-        if (type === "member") {
-            memberTab.classList.add("active");
-            companyTab.classList.remove("active");
-            memberForm.classList.add("active");
-            companyForm.classList.remove("active");
-        } else {
-            companyTab.classList.add("active");
-            memberTab.classList.remove("active");
-            companyForm.classList.add("active");
-            memberForm.classList.remove("active");
-        }
-    }*/
-
     function showForm(type) {
         const memberTab = document.getElementById("member-tab");
         const companyTab = document.getElementById("company-tab");
@@ -122,6 +103,8 @@
         e.preventDefault();
         handleLogin("email2", "password2", "error-msg2", "COMPANY");
     });
+
+
 </script>
 
 <script th:src="@{/js/dropdown.js}"></script>

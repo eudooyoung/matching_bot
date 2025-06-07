@@ -11,7 +11,9 @@ import com.multi.matchingbot.job.repository.JobRepository;
 import com.multi.matchingbot.job.service.JobService;
 import com.multi.matchingbot.job.service.OccupationService;
 import com.multi.matchingbot.job.service.ResumeBookmarkService;
-import com.multi.matchingbot.member.domain.dtos.ResumeDto;
+import com.multi.matchingbot.member.domain.dto.ResumeDto;
+import com.multi.matchingbot.member.domain.entity.Resume;
+import com.multi.matchingbot.member.service.ResumeService;
 import com.multi.matchingbot.notification.service.NotificationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/job")
 public class JobController {
@@ -37,15 +41,17 @@ public class JobController {
     private final JobRepository jobRepository;
     private final OccupationService occupationService;
     private final ResumeBookmarkService resumeBookmarkService;
+    private final ResumeService resumeService;
 
     @Autowired
-    public JobController(CompanyService companyService, JobService jobService, NotificationService notificationService, JobRepository jobRepository, OccupationService occupationService, ResumeBookmarkService resumeBookmarkService) {
+    public JobController(CompanyService companyService, JobService jobService, NotificationService notificationService, JobRepository jobRepository, OccupationService occupationService, ResumeBookmarkService resumeBookmarkService, ResumeService resumeService) {
         this.companyService = companyService;
         this.jobService = jobService;
         this.notificationService = notificationService;
         this.jobRepository = jobRepository;
         this.occupationService = occupationService;
         this.resumeBookmarkService = resumeBookmarkService;
+        this.resumeService = resumeService;
     }
 
     // 공고 목록
@@ -102,7 +108,6 @@ public class JobController {
         return "redirect:/job/manage-jobs";
     }
 
-
     // 공고 수정 페이지
     @GetMapping("/{id}/edit")
     public String showEditForm(@PathVariable("id") Long id, Model model) {
@@ -127,33 +132,44 @@ public class JobController {
         Occupation occupation = occupationService.findById(dto.getOccupationId());
         Job updatedJob = dto.toEntityWithOccupation(occupation);
 
+        updatedJob.setSkillKeywords(dto.getSkillKeywordsConcat());
+        updatedJob.setTraitKeywords(dto.getTraitKeywordsConcat());
+
         jobService.update(id, updatedJob);
 
         return "redirect:/job/manage-jobs";
     }
 
-
-
     // 공고 상세보기 형찬코드
     @GetMapping("/{id}")
-    public String getJobDetail(@PathVariable("id") Long id, Model model, @AuthenticationPrincipal MBotUserDetails userDetails) {
+    public String getJobDetail(@PathVariable("id") Long id,
+                               Model model,
+                               @AuthenticationPrincipal MBotUserDetails userDetails) {
 
         String role = null;
+        Resume resume = null;
         if (userDetails != null) {
             role = userDetails.getRole().name();
-        }
 
+            // 이력서 조회
+            List<Resume> resumes = resumeService.findByMemberId(userDetails.getMemberId());
+            if (!resumes.isEmpty()) {
+                resume = resumes.get(0); // 첫 번째 이력서 사용
+            }
+
+            model.addAttribute("resume", resume); // ✅ 비회원이면 이 값은 안 들어감
+        }
         Job job = jobService.findById(id);
-        Long postingCompanyId = job.getCompany().getId(); // ✅ 공고 등록 기업 ID
+        Long postingCompanyId = job.getCompany().getId();
 
         model.addAttribute("job", job);
+        model.addAttribute("resume", resume);
         model.addAttribute("role", role);
-        model.addAttribute("companyId", postingCompanyId); // ✅ 수정된 부분
+        model.addAttribute("companyId", postingCompanyId);
 
         return "job/job-detail";
 
     }
-
 
     // 관심 이력서 관리(id 포함)
     @GetMapping("/resume-bookmark")

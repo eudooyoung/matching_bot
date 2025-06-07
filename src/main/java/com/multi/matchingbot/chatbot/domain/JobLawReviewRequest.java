@@ -17,7 +17,7 @@ public class JobLawReviewRequest {
     private String description;
 
     @NotBlank(message = "근무지는 필수입니다.")
-    @Size(max = 100, message = "주소는 255자 이내로 작성해 주세요.")
+    @Size(max = 100, message = "주소는 100자 이내로 작성해 주세요.")
     private String address;
 
     @NotBlank(message = "주요 업무는 필수입니다.")
@@ -32,6 +32,6 @@ public class JobLawReviewRequest {
     @Size(max = 500, message = "인재상은 500자 이내로 작성해 주세요.")
     private String requiredTraits;
 
-    @Size(max = 255, message = "안내사항은 500자 이내로 작성해 주세요.")
+    @Size(max = 255, message = "안내사항은 255자 이내로 작성해 주세요.")
     private String notice;
 }
