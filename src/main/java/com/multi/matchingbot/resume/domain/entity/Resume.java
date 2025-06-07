@@ -1,8 +1,9 @@
-package com.multi.matchingbot.member.domain.entity;
+package com.multi.matchingbot.resume.domain.entity;
 
 import com.multi.matchingbot.common.domain.entity.BaseEntity;
 import com.multi.matchingbot.common.domain.enums.Yn;
 import com.multi.matchingbot.job.domain.entity.Occupation;
+import com.multi.matchingbot.member.domain.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 

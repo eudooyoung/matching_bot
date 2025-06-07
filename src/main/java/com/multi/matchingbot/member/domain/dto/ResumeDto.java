@@ -1,7 +1,7 @@
 package com.multi.matchingbot.member.domain.dto;
 
 import com.multi.matchingbot.job.domain.entity.Occupation;
-import com.multi.matchingbot.member.domain.entity.Resume;
+import com.multi.matchingbot.resume.domain.entity.Resume;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;

@@ -37,7 +37,7 @@ public class MemberController {
         Long memberId = userDetails.getId();
         Member member = memberService.findById(memberId);
         model.addAttribute("member", member);
-        return "member/member-mypage";
+        return "member/mypage";
     }
 
     // 개인정보 수정 페이지
@@ -79,4 +79,5 @@ public class MemberController {
 
         return "member/company-bookmark";
     }
+
 }

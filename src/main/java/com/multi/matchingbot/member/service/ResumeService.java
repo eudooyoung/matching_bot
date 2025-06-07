@@ -3,7 +3,7 @@ package com.multi.matchingbot.member.service;
 import com.multi.matchingbot.job.repository.ResumeBookmarkRepository;
 import com.multi.matchingbot.member.domain.dto.ResumeDto;
 import com.multi.matchingbot.member.domain.dto.ResumeViewLogDto;
-import com.multi.matchingbot.member.domain.entity.Resume;
+import com.multi.matchingbot.resume.domain.entity.Resume;
 import com.multi.matchingbot.member.domain.entity.ResumeViewLog;
 import com.multi.matchingbot.member.repository.ResumeRepository;
 import com.multi.matchingbot.member.repository.ResumeViewLogRepository;

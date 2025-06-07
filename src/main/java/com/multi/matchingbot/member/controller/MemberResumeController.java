@@ -7,15 +7,15 @@ import com.multi.matchingbot.job.domain.entity.Occupation;
 import com.multi.matchingbot.job.service.OccupationService;
 import com.multi.matchingbot.member.domain.dto.ResumeDto;
 import com.multi.matchingbot.member.domain.entity.Member;
-import com.multi.matchingbot.member.domain.entity.Resume;
-import com.multi.matchingbot.member.mapper.ResumeMapper;
 import com.multi.matchingbot.member.service.MemberService;
 import com.multi.matchingbot.member.service.ResumeService;
+import com.multi.matchingbot.resume.domain.dto.ResumeInsertDto;
+import com.multi.matchingbot.resume.domain.entity.Resume;
+import com.multi.matchingbot.resume.mapper.ResumeInsertPrefillMapper;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,36 +25,54 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/member")
-public class ResumeController {
+@RequiredArgsConstructor
+public class MemberResumeController {
 
     private final ResumeService resumeService;
     private final ResumeAdminService resumeAdminService;
     private final MemberService memberService;
     private final OccupationService occupationService;
 
-    @Autowired
-    public ResumeController(ResumeService resumeService, ResumeAdminService resumeAdminService, MemberService memberService, OccupationService occupationService){
-        this.resumeService = resumeService;
-        this.resumeAdminService = resumeAdminService;
-        this.memberService = memberService;
-        this.occupationService = occupationService;
-    }
+    @Qualifier("resumeInsertPrefillMapper")
+    private final ResumeInsertPrefillMapper prefillMapper;
 
-    // 목록
-    @GetMapping
-    public String list(Model model) {
-        // 로그인한 사용자 정보 가져오기
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-
-        // 사용자 엔티티 조회
-        Member member = memberService.findByUsername(email);
-        Long memberId = member.getId();
-
-        // 해당 사용자의 이력서만 조회
+    /**
+     * 이력서 등록 페이지
+     *
+     * @param userDetails 로그인 사용자 정보
+     * @param model       디티오 전달용 객체
+     * @return 이력서 목록 페이지 반환
+     */
+    @GetMapping("/resumes")
+    public String list(@AuthenticationPrincipal MBotUserDetails userDetails, Model model) {
+        // 로그인 정보 불러오기
+        Long memberId = userDetails.getId();
         List<Resume> resumes = resumeService.findByMemberId(memberId);
         model.addAttribute("resumes", resumes);
-        return "member/member-resume-list";
+        return "member/resumes";
+    }
+
+    /**
+     * 이력서 등록 페이지
+     *
+     * @return
+     */
+    @GetMapping("/insert-resume-test")
+    public String insertResumeTest(Model model, @AuthenticationPrincipal MBotUserDetails userDetails) {
+        Member member = memberService.findById(userDetails.getId());
+        ResumeInsertDto dto = prefillMapper.toDto(member);
+        dto.splitPhone(dto.getPhone());
+        System.out.println(dto);
+        model.addAttribute("resumeInsertDto", dto);
+        return "member/insert-resume-test";
+    }
+
+    @GetMapping("/insert-resume")
+    public String insertResume(Model model, @AuthenticationPrincipal MBotUserDetails userDetails) {
+        ResumeDto dto = new ResumeDto();
+        dto.setMemberId(userDetails.getMemberId());
+        model.addAttribute("resume", dto);
+        return "member/insert-resume";
     }
 
     @GetMapping("/view/{id}")
@@ -101,7 +119,7 @@ public class ResumeController {
     }
 
     //이력서 등록 페이지
-    @GetMapping("/insert")
+    /*@GetMapping("/insert")
     public String insertForm(Model model, @AuthenticationPrincipal MBotUserDetails userDetails) {
         ResumeDto dto = new ResumeDto();
         dto.setMemberId(userDetails.getMemberId());
@@ -135,5 +153,5 @@ public class ResumeController {
         resumeService.save(resume);
 
         return "member/member-resume-list";
-    }
+    }*/
 }

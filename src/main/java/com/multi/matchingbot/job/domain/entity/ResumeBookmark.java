@@ -1,7 +1,7 @@
 package com.multi.matchingbot.job.domain.entity;
 
 import com.multi.matchingbot.company.domain.Company;
-import com.multi.matchingbot.member.domain.entity.Resume;
+import com.multi.matchingbot.resume.domain.entity.Resume;
 import jakarta.persistence.*;
 import lombok.*;
 

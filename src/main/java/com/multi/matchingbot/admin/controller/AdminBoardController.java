@@ -6,7 +6,7 @@ import com.multi.matchingbot.company.domain.Company;
 import com.multi.matchingbot.company.service.CompanyService;
 import com.multi.matchingbot.job.domain.dto.JobDto;
 import com.multi.matchingbot.job.service.JobService;
-import com.multi.matchingbot.member.domain.entity.Resume;
+import com.multi.matchingbot.resume.domain.entity.Resume;
 import com.multi.matchingbot.member.service.MemberService;
 import com.multi.matchingbot.member.service.ResumeService;
 import lombok.RequiredArgsConstructor;

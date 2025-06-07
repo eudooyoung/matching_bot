@@ -5,7 +5,7 @@ import com.multi.matchingbot.company.repository.CompanyRepository;
 import com.multi.matchingbot.job.domain.entity.ResumeBookmark;
 import com.multi.matchingbot.job.repository.ResumeBookmarkRepository;
 import com.multi.matchingbot.member.domain.dto.ResumeDto;
-import com.multi.matchingbot.member.domain.entity.Resume;
+import com.multi.matchingbot.resume.domain.entity.Resume;
 import com.multi.matchingbot.member.repository.ResumeRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;

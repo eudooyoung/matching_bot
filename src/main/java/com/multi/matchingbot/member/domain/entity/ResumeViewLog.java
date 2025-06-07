@@ -2,6 +2,7 @@ package com.multi.matchingbot.member.domain.entity;
 
 import com.multi.matchingbot.common.domain.entity.BaseEntity;
 import com.multi.matchingbot.company.domain.Company;
+import com.multi.matchingbot.resume.domain.entity.Resume;
 import jakarta.persistence.*;
 import lombok.*;
 

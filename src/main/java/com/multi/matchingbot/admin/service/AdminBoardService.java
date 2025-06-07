@@ -14,7 +14,7 @@ import com.multi.matchingbot.admin.domain.AdminSearchCondition;
 import com.multi.matchingbot.common.domain.enums.Yn;
 import com.multi.matchingbot.company.domain.Company;
 import com.multi.matchingbot.member.domain.entity.Member;
-import com.multi.matchingbot.member.domain.entity.Resume;
+import com.multi.matchingbot.resume.domain.entity.Resume;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
