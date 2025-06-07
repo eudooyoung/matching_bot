@@ -134,16 +134,17 @@
                 <p th:text="${error}"></p>
             </div>
 
-            <form id="companyForm" action="/auth/register-company" method="post">
+                <form id="companyForm" th:action="@{/auth/register-company}" th:object="${companyDto}" method="post">
                 <!-- 1. 기본 정보 입력 -->
                 <div>
                     <label for="email">* 이메일</label>
-                    <input type="email" id="email" name="email" placeholder="email@matchingbot.co.kr" required>
+                    <input type="email" id="email" th:field="*{email}" name="email" placeholder="email@matchingbot.co.kr" required>
                     <br>
 
                     <label for="password">* PW </label>
                     <input type="password"
                            id="password"
+                           th:field="*{password}"
                            name="password"
                            placeholder="8~16자 / 영문, 숫자, 특수문자 조합"
                            required
@@ -154,6 +155,7 @@
                     <label>* 회사명</label>
                     <input type="text"
                            id="name"
+                           th:field="*{name}"
                            name="name"
                            placeholder="회사명을 입력해주세요"
                            required
@@ -165,18 +167,18 @@
                 <!-- 2. 사업자등록번호 -->
                 <div>
                     <label>* 사업자등록번호</label><br>
-                    <input type="text" id="businessNo" name="businessNo" required>
+                    <input type="text" id="businessNo" th:field="*{businessNo}" name="businessNo" required>
                     <button type="button" onclick="businessNumber()">인증</button>
                     <div id="regimessage" style="color: green;"></div>
                 </div>
 
                 <!-- 3. 주소 -->
                 <label for="address">* 주소</label>
-                <input type="text" id="address" name="address" required maxlength="50">
+                <input type="text" id="address" th:field="*{address}" name="address" required maxlength="50">
                 <br>
 
                 <label>* 산업군</label><br>
-                <input type="text" name="industry" required maxlength="20"><br>
+                <input type="text" th:field="*{industry}" name="industry" required maxlength="20"><br>
 
                 <!-- 5. 추가 기업 정보 -->
                 <div>
@@ -186,6 +188,7 @@
                         <select name="establishedMonth" id="establishedMonth" required></select>
                         <select name="establishedDay" id="establishedDay" required></select>
                     </div>
+
 
                     <script>
                         const currentYear = new Date().getFullYear();
@@ -207,16 +210,16 @@
                     </script>
 
                     <label>* 직원수</label><br>
-                    <input type="text" name="headcount"><br>
+                    <input type="text" th:field="*{headcount}" name="headcount"><br>
 
                     <label>* 연매출 (억)</label><br>
-                    <input type="text" name="annualRevenue"><br>
+                    <input type="text" th:field="*{annualRevenue}" name="annualRevenue"><br>
 
                     <label>* 영업이익 (원)</label><br>
-                    <input type="text" name="operatingIncome"><br>
+                    <input type="text" th:field="*{operatingIncome}" name="operatingIncome"><br>
 
                     <label>* 최근 1년 채용공고 수</label><br>
-                    <input type="text" name="jobsLastYear"><br>
+                    <input type="text" th:field="*{jobsLastYear}" name="jobsLastYear"><br>
                 </div>
 
 
@@ -230,25 +233,25 @@
 
                         <!-- 필수 항목 -->
                         <label class="checkbox-item">
-                            <input type="checkbox" name="agreeTerms" value="Y" required>
+                            <input type="checkbox" th:field="*{agreeTerms}" name="agreeTerms" value="Y" required>
                             <span>[필수] 서비스 이용약관 동의</span>
                         </label>
                         <label class="checkbox-item">
-                            <input type="checkbox" name="agreePrivacy" value="Y" required>
+                            <input type="checkbox" th:field="*{agreePrivacy}" name="agreePrivacy" value="Y" required>
                             <span>[필수] 정보 수집 및 이용 동의</span>
                         </label>
                         <label class="checkbox-item">
-                            <input type="checkbox" name="agreeFinance" value="Y" required>
+                            <input type="checkbox" th:field="*{agreeFinance}" name="agreeFinance" value="Y" required>
                             <span>[필수] 정보 제공 동의 (OPEN API 포함)</span>
                         </label>
 
                         <!-- 선택 항목 -->
                         <label class="checkbox-item">
-                            <input type="checkbox" name="agreeMarketing" value="Y">
+                            <input type="checkbox" th:field="*{agreeMarketing}" name="agreeMarketing" value="Y">
                             <span>[선택] 마케팅 정보 수신 동의</span>
                         </label>
                         <label class="checkbox-item">
-                            <input type="checkbox" name="agreeThirdParty" value="Y">
+                            <input type="checkbox" th:field="*{agreeThirdParty}" name="agreeThirdParty" value="Y">
                             <span>[선택] 제3자 정보 제공 동의</span>
                         </label>
                     </div>

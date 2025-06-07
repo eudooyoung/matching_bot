@@ -58,15 +58,16 @@
                 <p th:text="${error}">회원가입 중 오류가 발생했습니다.</p>
             </div>
 
-            <form id="userForm" action="/auth/register-member" method="post">
+                <form id="userForm" th:action="@{/auth/register-member}" th:object="${memberDto}" method="post">
 
                 <label for="email">* 이메일</label>
-                <input type="email" id="email" name="email" placeholder="email@matchingbot.co.kr" required>
+                <input type="email" id="email" th:field="*{email}" name="email" placeholder="email@matchingbot.co.kr" required>
                 <br>
 
                 <label for="password">* PW</label>
                 <input type="password"
                        id="password"
+                       th:field="*{password}"
                        name="password"
                        placeholder="8~16자 / 영문, 숫자, 특수문자 조합"
                        required
@@ -80,6 +81,7 @@
                 <label for="name">* 이름</label>
                 <input type="text"
                        id="name"
+                       th:field="*{name}"
                        name="name"
                        placeholder="이름을 입력해주세요"
                        required
@@ -88,15 +90,29 @@
                 <br>
 
                 <label for="address">* 주소</label>
-                <input type="text" id="address" name="address" required maxlength="50">
+                <input type="text" id="address" th:field="*{address}" name="address" required maxlength="50">
                 <br>
 
                 <!-- 생년월일 / 성별 -->
                 <label>* 생년월일 / 성별</label>
                 <div class="birth-gender">
-                    <select name="year" id="year" required></select>
-                    <select name="month" id="month" required></select>
-                    <select name="day" id="day" required></select>
+                    <select th:field="*{year}" required>
+                        <option th:each="y : ${#numbers.sequence(2030, 1900, -1)}"
+                                th:value="${y}" th:text="${y + '년'}"
+                                th:selected="${y} == *{year}"></option>
+                    </select>
+
+                    <select th:field="*{month}" required>
+                        <option th:each="m : ${#numbers.sequence(1, 12)}"
+                                th:value="${m}" th:text="${m + '월'}"
+                                th:selected="${m} == *{month}"></option>
+                    </select>
+
+                    <select th:field="*{day}" required>
+                        <option th:each="d : ${#numbers.sequence(1, 31)}"
+                                th:value="${d}" th:text="${d + '일'}"
+                                th:selected="${d} == *{day}"></option>
+                    </select>
 
                     <script>
                         const yearEl = document.getElementById("year");
@@ -114,15 +130,15 @@
                             dayEl.innerHTML += `<option value="${i}">${i}일</option>`;
                         }
                     </script>
-                    <label><input type="radio" name="gender" value="M" required> 남</label>
-                    <label><input type="radio" name="gender" value="F"> 여</label>
+                    <label><input type="radio" th:field="*{gender}" name="gender" value="M" required> 남</label>
+                    <label><input type="radio" th:field="*{gender}" name="gender" value="F"> 여</label>
                 </div>
 
                 <label>* 휴대전화번호</label>
                 <div class="phone-input">
-                    <input type="text" name="phone1" maxlength="3" pattern="\d{3}" title="숫자 3자리를 입력하세요" required>
-                    <input type="text" name="phone2" maxlength="4" pattern="\d{3,4}" title="숫자 3~4자리를 입력하세요" required>
-                    <input type="text" name="phone3" maxlength="4" pattern="\d{4}" title="숫자 4자리를 입력하세요" required>
+                    <input type="text" th:field="*{phone1}" name="phone1" maxlength="3" pattern="\d{3}" title="숫자 3자리를 입력하세요" required>
+                    <input type="text" th:field="*{phone2}" name="phone2" maxlength="4" pattern="\d{3,4}" title="숫자 3~4자리를 입력하세요" required>
+                    <input type="text" th:field="*{phone3}" name="phone3" maxlength="4" pattern="\d{4}" title="숫자 4자리를 입력하세요" required>
                 </div>
 
                 <!-- 약관동의 -->
@@ -134,19 +150,19 @@
                             <span>전체 동의</span>
                         </label>
                         <label class="checkbox-item">
-                            <input type="checkbox" name="agreeService" value="Y" required>
+                            <input type="checkbox" th:field="*{agreeService}" name="agreeService" value="Y" required>
                             <span>(필수) 서비스 이용약관 동의</span>
                         </label>
                         <label class="checkbox-item">
-                            <input type="checkbox" name="agreePrivacy" value="Y" required>
+                            <input type="checkbox" th:field="*{agreePrivacy}" name="agreePrivacy" value="Y" required>
                             <span>(필수) 개인정보 수집 및 이용 동의</span>
                         </label>
                         <label class="checkbox-item">
-                            <input type="checkbox" name="agreeLocation" value="Y" required>
+                            <input type="checkbox" th:field="*{agreeLocation}" name="agreeLocation" value="Y" required>
                             <span>(필수) 위치기반 서비스 이용약관 동의</span>
                         </label>
                         <label class="checkbox-item">
-                            <input type="checkbox" name="agreeMarketing" value="Y">
+                            <input type="checkbox" th:field="*{agreeMarketing}" name="agreeMarketing" value="Y">
                             <span>(선택) 마케팅 정보 수신 동의 - 이메일</span>
                         </label>
                     </div>
