@@ -1,7 +1,6 @@
 package com.multi.matchingbot.member.repository;
 
 import com.multi.matchingbot.company.domain.CompanyUpdateDto;
-import com.multi.matchingbot.member.domain.entities.CompanyBookmark;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.multi.matchingbot.member.domain.entity.CompanyBookmark;

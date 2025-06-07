@@ -1,10 +1,6 @@
 package com.multi.matchingbot.member.service;
 
 import com.multi.matchingbot.job.repository.ResumeBookmarkRepository;
-import com.multi.matchingbot.member.domain.dtos.ResumeDto;
-import com.multi.matchingbot.member.domain.dtos.ResumeViewLogDto;
-import com.multi.matchingbot.member.domain.entities.Resume;
-import com.multi.matchingbot.member.domain.entities.ResumeViewLog;
 import com.multi.matchingbot.member.domain.dto.ResumeDto;
 import com.multi.matchingbot.member.domain.dto.ResumeViewLogDto;
 import com.multi.matchingbot.member.domain.entity.Resume;

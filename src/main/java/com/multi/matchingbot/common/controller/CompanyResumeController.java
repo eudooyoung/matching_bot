@@ -1,8 +1,6 @@
 package com.multi.matchingbot.common.controller;
 
 import com.multi.matchingbot.common.security.MBotUserDetails;
-import com.multi.matchingbot.member.domain.dtos.ResumeDto;
-import com.multi.matchingbot.member.domain.entities.Resume;
 import com.multi.matchingbot.member.domain.dto.ResumeDto;
 import com.multi.matchingbot.member.domain.entity.Resume;
 import com.multi.matchingbot.member.service.ResumeService;
