@@ -5,7 +5,7 @@ import com.multi.matchingbot.common.domain.enums.Role;
 import com.multi.matchingbot.common.domain.enums.Yn;
 import com.multi.matchingbot.company.domain.Company;
 import com.multi.matchingbot.company.domain.CompanyRegisterDto;
-import com.multi.matchingbot.company.repository.AuthCompanyRepository;
+import com.multi.matchingbot.company.repository.CompanyRegisterRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,15 +14,19 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AuthCompanyRegistService {
+public class CompanyRegisterService {
 
-    private final AuthCompanyRepository authCompanyRepository;
+    private final CompanyRegisterRepository companyRegisterRepository;
     private final PasswordEncoder passwordEncoder;
-
     private final AttachedItemService attachedItemService;
 
-    public void register(CompanyRegisterDto dto) {
-        if (authCompanyRepository.existsByEmail(dto.getEmail())) {
+    /**
+     * 기업 회원 가입 메소드
+     *
+     * @param dto 기업회원 로그인용 디티오
+     */
+    public void registerCompany(CompanyRegisterDto dto) {
+        if (companyRegisterRepository.existsByEmail(dto.getEmail())) {
             throw new IllegalArgumentException("이미 등록된 이메일입니다.");
         }
 
@@ -35,9 +39,12 @@ public class AuthCompanyRegistService {
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .name(dto.getName())
                 .businessNo(dto.getBusinessNo())
-                .address(dto.getAddress())
+                .address(dto.getAddressRegion() +
+                        (dto.getAddressDetail() != null && !dto.getAddressDetail().isBlank()
+                                ? " " + dto.getAddressDetail()
+                                : ""))
                 .industry(dto.getIndustry())
-                .yearFound(dto.getEstablishedYear())
+                .yearFound(dto.getYearFound())
                 .headcount(dto.getHeadcount())
                 .annualRevenue(dto.getAnnualRevenue())
                 .operatingIncome(dto.getOperatingIncome())
@@ -53,12 +60,10 @@ public class AuthCompanyRegistService {
 
         log.debug(company.toString());
 
-//        authCompanyRepository.save(company);
-
-        Company savedCompany = authCompanyRepository.save(company);
+        Company savedCompany = companyRegisterRepository.save(company);
 
         /*기업 평가 보고서 로직*/
-       attachedItemService.saveReportImage(dto, savedCompany.getId());
+        attachedItemService.saveReportImage(dto, savedCompany.getId());
 
     }
 }

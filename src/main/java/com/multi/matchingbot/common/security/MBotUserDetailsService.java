@@ -5,7 +5,7 @@ import com.multi.matchingbot.common.error.InvalidRoleException;
 import com.multi.matchingbot.company.repository.CompanyRepository;
 import com.multi.matchingbot.company.domain.Company;
 import com.multi.matchingbot.member.repository.MemberRepository;
-import com.multi.matchingbot.member.domain.entities.Member;
+import com.multi.matchingbot.member.domain.entity.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;

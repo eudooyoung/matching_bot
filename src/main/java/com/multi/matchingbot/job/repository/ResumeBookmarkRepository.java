@@ -2,6 +2,8 @@ package com.multi.matchingbot.job.repository;
 
 import com.multi.matchingbot.job.domain.entity.ResumeBookmark;
 import com.multi.matchingbot.member.domain.dtos.ResumeDto;
+import com.multi.matchingbot.member.domain.entities.Resume;
+import com.multi.matchingbot.member.domain.dto.ResumeDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,7 +20,7 @@ public interface ResumeBookmarkRepository extends JpaRepository<ResumeBookmark, 
     Optional<ResumeBookmark> findByResumeIdAndCompanyId(@Param("resumeId") Long resumeId,
                                                         @Param("companyId") Long companyId);
 
-    @Query("SELECT new com.multi.matchingbot.member.domain.dtos.ResumeDto(r.id, r.title, r.createdAt, m.name) " +
+    @Query("SELECT new com.multi.matchingbot.member.domain.dto.ResumeDto(r.id, r.title, r.createdAt, m.name) " +
             "FROM ResumeBookmark b " +
             "JOIN b.resume r " +
             "JOIN r.member m " +

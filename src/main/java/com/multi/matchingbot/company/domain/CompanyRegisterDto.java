@@ -1,7 +1,6 @@
 package com.multi.matchingbot.company.domain;
 
 import com.multi.matchingbot.common.domain.enums.Yn;
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
@@ -25,14 +24,15 @@ public class CompanyRegisterDto {
     private String businessNo;
 
     @NotBlank(message = "주소를 입력하세요.")
-    private String address;
+    private String addressRegion;
+    private String addressDetail;
 
     @NotBlank(message = "산업군을 입력하세요.")
     private String industry;
 
     @Min(value = 1900, message = "설립연도는 1900년 이후여야 합니다.")
     @Max(value = 2100, message = "설립연도는 2100년 이전이어야 합니다.")
-    private int establishedYear;
+    private Integer yearFound;
 
     @Min(value = 1, message = "직원 수는 1명 이상이어야 합니다.")
     private int headcount;
@@ -53,7 +53,9 @@ public class CompanyRegisterDto {
     @NotNull(message = "개인정보 처리방침 동의는 필수입니다.")
     private Yn agreePrivacy;
 
+    @NotNull(message = "정보 제공 동의는 필수입니다.")
     private Yn agreeFinance;
+
     private Yn agreeMarketing;
     private Yn agreeThirdParty;
 }

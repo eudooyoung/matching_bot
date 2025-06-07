@@ -2,7 +2,7 @@ package com.multi.matchingbot.notification.service;
 
 import com.multi.matchingbot.job.domain.entity.Job;
 import com.multi.matchingbot.job.repository.JobRepository;
-import com.multi.matchingbot.member.domain.entities.CompanyBookmark;
+import com.multi.matchingbot.member.domain.entity.CompanyBookmark;
 import com.multi.matchingbot.member.repository.CompanyBookmarkRepository;
 import com.multi.matchingbot.notification.domain.dto.NotificationDto;
 import com.multi.matchingbot.notification.domain.entity.Notification;
