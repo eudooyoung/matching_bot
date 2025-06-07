@@ -35,7 +35,14 @@ public class CompanyResumeController {
                              @AuthenticationPrincipal MBotUserDetails userDetails,
                              Model model) {
 
-        log.info("📄 resumeList() 컨트롤러 도달!"); // 로그 추가
+        log.info("📄 resumeList() 컨트롤러 도달!");
+
+        if (userDetails != null) {
+            log.info("현재 사용자 ROLE: {}", userDetails.getRole());
+            model.addAttribute("role", userDetails.getRole().name());  // ✅ role 전달
+        } else {
+            model.addAttribute("role", null);  // 예외적으로 null 처리
+        }
 
         int pageIndex = Math.max(0, page - 1);
         Page<ResumeDto> resumePage = resumeService.getPageResumes(PageRequest.of(pageIndex, size));
@@ -49,6 +56,7 @@ public class CompanyResumeController {
 
         return "resume/list";
     }
+
 
     @GetMapping("/{id}")
     public String resumeDetail(@PathVariable("id") Long id,

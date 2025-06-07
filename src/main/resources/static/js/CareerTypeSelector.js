@@ -1,38 +1,61 @@
-// ✅ 이 파일 내부에서 React를 직접 import
-import React, { useState } from "https://cdn.jsdelivr.net/npm/react@18.2.0/+esm";
+// // ✅ React 및 createRoot 불러오기
+import React from "https://cdn.jsdelivr.net/npm/react@18.2.0/+esm";
+import { createRoot } from "https://cdn.jsdelivr.net/npm/react-dom@18.2.0/client/+esm";
+//
+// // ✅ 신입/경력 선택 컴포넌트
+// const CareerTypeSelector = () => {
+//     const handleChange = (e) => {
+//         const selectedValue = e.target.value;
+//         const hiddenInput = document.getElementById("filter-career-type");
+//         if (hiddenInput) {
+//             hiddenInput.value = selectedValue;
+//         }
+//     };
+//
+//     return (
+//         <select className="form-select" onChange={handleChange}>
+//             <option value="">전체</option>
+//             <option value="new">신입</option>
+//             <option value="exp">경력</option>
+//         </select>
+//     );
+// };
+//
+// // ✅ 렌더링 대상 컨테이너 찾고 마운트
+// const container = document.getElementById("react-career-type-selector");
+// if (container) {
+//     const root = createRoot(container);
+//     root.render(<CareerTypeSelector />);
+// }
+// ✅ React 및 createRoot 불러오기
+import React, { useEffect, useState } from "https://cdn.jsdelivr.net/npm/react@18.2.0/+esm";
 import { createRoot } from "https://cdn.jsdelivr.net/npm/react-dom@18.2.0/client/+esm";
 
+// ✅ 신입/경력 필터 선택 컴포넌트
 function CareerTypeSelector() {
-    const [careerType, setCareerType] = useState('');
+    const [selectedCareer, setSelectedCareer] = useState("");
 
     const handleChange = (e) => {
         const value = e.target.value;
-        setCareerType(value);
-        document.getElementById('filter-career-type').value = value;
+        setSelectedCareer(value);
+        const hiddenInput = document.getElementById("filter-career-type");
+        if (hiddenInput) {
+            hiddenInput.value = value;
+        }
     };
 
     return (
-        <div className="career-type-selector">
-            <label className="me-3">
-                <input type="radio" name="careerType" value="" onChange={handleChange} checked={careerType === ''} />
-                전체
-            </label>
-            <label className="me-3">
-                <input type="radio" name="careerType" value="new" onChange={handleChange} checked={careerType === 'new'} />
-                신입
-            </label>
-            <label>
-                <input type="radio" name="careerType" value="exp" onChange={handleChange} checked={careerType === 'exp'} />
-                경력
-            </label>
-        </div>
+        <select className="form-select" onChange={handleChange} value={selectedCareer}>
+            <option value="">전체</option>
+            <option value="new">신입</option>
+            <option value="exp">경력</option>
+        </select>
     );
 }
 
-const container = document.getElementById('react-career-type-selector');
+// ✅ 마운트
+const container = document.getElementById("react-career-type-selector");
 if (container) {
     const root = createRoot(container);
-    root.render(React.createElement(CareerTypeSelector));
-} else {
-    console.error("❌ react-career-type-selector element가 존재하지 않습니다.");
+    root.render(<CareerTypeSelector />);
 }

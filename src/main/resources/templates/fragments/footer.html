@@ -3,4 +3,138 @@
   <footer class="footer">
     &copy; 2025 MatchingBot Inc. All rights reserved.
   </footer>
+
+  <!-- ✅ 챗봇 고정 버튼 -->
+  <div id="chatbot-toggle" style="
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #103254;
+      color: white;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 9999;">
+    💬
+  </div>
+
+  <!-- ✅ 챗봇 모달 -->
+  <div id="chatbot-modal" style="
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      width: 350px;
+      height: 500px;
+      background-color: white;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      display: none;
+      flex-direction: column;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      z-index: 9999;">
+    <div style="background-color: #103254; color: white; padding: 10px; border-top-left-radius: 10px; border-top-right-radius: 10px;">
+      GPT 챗봇
+      <button onclick="document.getElementById('chatbot-modal').style.display='none'" style="float:right; background:none; border:none; color:white;">✖</button>
+    </div>
+    <div id="chat-messages" style="flex:1; padding:10px; overflow-y:auto;"></div>
+    <div style="display:flex; border-top:1px solid #ddd;">
+      <input id="chat-input" type="text" style="flex:1; border:none; padding:10px;" placeholder="메시지를 입력하세요">
+      <button id="chat-send-button" style="background-color:#103254; color:white; border:none; padding:10px;">전송</button>
+    </div>
+  </div>
+
+  <!-- ✅ JS 스크립트 -->
+  <!-- ✅ 사용자 role을 Thymeleaf에서 JS로 전달 -->
+  <!-- ✅ 사용자 role을 Thymeleaf에서 JS로 전달 -->
+  <script th:inline="javascript">
+    const userRole = /*[[${role} == null ? 'GUEST' : '${role}']]*/ "GUEST";
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const toggleBtn = document.getElementById("chatbot-toggle");
+      const modal = document.getElementById("chatbot-modal");
+      const sendBtn = document.getElementById("chat-send-button");
+
+      // ✅ 챗봇 토글 버튼 클릭 시
+      if (toggleBtn && modal) {
+        toggleBtn.addEventListener("click", () => {
+          if (userRole === "GUEST") {
+            const goLogin = confirm("챗봇은 로그인 후 이용 가능합니다.\n지금 로그인하시겠습니까?");
+            if (goLogin) {
+              window.location.href = "/auth/login"; // 🔁 로그인 경로에 맞게 수정
+            }
+            return;
+          }
+
+          // 챗봇 모달 열기/닫기
+          modal.style.display = modal.style.display === "none" ? "flex" : "none";
+        });
+      }
+
+      // ✅ 메시지 전송 로직
+      async function sendMessage() {
+        const input = document.getElementById("chat-input");
+        const message = input.value.trim();
+        if (!message) return;
+
+        appendMessage("user", message);
+        input.value = "";
+
+        const container = document.getElementById("chat-messages");
+
+        // ✅ 로딩 메시지 + 애니메이션
+        const loadingMsg = document.createElement("div");
+        loadingMsg.textContent = "🤖 답변을 생성 중";
+        loadingMsg.style.marginBottom = "8px";
+        container.appendChild(loadingMsg);
+        container.scrollTop = container.scrollHeight;
+
+        let dotCount = 0;
+        const loadingInterval = setInterval(() => {
+          dotCount = (dotCount + 1) % 4;
+          loadingMsg.textContent = "🤖 답변을 생성 중" + ".".repeat(dotCount);
+        }, 500);
+
+        try {
+          const response = await fetch("/api/v1/chatbot/talk", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message })
+          });
+
+          const data = await response.json();
+          const reply = data.messages?.[1]?.content || data.reply || "GPT 응답을 받지 못했습니다.";
+
+          clearInterval(loadingInterval);
+          loadingMsg.textContent = "🤖 " + reply;
+        } catch (error) {
+          clearInterval(loadingInterval);
+          loadingMsg.textContent = "❌ GPT 호출 실패: 서버 오류 또는 네트워크 문제입니다.";
+        }
+      }
+
+      function appendMessage(sender, text) {
+        const container = document.getElementById("chat-messages");
+        const msg = document.createElement("div");
+        msg.textContent = (sender === "user" ? "🙋 " : "🤖 ") + text;
+        msg.style.marginBottom = "8px";
+        container.appendChild(msg);
+        container.scrollTop = container.scrollHeight;
+      }
+
+      if (sendBtn) {
+        sendBtn.addEventListener("click", sendMessage);
+      }
+    });
+  </script>
+
+
+
+
 </div>

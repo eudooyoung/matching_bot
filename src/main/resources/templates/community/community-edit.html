@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>게시글 수정</title>
 
-    <link rel="stylesheet" th:href="@{/css/layout.css}"/>
+    <link rel="stylesheet" th:href="@{/css/layout.css}" />
     <style>
         .container {
             max-width: 900px;
@@ -32,6 +32,7 @@
         .btn-delete {
             background-color: #f44336;
             color: white;
+            margin-left: 10px;
         }
 
         .btn-edit:hover {
@@ -41,17 +42,25 @@
         .btn-delete:hover {
             background-color: #e53935;
         }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
 
 <div class="wrapper">
+    <!-- ✅ Header Fragment -->
     <div th:replace="~{fragments/header :: header(role=${role})}"></div>
 
     <div class="container">
         <h2 class="mb-4 text-center">✏ 게시글 수정</h2>
 
         <div class="edit-box">
+            <!-- ✅ 수정 폼 -->
             <form th:action="@{'/community/edit/' + ${post.id}}" method="post">
                 <div class="mb-3">
                     <label for="categoryId" class="form-label">카테고리</label>
@@ -66,7 +75,7 @@
 
                 <div class="mb-3">
                     <label for="title" class="form-label">제목</label>
-                    <input type="text" id="title" name="title" th:value="${post.title}" class="form-control" required>
+                    <input type="text" id="title" name="title" th:value="${post.title}" class="form-control" required />
                 </div>
 
                 <div class="mb-3">
@@ -75,20 +84,22 @@
                               th:text="${post.content}"></textarea>
                 </div>
 
-                <div class="d-flex justify-content-between">
+                <!-- ✅ 수정 및 삭제 버튼 -->
+                <div class="button-group">
                     <button type="submit" class="btn btn-edit">수정 완료</button>
-
-                    <form th:action="@{'/community/delete/' + ${post.id}}" method="post" class="ms-2">
-                        <button type="submit" class="btn btn-delete" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
+                    <form th:action="@{'/community/delete/' + ${post.id}}" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?');">
+                        <button type="submit" class="btn btn-delete">삭제</button>
                     </form>
                 </div>
             </form>
         </div>
     </div>
 
+    <!-- ✅ Footer Fragment -->
     <div th:insert="~{fragments/footer :: footer}"></div>
 </div>
 
+<!-- ✅ Scripts -->
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>
 </body>
