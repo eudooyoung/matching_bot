@@ -1,12 +1,8 @@
 package com.multi.matchingbot.member.service;
 
 
-import com.multi.matchingbot.member.domain.dtos.MemberUpdateDto;
-import com.multi.matchingbot.common.domain.enums.Gender;
-import com.multi.matchingbot.common.domain.enums.Role;
-import com.multi.matchingbot.common.domain.enums.Yn;
-import com.multi.matchingbot.member.domain.dtos.MemberRegisterDto;
-import com.multi.matchingbot.member.domain.entities.Member;
+import com.multi.matchingbot.member.domain.dto.MemberUpdateDto;
+import com.multi.matchingbot.member.domain.entity.Member;
 import com.multi.matchingbot.member.mapper.MemberMapper;
 import com.multi.matchingbot.member.repository.MemberRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -16,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service

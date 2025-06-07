@@ -1,9 +1,9 @@
 package com.multi.matchingbot.auth.service;
 
-import com.multi.matchingbot.company.repository.AuthCompanyRepository;
+import com.multi.matchingbot.company.repository.CompanyRegisterRepository;
 import com.multi.matchingbot.auth.domain.dto.FindCompanyPasswordDto;
 import com.multi.matchingbot.auth.domain.dto.FindUserPasswordDto;
-import com.multi.matchingbot.member.domain.entities.Member;
+import com.multi.matchingbot.member.domain.entity.Member;
 import com.multi.matchingbot.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import java.util.Optional;
 public class FindPasswordService {
 
     private final MemberRepository memberRepository;
-    private final AuthCompanyRepository authCompanyRepository;
+    private final CompanyRegisterRepository companyRegisterRepository;
 
     public boolean verifyUser(FindUserPasswordDto dto) {
         Optional<Member> member = memberRepository.findByEmail(dto.getEmail());
@@ -28,7 +28,7 @@ public class FindPasswordService {
     }
 
     public boolean verifyCompany(FindCompanyPasswordDto dto) {
-        return authCompanyRepository
+        return companyRegisterRepository
                 .findByEmailAndNameAndBusinessNo(dto.getEmail(), dto.getName(), dto.getBusinessNo())
                 .isPresent();
     }

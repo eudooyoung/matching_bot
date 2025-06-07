@@ -1,4 +1,4 @@
-package com.multi.matchingbot.member.domain.dtos;
+package com.multi.matchingbot.member.domain.dto;
 
 
 import lombok.AllArgsConstructor;

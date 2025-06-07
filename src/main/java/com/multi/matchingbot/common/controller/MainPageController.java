@@ -48,8 +48,6 @@ public class MainPageController {
             model.addAttribute("role", null);
         }
 
-
-
         // 👉 개인회원 or 비회원에게만 채용공고 보이게
         int pageIndex = Math.max(0, page - 1);
         Page<Job> jobPage = jobService.getPageJobs(PageRequest.of(pageIndex, size));

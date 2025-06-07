@@ -3,7 +3,7 @@ package com.multi.matchingbot.admin.service;
 import com.multi.matchingbot.admin.domain.BulkResponseDto;
 import com.multi.matchingbot.admin.repository.MemberAdminRepository;
 import com.multi.matchingbot.common.domain.enums.Yn;
-import com.multi.matchingbot.member.domain.entities.Member;
+import com.multi.matchingbot.member.domain.entity.Member;
 import com.multi.matchingbot.member.repository.MemberRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;

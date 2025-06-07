@@ -5,9 +5,9 @@ import com.multi.matchingbot.admin.service.ResumeAdminService;
 import com.multi.matchingbot.common.security.MBotUserDetails;
 import com.multi.matchingbot.job.domain.entity.Occupation;
 import com.multi.matchingbot.job.service.OccupationService;
-import com.multi.matchingbot.member.domain.dtos.ResumeDto;
-import com.multi.matchingbot.member.domain.entities.Member;
-import com.multi.matchingbot.member.domain.entities.Resume;
+import com.multi.matchingbot.member.domain.dto.ResumeDto;
+import com.multi.matchingbot.member.domain.entity.Member;
+import com.multi.matchingbot.member.domain.entity.Resume;
 import com.multi.matchingbot.member.mapper.ResumeMapper;
 import com.multi.matchingbot.member.service.MemberService;
 import com.multi.matchingbot.member.service.ResumeService;
@@ -60,8 +60,9 @@ public class ResumeController {
     @GetMapping("/view/{id}")
     public String view(@PathVariable("id") Long id, Model model) {
         Resume resume = resumeService.findByIdWithOccupation(id);
-        model.addAttribute("resume", resume);
-        return "/member/resume-view";
+        ResumeDto resumeDto = ResumeDto.fromEntity(resume);
+        model.addAttribute("resume", resumeDto);
+        return "member/resume-view";
     }
 
     @GetMapping("/edit/{id}")

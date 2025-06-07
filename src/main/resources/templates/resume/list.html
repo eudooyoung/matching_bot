@@ -94,7 +94,17 @@
       <div class="col-md-4" th:each="resume : ${resumeList}">
         <div class="card h-100 resume-card" th:onclick="|location.href='@{/resumes/{id}(id=${resume.id})}'|" style="cursor: pointer;">
           <div class="card-body">
-            <h5 class="card-title" th:text="${resume.memberName} ?: '이름 없음'">지원자 이름</h5>
+            <div class="resume-card-header">
+              <h5 class="card-title" th:text="${resume.memberName} ?: '이름 없음'">지원자 이름</h5>
+              <button
+                      class="star-button"
+                      th:classappend="${resume.bookmarked} ? 'filled' : ''"
+                      th:data-resume-id="${resume.id}"
+                      onclick="toggleStar(this, event)"
+                      sec:authorize="hasRole('COMPANY')">
+                <span th:text="${resume.bookmarked} ? '★' : '☆'">☆</span>
+              </button>
+            </div>
             <p class="card-text"><strong>이력서 제목:</strong> <span th:text="${resume.title} ?: '제목 없음'"></span></p>
             <p class="card-text"><strong>기술 소개:</strong> <span th:text="${resume.skillAnswer} ?: '기술 소개 없음'"></span></p>
             <p class="card-text"><strong>성향 소개:</strong> <span th:text="${resume.traitAnswer} ?: '성향 소개 없음'"></span></p>
@@ -175,7 +185,48 @@
 <!-- ✅ 경력 필터 React 컴포넌트 -->
 <script type="module" src="/js/JobCategorySelector.js"></script>
 <!--<script type="module" src="/js/CareerTypeSelector.js"></script>-->
+      window.React = React;
+      window.createRoot = createRoot;
+<!--    </script>-->
+<!--  </main>-->
 
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- 이력서 즐겨찾기 -->
+<script>
+  function toggleStar(button, event) {
+    event.stopPropagation();
+    const resumeId = button.dataset.resumeId;
+
+    fetch(`/job/resume-bookmark/toggle?resumeId=${resumeId}`, {
+      method: 'POST'
+    })
+            .then(response => {
+              if (!response.ok) throw new Error("즐겨찾기 실패");
+              return response.json();
+            })
+            .then(data => {
+              const icon = button.querySelector('span');
+
+              if (data.bookmarked) {
+                button.classList.add('filled');
+                icon.textContent = '★';
+                alert('이력서가 즐겨찾기 되었습니다.');
+              } else {
+                button.classList.remove('filled');
+                icon.textContent = '☆';
+                alert('즐겨찾기가 해제되었습니다.');
+              }
+            })
+            .catch(error => {
+              console.error(error);
+              alert('오류가 발생했습니다.');
+            });
+  }
+
+</script>
+
+<script th:src="@{/js/logout.js}"></script>
 
 </body>
 </html>

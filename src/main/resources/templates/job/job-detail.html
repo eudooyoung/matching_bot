@@ -46,6 +46,10 @@
 
 <div class="container">
     <!-- 유사도 비교용 키워드 (Spring에서 렌더링) -->
+    <!--<div id="similarity-data"
+         th:data-job-skill="${job.skillKeywords}"
+         th:data-resume-skill="${resume.skillKeywords}">
+    </div>-->
     <div id="similarity-data"
          th:data-job-skill="${resume != null ? job.skillKeywords : '채용공고 기술 키워드 없음'}"
          th:data-resume-skill="${resume != null ? resume.skillKeywords : '이력서 기술 키워드 없음'}">
@@ -74,8 +78,6 @@
             </span>
 
         </h2>
-
-
         <div class="tooltip-wrapper">
             <button class="help-icon-button">?</button>
             <div class="tooltip-box">
@@ -165,6 +167,8 @@
 <script th:src="@{/js/logout.js}"></script>
 <script th:src="@{/js/auth/fetchWithAuth.js}"></script>
 <script th:src="@{/js/chatbot/loadSummaryImage.js}"></script>
+
+<script th:src="@{/js/resumeGoBack.js}"></script>
 <script th:inline="javascript">
     const userRole = /*[[${role != null ? role : "null"}]]*/ null;
     console.log("userRole:", userRole);
@@ -188,7 +192,7 @@
             console.warn("이력서 드롭다운 없음");
             return;
         }
-        
+
         console.log("jobSkillRaw", jobSkillRaw);
         console.log("resumeSkillRaw",resumeSkillRaw);
 
@@ -230,6 +234,7 @@
         }
     });
 </script>
+
 
 
 </body>

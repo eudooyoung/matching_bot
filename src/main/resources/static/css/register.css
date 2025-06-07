@@ -1,43 +1,261 @@
-body {
-    font-family: Arial;
-    margin: 20px;
-}
 
-.logo {
-    color: white;
-    text-decoration: none;
-    font-size: 1.5rem;
-    font-weight: bold;
-}
-
+/* 중앙 정렬된 폼 컨테이너 */
 .container {
     max-width: 500px;
     margin: auto;
 }
 
-input, select {
-    width: 100%;
-    margin-bottom: 10px;
-    padding: 8px;
-}
-
+/* 공통 label */
 label {
     font-weight: bold;
     display: block;
-    margin-top: 10px;
+    margin-top: 12px;
 }
 
+/* 인풋 요소 (input, select, textarea 등) */
+input,
+select {
+    width: 100%;
+    margin-bottom: 12px;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+/* 주소, 전화번호 인풋용 클래스 */
+.address-input,
+.phone-segment {
+    width: 100%;
+}
+
+/* 생년월일 */
 .birth-gender {
     display: flex;
-    gap: 5px;
+    gap: 10px;
     flex-wrap: wrap;
+}
+.birth-gender select {
+    flex: 1;
+    min-width: 100px;
+}
+
+/* 성별 선택 라디오 */
+.gender-options {
+    display: flex;
+    gap: 20px;
+    align-items: baseline;
+    margin-top: 10px;
+}
+.gender-options label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    flex-direction: row-reverse;
+}
+.gender-options input[type="radio"] {
+    position: relative;
+    top: 2px;
+}
+
+/* 전화번호 세그먼트 */
+.phone-input select,
+.phone-input input {
+    flex: 1;
+    height: 38px;
+    padding: 8px;
+    box-sizing: border-box;
+    min-width: 0;
 }
 
 .phone-input {
     display: flex;
-    gap: 5px;
+    gap: 10px;
+    width: 100%;
 }
 
+/* 구분용 제목 */
+.section-title {
+    font-weight: bold;
+    margin: 20px 0 10px;
+    font-size: 15px;
+}
+
+/* 주소 래퍼 */
+.address-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: stretch;
+}
+.address-input {
+    flex: 1;
+    height: 38px;
+    padding: 8px;
+    box-sizing: border-box;
+}
+#addressDetail {
+    flex: 1 1 100%;
+    margin-top: 6px;
+    height: 38px;
+    padding: 8px;
+    box-sizing: border-box;
+}
+.address-btn {
+    height: 38px;
+    padding: 0 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #103254;
+    color: white;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 1;
+    box-sizing: border-box;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+/* 약관 동의 */
+.agreement-box {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    margin-top: 10px;
+    font-size: 14px;
+    max-width: 600px;
+}
 .checkbox-group {
     margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.checkbox-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.checkbox-item span {
+    word-break: break-word;
+}
+.checkbox-item a {
+    text-decoration: none;
+    color: inherit;
+    font-size: 13px;
+    margin-left: 4px;
+}
+.checkbox-item a:hover {
+    text-decoration: underline;
+    color: #555;
+}
+
+/* 제출 버튼 */
+.submit-btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    font-weight: bold;
+    background-color: #103254;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.submit-btn:hover {
+    background-color: #0d2845;
+}
+
+/* 모달 */
+.modal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+.modal-content {
+    background: #fff;
+    padding: 24px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 600px;
+    max-height: 80%;
+    overflow-y: auto;
+}
+.modal .close {
+    float: right;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* 에러 메시지 */
+.error-message {
+    color: red;
+    margin-top: 10px;
+}
+input + .error-message,
+select + .error-message {
+    margin-top: -8px;
+    margin-bottom: 6px;
+    font-size: 13px;
+    color: red;
+}
+
+/* 기본 브라우저 검증 시 border 표시 방지 (submit 후만 처리하도록) */
+/*
+input:invalid {
+    border-color: red;
+}
+*/
+.form-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+}
+
+.required-note {
+    font-size: 13px;
+    color: #666;
+    margin: 0;
+    white-space: nowrap;
+}
+
+
+/* 사업자등록번호 줄 정렬용 */
+.biznum-input {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+.biznum-input input {
+    flex: 1;
+    height: 38px;
+    padding: 8px;
+    box-sizing: border-box;
+}
+.verify-btn {
+    height: 38px;
+    padding: 0 14px;
+    background-color: #103254;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+.verify-btn:hover {
+    background-color: #0d2845;
 }

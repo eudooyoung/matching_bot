@@ -13,6 +13,7 @@ import com.multi.matchingbot.job.service.OccupationService;
 import com.multi.matchingbot.job.service.ResumeBookmarkService;
 import com.multi.matchingbot.member.domain.dtos.ResumeDto;
 import com.multi.matchingbot.member.domain.entities.Resume;
+import com.multi.matchingbot.member.domain.dto.ResumeDto;
 import com.multi.matchingbot.member.service.ResumeService;
 import com.multi.matchingbot.notification.service.NotificationService;
 import jakarta.validation.Valid;
@@ -29,7 +30,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/job")
@@ -42,17 +45,16 @@ public class JobController {
     private final OccupationService occupationService;
     private final ResumeBookmarkService resumeBookmarkService;
     private final ResumeService resumeService;
-//    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate = new RestTemplate();
 
     @Autowired
-    public JobController(CompanyService companyService, JobService jobService, NotificationService notificationService, JobRepository jobRepository, OccupationService occupationService, ResumeBookmarkService resumeBookmarkService, ResumeService resumeService) {
+    public JobController(CompanyService companyService, JobService jobService, NotificationService notificationService, JobRepository jobRepository, OccupationService occupationService, ResumeBookmarkService resumeBookmarkService) {
         this.companyService = companyService;
         this.jobService = jobService;
         this.notificationService = notificationService;
         this.jobRepository = jobRepository;
         this.occupationService = occupationService;
         this.resumeBookmarkService = resumeBookmarkService;
-        this.resumeService = resumeService;
     }
 
     // 공고 목록
@@ -109,7 +111,6 @@ public class JobController {
         return "redirect:/job/manage-jobs";
     }
 
-
     // 공고 수정 페이지
     @GetMapping("/{id}/edit")
     public String showEditForm(@PathVariable("id") Long id, Model model) {
@@ -142,8 +143,6 @@ public class JobController {
         return "redirect:/job/manage-jobs";
     }
 
-
-
     // 공고 상세보기 형찬코드
     @GetMapping("/{id}")
     public String getJobDetail(@PathVariable("id") Long id,
@@ -174,32 +173,6 @@ public class JobController {
         return "job/job-detail";
 
     }
-
-    /*@PostMapping("/calculate-similarity")
-    @ResponseBody
-    public ResponseEntity<Map<String, Object>> calculateSimilarity(@RequestBody Map<String, List<String>> payload) {
-        try {
-            // FastAPI 서버 주소
-            String url = "http://localhost:8081/calculate-similarity";
-
-            // FastAPI로 POST 요청 전송
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity<Map<String, List<String>>> request = new HttpEntity<>(payload, headers);
-
-            ResponseEntity<Map> response = restTemplate.postForEntity(url, request, Map.class);
-
-            // 결과 반환
-            return ResponseEntity.ok(response.getBody());
-
-        } catch (Exception e) {
-            Map<String, Object> error = new HashMap<>();
-            error.put("error", "유사도 계산 실패: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
-        }
-    }*/
-
-
 
     // 관심 이력서 관리(id 포함)
     @GetMapping("/resume-bookmark")
