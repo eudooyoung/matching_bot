@@ -11,9 +11,8 @@ import com.multi.matchingbot.job.repository.JobRepository;
 import com.multi.matchingbot.job.service.JobService;
 import com.multi.matchingbot.job.service.OccupationService;
 import com.multi.matchingbot.job.service.ResumeBookmarkService;
-import com.multi.matchingbot.member.domain.dtos.ResumeDto;
-import com.multi.matchingbot.member.domain.entities.Resume;
 import com.multi.matchingbot.member.domain.dto.ResumeDto;
+import com.multi.matchingbot.member.domain.entity.Resume;
 import com.multi.matchingbot.member.service.ResumeService;
 import com.multi.matchingbot.notification.service.NotificationService;
 import jakarta.validation.Valid;
@@ -30,9 +29,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/job")
@@ -45,16 +42,16 @@ public class JobController {
     private final OccupationService occupationService;
     private final ResumeBookmarkService resumeBookmarkService;
     private final ResumeService resumeService;
-    private final RestTemplate restTemplate = new RestTemplate();
 
     @Autowired
-    public JobController(CompanyService companyService, JobService jobService, NotificationService notificationService, JobRepository jobRepository, OccupationService occupationService, ResumeBookmarkService resumeBookmarkService) {
+    public JobController(CompanyService companyService, JobService jobService, NotificationService notificationService, JobRepository jobRepository, OccupationService occupationService, ResumeBookmarkService resumeBookmarkService, ResumeService resumeService) {
         this.companyService = companyService;
         this.jobService = jobService;
         this.notificationService = notificationService;
         this.jobRepository = jobRepository;
         this.occupationService = occupationService;
         this.resumeBookmarkService = resumeBookmarkService;
+        this.resumeService = resumeService;
     }
 
     // 공고 목록

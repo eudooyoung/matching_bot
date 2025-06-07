@@ -22,7 +22,7 @@ DROP TABLE IF EXISTS `resume_bookmark`;
 DROP TABLE IF EXISTS `member`;
 DROP TABLE IF EXISTS `region`;
 DROP TABLE IF EXISTS `refresh_token`;
-
+DROP TABLE IF EXISTS `resume_view_log`;
 -- 3. 외래키 제약 조건 다시 활성화
 SET FOREIGN_KEY_CHECKS = 1;*/
 
@@ -30,6 +30,7 @@ CREATE TABLE member (
     id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '회원 ID',
     role ENUM('MEMBER', 'ADMIN') NOT NULL COMMENT '역할', -- 관리자=admin, 구직자=member
     name VARCHAR(10) NOT NULL COMMENT '이름',
+    nickname VARCHAR(15) NOT NULL UNIQUE COMMENT '닉네임 (2~15자, 한글/영문/숫자/언더스코어/하이픈)',
     address VARCHAR(200) NOT NULL COMMENT '주소',
     email VARCHAR(50) NOT NULL UNIQUE COMMENT '이메일 (이메일형식)',
     password VARCHAR(100) NOT NULL COMMENT '비밀번호 (암호화저장)',
@@ -157,13 +158,14 @@ CREATE TABLE job (
 
 -- 알림 테이블 생성 --
 create table notification(
-	id BIGINT NOT NULL AUTO_INCREMENT,
-	member_id BIGINT NOT NULL,
-	title VARCHAR(100) NOT NULL,
-	content VARCHAR(255) NOT NULL,
-	status VARCHAR(10) NOT NULL,
-	PRIMARY KEY (id),
-	FOREIGN KEY (member_id) REFERENCES member(id)
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    member_id BIGINT NOT NULL,
+    title VARCHAR(100) NOT NULL,
+    content VARCHAR(255) NOT NULL,
+    status VARCHAR(10) NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    FOREIGN KEY (member_id) REFERENCES member(id)
 );
 
 
@@ -237,7 +239,7 @@ CREATE TABLE resume (
     occupation_id BIGINT NOT NULL,
     title VARCHAR(50) NOT NULL,
     skill_answer VARCHAR(255) NOT NULL,
-    trait_answer VARCHAR(255) NOT NULL,
+    trait_answer VARCHAR(255),
     skill_keywords VARCHAR(100),
     trait_keywords VARCHAR(100),
     keywords_status ENUM('Y', 'N') NOT NULL DEFAULT 'N' COMMENT '키워드 추출 상태',
@@ -268,6 +270,18 @@ CREATE TABLE career (
 	FOREIGN KEY (resume_id) REFERENCES resume(id)
 );
 
+CREATE TABLE resume_view_log (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    company_id BIGINT NOT NULL,
+    resume_id BIGINT NOT NULL,
+    viewed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    created_by VARCHAR(50),
+    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
+    updated_by VARCHAR(50),
+    FOREIGN KEY (company_id) REFERENCES company(id),
+    FOREIGN KEY (resume_id) REFERENCES resume(id)
+);
 
 create table resume_bookmark (
 	id BIGINT PRIMARY KEY AUTO_INCREMENT comment '관심 이력서 ID',
