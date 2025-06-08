@@ -1,4 +1,4 @@
-// insert-resume.js
+// category.js
 import React from "https://cdn.jsdelivr.net/npm/react@18.2.0/+esm";
 import { createRoot } from "https://cdn.jsdelivr.net/npm/react-dom@18.2.0/client/+esm";
 

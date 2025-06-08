@@ -1,369 +1,229 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>자기소개서 입력</title>
-    <link rel="stylesheet" th:href="@{/css/company-job.css}"/>
-    <link rel="stylesheet" th:href="@{/css/job-new.css}">
+    <meta charset="UTF-8"/>
+    <title>이력서 등록</title>
+    <link rel="stylesheet" th:href="@{/css/insert-resume.css}"/>
+    <link rel="stylesheet" th:href="@{/css/extract-keyword.css}"/>
+    <link rel="stylesheet" th:href="@{/css/layout.css}"/>
 </head>
 <body>
-<div th:replace="~{fragments/header :: header(role=${role})}"></div>
+<div class="wrapper">
+    <div th:replace="~{fragments/header :: header(role=${role})}"></div>
 
-<div class="container">
-    <h2>이력서 등록</h2>
+    <main class="main-content">
+        <div class="container">
+            <h2>이력서 등록</h2>
 
-    <form th:action="@{/member/resume/insert}" method="post" th:object="${resume}">
-        <input type="hidden" name="skillKeywordsConcat" id="skillKeywordsConcat"/>
-        <input type="hidden" name="traitKeywordsConcat" id="traitKeywordsConcat"/>
+            <form id="resumeForm" th:action="@{/member/insert-resume}" method="post" th:object="${resumeInsertDto}">
+                <input type="hidden" name="skillKeywordsConcat" id="skillKeywordsConcat"/>
+                <input type="hidden" name="traitKeywordsConcat" id="traitKeywordsConcat"/>
 
-        <!-- 인적사항 -->
-        <div class="form-group">
-            <label>제목</label>
-            <input type="text" name="intro" placeholder="간결, 목표, 관심 분야도 좋아요">
-        </div>
+                <fieldset>
+                    <legend>이력서 제목</legend>
+                    <div class="form-group">
+                        <input type="text" th:field="*{title}" id="title" name="title" required maxlength="100"
+                               placeholder="경력과 목표를 한 줄로 표현해 보세요"/>
+                    </div>
+                </fieldset>
 
-        <!-- 관심 직무 -->
-        <div class="form-group">
-            <label>관심 직무</label>
-            <input type="hidden" th:field="*{occupationId}" id="occupationId"/>
-            <div id="react-job-category-selector"></div>
-            <div th:if="${#fields.hasErrors('occupationId')}" class="error-message" th:errors="*{occupationId}"></div>
-        </div>
+                <!-- 관심 직무 -->
+                <fieldset>
+                    <legend>관심 직무</legend>
+                    <div class="form-group">
+                        <!--<label>관심 직무</label>-->
+                        <input type="hidden" th:field="*{occupationId}" id="occupationId"/>
+                        <div id="react-job-category-selector"></div>
+                        <div th:if="${#fields.hasErrors('occupationId')}" class="error-message"
+                             th:errors="*{occupationId}"></div>
+                    </div>
+                </fieldset>
 
+                <!-- 인적사항 -->
+                <fieldset>
+                    <legend>인적사항</legend>
 
-        <div class="row">
-            <div class="form-group">
-                <label>이름</label>
-                <input type="text" name="name">
-            </div>
-            <div class="form-group">
-                <label>성별</label>
-                <select name="gender">
-                    <option value="">선택</option>
-                    <option value="M">남</option>
-                    <option value="F">여</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>이메일</label>
-                <input type="email" name="email">
-            </div>
-            <div class="form-group">
-                <label>주소</label>
-                <input type="text" name="address">
-            </div>
-        </div>
+                    <div class="inline-group">
+                        <div class="form-group" id="name-group">
+                            <label for="name">이름*</label>
+                            <input type="text" id="name" th:field="*{name}" readonly/>
+                        </div>
 
-        <!--            &lt;!&ndash; 사진 등록 &ndash;&gt;-->
-        <!--            <div class="form-group photo-upload">-->
-        <!--                <label for="photo">사진</label>-->
-        <!--                <input type="file" id="photo" name="photo">-->
-        <!--            </div> -->
+                        <div class="form-group" id="birth-group">
+                            <label for="birth">생년월일*</label>
+                            <input type="date"
+                                   id="birth"
+                                   name="birth"
+                                   th:value="${#temporals.format(resumeInsertDto.birth, 'yyyy-MM-dd')}"
+                                   readonly/>
+                        </div>
 
+                        <div class="form-group" id="gender-group">
+                            <label for="gender">성별*</label>
+                            <select id="gender" th:field="*{gender}" disabled>
+                                <option value="">선택</option>
+                                <option value="M">남성</option>
+                                <option value="F">여성</option>
+                            </select>
+                            <input type="hidden" th:field="*{gender}"/>
+                        </div>
 
-        <!-- 경력 체크박스 -->
-        <div class="form-group">
-            <label>경력 구분</label><br>
-            <label class="checkbox-inline"><input type="radio" name="careerType" value="new" checked
-                                                  onchange="toggleCareerFields()"> 신입</label>
-            <label class="checkbox-inline"><input type="radio" name="careerType" value="experienced"
-                                                  onchange="toggleCareerFields()"> 경력</label>
-        </div>
+                        <div class="form-group" id="address-group">
+                            <label for="address">주소</label>
+                            <input type="text" id="address" th:field="*{address}" readonly/>
+                        </div>
+                    </div>
 
-        <!-- 경력 -->
-        <div class="experience-box" id="careerFields" style="display: none;">
-            <div class="form-group">
-                <label>근무부서</label>
-                <input type="text" name="department">
-            </div>
-            <div class="form-group">
-                <label>직급/직책</label>
-                <input type="text" name="position">
-            </div>
-            <div class="form-group">
-                <label>입사일</label>
-                <input type="text" name="entryDate">
-            </div>
-            <div class="form-group">
-                <label>퇴사일</label>
-                <input type="text" name="exitDate">
-            </div>
-            <div class="form-group">
-                <label>회사명</label>
-                <input type="text" name="company">
-            </div>
-        </div>
+                    <!-- 이메일 + 휴대폰 -->
+                    <div class="inline-group">
+                        <div class="form-group" id="email-group">
+                            <label for="email">이메일*</label>
+                            <input type="email" id="email" th:field="*{email}" required/>
+                        </div>
 
-        <!-- 기술 기반 자기소개서 -->
-        <div class="form-group">
-            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 6px;">
-                <label style="margin-bottom: 0;">기술 기반 자기소개서 (500~1000자)</label>
-                <button type="button" onclick="extractKeywords('skill')" class="btn btn-warning btn-sm">
-                    👇키워드 추출하기👇
-                </button>
-            </div>
-            <textarea id="skillAnswer" name="skillAnswer" maxlength="1000"></textarea>
-        </div>
+                        <div class="form-group" id="phone-group">
+                            <label>휴대폰 번호*</label>
+                            <div class="phone-input">
+                                <select th:field="*{phone1}" name="phone1" class="phone-segment" required>
+                                    <option value="">선택</option>
+                                    <option value="010">010</option>
+                                    <option value="011">011</option>
+                                    <option value="016">016</option>
+                                    <option value="017">017</option>
+                                    <option value="018">018</option>
+                                    <option value="019">019</option>
+                                </select>
+                                <input type="tel" th:field="*{phone2}" name="phone2" class="phone-segment" maxlength="4"
+                                       pattern="\d{3,4}" title="숫자 3~4자리를 입력하세요" required>
+                                <input type="tel" th:field="*{phone3}" name="phone3" class="phone-segment" maxlength="4"
+                                       pattern="\d{4}" title="숫자 4자리를 입력하세요" required>
+                            </div>
+                        </div>
+                    </div>
 
-        <!-- 성향 기반 자기소개서 -->
-        <div class="form-group">
-            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 6px;">
-                <label style="margin-bottom: 0;">성향 기반 자기소개서 (500~1000자)</label>
-                <button type="button" onclick="extractKeywords('trait')" class="btn btn-warning btn-sm">
-                    👇키워드 추출하기👇
-                </button>
-            </div>
-            <textarea id="traitAnswer" name="traitAnswer" maxlength="1000"></textarea>
-        </div>
+                </fieldset>
 
-        <div>
-            <label><strong>기술 키워드</strong></label>
-            <div id="skill-keyword-wrapper" class="keyword-wrapper">
-                <div class="keyword-input">
-                    <input type="text" name="skill_keywords[]" placeholder="기술 키워드"/>
-                    <button type="button" onclick="addSkillKeyword()">+</button>
+                <!-- 자기소개서 -->
+                <fieldset>
+                    <legend>자기소개서</legend>
+
+                    <!-- 기술 기반 자기소개서 -->
+                    <div class="form-group">
+                        <div class="keyword-label-group">
+                            <label for="skillAnswer">기술 기반 자기소개서 (500~1000자)</label>
+                            <button type="button" onclick="extractKeywords('skill')" class="btn btn-warning btn-sm">
+                                👇키워드 추출하기👇
+                            </button>
+                        </div>
+                        <textarea name="skillAnswer" id="skillAnswer" maxlength="1000"
+                                  required></textarea>
+                    </div>
+
+                    <!-- 성향 기반 자기소개서 -->
+                    <div class="form-group">
+                        <div class="keyword-label-group">
+                            <label for="traitAnswer">성향 기반 자기소개서 (500~1000자)</label>
+                            <button type="button" onclick="extractKeywords('trait')" class="btn btn-warning btn-sm">
+                                👇키워드 추출하기👇
+                            </button>
+                        </div>
+                        <textarea name="traitAnswer" id="traitAnswer" maxlength="1000"
+                                  required></textarea>
+                    </div>
+                </fieldset>
+
+                <div class="form-group">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 6px;">
+                        <label style="margin-bottom: 0;">기술 키워드 추출</label>
+
+                    </div>
+                    <div id="skill-keyword-wrapper" class="keyword-wrapper">
+                        <div class="keyword-input">
+                            <input type="text" name="skill_keywords[]" placeholder="기술 키워드"/>
+                            <button type="button" onclick="addSkillKeyword()">+</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
 
-        <div>
-            <label><strong>성향 키워드</strong></label>
-            <div id="trait-keyword-wrapper" class="keyword-wrapper">
-                <div class="keyword-input">
-                    <input type="text" name="trait_keywords[]" placeholder="성향 키워드"/>
-                    <button type="button" onclick="addTraitKeyword()">+</button>
+                <div class="form-group">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 6px;">
+                        <label style="margin-bottom: 0;">성향 키워드 추출</label>
+
+                    </div>
+                    <div id="trait-keyword-wrapper" class="keyword-wrapper">
+                        <div class="keyword-input">
+                            <input type="text" name="trait_keywords[]" placeholder="성향 키워드"/>
+                            <button type="button" onclick="addTraitKeyword()">+</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
+
+                <!-- 경력 -->
+                <fieldset>
+                    <legend>경력</legend>
+
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="careerType" value="EXP"  onchange="toggleCareer(true)"
+                                   checked/> 경력자
+                        </label>
+                        <label>
+                            <input type="radio" name="careerType" value="NEW" onchange="toggleCareer(false)"/> 신입
+                        </label>
+                    </div>
+
+                    <div id="career-section" style="margin-top: 16px;">
+                        <div id="career-list">
+                            <!-- JavaScript로 경력 항목이 추가됨 -->
+                        </div>
+                        <div class="button-area">
+                            <button type="button" onclick="addCareerRow()">+ 경력 추가</button>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <div style="text-align: center; margin-top: 20px;">
+                    <button type="submit" class="btn btn-primary">등록하기</button>
+                </div>
+
+            </form>
         </div>
-        <div class="form-group" style="text-align: right;">
-            <button type="submit">등록하기</button>
-        </div>
-    </form>
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
 </div>
-<div th:replace="fragments/footer :: footer"></div>
-
 <script>
-    function toggleCareerFields() {
-        const isExperienced = document.querySelector('input[name="careerType"]:checked').value === 'experienced';
-        document.getElementById('careerFields').style.display = isExperienced ? 'flex' : 'none';
-    }
+    window.addEventListener("DOMContentLoaded", () => {
+        // 숫자 외 입력 방지
+        document.querySelectorAll(".phone-segment").forEach(input => {
+            input.addEventListener("input", e => {
+                e.target.value = e.target.value.replace(/[^0-9]/g, "");
+            });
+        });
+    });
 
-    // 페이지 로드시 초기화
-    document.addEventListener('DOMContentLoaded', toggleCareerFields);
+
 </script>
+<script type="module">
+    import {
+        extractKeywords,
+        addSkillKeyword,
+        addTraitKeyword,
+        removeKeyword,
+        attachKeywordSubmitHandler
+    } from "/js/member/resume-keyword.js";
 
+    // 함수들을 전역에 등록 (onclick에서 직접 호출해야 해서)
+    window.extractKeywords = extractKeywords;
+    window.addSkillKeyword = addSkillKeyword;
+    window.addTraitKeyword = addTraitKeyword;
+    window.removeKeyword = removeKeyword;
+
+    attachKeywordSubmitHandler();
+</script>
+<script type="module" src="/js/member/category.js"></script>
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>
-
-<!-- React + ReactDOM CDN -->
-<script type="module">
-    import React from "https://cdn.jsdelivr.net/npm/react@18.2.0/+esm";
-    import {createRoot} from "https://cdn.jsdelivr.net/npm/react-dom@18.2.0/client/+esm";
-
-    window.React = React;
-    window.createRoot = createRoot;
-
-    // React 컴포넌트를 DOM이 로드된 이후 실행
-    document.addEventListener("DOMContentLoaded", () => {
-        import("/js/JobCategorySelector.js").then((mod) => {
-            const container = document.getElementById("react-job-category-selector");
-            if (container) {
-                const root = createRoot(container);
-                root.render(React.createElement(mod.default));
-            }
-        });
-
-        // Form 제출 전에 occupationId 값이 제대로 들어갔는지 검증
-        const form = document.querySelector("form");
-        if (form) {
-            form.addEventListener("submit", function (e) {
-                const occInput = document.getElementById("occupationId");
-                if (!occInput || !occInput.value) {
-                    alert("직무를 선택해 주세요!");
-                    e.preventDefault(); // 전송 방지
-                } else {
-                    console.log("✅ 선택된 occupationId:", occInput.value);
-                }
-            });
-        }
-    });
-</script>
-<script>
-    const MAX_KEYWORDS = 15;
-
-    function addKeyword(wrapperId, inputName, placeholderText) {
-        const wrapper = document.getElementById(wrapperId);
-        const count = wrapper.querySelectorAll('.keyword-input').length;
-
-        if (count >= MAX_KEYWORDS) return;
-
-        // ✅ 기존 + 버튼 제거 (있다면)
-        const plusButton = Array.from(wrapper.querySelectorAll('button')).find(btn => btn.textContent === '+');
-        if (plusButton) {
-            plusButton.parentElement.remove(); // div.keyword-input 자체 삭제
-        }
-
-        // 🔼 새 키워드 input 추가
-        const inputDiv = document.createElement('div');
-        inputDiv.className = 'keyword-input';
-        inputDiv.innerHTML = `
-        <input type="text" name="${inputName}" placeholder="${placeholderText}" />
-        <button type="button" onclick="removeKeyword(this)">-</button>
-    `;
-        wrapper.appendChild(inputDiv);
-
-        // 🔽 + 버튼 재삽입 (마지막으로)
-        if (wrapper.querySelectorAll('.keyword-input').length < MAX_KEYWORDS) {
-            const plusDiv = document.createElement('div');
-            plusDiv.className = 'keyword-input';
-
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.name = inputName;
-            input.placeholder = placeholderText;
-
-            const button = document.createElement('button');
-            button.type = 'button';
-            button.textContent = '+';
-            button.addEventListener('click', () => {
-                addKeyword(wrapperId, inputName, placeholderText);
-            });
-
-            plusDiv.appendChild(input);
-            plusDiv.appendChild(button);
-            wrapper.appendChild(plusDiv);
-        }
-    }
-
-
-    function addSkillKeyword() {
-        addKeyword('skill-keyword-wrapper', 'skill_keywords[]', '기술 키워드');
-    }
-
-    function addTraitKeyword() {
-        addKeyword('trait-keyword-wrapper', 'trait_keywords[]', '성향 키워드');
-    }
-
-    function removeKeyword(button) {
-        const wrapper = button.closest('.keyword-wrapper');
-        const inputDiv = button.parentElement;
-
-        inputDiv.remove(); // 삭제
-
-        const count = wrapper.querySelectorAll('.keyword-input').length;
-
-        // 이미 + 버튼 있으면 중복 방지
-        const hasPlusButton = Array.from(wrapper.querySelectorAll('button')).some(btn => btn.textContent === '+');
-
-        if (count < 15 && !hasPlusButton) {
-            const isSkill = wrapper.id.includes('skill');
-            const inputName = isSkill ? 'skill_keywords[]' : 'trait_keywords[]';
-            const placeholder = isSkill ? '기술 키워드' : '성향 키워드';
-
-            const plusDiv = document.createElement('div');
-            plusDiv.className = 'keyword-input';
-
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.name = inputName;
-            input.placeholder = placeholder;
-
-            const button = document.createElement('button');
-            button.type = 'button';
-            button.textContent = '+';
-            button.addEventListener('click', () => {
-                if (isSkill) {
-                    addSkillKeyword();
-                } else {
-                    addTraitKeyword();
-                }
-            });
-
-            plusDiv.appendChild(input);
-            plusDiv.appendChild(button);
-            wrapper.appendChild(plusDiv);
-        }
-    }
-
-
-</script>
-<script>
-    async function extractKeywords(type) {
-        const textareaId = type === 'skill' ? 'skillAnswer' : 'traitAnswer';
-        const wrapperId = type === 'skill' ? 'skill-keyword-wrapper' : 'trait-keyword-wrapper';
-        const inputName = type === 'skill' ? 'skill_keywords[]' : 'trait_keywords[]';
-
-        const text = document.getElementById(textareaId).value.trim();
-        if (!text) {
-            alert("내용을 입력해주세요.");
-            return;
-        }
-
-        const formData = new FormData();
-        formData.append("text", text);
-
-        try {
-            const response = await fetch("http://localhost:8081/extract", {
-                method: "POST",
-                body: formData
-            });
-
-            const result = await response.json();
-            let keywords = result.keywords || [];
-
-            keywords = keywords.slice(0, 15);
-
-            const wrapper = document.getElementById(wrapperId);
-            wrapper.innerHTML = ''; // 기존 키워드 input 초기화
-
-            keywords.forEach(kw => {
-                const inputDiv = document.createElement('div');
-                inputDiv.className = 'keyword-input';
-                inputDiv.innerHTML = `
-                    <input type="text" name="${inputName}" value="${kw}" />
-                    <button type="button" onclick="removeKeyword(this)">-</button>
-                `;
-                wrapper.appendChild(inputDiv);
-            });
-            if (keywords.length < 15) {
-                const plusDiv = document.createElement('div');
-                plusDiv.className = 'keyword-input';
-                plusDiv.innerHTML = `
-        <input type="text" name="${inputName}" placeholder="${type === 'skill' ? '기술 키워드' : '성향 키워드'}" />
-        <button type="button" onclick="${type === 'skill' ? 'addSkillKeyword()' : 'addTraitKeyword()'}">+</button>
-    `;
-                wrapper.appendChild(plusDiv);
-            }
-        } catch (err) {
-            console.error("키워드 추출 중 오류:", err);
-            alert("키워드 추출 실패");
-        }
-    }
-</script>
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const form = document.querySelector("form");
-        if (form) {
-            form.addEventListener("submit", function (e) {
-                const skillInputs = document.querySelectorAll("#skill-keyword-wrapper input[name='skill_keywords[]']");
-                const traitInputs = document.querySelectorAll("#trait-keyword-wrapper input[name='trait_keywords[]']");
-
-                const skillKeywords = Array.from(skillInputs)
-                    .map(input => input.value.trim())
-                    .filter(val => val)
-                    .join(",");
-
-                const traitKeywords = Array.from(traitInputs)
-                    .map(input => input.value.trim())
-                    .filter(val => val)
-                    .join(",");
-
-                document.getElementById("skillKeywordsConcat").value = skillKeywords;
-                document.getElementById("traitKeywordsConcat").value = traitKeywords;
-            });
-        }
-    });
-</script>
-
+<script th:src="@{/js/member/resume-career.js}"></script>
 </body>
 </html>

@@ -1,21 +1,20 @@
 package com.multi.matchingbot.resume.domain.entity;
 
 import com.multi.matchingbot.common.domain.entity.BaseEntity;
-import com.multi.matchingbot.resume.domain.CareerType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "career")
-@Data
-@Builder
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Career extends BaseEntity {
 
     @Id
@@ -25,10 +24,6 @@ public class Career extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "resume_id", nullable = false)
     private Resume resume;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private CareerType careerType;
 
     @Column(nullable = false, length = 50)
     private String companyName;
@@ -45,11 +40,13 @@ public class Career extends BaseEntity {
     @Column(nullable = false)
     private LocalDate endDate;
 
-    @Column(nullable = false)
-    private int salary;
+    @Column(nullable = true)
+    private Integer salary;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String careerSummary;
 
-
+    public void setResume(Resume resume) {
+        this.resume = resume;
+    }
 }

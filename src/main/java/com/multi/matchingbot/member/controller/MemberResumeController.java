@@ -9,11 +9,13 @@ import com.multi.matchingbot.member.domain.dto.ResumeDto;
 import com.multi.matchingbot.member.domain.entity.Member;
 import com.multi.matchingbot.member.service.MemberService;
 import com.multi.matchingbot.member.service.ResumeService;
+import com.multi.matchingbot.resume.domain.dto.CareerDto;
 import com.multi.matchingbot.resume.domain.dto.ResumeInsertDto;
 import com.multi.matchingbot.resume.domain.entity.Resume;
 import com.multi.matchingbot.resume.mapper.ResumeInsertPrefillMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @Controller
 @RequestMapping("/member")
 @RequiredArgsConstructor
@@ -38,7 +41,6 @@ public class MemberResumeController {
 
     /**
      * 이력서 등록 페이지
-     *
      * @param userDetails 로그인 사용자 정보
      * @param model       디티오 전달용 객체
      * @return 이력서 목록 페이지 반환
@@ -54,26 +56,52 @@ public class MemberResumeController {
 
     /**
      * 이력서 등록 페이지
-     *
+     * @param model       디티오 전달용 객체
+     * @param userDetails 로그인 정보
      * @return
      */
-    @GetMapping("/insert-resume-test")
-    public String insertResumeTest(Model model, @AuthenticationPrincipal MBotUserDetails userDetails) {
+    @GetMapping("/insert-resume")
+    public String insertResume(Model model, @AuthenticationPrincipal MBotUserDetails userDetails) {
         Member member = memberService.findById(userDetails.getId());
         ResumeInsertDto dto = prefillMapper.toDto(member);
         dto.splitPhone(dto.getPhone());
         System.out.println(dto);
         model.addAttribute("resumeInsertDto", dto);
-        return "member/insert-resume-test";
-    }
-
-    @GetMapping("/insert-resume")
-    public String insertResume(Model model, @AuthenticationPrincipal MBotUserDetails userDetails) {
-        ResumeDto dto = new ResumeDto();
-        dto.setMemberId(userDetails.getMemberId());
-        model.addAttribute("resume", dto);
         return "member/insert-resume";
     }
+
+
+    /**
+     * 이력서 등록 메소드
+     * @param dto 이력서 등록용 dto
+     * @param bindingResult 유효성 검사 객체
+     * @param userDetails 로그인 정보
+     * @return 이력서 목록 페이지 리다이렉트
+     */
+    @PostMapping("/insert-resume")
+    public String insertResume(@Valid @ModelAttribute ResumeInsertDto dto, BindingResult bindingResult,
+                               @AuthenticationPrincipal MBotUserDetails userDetails) {
+        if (bindingResult.hasErrors()) {
+            log.warn("❌ 이력서 입력 오류: {}", bindingResult.getAllErrors());
+            return "member/insert-resume"; // 다시 입력 화면으로
+        }
+
+        log.info("📨 이력서 등록 요청: {}", dto);
+        dto.mergePhone();
+
+        for (int i = 0; i < dto.getCareers().size(); i++) {
+            CareerDto c = dto.getCareers().get(i);
+            log.warn("▶️ Career {} - 회사명: {}", i, c.getCompanyName());
+        }
+
+        Member member = memberService.findById(userDetails.getId());
+
+        // 저장
+        resumeService.insertResume(dto, member);
+
+        return "redirect:/member/resumes";
+    }
+
 
     @GetMapping("/view/{id}")
     public String view(@PathVariable("id") Long id, Model model) {
@@ -118,40 +146,5 @@ public class MemberResumeController {
         return "redirect:/member";
     }
 
-    //이력서 등록 페이지
-    /*@GetMapping("/insert")
-    public String insertForm(Model model, @AuthenticationPrincipal MBotUserDetails userDetails) {
-        ResumeDto dto = new ResumeDto();
-        dto.setMemberId(userDetails.getMemberId());
-        model.addAttribute("resume", dto);
 
-        return "member/resume-insert";
-    }
-
-    @PostMapping("/insert")
-    public String insert(@Valid @ModelAttribute("resume") ResumeDto resumeDto,
-                         BindingResult bindingResult,
-                         @AuthenticationPrincipal MBotUserDetails userDetails) {
-        if (bindingResult.hasErrors()) {
-            System.out.println("📌 Binding Error 발생:");
-            bindingResult.getAllErrors().forEach(e -> System.out.println("  - " + e));
-            return "member/resume-insert";
-        }
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-//        Member member = memberService.findByUsername(email);
-
-        Member member = memberService.findById(userDetails.getMemberId());
-        Occupation occupation = occupationService.findById(resumeDto.getOccupationId());
-
-        Resume resume = ResumeMapper.toEntity(resumeDto, member, occupation);
-
-        // ✅ 추출된 키워드 문자열 추가 설정
-        resume.setSkillKeywords(resumeDto.getSkillKeywordsConcat());
-        resume.setTraitKeywords(resumeDto.getTraitKeywordsConcat());
-
-        resumeService.save(resume);
-
-        return "member/member-resume-list";
-    }*/
 }

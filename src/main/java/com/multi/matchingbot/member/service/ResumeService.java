@@ -1,12 +1,18 @@
 package com.multi.matchingbot.member.service;
 
+import com.multi.matchingbot.job.domain.entity.Occupation;
 import com.multi.matchingbot.job.repository.ResumeBookmarkRepository;
+import com.multi.matchingbot.job.service.OccupationService;
 import com.multi.matchingbot.member.domain.dto.ResumeDto;
 import com.multi.matchingbot.member.domain.dto.ResumeViewLogDto;
-import com.multi.matchingbot.resume.domain.entity.Resume;
+import com.multi.matchingbot.member.domain.entity.Member;
 import com.multi.matchingbot.member.domain.entity.ResumeViewLog;
 import com.multi.matchingbot.member.repository.ResumeRepository;
 import com.multi.matchingbot.member.repository.ResumeViewLogRepository;
+import com.multi.matchingbot.resume.domain.CareerType;
+import com.multi.matchingbot.resume.domain.dto.ResumeInsertDto;
+import com.multi.matchingbot.resume.domain.entity.Resume;
+import com.multi.matchingbot.resume.mapper.ResumeInsertMapper;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +31,8 @@ public class ResumeService {
     private final ResumeRepository resumeRepository;
     private final ResumeViewLogRepository resumeViewLogRepository;
     private final ResumeBookmarkRepository resumeBookmarkRepository;
+    private final OccupationService occupationService;
+    private final ResumeInsertMapper resumeInsertMapper;
 
     public List<Resume> findAll() {
         return resumeRepository.findAll();
@@ -112,5 +121,24 @@ public class ResumeService {
 
     public List<Long> findBookmarkedResumeIdsByCompanyId(Long companyId) {
         return resumeBookmarkRepository.findResumeIdsByCompanyId(companyId);
+    }
+
+    @Transactional
+    public void insertResume(ResumeInsertDto dto, Member member) {
+        Occupation occupation = occupationService.findById(dto.getOccupationId());
+
+        if (dto.getCareerType() == CareerType.NEW) {
+            dto.setCareers(Collections.emptyList());  // 🔹 핵심 추가
+        }
+
+        Resume resume = resumeInsertMapper.toEntity(dto);
+        resume.setMember(member);
+        resume.setOccupation(occupation);
+
+        if (resume.getCareers() != null) {
+            resume.getCareers().forEach(c -> c.setResume(resume));  // 🔹 주석 해제 필요
+        }
+
+        resumeRepository.save(resume);
     }
 }

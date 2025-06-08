@@ -88,7 +88,7 @@ export function removeKeyword(button) {
 }
 
 export async function extractKeywords(type) {
-    const textareaId = type === 'skill' ? 'strengthIntro' : 'personalityIntro';
+    const textareaId = type === 'skill' ? 'skillAnswer' : 'traitAnswer';
     const wrapperId = type === 'skill' ? 'skill-keyword-wrapper' : 'trait-keyword-wrapper';
     const inputName = type === 'skill' ? 'skill_keywords[]' : 'trait_keywords[]';
 

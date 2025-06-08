@@ -4,6 +4,7 @@ import com.multi.matchingbot.common.domain.entity.BaseEntity;
 import com.multi.matchingbot.common.domain.enums.Yn;
 import com.multi.matchingbot.job.domain.entity.Occupation;
 import com.multi.matchingbot.member.domain.entity.Member;
+import com.multi.matchingbot.resume.domain.CareerType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -53,6 +54,10 @@ public class Resume extends BaseEntity {
     @Column(nullable = false, length = 1)
     @Builder.Default
     private Yn keywordsStatus = Yn.N;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private CareerType careerType;
 
     public void updateFrom(Resume updatedResume) {
         this.title = updatedResume.getTitle();
