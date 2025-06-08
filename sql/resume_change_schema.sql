@@ -149,11 +149,12 @@ CREATE TABLE community_category (
     name VARCHAR(50) NOT NULL
 );
 
--- 2. 게시글 테이블 생성
+-- 2. 게시글 테이블 (개인 or 기업 작성 가능)
 CREATE TABLE community_post (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     category_id BIGINT NOT NULL,
-    member_id BIGINT NOT NULL,
+    member_id BIGINT,
+    company_id BIGINT,
     title VARCHAR(200) NOT NULL,
     content TEXT NOT NULL,
     views INT NOT NULL DEFAULT 0,
@@ -162,21 +163,24 @@ CREATE TABLE community_post (
     updated_by VARCHAR(50),
     updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fk_post_category FOREIGN KEY (category_id) REFERENCES community_category(id),
-    CONSTRAINT fk_post_member FOREIGN KEY (member_id) REFERENCES member(id)
+    CONSTRAINT fk_post_member FOREIGN KEY (member_id) REFERENCES member(id),
+    CONSTRAINT fk_post_company FOREIGN KEY (company_id) REFERENCES company(id)
 );
 
--- 3. 댓글 테이블 생성
+-- 3. 댓글 테이블 (개인 or 기업 작성 가능)
 CREATE TABLE community_comment (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     post_id BIGINT NOT NULL,
-    member_id BIGINT NOT NULL,
+    member_id BIGINT,
+    company_id BIGINT,
     content VARCHAR(500) NOT NULL,
     created_by VARCHAR(50) NOT NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_by VARCHAR(50),
     updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fk_comment_post FOREIGN KEY (post_id) REFERENCES community_post(id),
-    CONSTRAINT fk_comment_member FOREIGN KEY (member_id) REFERENCES member(id)
+    CONSTRAINT fk_comment_member FOREIGN KEY (member_id) REFERENCES member(id),
+    CONSTRAINT fk_comment_company FOREIGN KEY (company_id) REFERENCES company(id)
 );
 
 
@@ -214,8 +218,8 @@ CREATE TABLE resume (
     title VARCHAR(50) NOT NULL,
     skill_answer TEXT NOT NULL,
     trait_answer TEXT,
-    skill_keywords VARCHAR(100),
-    trait_keywords VARCHAR(100),
+    skill_keywords VARCHAR(200),
+    trait_keywords VARCHAR(200),
     keywords_status ENUM('Y', 'N') NOT NULL DEFAULT 'N' COMMENT '키워드 추출 상태',
     career_type ENUM('NEW', 'EXP'),
     created_by VARCHAR(50) NOT NULL,
@@ -266,7 +270,6 @@ create table resume_bookmark (
 	FOREIGN KEY (company_id) REFERENCES company(id),
 	FOREIGN KEY (resume_id) REFERENCES resume(id)
 );
-
 
 
 -- 관심 기업 테이블
