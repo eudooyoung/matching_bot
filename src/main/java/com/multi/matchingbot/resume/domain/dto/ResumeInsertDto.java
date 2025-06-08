@@ -53,7 +53,7 @@ public class ResumeInsertDto {
     @Size(max = 200, message = "성향 키워드는 200자 이내여야 합니다.")
     private String traitKeywordsConcat;
 
-    @NotNull(message = "경력 유형은 필수입니다.")
+//    @NotNull(message = "경력 유형은 필수입니다.")
     private CareerType careerType;
 
     @NotNull(message = "직무는 필수입니다.")

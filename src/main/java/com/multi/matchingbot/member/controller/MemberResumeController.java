@@ -7,7 +7,6 @@ import com.multi.matchingbot.member.domain.entity.Member;
 import com.multi.matchingbot.member.service.MemberResumeService;
 import com.multi.matchingbot.member.service.MemberService;
 import com.multi.matchingbot.resume.domain.dto.ResumeDetailDto;
-import com.multi.matchingbot.resume.domain.dto.ResumeDto;
 import com.multi.matchingbot.resume.domain.dto.ResumeInsertDto;
 import com.multi.matchingbot.resume.domain.dto.ResumeUpdateDto;
 import com.multi.matchingbot.resume.domain.entity.Resume;
@@ -92,16 +91,25 @@ public class MemberResumeController {
     @PostMapping("/insert-resume")
     public String insertResume(@Valid @ModelAttribute ResumeInsertDto dto, BindingResult bindingResult, Model model,
                                @AuthenticationPrincipal MBotUserDetails userDetails) {
+
+        // 검증 실패 시
         if (bindingResult.hasErrors()) {
-            log.warn("❌ 이력서 입력 오류: {}", bindingResult.getAllErrors());
+            log.warn("❌ 이력서 유효성 오류: {}", bindingResult.getAllErrors());
+
+            // 👉 커리어는 JS로 렌더링되기 때문에,
+            //    개별 필드 메시지 대신 글로벌 에러 메시지 하나 추가 (선택)
+            bindingResult.reject("careerInvalid", "경력 항목에 누락된 정보가 있습니다.");
+
             model.addAttribute("resumeInsertDto", dto);
-            return "member/insert-resume"; // 다시 입력 화면으로
+            return "member/insert-resume";
         }
 
         log.info("📨 이력서 등록 요청: {}", dto);
         dto.mergePhone();
+
         Member member = memberService.findById(userDetails.getId());
         memberResumeService.insertResume(dto, member);
+
         return "redirect:/member/manage-resumes";
     }
 
@@ -178,13 +186,13 @@ public class MemberResumeController {
         return "resume/detail";
     }
 
-    @GetMapping("/view/{id}")
+    /*@GetMapping("/view/{id}")
     public String view(@PathVariable("id") Long id, Model model) {
         Resume resume = resumeService.findByIdWithOccupation(id);
         ResumeDto resumeDto = ResumeDto.fromEntity(resume);
         model.addAttribute("resume", resumeDto);
         return "member/resume-view";
-    }
+    }*/
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") Long id) {

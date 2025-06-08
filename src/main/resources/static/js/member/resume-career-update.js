@@ -1,14 +1,14 @@
-function toggleCareer(isExperienced) {
+/*function toggleCareer(isExperienced) {
     const section = document.getElementById("career-section");
     section.style.display = isExperienced ? "block" : "none";
 
     const inputs = section.querySelectorAll("input, select, textarea");
     inputs.forEach(input => input.disabled = !isExperienced);
-}
+}*/
 
 function addCareerRow() {
     const list = document.getElementById("career-list");
-    const index = list.children.length;
+    const index = list.querySelectorAll(".career-entry").length;
 
     const row = document.createElement("div");
     row.className = "career-entry";
@@ -47,7 +47,9 @@ function addCareerRow() {
             </div>
         </div>
     `;
-    list.appendChild(row);
+    const buttonArea = list.querySelector(".button-area");
+    list.insertBefore(row, buttonArea);
+    // list.appendChild(row);
 }
 
 function removeCareer(button) {
@@ -57,5 +59,5 @@ function removeCareer(button) {
 
 window.addEventListener("DOMContentLoaded", () => {
     const selected = document.querySelector('input[name="careerType"]:checked');
-    toggleCareer(selected?.value === "EXP");
+    // toggleCareer(selected?.value === "EXP");
 });

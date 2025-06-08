@@ -16,9 +16,11 @@
             <h2>이력서 수정</h2>
 
             <form id="resumeForm" th:action="@{/member/update-resume}" method="post" th:object="${resumeUpdateDto}">
-                <input type="hidden" name="id" th:value="${resumeUpdateDto.id}" />
-                <input type="hidden" name="skillKeywordsConcat" id="skillKeywordsConcat" th:value="*{skillKeywordsConcat}"/>
-                <input type="hidden" name="traitKeywordsConcat" id="traitKeywordsConcat" th:value="*{traitKeywordsConcat}"/>
+                <input type="hidden" name="id" th:value="${resumeUpdateDto.id}"/>
+                <input type="hidden" name="skillKeywordsConcat" id="skillKeywordsConcat"
+                       th:value="*{skillKeywordsConcat}"/>
+                <input type="hidden" name="traitKeywordsConcat" id="traitKeywordsConcat"
+                       th:value="*{traitKeywordsConcat}"/>
 
                 <fieldset>
                     <legend>이력서 제목</legend>
@@ -166,7 +168,7 @@
                 <fieldset>
                     <legend>경력</legend>
 
-                    <div class="radio-group">
+                    <!--<div class="radio-group">
                         <label>
                             <input type="radio" name="careerType" value="EXP" onchange="toggleCareer(true)"
                                    checked/> 경력자
@@ -174,7 +176,9 @@
                         <label>
                             <input type="radio" name="careerType" value="NEW" onchange="toggleCareer(false)"/> 신입
                         </label>
-                    </div>
+                    </div>-->
+
+                    <input type="hidden" th:field="*{careerType}" id="careerType"/>
 
                     <div id="career-list">
                         <div class="career-entry" th:each="career, stat : *{careers}">
@@ -211,6 +215,7 @@
                                            onclick="this.showPicker()"/>
                                 </div>
                             </div>
+
                             <div class="inline-group">
                                 <div class="form-group" style="flex: 2;">
                                     <label th:for="'careers[' + ${stat.index} + '].careerSummary'">담당 업무 및 성과 요약</label>
@@ -219,17 +224,17 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-
-                    <div id="career-section" style="margin-top: 16px;">
-                        <div id="career-list">
-                            <!-- JavaScript로 경력 항목이 추가됨 -->
-                        </div>
                         <div class="button-area">
                             <button type="button" onclick="addCareerRow()">+ 경력 추가</button>
                         </div>
                     </div>
+
+
+                    <!--<div id="career-section" style="margin-top: 16px;">
+                        <div id="career-list">
+                            &lt;!&ndash; JavaScript로 경력 항목이 추가됨 &ndash;&gt;
+                        </div>
+                    </div>-->
                 </fieldset>
 
                 <div style="text-align: center; margin-top: 20px;">

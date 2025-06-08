@@ -19,6 +19,10 @@
                 <input type="hidden" name="skillKeywordsConcat" id="skillKeywordsConcat"/>
                 <input type="hidden" name="traitKeywordsConcat" id="traitKeywordsConcat"/>
 
+                <div th:if="${#fields.hasGlobalErrors()}" class="error-message">
+                    <p th:each="err : ${#fields.globalErrors()}" th:text="${err}">오류</p>
+                </div>
+
                 <fieldset>
                     <legend>이력서 제목</legend>
                     <div class="form-group">
@@ -28,12 +32,26 @@
                 </fieldset>
 
                 <!-- 관심 직무 -->
+                <!--<fieldset>
+                    <legend>관심 직무</legend>
+                    <div class="form-group">
+                        &lt;!&ndash;<label>관심 직무</label>&ndash;&gt;
+                        <input type="hidden" th:field="*{occupationId}" id="occupationId"/>
+                        <div id="react-job-category-selector"></div>
+                        <div th:if="${#fields.hasErrors('occupationId')}" class="error-message"
+                             th:errors="*{occupationId}"></div>
+                    </div>
+                </fieldset>-->
+
                 <fieldset>
                     <legend>관심 직무</legend>
                     <div class="form-group">
-                        <!--<label>관심 직무</label>-->
                         <input type="hidden" th:field="*{occupationId}" id="occupationId"/>
-                        <div id="react-job-category-selector"></div>
+
+                        <!-- ✅ 선택된 직무 ID를 data 속성으로 전달 -->
+                        <div id="react-job-category-selector"
+                             th:attr="data-selected-id=${resumeInsertDto.occupationId}"></div>
+
                         <div th:if="${#fields.hasErrors('occupationId')}" class="error-message"
                              th:errors="*{occupationId}"></div>
                     </div>
@@ -115,7 +133,7 @@
                                 👇키워드 추출하기👇
                             </button>
                         </div>
-                        <textarea name="skillAnswer" id="skillAnswer" maxlength="1000"
+                        <textarea th:field="*{skillAnswer}" name="skillAnswer" id="skillAnswer" maxlength="1000"
                                   required></textarea>
                     </div>
 
@@ -127,7 +145,7 @@
                                 👇키워드 추출하기👇
                             </button>
                         </div>
-                        <textarea name="traitAnswer" id="traitAnswer" maxlength="1000"
+                        <textarea th:field="*{traitAnswer}" name="traitAnswer" id="traitAnswer" maxlength="1000"
                                   required></textarea>
                     </div>
                 </fieldset>
@@ -162,16 +180,6 @@
                 <fieldset>
                     <legend>경력</legend>
 
-                    <div class="radio-group">
-                        <label>
-                            <input type="radio" name="careerType" value="EXP" onchange="toggleCareer(true)"
-                                   checked/> 경력자
-                        </label>
-                        <label>
-                            <input type="radio" name="careerType" value="NEW" onchange="toggleCareer(false)"/> 신입
-                        </label>
-                    </div>
-
                     <div id="career-section" style="margin-top: 16px;">
                         <div id="career-list">
                             <!-- JavaScript로 경력 항목이 추가됨 -->
@@ -185,6 +193,7 @@
                 <div style="text-align: center; margin-top: 20px;">
                     <button type="submit" class="btn btn-primary">등록하기</button>
                 </div>
+
 
             </form>
         </div>
@@ -219,6 +228,11 @@
     window.removeKeyword = removeKeyword;
 
     attachKeywordSubmitHandler();
+</script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    const initialCareers = [[${resumeInsertDto.careers}]];
+    /*]]>*/
 </script>
 <script type="module" src="/js/member/category.js"></script>
 <script th:src="@{/js/dropdown.js}"></script>

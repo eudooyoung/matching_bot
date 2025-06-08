@@ -39,6 +39,10 @@ public class MemberResumeService {
     public void insertResume(ResumeInsertDto dto, Member member) {
         Occupation occupation = occupationService.findById(dto.getOccupationId());
 
+        CareerType careerType = (dto.getCareers() == null || dto.getCareers().isEmpty())
+                ? CareerType.NEW : CareerType.EXP;
+        dto.setCareerType(careerType);
+
         if (dto.getCareerType() == CareerType.NEW)
             dto.setCareers(Collections.emptyList());  // 신입 일때 career 처리
 

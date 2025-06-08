@@ -203,3 +203,15 @@ select[disabled] {
     flex: 1;
     min-width: 200px;
 }
+
+/* 에러 메시지 공통 */
+.error-message {
+    color: #d9534f;
+    background-color: #fdf1f0;
+    border: 1px solid #f5c6cb;
+    padding: 10px 12px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    line-height: 1.5;
+}
