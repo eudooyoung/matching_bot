@@ -2483,7 +2483,7 @@ values
     (4, 'COMM', 'CO_file_19.jpg', 'co_4_322d48ab.jpg', '/files/co/4/', 'Y', 'seoyun55@hanmail.net', '2025-05-15 01:12:00', NULL, NULL),
     (1, 'REPORT', 'VL_file_20.jpg', 'vl_1_a35e5cde.jpg', '/files/vl/1/', 'Y', 'seoyeon45@daum.net', '2025-05-15 00:07:00', NULL, NULL);*/
 
-INSERT INTO resume_bookmark (company_id, resume_id) VALUES
+/*INSERT INTO resume_bookmark (company_id, resume_id) VALUES
 (1, 98),
 (1, 8),
 (1, 7),
@@ -2633,7 +2633,17 @@ INSERT INTO resume_bookmark (company_id, resume_id) VALUES
 (10, 99),
 (10, 48),
 (10, 81),
-(10, 37);
+(10, 37);*/
+
+-- 1. EXP로 설정
+UPDATE resume
+SET career_type = 'EXP'
+WHERE id IN (SELECT DISTINCT resume_id FROM career);
+
+-- 2. 나머지는 NEW로 설정
+UPDATE resume
+SET career_type = 'NEW'
+WHERE career_type IS NULL OR id NOT IN (SELECT DISTINCT resume_id FROM career);
 
 commit;
 
