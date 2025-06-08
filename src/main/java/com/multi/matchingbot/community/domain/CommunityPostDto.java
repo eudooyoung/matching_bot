@@ -24,6 +24,9 @@ public class CommunityPostDto {
     private String createdBy;
     private LocalDateTime createdAt;
     private String writerName; // ✅ 추가
+    private Long companyId;
+    private String companyName;
+
 
     private List<CommunityCommentDto> comments;
 
@@ -40,6 +43,12 @@ public class CommunityPostDto {
             dto.setMemberId(post.getMember().getId());
             dto.setWriterName(post.getMember().getName());
         }
+
+        if (post.getCompany() != null) {
+            dto.setCompanyId(post.getCompany().getId());
+            dto.setCompanyName(post.getCompany().getName());
+        }
+
 
         dto.setTitle(post.getTitle());
         dto.setContent(post.getContent());

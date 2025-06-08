@@ -29,44 +29,19 @@
       font-size: 0.9rem;
       color: #777;
     }
-  </style>
 
-  <!-- head 안에 직접 삽입하여 JS inline으로 실행해 보기 -->
-  <script type="module">
-    import React from "https://cdn.jsdelivr.net/npm/react@18.2.0/+esm";
-    import { createRoot } from "https://cdn.jsdelivr.net/npm/react-dom@18.2.0/client/+esm";
-
-    function CareerTypeSelector() {
-      const [careerType, setCareerType] = React.useState('');
-
-      const handleChange = (e) => {
-        const value = e.target.value;
-        setCareerType(value);
-        document.getElementById('filter-career-type').value = value;
-      };
-
-      const container = document.getElementById('react-career-type-selector');
-      if (container) {
-        const root = createRoot(container);
-        root.render(
-                <div className="career-type-selector">
-                  <label className="me-3">
-                    <input type="radio" name="careerType" value="" onChange={handleChange} checked={careerType === ''}/> 전체
-                  </label>
-                  <label className="me-3">
-                    <input type="radio" name="careerType" value="new" onChange={handleChange} checked={careerType === 'new'}/> 신입
-                  </label>
-                  <label>
-                    <input type="radio" name="careerType" value="exp" onChange={handleChange} checked={careerType === 'exp'}/> 경력
-                  </label>
-                </div>
-        );
-      }
+    .search-filters {
+      display: none;
+      margin-top: 10px;
+      padding: 10px;
+      background-color: #f2f2f2;
+      border-radius: 8px;
     }
 
-    CareerTypeSelector();
-  </script>
-
+    .search-filters label {
+      margin-right: 20px;
+    }
+  </style>
 </head>
 <body>
 
@@ -82,13 +57,29 @@
       <button type="button" id="search-button" class="btn btn-primary ms-2">🔍 검색</button>
     </section>
 
-    <!-- ✅ 신입/경력 필터 영역 -->
-    <section id="search-filters" class="text-center mb-4" style="display: none;">
-      <label><strong>경력 유형:</strong></label>
-      <div id="react-career-type-selector" class="my-2 d-inline-block"></div>
-      <input type="hidden" id="filter-career-type" />
-    </section>
+<!--    &lt;!&ndash; ✅ 신입/경력 필터 영역 &ndash;&gt;-->
+<!--    <section id="search-filters" class="text-center mb-4" style="display: none;">-->
+<!--      <label><strong>경력 유형:</strong></label>-->
+<!--      <div id="react-career-type-selector" class="my-2 d-inline-block"></div>-->
+<!--      <input type="hidden" id="filter-career-type" />-->
+<!--    </section>-->
+    <!-- ✅ 필터 영역 -->
+    <section class="search-filters text-center" id="search-filters">
+<!--      <label><strong>직무 선택:</strong></label>-->
+<!--      <div id="react-job-category-selector" class="mb-2"></div>-->
+<!--      <input type="hidden" id="filter-job-group" name="jobGroup"/>-->
+<!--      <input type="hidden" id="filter-job-type" name="jobType"/>-->
+<!--      <input type="hidden" id="filter-job-role" name="jobRole"/>-->
+      <label><strong>경력 선택:</strong></label>
+      <!-- 필터 영역 -->
+      <div id="react-career-type-selector"></div>
 
+      <!-- form 내부 숨겨진 값 -->
+      <input type="hidden" name="careerType" id="filter-career-type" value="">
+
+
+
+    </section>
     <!-- ✅ 이력서 카드 목록 -->
     <div class="row">
       <div class="col-md-4" th:each="resume : ${resumeList}">
@@ -116,26 +107,44 @@
     </div>
 
     <!-- ✅ 페이징 -->
+    <!-- ✅ 페이징 -->
     <nav class="mt-4">
       <ul class="pagination justify-content-center">
+
+        <!-- 이전 버튼 -->
         <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
-          <a class="page-link" th:href="@{'/resumes?page=' + (${currentPage - 1})}">이전</a>
+          <a class="page-link"
+             th:if="${currentPage > 1}"
+             th:href="@{/resumes(page=${currentPage - 1})}">이전</a>
+          <span class="page-link" th:if="${currentPage == 1}">이전</span>
         </li>
-        <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}" th:classappend="${currentPage == i} ? 'active'">
-          <a class="page-link" th:href="@{'/resumes?page=' + ${i}}" th:text="${i}">1</a>
+
+        <!-- 페이지 번호 5개씩 -->
+        <li class="page-item"
+            th:each="i : ${#numbers.sequence(((currentPage - 1) / 5 * 5 + 1), T(java.lang.Math).min(((currentPage - 1) / 5 * 5 + 5), totalPages))}"
+            th:classappend="${currentPage == i} ? 'active'">
+          <a class="page-link" th:href="@{/resumes(page=${i})}" th:text="${i}">1</a>
         </li>
+
+        <!-- 다음 버튼 -->
         <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
-          <a class="page-link" th:href="@{'/resumes?page=' + (${currentPage + 1})}">다음</a>
+          <a class="page-link"
+             th:if="${currentPage < totalPages}"
+             th:href="@{/resumes(page=${currentPage + 1})}">다음</a>
+          <span class="page-link" th:if="${currentPage == totalPages}">다음</span>
         </li>
+
       </ul>
     </nav>
 
+
+
   </main>
 
-  <div th:insert="~{fragments/footer :: footer}"></div>
+  <div th:replace="~{fragments/footer :: footer(role=${role})}"></div>
 </div>
 
-<!-- ✅ 검색 스크립트 -->
+ ✅ 검색 스크립트
 <!--<script>-->
 <!--  window.onload = function () {-->
 <!--    const searchInput = document.getElementById("search-input");-->
@@ -148,23 +157,21 @@
 
 
 <!--    document.getElementById("search-button").addEventListener("click", () => {-->
-<!--      const companyName = document.getElementById("search-input").value;-->
-<!--      const jobGroup = document.getElementById("filter-job-group").value;-->
-<!--      const jobType = document.getElementById("filter-job-type").value;-->
-<!--      const jobRole = document.getElementById("filter-job-role").value;-->
-<!--      const regionMain = document.getElementById("filter-region-main").value;-->
-<!--      const regionSub = document.getElementById("filter-region-sub").value;-->
+<!--      // const companyName = document.getElementById("search-input").value;-->
+<!--      // const jobGroup = document.getElementById("filter-job-group").value;-->
+<!--      // const jobType = document.getElementById("filter-job-type").value;-->
+<!--      // const jobRole = document.getElementById("filter-job-role").value;-->
+<!--      const careerType = document.getElementById("filter-career-type").value;-->
 
 <!--      const query = new URLSearchParams({-->
-<!--        companyName: companyName || '',-->
-<!--        regionMain: regionMain || '',-->
-<!--        regionSub: regionSub || '',-->
-<!--        jobGroup: jobGroup || '',-->
-<!--        jobType: jobType || '',-->
-<!--        jobRole: jobRole || ''-->
+<!--        // companyName: companyName || '',-->
+<!--        careerType: careerType || ''-->
+<!--        // jobGroup: jobGroup || '',-->
+<!--        // jobType: jobType || '',-->
+<!--        // jobRole: jobRole || ''-->
 <!--      }).toString();-->
 
-<!--      window.location.href = `/search-page?${query}`;-->
+<!--      window.location.href = `/member-resume?${query}`;-->
 <!--    });-->
 <!--  };-->
 <!--</script>-->
@@ -178,12 +185,12 @@
   import React from "https://cdn.jsdelivr.net/npm/react@18.2.0/+esm";
   import {createRoot} from "https://cdn.jsdelivr.net/npm/react-dom@18.2.0/client/+esm";
 
-  window.React = React;
-  window.createRoot = createRoot;
+
 </script>
 
 <!-- ✅ 경력 필터 React 컴포넌트 -->
 <script type="module" src="/js/JobCategorySelector.js"></script>
+<script type="module" src="/js/CareerTypeSelector.js"></script>
 <!--<script type="module" src="/js/CareerTypeSelector.js"></script>-->
       window.React = React;
       window.createRoot = createRoot;

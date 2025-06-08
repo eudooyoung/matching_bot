@@ -1,6 +1,7 @@
 // CommunityComment.java
 package com.multi.matchingbot.community.domain;
 
+import com.multi.matchingbot.company.domain.Company;
 import com.multi.matchingbot.member.domain.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -24,6 +25,10 @@ public class CommunityComment {
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
 
     @Column(nullable = false, length = 500)
     private String content;
