@@ -1,4 +1,4 @@
-package com.multi.matchingbot.member.domain.dto;
+package com.multi.matchingbot.resume.domain.dto;
 
 import com.multi.matchingbot.job.domain.entity.Occupation;
 import com.multi.matchingbot.resume.domain.entity.Resume;

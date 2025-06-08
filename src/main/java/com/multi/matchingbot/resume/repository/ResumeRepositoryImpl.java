@@ -1,6 +1,6 @@
 package com.multi.matchingbot.member.repository;
 
-import com.multi.matchingbot.resume.domain.CareerType;
+import com.multi.matchingbot.career.domain.CareerType;
 import com.multi.matchingbot.resume.domain.entity.Resume;
 import com.multi.matchingbot.resume.repository.ResumeRepositoryCustom;
 import jakarta.persistence.EntityManager;

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>이력서 상세보기</title>
+    <link rel="stylesheet" th:href="@{/css/resume-detail.css}"/>
+    <link rel="stylesheet" th:href="@{/css/layout.css}"/>
+</head>
+<body>
+<div class="wrapper">
+    <div th:replace="~{fragments/header :: header(role=${role})}"></div>
+
+    <main class="main-content">
+        <div class="container">
+            <h2 th:text="${resume.title}">이력서 상세보기</h2>
+
+            <div class="resume-box">
+
+                <!-- 기본 정보 -->
+                <div class="section">
+                    <h4>기본 정보</h4>
+                    <div class="info-line">
+                        <span class="info-label">이름:</span>
+                        <span th:text="${resume.member.name}">홍길동</span>
+                    </div>
+                    <div class="info-line">
+                        <span class="info-label">생년월일:</span>
+                        <span th:text="${#temporals.format(resume.member.birth, 'yyyy-MM-dd')}">1995-03-01</span>
+                    </div>
+                    <div class="info-line">
+                        <span class="info-label">성별:</span>
+                        <span th:text="${resume.member.getGenderLabel()}">남성</span>
+                    </div>
+                    <div class="info-line">
+                        <span class="info-label">주소:</span>
+                        <span th:text="${resume.member.address}">서울시 마포구</span>
+                    </div>
+                    <div class="info-line">
+                        <span class="info-label">이메일:</span>
+                        <span th:text="${resume.member.email}">test@example.com</span>
+                    </div>
+                    <div class="info-line">
+                        <span class="info-label">휴대폰:</span>
+                        <span th:text="${resume.member.phone}">010-1234-5678</span>
+                    </div>
+                </div>
+
+                <!-- 자기소개 -->
+                <div class="section">
+                    <h4>자기소개</h4>
+                    <div class="answer-box" th:text="${resume.traitAnswer}">성격 및 태도 요약</div>
+                </div>
+
+                <!-- 핵심역량 -->
+                <div class="section">
+                    <h4>핵심역량</h4>
+                    <div class="answer-box" th:text="${resume.skillAnswer}">기술 및 직무 역량 요약</div>
+                </div>
+
+                <!-- 추출 키워드 -->
+                <div class="section keywords">
+                    <h4>키워드</h4>
+                    <div class="info-line">
+                        <span class="info-label">인재상:</span>
+                        <span th:text="${resume.traitKeywords}">...</span>
+                    </div>
+                    <div class="info-line">
+                        <span class="info-label">역량:</span>
+                        <span th:text="${resume.skillKeywords}">...</span>
+                    </div>
+                </div>
+
+                <!-- 경력 -->
+                <div class="section">
+                    <h4>경력</h4>
+
+                    <div th:if="${resume.careerType.name() == 'NEW'}">
+                        <p>신입</p>
+                    </div>
+
+                    <div th:if="${resume.careerType.name() == 'EXP'}"
+                         th:each="career : ${resume.careers}"
+                         class="career-entry">
+
+                        <p class="career-header">
+                            <strong th:text="${career.companyName}">회사명</strong> |
+                            <span th:text="${career.departmentName}">부서명</span> |
+                            <span th:text="${career.positionTitle}">직급/직책</span>
+                        </p>
+
+                        <p class="career-period">
+                            <span th:text="'근무 기간: ' + ${#temporals.format(career.startDate, 'yyyy-MM')} + ' ~ ' + ${#temporals.format(career.endDate, 'yyyy-MM')}">
+                                입사년월 ~ 퇴사년월
+                            </span>
+                            <span class="career-salary" th:text="'연봉: ' + ${career.salary} + '만원'">연봉</span>
+                        </p>
+
+                        <p class="career-summary">
+                            <strong>업무 요약:</strong>
+                            <span th:text="${career.careerSummary}">담당 업무 및 성과 요약</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 작성일 -->
+                <div class="section">
+                    <h4>작성일</h4>
+                    <!--<div class="info-line">
+                        <span class="info-label">작성:</span>
+                        <span th:text="${#temporals.format(resume.createdAt, 'yyyy-MM-dd HH:mm')}">2025-06-08 10:09</span>
+                    </div>-->
+                    <p th:text="${#temporals.format(resume.createdAt, 'yyyy-MM-dd HH:mm')}">2025-06-08 14:00</p>
+                </div>
+
+                <!-- 돌아가기 버튼 -->
+                <div style="margin-top: 30px; text-align: center;">
+                    <button type="button" class="nav-button" onclick="history.back()">돌아가기</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</div>
+<script th:src="@{/js/logout.js}"></script>
+</body>
+</html>

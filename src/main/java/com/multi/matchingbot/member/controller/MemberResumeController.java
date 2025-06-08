@@ -3,20 +3,24 @@ package com.multi.matchingbot.member.controller;
 
 import com.multi.matchingbot.admin.service.ResumeAdminService;
 import com.multi.matchingbot.common.security.MBotUserDetails;
-import com.multi.matchingbot.job.service.OccupationService;
-import com.multi.matchingbot.member.domain.dto.ResumeDto;
 import com.multi.matchingbot.member.domain.entity.Member;
+import com.multi.matchingbot.member.service.MemberResumeService;
 import com.multi.matchingbot.member.service.MemberService;
-import com.multi.matchingbot.member.service.ResumeService;
+import com.multi.matchingbot.resume.domain.dto.ResumeDetailDto;
+import com.multi.matchingbot.resume.domain.dto.ResumeDto;
 import com.multi.matchingbot.resume.domain.dto.ResumeInsertDto;
 import com.multi.matchingbot.resume.domain.dto.ResumeUpdateDto;
 import com.multi.matchingbot.resume.domain.entity.Resume;
+import com.multi.matchingbot.resume.mapper.ResumeDetailMapper;
 import com.multi.matchingbot.resume.mapper.ResumeInsertPrefillMapper;
 import com.multi.matchingbot.resume.mapper.ResumeUpdatePrefillMapper;
+import com.multi.matchingbot.resume.service.ResumeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,8 +37,9 @@ public class MemberResumeController {
 
     private final ResumeService resumeService;
     private final ResumeAdminService resumeAdminService;
+    private final MemberResumeService memberResumeService;
     private final MemberService memberService;
-    private final OccupationService occupationService;
+    private final ResumeDetailMapper resumeDetailMapper;
 
     @Qualifier("resumeInsertPrefillMapper")
     private final ResumeInsertPrefillMapper insertPrefillMapper;
@@ -48,13 +53,13 @@ public class MemberResumeController {
      * @param model       resume 리스트 전달
      * @return 이력서 관리 페이지 반환
      */
-    @GetMapping("/resumes")
+    @GetMapping("/manage-resumes")
     public String list(@AuthenticationPrincipal MBotUserDetails userDetails, Model model) {
         // 로그인 정보 불러오기
         Long memberId = userDetails.getId();
         List<Resume> resumes = resumeService.findByMemberId(memberId);
         model.addAttribute("resumes", resumes);
-        return "member/resumes";
+        return "member/manage-resumes";
     }
 
     /**
@@ -64,6 +69,7 @@ public class MemberResumeController {
      * @param userDetails 로그인 정보
      * @return 등록 페이지 반환
      */
+    @PreAuthorize("hasRole('MEMBER')")
     @GetMapping("/insert-resume")
     public String insertResume(Model model, @AuthenticationPrincipal MBotUserDetails userDetails) {
         Member member = memberService.findById(userDetails.getId());
@@ -74,7 +80,7 @@ public class MemberResumeController {
     }
 
     /**
-     * 이력서 등록 메소드
+     * 이력서 등록 컨트롤러 메소드
      *
      * @param dto           이력서 등록용 dto
      * @param bindingResult 유효성 검사 객체
@@ -82,6 +88,7 @@ public class MemberResumeController {
      * @param userDetails   로그인 정보
      * @return 성공시 이력서 목록 페이지 리다이렉트, 실패시 이동 없음
      */
+    @PreAuthorize("hasRole('MEMBER')")
     @PostMapping("/insert-resume")
     public String insertResume(@Valid @ModelAttribute ResumeInsertDto dto, BindingResult bindingResult, Model model,
                                @AuthenticationPrincipal MBotUserDetails userDetails) {
@@ -94,8 +101,8 @@ public class MemberResumeController {
         log.info("📨 이력서 등록 요청: {}", dto);
         dto.mergePhone();
         Member member = memberService.findById(userDetails.getId());
-        resumeService.insertResume(dto, member);
-        return "redirect:/member/resumes";
+        memberResumeService.insertResume(dto, member);
+        return "redirect:/member/manage-resumes";
     }
 
     /**
@@ -106,10 +113,11 @@ public class MemberResumeController {
      * @param userDetails 로그인 정보
      * @return 이력서 수정 페이지 이동
      */
+    @PreAuthorize("hasRole('MEMBER')")
     @GetMapping("/update-resume/{id}")
     public String updateResumeForm(@PathVariable("id") Long id, Model model, @AuthenticationPrincipal MBotUserDetails userDetails) {
         Member member = memberService.findById(userDetails.getId());
-        Resume resume = resumeService.findByIdAndMemberWithOccupation(id, member);
+        Resume resume = memberResumeService.findByIdAndMemberWithOccupation(id, member);
         ResumeUpdateDto dto = updatePrefillMapper.toDto(resume); // → prefill mapper 필요
 
         dto.splitPhone(dto.getPhone()); // phone1~3 나누기
@@ -121,12 +129,15 @@ public class MemberResumeController {
     }
 
     /**
+     * 이력서 수정 컨트롤러 메소드
+     *
      * @param dto           수정된 이력서 정보
      * @param bindingResult 유효성 검사용 객체
      * @param model         이력서 수정 실패시 dto를 재전달
      * @param userDetails   로그인 정보
      * @return 성공시 이력서 관리페이지로 이동, 실패시 이동 없음
      */
+    @PreAuthorize("hasRole('MEMBER')")
     @PostMapping("/update-resume")
     public String updateResume(@Valid @ModelAttribute ResumeUpdateDto dto, BindingResult bindingResult, Model model,
                                @AuthenticationPrincipal MBotUserDetails userDetails) {
@@ -137,9 +148,34 @@ public class MemberResumeController {
         }
 
         Member member = memberService.findById(userDetails.getId());
-        resumeService.updateResume(dto, member);
+        memberResumeService.updateResume(dto, member);
 
-        return "redirect:/member/resumes"; // 혹은 상세 페이지
+        return "redirect:/member/manage-resumes";
+    }
+
+    /**
+     * 멤버용 이력서 조회 페이지
+     *
+     * @param id
+     * @param userDetails
+     * @param model
+     * @return
+     */
+    @PreAuthorize("hasRole('MEMBER')")
+    @GetMapping("/resume/{id}")
+    public String viewMyResume(@PathVariable("id") Long id, @AuthenticationPrincipal MBotUserDetails userDetails,
+                               Model model) {
+
+        Resume resume = memberResumeService.findByIdWithAll(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이력서입니다."));
+
+        if (!resume.getMember().getId().equals(userDetails.getId())) {
+            throw new AccessDeniedException("본인의 이력서만 조회할 수 있습니다.");
+        }
+
+        ResumeDetailDto resumeDetailDto = resumeDetailMapper.toDto(resume);
+        model.addAttribute("resume", resumeDetailDto);
+        return "resume/detail";
     }
 
     @GetMapping("/view/{id}")

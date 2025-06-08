@@ -1,4 +1,4 @@
-package com.multi.matchingbot.resume.domain.dto;
+package com.multi.matchingbot.career.domain;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

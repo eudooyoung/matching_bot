@@ -1,0 +1,143 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="ko" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>이력서 수정</title>-->
+<!--    <link rel="stylesheet" th:href="@{/css/layout.css}" />-->
+<!--</head>-->
+<!--<style>-->
+<!--    .resume-form {-->
+<!--        max-width: 600px;-->
+<!--        margin: 0 auto;-->
+<!--    }-->
+
+<!--    .form-group {-->
+<!--        display: flex;-->
+<!--        flex-direction: column;-->
+<!--        margin-bottom: 16px;-->
+<!--    }-->
+
+<!--    .form-group label {-->
+<!--        font-weight: bold;-->
+<!--        margin-bottom: 6px;-->
+<!--    }-->
+
+<!--    .form-group input,-->
+<!--    .form-group textarea {-->
+<!--        padding: 8px;-->
+<!--        font-size: 14px;-->
+<!--        border: 1px solid #ccc;-->
+<!--        border-radius: 4px;-->
+<!--    }-->
+
+<!--    .form-actions {-->
+<!--        display: flex;-->
+<!--        justify-content: space-between;-->
+<!--        gap: 10px;-->
+<!--        margin-top: 20px;-->
+<!--    }-->
+
+<!--    .btn-primary {-->
+<!--        background-color: #0066cc;-->
+<!--        color: white;-->
+<!--        padding: 10px 20px;-->
+<!--        border: none;-->
+<!--        border-radius: 4px;-->
+<!--        cursor: pointer;-->
+<!--    }-->
+
+<!--    .btn-secondary {-->
+<!--        background-color: #ccc;-->
+<!--        color: #333;-->
+<!--        padding: 10px 20px;-->
+<!--        border: none;-->
+<!--        border-radius: 4px;-->
+<!--        text-decoration: none;-->
+<!--        text-align: center;-->
+<!--    }-->
+<!--</style>-->
+
+
+<!--<body>-->
+<!--<div th:replace="fragments/header :: header(role=${role})"></div>-->
+
+<!--<main class="main-content">-->
+<!--    <div class="container">-->
+<!--        <h2>이력서 수정</h2>-->
+
+<!--        <form method="post" th:action="@{/member/edit/{id}(id=${resume.id})}" th:object="${resume}" class="resume-form">-->
+
+<!--            &lt;!&ndash; 이력서 제목 &ndash;&gt;-->
+<!--            <div class="form-group">-->
+<!--                <label>이력서 제목</label>-->
+<!--                <input type="text" th:field="*{title}" placeholder="이력서 제목"/>-->
+<!--            </div>-->
+
+<!--&lt;!&ndash;            &lt;!&ndash; 관심 직무 &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;            <div class="form-group">&ndash;&gt;-->
+<!--&lt;!&ndash;                <label>직군</label>&ndash;&gt;-->
+<!--&lt;!&ndash;                <input type="text" th:value="${resume.occupation?.jobGroupName}" readonly />&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;            <div class="form-group">&ndash;&gt;-->
+<!--&lt;!&ndash;                <label>직종</label>&ndash;&gt;-->
+<!--&lt;!&ndash;                <input type="text" th:value="${resume.occupation?.jobTypeName}" readonly />&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;            <div class="form-group">&ndash;&gt;-->
+<!--&lt;!&ndash;                <label>직무</label>&ndash;&gt;-->
+<!--&lt;!&ndash;                <input type="text" th:value="${resume.occupation?.jobRoleName}" readonly />&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+
+<!--            <div class="form-group">-->
+<!--                <label>관심 직무</label>-->
+<!--                <input type="hidden" th:field="*{occupation.id}" id="occupationId" />-->
+<!--                <div id="react-job-category-selector"></div>-->
+<!--                <div th:if="${#fields.hasErrors('occupation.id')}" class="error-message" th:errors="*{occupation.id}"></div>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; 자기소개서: 기술 중심 &ndash;&gt;-->
+<!--            <div class="form-group">-->
+<!--                <label>자기소개서 (기술 중심)</label>-->
+<!--                <textarea th:field="*{skillAnswer}" rows="6" placeholder="기술 역량 중심 자기소개 (500~1000자)"></textarea>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; 자기소개서: 인성 중심 &ndash;&gt;-->
+<!--            <div class="form-group">-->
+<!--                <label>자기소개서 (인성 중심)</label>-->
+<!--                <textarea th:field="*{traitAnswer}" rows="6" placeholder="인성 중심 자기소개 (500~1000자)"></textarea>-->
+<!--            </div>-->
+
+<!--            <div class="form-actions">-->
+<!--                <button type="submit" class="btn-primary">저장</button>-->
+<!--                <a th:href="@{/member}" class="btn-secondary">취소</a>-->
+<!--            </div>-->
+
+<!--        </form>-->
+<!--    </div>-->
+<!--</main>-->
+
+<!--<div th:replace="fragments/footer :: footer"></div>-->
+
+<!--<script type="module">-->
+<!--    import React from "https://cdn.jsdelivr.net/npm/react@18.2.0/+esm";-->
+<!--    import { createRoot } from "https://cdn.jsdelivr.net/npm/react-dom@18.2.0/client/+esm";-->
+
+<!--    window.React = React;-->
+<!--    window.createRoot = createRoot;-->
+
+<!--    document.addEventListener("DOMContentLoaded", () => {-->
+<!--        import("/js/JobCategorySelector.js").then((mod) => {-->
+<!--            const container = document.getElementById("react-job-category-selector");-->
+<!--            if (container) {-->
+<!--                const root = createRoot(container);-->
+<!--                root.render(React.createElement(mod.default));-->
+<!--            }-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
+
+<!--<script th:src="@{/js/dropdown.js}"></script>-->
+<!--<script th:src="@{/js/logout.js}"></script>-->
+<!--</body>-->
+<!--</html>-->

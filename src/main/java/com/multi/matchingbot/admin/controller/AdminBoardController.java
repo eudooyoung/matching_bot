@@ -8,7 +8,7 @@ import com.multi.matchingbot.job.domain.dto.JobDto;
 import com.multi.matchingbot.job.service.JobService;
 import com.multi.matchingbot.resume.domain.entity.Resume;
 import com.multi.matchingbot.member.service.MemberService;
-import com.multi.matchingbot.member.service.ResumeService;
+import com.multi.matchingbot.resume.service.ResumeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

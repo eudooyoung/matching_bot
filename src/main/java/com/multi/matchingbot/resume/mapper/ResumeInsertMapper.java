@@ -1,7 +1,7 @@
 package com.multi.matchingbot.resume.mapper;
 
-import com.multi.matchingbot.resume.domain.entity.Career;
-import com.multi.matchingbot.resume.domain.dto.CareerInsertDto;
+import com.multi.matchingbot.career.domain.Career;
+import com.multi.matchingbot.career.domain.CareerInsertDto;
 import com.multi.matchingbot.resume.domain.dto.ResumeInsertDto;
 import com.multi.matchingbot.resume.domain.entity.Resume;
 import org.mapstruct.Mapper;

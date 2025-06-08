@@ -1,6 +1,7 @@
-package com.multi.matchingbot.resume.domain.entity;
+package com.multi.matchingbot.career.domain;
 
 import com.multi.matchingbot.common.domain.entity.BaseEntity;
+import com.multi.matchingbot.resume.domain.entity.Resume;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

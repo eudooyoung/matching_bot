@@ -1,7 +1,7 @@
 //package com.multi.matchingbot.resume.controller;
 //
-//import com.multi.matchingbot.member.domain.dto.ResumeDto;
-//import com.multi.matchingbot.member.service.ResumeService;
+//import com.multi.matchingbot.resume.domain.dto.ResumeDto;
+//import com.multi.matchingbot.resume.service.ResumeService;
 //import com.multi.matchingbot.resume.domain.entity.Resume;
 //import org.springframework.data.domain.Page;
 //import org.springframework.data.domain.PageRequest;
@@ -14,7 +14,7 @@
 //import org.springframework.web.bind.annotation.RequestParam;
 //
 //@Controller
-//@RequestMapping("/resumes")
+//@RequestMapping("/resumes")"
 //public class ResumeSearchController {
 //
 //    private final ResumeService resumeService;

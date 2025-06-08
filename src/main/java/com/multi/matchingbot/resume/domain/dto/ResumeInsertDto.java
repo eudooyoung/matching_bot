@@ -1,7 +1,8 @@
 package com.multi.matchingbot.resume.domain.dto;
 
+import com.multi.matchingbot.career.domain.CareerInsertDto;
 import com.multi.matchingbot.common.domain.enums.Gender;
-import com.multi.matchingbot.resume.domain.CareerType;
+import com.multi.matchingbot.career.domain.CareerType;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.Data;

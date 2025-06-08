@@ -4,7 +4,7 @@ import com.multi.matchingbot.common.security.MBotUserDetails;
 import com.multi.matchingbot.job.domain.entity.Job;
 import com.multi.matchingbot.job.service.JobService;
 import com.multi.matchingbot.resume.domain.entity.Resume;
-import com.multi.matchingbot.member.service.ResumeService;
+import com.multi.matchingbot.resume.service.ResumeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;

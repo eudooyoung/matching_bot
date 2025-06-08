@@ -1,8 +1,7 @@
-package com.multi.matchingbot.member.repository;
+package com.multi.matchingbot.resume.repository;
 
 import com.multi.matchingbot.member.domain.entity.Member;
 import com.multi.matchingbot.resume.domain.entity.Resume;
-import com.multi.matchingbot.resume.repository.ResumeRepositoryCustom;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -43,4 +42,12 @@ public interface ResumeRepository extends JpaRepository<Resume, Long>, ResumeRep
 //                               @Param("companyName") String companyName);
 
 
+    @Query("""
+                SELECT r FROM Resume r
+                LEFT JOIN FETCH r.member
+                LEFT JOIN FETCH r.occupation
+                LEFT JOIN FETCH r.careers
+                WHERE r.id = :id
+            """)
+    Optional<Resume> findByIdWithAll(@Param("id") Long id);
 }
