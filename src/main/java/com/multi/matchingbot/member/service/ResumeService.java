@@ -10,7 +10,10 @@ import com.multi.matchingbot.member.domain.entity.ResumeViewLog;
 import com.multi.matchingbot.member.repository.ResumeRepository;
 import com.multi.matchingbot.member.repository.ResumeViewLogRepository;
 import com.multi.matchingbot.resume.domain.CareerType;
+import com.multi.matchingbot.resume.domain.dto.CareerUpdateDto;
 import com.multi.matchingbot.resume.domain.dto.ResumeInsertDto;
+import com.multi.matchingbot.resume.domain.dto.ResumeUpdateDto;
+import com.multi.matchingbot.resume.domain.entity.Career;
 import com.multi.matchingbot.resume.domain.entity.Resume;
 import com.multi.matchingbot.resume.mapper.ResumeInsertMapper;
 import jakarta.persistence.EntityNotFoundException;
@@ -81,28 +84,6 @@ public class ResumeService {
                 .build();
     }
 
-    @Transactional
-    public void update(Long id, Resume updatedResume) {
-        Resume resume = resumeRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("이력서를 찾을 수 없습니다."));
-
-        resume.updateFrom(updatedResume); // 아래와 같이 정의 필요
-    }
-
-    /*public void updateResume(Long id, Resume updatedResume) {
-        Resume resume = findById(id);
-        resume.setTitle(updatedResume.getTitle());
-        resume.setSkillAnswer(updatedResume.getSkillAnswer());
-        resume.setTraitAnswer(updatedResume.getTraitAnswer());
-
-        // occupation 수정
-        if (updatedResume.getOccupation() != null) {
-            resume.setOccupation(updatedResume.getOccupation());
-        }
-
-        resumeRepository.save(resume);
-    }*/
-
     public List<ResumeViewLogDto> getResumeViewLogs(Long memberId) {
         List<ResumeViewLog> logs = resumeViewLogRepository.findByResume_Member_IdOrderByViewedAtDesc(memberId);
 
@@ -127,18 +108,57 @@ public class ResumeService {
     public void insertResume(ResumeInsertDto dto, Member member) {
         Occupation occupation = occupationService.findById(dto.getOccupationId());
 
-        if (dto.getCareerType() == CareerType.NEW) {
-            dto.setCareers(Collections.emptyList());  // 🔹 핵심 추가
-        }
+        if (dto.getCareerType() == CareerType.NEW)
+            dto.setCareers(Collections.emptyList());  // 신입 일때 career 처리
 
         Resume resume = resumeInsertMapper.toEntity(dto);
         resume.setMember(member);
         resume.setOccupation(occupation);
 
-        if (resume.getCareers() != null) {
-            resume.getCareers().forEach(c -> c.setResume(resume));  // 🔹 주석 해제 필요
+        if (resume.getCareers() != null)
+            resume.getCareers().forEach(c -> c.setResume(resume));
+
+        resumeRepository.save(resume);
+    }
+
+    @Transactional
+    public void updateResume(ResumeUpdateDto dto, Member member) {
+        Resume resume = resumeRepository.findByIdAndMember(dto.getId(), member)
+                .orElseThrow(() -> new EntityNotFoundException("이력서를 찾을 수 없습니다."));
+
+        // 기본 필드 업데이트
+        resume.updateBasicFields(dto);
+
+        // 관심 직무
+        Occupation occupation = occupationService.findById(dto.getOccupationId());
+        resume.setOccupation(occupation);
+
+        // 경력 처리 (신입이면 비우기)
+        if (dto.getCareerType() == CareerType.NEW) {
+            resume.getCareers().clear();
+        } else {
+            resume.getCareers().clear();
+            for (CareerUpdateDto c : dto.getCareers()) {
+                Career career = Career.builder()
+                        .companyName(c.getCompanyName())
+                        .departmentName(c.getDepartmentName())
+                        .positionTitle(c.getPositionTitle())
+                        .salary(c.getSalary())
+                        .careerSummary(c.getCareerSummary())
+                        .startDate(c.getStartDate())
+                        .endDate(c.getEndDate())
+                        .resume(resume)
+                        .build();
+                resume.getCareers().add(career);
+            }
         }
 
         resumeRepository.save(resume);
     }
+
+    public Resume findByIdAndMemberWithOccupation(Long id, Member member) {
+        return resumeRepository.findWithOccupationByIdAndMember(id, member)
+                .orElseThrow(() -> new EntityNotFoundException("해당 이력서를 찾을 수 없습니다."));
+    }
+
 }

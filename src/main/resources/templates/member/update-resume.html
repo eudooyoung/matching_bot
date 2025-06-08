@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>이력서 등록</title>
+    <title>이력서 수정</title>
     <link rel="stylesheet" th:href="@{/css/insert-resume.css}"/>
     <link rel="stylesheet" th:href="@{/css/extract-keyword.css}"/>
     <link rel="stylesheet" th:href="@{/css/layout.css}"/>
@@ -13,11 +13,12 @@
 
     <main class="main-content">
         <div class="container">
-            <h2>이력서 등록</h2>
+            <h2>이력서 수정</h2>
 
-            <form id="resumeForm" th:action="@{/member/insert-resume}" method="post" th:object="${resumeInsertDto}">
-                <input type="hidden" name="skillKeywordsConcat" id="skillKeywordsConcat"/>
-                <input type="hidden" name="traitKeywordsConcat" id="traitKeywordsConcat"/>
+            <form id="resumeForm" th:action="@{/member/update-resume}" method="post" th:object="${resumeUpdateDto}">
+                <input type="hidden" name="id" th:value="${resumeUpdateDto.id}" />
+                <input type="hidden" name="skillKeywordsConcat" id="skillKeywordsConcat" th:value="*{skillKeywordsConcat}"/>
+                <input type="hidden" name="traitKeywordsConcat" id="traitKeywordsConcat" th:value="*{traitKeywordsConcat}"/>
 
                 <fieldset>
                     <legend>이력서 제목</legend>
@@ -31,9 +32,12 @@
                 <fieldset>
                     <legend>관심 직무</legend>
                     <div class="form-group">
-                        <!--<label>관심 직무</label>-->
                         <input type="hidden" th:field="*{occupationId}" id="occupationId"/>
-                        <div id="react-job-category-selector"></div>
+
+                        <!-- ✅ 선택된 직무 ID를 data 속성으로 전달 -->
+                        <div id="react-job-category-selector"
+                             th:attr="data-selected-id=${resumeUpdateDto.occupationId}"></div>
+
                         <div th:if="${#fields.hasErrors('occupationId')}" class="error-message"
                              th:errors="*{occupationId}"></div>
                     </div>
@@ -54,7 +58,7 @@
                             <input type="date"
                                    id="birth"
                                    name="birth"
-                                   th:value="${#temporals.format(resumeInsertDto.birth, 'yyyy-MM-dd')}"
+                                   th:value="${#temporals.format(resumeUpdateDto.birth, 'yyyy-MM-dd')}"
                                    readonly/>
                         </div>
 
@@ -115,7 +119,7 @@
                                 👇키워드 추출하기👇
                             </button>
                         </div>
-                        <textarea name="skillAnswer" id="skillAnswer" maxlength="1000"
+                        <textarea name="skillAnswer" id="skillAnswer" maxlength="1000" th:field="*{skillAnswer}"
                                   required></textarea>
                     </div>
 
@@ -127,7 +131,7 @@
                                 👇키워드 추출하기👇
                             </button>
                         </div>
-                        <textarea name="traitAnswer" id="traitAnswer" maxlength="1000"
+                        <textarea name="traitAnswer" id="traitAnswer" maxlength="1000" th:field="*{traitAnswer}"
                                   required></textarea>
                     </div>
                 </fieldset>
@@ -172,6 +176,52 @@
                         </label>
                     </div>
 
+                    <div id="career-list">
+                        <div class="career-entry" th:each="career, stat : *{careers}">
+                            <button type="button" class="career-remove-btn" onclick="removeCareer(this)">✕</button>
+
+                            <div class="inline-group">
+                                <div class="form-group">
+                                    <label th:for="'careers[' + ${stat.index} + '].companyName'">회사명</label>
+                                    <input type="text" th:field="*{careers[__${stat.index}__].companyName}"
+                                           maxlength="50"/>
+                                </div>
+                                <div class="form-group">
+                                    <label th:for="'careers[' + ${stat.index} + '].departmentName'">부서명</label>
+                                    <input type="text" th:field="*{careers[__${stat.index}__].departmentName}"
+                                           maxlength="50"/>
+                                </div>
+                                <div class="form-group">
+                                    <label th:for="'careers[' + ${stat.index} + '].positionTitle'">직급/직책</label>
+                                    <input type="text" th:field="*{careers[__${stat.index}__].positionTitle}"
+                                           maxlength="50"/>
+                                </div>
+                                <div class="form-group">
+                                    <label th:for="'careers[' + ${stat.index} + '].salary'">최종 연봉</label>
+                                    <input type="text" th:field="*{careers[__${stat.index}__].salary}"/>
+                                </div>
+                                <div class="form-group">
+                                    <label th:for="'careers[' + ${stat.index} + '].startDateRaw'">입사년월</label>
+                                    <input type="month" th:field="*{careers[__${stat.index}__].startDateRaw}"
+                                           onclick="this.showPicker()"/>
+                                </div>
+                                <div class="form-group">
+                                    <label th:for="'careers[' + ${stat.index} + '].endDateRaw'">퇴사년월</label>
+                                    <input type="month" th:field="*{careers[__${stat.index}__].endDateRaw}"
+                                           onclick="this.showPicker()"/>
+                                </div>
+                            </div>
+                            <div class="inline-group">
+                                <div class="form-group" style="flex: 2;">
+                                    <label th:for="'careers[' + ${stat.index} + '].careerSummary'">담당 업무 및 성과 요약</label>
+                                    <input type="text" th:field="*{careers[__${stat.index}__].careerSummary}"
+                                           maxlength="255"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
                     <div id="career-section" style="margin-top: 16px;">
                         <div id="career-list">
                             <!-- JavaScript로 경력 항목이 추가됨 -->
@@ -183,7 +233,7 @@
                 </fieldset>
 
                 <div style="text-align: center; margin-top: 20px;">
-                    <button type="submit" class="btn btn-primary">등록하기</button>
+                    <button type="submit" class="btn btn-primary">수정하기</button>
                 </div>
 
             </form>
@@ -223,6 +273,6 @@
 <script type="module" src="/js/member/category.js"></script>
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>
-<script th:src="@{/js/member/resume-career-insert.js}"></script>
+<script th:src="@{/js/member/resume-career-update.js}"></script>
 </body>
 </html>

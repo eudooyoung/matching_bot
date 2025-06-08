@@ -3,16 +3,16 @@ package com.multi.matchingbot.member.controller;
 
 import com.multi.matchingbot.admin.service.ResumeAdminService;
 import com.multi.matchingbot.common.security.MBotUserDetails;
-import com.multi.matchingbot.job.domain.entity.Occupation;
 import com.multi.matchingbot.job.service.OccupationService;
 import com.multi.matchingbot.member.domain.dto.ResumeDto;
 import com.multi.matchingbot.member.domain.entity.Member;
 import com.multi.matchingbot.member.service.MemberService;
 import com.multi.matchingbot.member.service.ResumeService;
-import com.multi.matchingbot.resume.domain.dto.CareerDto;
 import com.multi.matchingbot.resume.domain.dto.ResumeInsertDto;
+import com.multi.matchingbot.resume.domain.dto.ResumeUpdateDto;
 import com.multi.matchingbot.resume.domain.entity.Resume;
 import com.multi.matchingbot.resume.mapper.ResumeInsertPrefillMapper;
+import com.multi.matchingbot.resume.mapper.ResumeUpdatePrefillMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,13 +37,16 @@ public class MemberResumeController {
     private final OccupationService occupationService;
 
     @Qualifier("resumeInsertPrefillMapper")
-    private final ResumeInsertPrefillMapper prefillMapper;
+    private final ResumeInsertPrefillMapper insertPrefillMapper;
+    @Qualifier("resumeUpdatePrefillMapper")
+    private final ResumeUpdatePrefillMapper updatePrefillMapper;
 
     /**
-     * 이력서 등록 페이지
+     * 이력서 관리 페이지 매핑
+     *
      * @param userDetails 로그인 사용자 정보
-     * @param model       디티오 전달용 객체
-     * @return 이력서 목록 페이지 반환
+     * @param model       resume 리스트 전달
+     * @return 이력서 관리 페이지 반환
      */
     @GetMapping("/resumes")
     public String list(@AuthenticationPrincipal MBotUserDetails userDetails, Model model) {
@@ -55,53 +58,89 @@ public class MemberResumeController {
     }
 
     /**
-     * 이력서 등록 페이지
-     * @param model       디티오 전달용 객체
+     * 이력서 등록 페이지 매핑
+     *
+     * @param model       회원 인적 사항(resumeInsertDto) 전달
      * @param userDetails 로그인 정보
-     * @return
+     * @return 등록 페이지 반환
      */
     @GetMapping("/insert-resume")
     public String insertResume(Model model, @AuthenticationPrincipal MBotUserDetails userDetails) {
         Member member = memberService.findById(userDetails.getId());
-        ResumeInsertDto dto = prefillMapper.toDto(member);
+        ResumeInsertDto dto = insertPrefillMapper.toDto(member);
         dto.splitPhone(dto.getPhone());
-        System.out.println(dto);
         model.addAttribute("resumeInsertDto", dto);
         return "member/insert-resume";
     }
 
-
     /**
      * 이력서 등록 메소드
-     * @param dto 이력서 등록용 dto
+     *
+     * @param dto           이력서 등록용 dto
      * @param bindingResult 유효성 검사 객체
-     * @param userDetails 로그인 정보
-     * @return 이력서 목록 페이지 리다이렉트
+     * @param model         이력서 등록 실패시 dto 재전달
+     * @param userDetails   로그인 정보
+     * @return 성공시 이력서 목록 페이지 리다이렉트, 실패시 이동 없음
      */
     @PostMapping("/insert-resume")
-    public String insertResume(@Valid @ModelAttribute ResumeInsertDto dto, BindingResult bindingResult,
+    public String insertResume(@Valid @ModelAttribute ResumeInsertDto dto, BindingResult bindingResult, Model model,
                                @AuthenticationPrincipal MBotUserDetails userDetails) {
         if (bindingResult.hasErrors()) {
             log.warn("❌ 이력서 입력 오류: {}", bindingResult.getAllErrors());
+            model.addAttribute("resumeInsertDto", dto);
             return "member/insert-resume"; // 다시 입력 화면으로
         }
 
         log.info("📨 이력서 등록 요청: {}", dto);
         dto.mergePhone();
-
-        for (int i = 0; i < dto.getCareers().size(); i++) {
-            CareerDto c = dto.getCareers().get(i);
-            log.warn("▶️ Career {} - 회사명: {}", i, c.getCompanyName());
-        }
-
         Member member = memberService.findById(userDetails.getId());
-
-        // 저장
         resumeService.insertResume(dto, member);
-
         return "redirect:/member/resumes";
     }
 
+    /**
+     * 이력서 수정 페이지 매핑
+     *
+     * @param id          이력서 아이디
+     * @param model       기존 이력서 정보(resumeUpdateDto) 전달
+     * @param userDetails 로그인 정보
+     * @return 이력서 수정 페이지 이동
+     */
+    @GetMapping("/update-resume/{id}")
+    public String updateResumeForm(@PathVariable("id") Long id, Model model, @AuthenticationPrincipal MBotUserDetails userDetails) {
+        Member member = memberService.findById(userDetails.getId());
+        Resume resume = resumeService.findByIdAndMemberWithOccupation(id, member);
+        ResumeUpdateDto dto = updatePrefillMapper.toDto(resume); // → prefill mapper 필요
+
+        dto.splitPhone(dto.getPhone()); // phone1~3 나누기
+        System.out.println(dto);
+        System.out.println(dto.getCareers().toString());
+
+        model.addAttribute("resumeUpdateDto", dto);
+        return "member/update-resume";
+    }
+
+    /**
+     * @param dto           수정된 이력서 정보
+     * @param bindingResult 유효성 검사용 객체
+     * @param model         이력서 수정 실패시 dto를 재전달
+     * @param userDetails   로그인 정보
+     * @return 성공시 이력서 관리페이지로 이동, 실패시 이동 없음
+     */
+    @PostMapping("/update-resume")
+    public String updateResume(@Valid @ModelAttribute ResumeUpdateDto dto, BindingResult bindingResult, Model model,
+                               @AuthenticationPrincipal MBotUserDetails userDetails) {
+        if (bindingResult.hasErrors()) {
+            bindingResult.getAllErrors().forEach(err -> System.out.println(err));
+            model.addAttribute("resumeUpdateDto", dto);
+            return "member/update-resume";
+        }
+
+        Member member = memberService.findById(userDetails.getId());
+        resumeService.updateResume(dto, member);
+
+        return "redirect:/member/resumes"; // 혹은 상세 페이지
+    }
 
     @GetMapping("/view/{id}")
     public String view(@PathVariable("id") Long id, Model model) {
@@ -109,27 +148,6 @@ public class MemberResumeController {
         ResumeDto resumeDto = ResumeDto.fromEntity(resume);
         model.addAttribute("resume", resumeDto);
         return "member/resume-view";
-    }
-
-    @GetMapping("/edit/{id}")
-    public String editForm(@PathVariable("id") Long id, Model model) {
-        Resume resume = resumeService.findById(id);
-        model.addAttribute("resume", resume);
-        return "/member/resume-edit";
-    }
-
-    @PostMapping("/edit/{id}")
-    public String update(@PathVariable("id") Long id,
-                         @Valid @ModelAttribute("resume") ResumeDto dto,
-                         BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "/member/resume-edit";
-        }
-        Occupation occupation = occupationService.findById(dto.getOccupationId());
-        Resume updatedResume = dto.toEntityWithOccupation(occupation);
-
-        resumeService.update(id, updatedResume);
-        return "redirect:/member/view/" + id;
     }
 
     @GetMapping("/delete/{id}")

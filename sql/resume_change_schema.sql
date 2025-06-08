@@ -3,7 +3,7 @@
 -- use hr;
 use matching_bot;
 
-/*-- 1. 외래키 제약 조건 해제
+-- 1. 외래키 제약 조건 해제
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `attached_item`;
 DROP TABLE IF EXISTS `career`;
@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `region`;
 DROP TABLE IF EXISTS `refresh_token`;
 DROP TABLE IF EXISTS `resume_view_log`;
 -- 3. 외래키 제약 조건 다시 활성화
-SET FOREIGN_KEY_CHECKS = 1;*/
+SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE member (
     id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '회원 ID',
@@ -92,7 +92,7 @@ CREATE TABLE occupation (
 
 CREATE TABLE company (
     id BIGINT NOT NULL AUTO_INCREMENT,
-    
+
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(100) NOT NULL,
     role ENUM('COMPANY') NOT NULL DEFAULT 'COMPANY',
@@ -122,7 +122,7 @@ CREATE TABLE company (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_by VARCHAR(50),
     updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
-    
+
     PRIMARY KEY (id)
 );
 
@@ -238,11 +238,12 @@ CREATE TABLE resume (
     member_id BIGINT NOT NULL,
     occupation_id BIGINT NOT NULL,
     title VARCHAR(50) NOT NULL,
-    skill_answer VARCHAR(255) NOT NULL,
-    trait_answer VARCHAR(255),
+    skill_answer TEXT NOT NULL,
+    trait_answer TEXT,
     skill_keywords VARCHAR(100),
     trait_keywords VARCHAR(100),
     keywords_status ENUM('Y', 'N') NOT NULL DEFAULT 'N' COMMENT '키워드 추출 상태',
+    career_type ENUM('NEW', 'EXP'),
     created_by VARCHAR(50) NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_by VARCHAR(50),
@@ -255,7 +256,7 @@ CREATE TABLE resume (
 CREATE TABLE career (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     resume_id BIGINT NOT NULL,
-    career_type VARCHAR(10)  CHECK (career_type IN ('new', 'exp')),
+--     career_type VARCHAR(10)  CHECK (career_type IN ('new', 'exp')),
     company_name VARCHAR(50) NOT NULL,
     department_name VARCHAR(50) NOT NULL,
     position_title VARCHAR(50) NOT NULL ,

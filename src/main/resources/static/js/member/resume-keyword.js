@@ -27,6 +27,7 @@ function addKeyword(wrapperId, inputName, placeholderText) {
         input.type = 'text';
         input.name = inputName;
         input.placeholder = placeholderText;
+        input.maxLength = 10;
 
         const button = document.createElement('button');
         button.type = 'button';
@@ -69,6 +70,7 @@ export function removeKeyword(button) {
         input.type = 'text';
         input.name = inputName;
         input.placeholder = placeholder;
+        input.maxLength = 10;
 
         const button = document.createElement('button');
         button.type = 'button';
@@ -118,7 +120,7 @@ export async function extractKeywords(type) {
             const inputDiv = document.createElement('div');
             inputDiv.className = 'keyword-input';
             inputDiv.innerHTML = `
-                <input type="text" name="${inputName}" value="${kw}" />
+                <input type="text" name="${inputName}" value="${kw}" maxlength="5"/>
                 <button type="button" onclick="removeKeyword(this)">-</button>
             `;
             wrapper.appendChild(inputDiv);
@@ -128,7 +130,7 @@ export async function extractKeywords(type) {
             const plusDiv = document.createElement('div');
             plusDiv.className = 'keyword-input';
             plusDiv.innerHTML = `
-                <input type="text" name="${inputName}" placeholder="${type === 'skill' ? '기술 키워드' : '성향 키워드'}" />
+                <input type="text" name="${inputName}" placeholder="${type === 'skill' ? '기술 키워드' : '성향 키워드'}" maxlength="5"/>
                 <button type="button" onclick="${type === 'skill' ? 'addSkillKeyword()' : 'addTraitKeyword()'}">+</button>
             `;
             wrapper.appendChild(plusDiv);
@@ -146,6 +148,39 @@ export function attachKeywordSubmitHandler() {
         const form = document.querySelector("form");
         if (!form) return;
 
+        // ✅ 초기 키워드 렌더링
+        const initKeywordInputs = (wrapperId, inputName, concatValue) => {
+            const wrapper = document.getElementById(wrapperId);
+            if (!wrapper) return;
+
+            wrapper.innerHTML = "";
+
+            const keywords = concatValue.split(",").filter(k => k);
+            keywords.forEach(kw => {
+                const div = document.createElement("div");
+                div.className = "keyword-input";
+                div.innerHTML = `
+                    <input type="text" name="${inputName}" value="${kw}" maxlength="5"/>
+                    <button type="button" onclick="removeKeyword(this)">-</button>
+                `;
+                wrapper.appendChild(div);
+            });
+
+            if (keywords.length < 15) {
+                const plusDiv = document.createElement("div");
+                plusDiv.className = "keyword-input";
+                plusDiv.innerHTML = `
+                    <input type="text" name="${inputName}" placeholder="${inputName.includes("skill") ? "기술 키워드" : "성향 키워드"}" maxlength="5"/>
+                    <button type="button" onclick="${inputName.includes("skill") ? "addSkillKeyword()" : "addTraitKeyword()"}">+</button>
+                `;
+                wrapper.appendChild(plusDiv);
+            }
+        };
+
+        initKeywordInputs("skill-keyword-wrapper", "skill_keywords[]", document.getElementById("skillKeywordsConcat")?.value || "");
+        initKeywordInputs("trait-keyword-wrapper", "trait_keywords[]", document.getElementById("traitKeywordsConcat")?.value || "");
+
+        // ✅ 기존 submit 로직
         form.addEventListener("submit", function () {
             const skillInputs = document.querySelectorAll("#skill-keyword-wrapper input[name='skill_keywords[]']");
             const traitInputs = document.querySelectorAll("#trait-keyword-wrapper input[name='trait_keywords[]']");
@@ -153,12 +188,14 @@ export function attachKeywordSubmitHandler() {
             const skillKeywords = Array.from(skillInputs)
                 .map(input => input.value.trim())
                 .filter(val => val)
-                .join(",");
+                .join(",")
+                .slice(0, 200);
 
             const traitKeywords = Array.from(traitInputs)
                 .map(input => input.value.trim())
                 .filter(val => val)
-                .join(",");
+                .join(",")
+                .slice(0, 200);
 
             document.getElementById("skillKeywordsConcat").value = skillKeywords;
             document.getElementById("traitKeywordsConcat").value = traitKeywords;

@@ -17,19 +17,19 @@ function addCareerRow() {
         <div class="inline-group">
             <div class="form-group">
                 <label for="careers[${index}].companyName">회사명</label>
-                <input type="text" name="careers[${index}].companyName" id="careers[${index}].companyName" />
+                <input type="text" name="careers[${index}].companyName" id="careers[${index}].companyName" maxlength="50" />
             </div>
             <div class="form-group">
                 <label for="careers[${index}].departmentName">부서명</label>
-                <input type="text" name="careers[${index}].departmentName" id="careers[${index}].departmentName" />
+                <input type="text" name="careers[${index}].departmentName" id="careers[${index}].departmentName" maxlength="50" />
             </div>
             <div class="form-group">
                 <label for="careers[${index}].positionTitle">직급/직책</label>
-                <input type="text" name="careers[${index}].positionTitle" id="careers[${index}].positionTitle" />
+                <input type="text" name="careers[${index}].positionTitle" id="careers[${index}].positionTitle" maxlength="50" />
             </div>
             <div class="form-group">
                 <label for="careers[${index}].salary">최종 연봉</label>
-                <input type="text" name="careers[${index}].salary" id="careers[${index}].lastSalary" />
+                <input type="text" name="careers[${index}].salary" id="careers[${index}].salary" />
             </div>
             <div class="form-group">
                 <label for="careers[${index}].startDateRaw">입사년월</label>
@@ -43,7 +43,7 @@ function addCareerRow() {
         <div class="inline-group">
             <div class="form-group" style="flex: 2;">
                 <label for="careers[${index}].careerSummary">담당 업무 및 성과 요약</label>
-                <input type="text" name="careers[${index}].careerSummary" id="careers[${index}].careerSummary" />
+                <input type="text" name="careers[${index}].careerSummary" id="careers[${index}].careerSummary" maxlength="255" />
             </div>
         </div>
     `;
@@ -58,6 +58,4 @@ function removeCareer(button) {
 window.addEventListener("DOMContentLoaded", () => {
     const selected = document.querySelector('input[name="careerType"]:checked');
     toggleCareer(selected?.value === "EXP");
-    addCareerRow(); // 기본 1개 경력 입력칸 추가
-
 });

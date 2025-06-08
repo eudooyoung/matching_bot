@@ -7,11 +7,12 @@ window.createRoot = createRoot;
 
 document.addEventListener("DOMContentLoaded", () => {
     // React 직무 선택기 렌더링
-    import("/js/JobCategorySelector.js").then((mod) => {
+    import("/js/member/JobCategorySelectorResume.js").then((mod) => {
         const container = document.getElementById("react-job-category-selector");
         if (container) {
+            const selectedId = container.dataset.selectedId; // ✅ 초기 선택값 읽기
             const root = createRoot(container);
-            root.render(React.createElement(mod.default));
+            root.render(React.createElement(mod.default, { selectedId }));
         }
     });
 
