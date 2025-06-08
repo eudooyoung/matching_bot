@@ -8,6 +8,7 @@ import com.multi.matchingbot.community.repository.CommunityCategoryRepository;
 import com.multi.matchingbot.community.repository.CommunityCommentRepository;
 import com.multi.matchingbot.community.repository.CommunityPostRepository;
 import com.multi.matchingbot.member.domain.entity.Member;
+import com.multi.matchingbot.company.domain.Company;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -170,6 +172,96 @@ public class CommunityService {
 
         commentRepo.delete(comment);
         log.info("✅ 댓글 삭제 실행됨 - commentId: {}", commentId);
+    }
+
+    public void createPostByCompany(CommunityPostDto dto, Company company) {
+        CommunityCategory category = categoryRepo.findById(dto.getCategoryId())
+                .orElseThrow(() -> new EntityNotFoundException("Category not found"));
+
+        CommunityPost post = new CommunityPost();
+        post.setCategory(category);
+        post.setCompany(company);
+        post.setTitle(dto.getTitle());
+        post.setContent(dto.getContent());
+        post.setCreatedBy(company.getName());  // 기업 이름으로 작성자 표시
+        post.setCreatedAt(java.time.LocalDateTime.now());
+
+        postRepo.save(post);
+    }
+    public void addCommentByCompany(Long postId, String content, Company company) {
+        CommunityPost post = postRepo.findById(postId)
+                .orElseThrow(() -> new EntityNotFoundException("Post not found"));
+
+        CommunityComment comment = new CommunityComment();
+        comment.setPost(post);
+        comment.setCompany(company);
+        comment.setContent(content);
+        comment.setCreatedBy(company.getName());
+        comment.setCreatedAt(LocalDateTime.now());
+
+        commentRepo.save(comment);
+    }
+    // 게시글 수정 (기업)
+    @Transactional
+    public void updatePostByCompany(Long postId, CommunityPostDto dto, Company company) {
+        CommunityPost post = postRepo.findById(postId)
+                .orElseThrow(() -> new EntityNotFoundException("Post not found"));
+
+        if (post.getCompany() == null || !post.getCompany().getId().equals(company.getId())) {
+            throw new AccessDeniedException("게시글 수정 권한이 없습니다.");
+        }
+
+        CommunityCategory category = categoryRepo.findById(dto.getCategoryId())
+                .orElseThrow(() -> new EntityNotFoundException("Category not found"));
+
+        post.setTitle(dto.getTitle());
+        post.setContent(dto.getContent());
+        post.setCategory(category);
+        post.setUpdatedBy(company.getName());
+        post.setUpdatedAt(LocalDateTime.now());
+
+        postRepo.save(post);
+    }
+
+    // 게시글 삭제 (기업)
+    @Transactional
+    public void deletePostByCompany(Long postId, Company company) {
+        CommunityPost post = postRepo.findById(postId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 게시글이 존재하지 않습니다."));
+
+        if (post.getCompany() == null || !post.getCompany().getId().equals(company.getId())) {
+            throw new AccessDeniedException("삭제 권한이 없습니다.");
+        }
+
+        postRepo.delete(post);
+    }
+
+    // 댓글 수정 (기업)
+    @Transactional
+    public void updateCommentByCompany(Long commentId, String content, Company company) {
+        CommunityComment comment = commentRepo.findById(commentId)
+                .orElseThrow(() -> new EntityNotFoundException("댓글이 존재하지 않습니다."));
+
+        if (comment.getCompany() == null || !comment.getCompany().getId().equals(company.getId())) {
+            throw new AccessDeniedException("댓글 수정 권한이 없습니다.");
+        }
+
+        comment.setContent(content);
+        comment.setUpdatedBy(company.getName());
+        comment.setUpdatedAt(LocalDateTime.now());
+    }
+
+    // 댓글 삭제 (기업)
+    @Transactional
+    public void deleteCommentByCompany(Long commentId, Long companyId) {
+        CommunityComment comment = commentRepo.findById(commentId)
+                .orElseThrow(() -> new EntityNotFoundException("댓글이 존재하지 않습니다."));
+
+        if (comment.getCompany() == null || !comment.getCompany().getId().equals(companyId)) {
+            throw new AccessDeniedException("댓글 삭제 권한이 없습니다.");
+        }
+
+        commentRepo.delete(comment);
     }
 
 }

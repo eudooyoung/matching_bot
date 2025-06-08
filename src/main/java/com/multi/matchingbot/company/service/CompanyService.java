@@ -69,4 +69,10 @@ public class CompanyService {
         return companyRepository.findById(companyId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 아이디의 회사 정보를 찾을 수 없습니다: " + companyId));
     }
+    // CompanyService.java
+    public Company findByEmail(String email) {
+        return companyRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("해당 이메일의 회사 정보를 찾을 수 없습니다: " + email));
+    }
+
 }

@@ -14,15 +14,40 @@ public class CommunityCommentDto {
     private String createdBy;
     private LocalDateTime createdAt;
     private Long memberId;
+    private Long companyId;
+    private String companyName;
 
-    public static CommunityCommentDto fromEntity(CommunityComment comment) {
-        CommunityCommentDto dto = new CommunityCommentDto();
-        dto.setId(comment.getId());
-        dto.setContent(comment.getContent());
-        dto.setWriterName(comment.getMember().getName()); // 또는 getUsername()
-        dto.setCreatedBy(comment.getCreatedBy());
-        dto.setCreatedAt(comment.getCreatedAt());
+//    public static CommunityCommentDto fromEntity(CommunityComment comment) {
+//        CommunityCommentDto dto = new CommunityCommentDto();
+//        dto.setId(comment.getId());
+//        dto.setContent(comment.getContent());
+//        dto.setWriterName(comment.getMember().getName()); // 또는 getUsername()
+//        dto.setCreatedBy(comment.getCreatedBy());
+//        dto.setCreatedAt(comment.getCreatedAt());
+//        dto.setMemberId(comment.getMember().getId());
+//
+//        return dto;
+//
+//    }
+public static CommunityCommentDto fromEntity(CommunityComment comment) {
+    CommunityCommentDto dto = new CommunityCommentDto();
+    dto.setId(comment.getId());
+    dto.setContent(comment.getContent());
+    dto.setCreatedBy(comment.getCreatedBy());
+    dto.setCreatedAt(comment.getCreatedAt());
+
+    if (comment.getMember() != null) {
         dto.setMemberId(comment.getMember().getId());
-        return dto;
+        dto.setWriterName(comment.getMember().getName());
+    } else if (comment.getCompany() != null) {
+        dto.setCompanyId(comment.getCompany().getId());
+        dto.setCompanyName(comment.getCompany().getName());
+        dto.setWriterName(comment.getCompany().getName());
+    } else {
+        dto.setWriterName("알 수 없음");
     }
+
+    return dto;
+}
+
 }
