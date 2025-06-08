@@ -63,32 +63,6 @@ CREATE TABLE occupation (
 
 
 -- 기업 회원 테이블 생성 --
-/*create table company(
-	id BIGINT NOT NULL AUTO_INCREMENT,
-	email VARCHAR(50) NOT NULL unique,
-	password VARCHAR(100) NOT NULL,
-	role ENUM('COMPANY') NOT NULL,
-	name VARCHAR(50) NOT NULL,
-	phone VARCHAR(20),
-	business_no BIGINT NOT NULL unique,
-	address VARCHAR(200) NOT NULL,
-	industry VARCHAR(50) NOT NULL,
-	year_found year NOT NULL,
-	headcount INT NOT NULL,
-	annual_revenue BIGINT NOT NULL,
-	operating_income BIGINT NOT NULL,
-	jobs_last_year INT NOT NULL,
-	agree_terms ENUM('Y', 'N') NOT NULL,
-	agree_privacy ENUM('Y', 'N') NOT NULL,
-	agree_finance ENUM('Y', 'N') NOT NULL,
-	agree_marketing ENUM('Y', 'N') NOT NULL,
-	agree_third_party ENUM('Y', 'N') NOT NULL,
-	created_by VARCHAR(50) NOT NULL,
-	created_at DATETIME NOT NULL,
-	updated_by VARCHAR(50),
-	updated_at DATETIME,
-	PRIMARY KEY (id)
-);*/
 
 CREATE TABLE company (
     id BIGINT NOT NULL AUTO_INCREMENT,
