@@ -1,6 +1,7 @@
 // CommunityPost.java
 package com.multi.matchingbot.community.domain;
 
+import com.multi.matchingbot.company.domain.Company;
 import com.multi.matchingbot.member.domain.entity.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
@@ -27,6 +28,11 @@ public class CommunityPost {
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id")
+    private Company company;
+
 
     @Size(max =100)
     private String title;

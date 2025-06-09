@@ -99,21 +99,36 @@
         <!-- ✅ 페이징 처리 -->
         <nav class="mt-4">
             <ul class="pagination justify-content-center">
+
+                <!-- 이전 버튼 -->
                 <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
-                    <a class="page-link" th:href="@{'/main?page=' + (${currentPage - 1})}">이전</a>
+                    <a class="page-link"
+                       th:if="${currentPage > 1}"
+                       th:href="@{/main(page=${currentPage - 1})}">이전</a>
+                    <span class="page-link" th:if="${currentPage == 1}">이전</span>
                 </li>
-                <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"
+
+                <!-- 페이지 번호 5개씩 -->
+                <li class="page-item"
+                    th:each="i : ${#numbers.sequence(((currentPage - 1) / 5 * 5 + 1), T(java.lang.Math).min(((currentPage - 1) / 5 * 5 + 5), totalPages))}"
                     th:classappend="${currentPage == i} ? 'active'">
-                    <a class="page-link" th:href="@{'/main?page=' + ${i}}" th:text="${i}">1</a>
+                    <a class="page-link" th:href="@{/main(page=${i})}" th:text="${i}">1</a>
                 </li>
+
+                <!-- 다음 버튼 -->
                 <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
-                    <a class="page-link" th:href="@{'/main?page=' + (${currentPage + 1})}">다음</a>
+                    <a class="page-link"
+                       th:if="${currentPage < totalPages}"
+                       th:href="@{/main(page=${currentPage + 1})}">다음</a>
+                    <span class="page-link" th:if="${currentPage == totalPages}">다음</span>
                 </li>
+
             </ul>
         </nav>
+
     </main>
 
-    <div th:insert="~{fragments/footer :: footer}"></div>
+    <div th:replace="fragments/footer :: footer"></div>
 </div>
 
 <!-- ✅ 스크립트 -->

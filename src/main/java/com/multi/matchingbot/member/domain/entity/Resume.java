@@ -33,6 +33,11 @@ public class Resume extends BaseEntity {
     @JoinColumn(name = "occupation_id", nullable = false)
     private Occupation occupation;
 
+//    @Enumerated(EnumType.STRING)
+//    @Column(nullable = false, length = 10)
+//    private CareerType careerType;
+
+
     @Column(nullable = false, length = 50)
     private String title;
 

@@ -167,4 +167,16 @@ public class ResumeController {
 
         return "member/resume-view";
     }
+//    @GetMapping("/resume-search-page")
+//    public String searchResumes(@RequestParam(name="jobGroup", required = false) String jobGroup,
+//                                @RequestParam(name="jobType", required = false) String jobType,
+//                                @RequestParam(name="jobRole", required = false) String jobRole,
+//                                @RequestParam(name="careerType", required = false) String careerType,
+//                                @RequestParam(name="companyName", required = false) String companyName,
+//                                Model model) {
+//
+//        List<ResumeDto> resumeList = resumeService.searchResumes(jobGroup, jobType, jobRole, careerType, companyName);
+//        model.addAttribute("resumeList", resumeList);
+//        return "member/resume-view"; // 결과 뷰
+//    }
 }
