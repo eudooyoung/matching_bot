@@ -2,13 +2,11 @@ html, body {
     height: 100%;
 }
 
-/* 전체 페이지를 세로로 정렬하는 wrapper */
 .wrapper {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
-
 
 body {
     margin: 0;
@@ -17,7 +15,6 @@ body {
 }
 
 /* Header */
-
 .header {
     display: flex;
     justify-content: space-between;
@@ -25,8 +22,8 @@ body {
     background-color: #103254;
     padding: 1rem 2rem;
     color: white;
-    height: 65px; /* 예시 고정값 */
-    box-sizing: border-box; /* 패딩 포함 계산 */
+    height: 65px;
+    box-sizing: border-box;
 }
 
 .logo {
@@ -36,15 +33,26 @@ body {
     font-weight: bold;
 }
 
+.logo-link {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+/* 알림 종 */
 .notification-container {
     position: relative;
     display: inline-block;
 }
 
+/* 알림 종 스타일 */
 .notification-bell {
-    font-size: 24px; /* 필요 시 조절 */
+    font-size: 24px;
+    position: relative; /* 점 기준 위치를 위해 필요 */
 }
 
+/* 정적 알림 점 */
 .notification-dot {
     position: absolute;
     top: 0;
@@ -53,28 +61,11 @@ body {
     height: 10px;
     background-color: red;
     border-radius: 50%;
-    border: 2px solid white; /* 종 테두리색에 맞게 조정 */
+    border: 2px solid white;
+    display: inline-block; /* JS가 이걸 토글함 */
 }
 
-/* 메인 콘텐츠는 늘어나게 */
-.main-content {
-    flex: 1;
-    width: 100%;
-    padding: 0 16px; /* ✅ 모든 페이지 좌우 여백 */
-    box-sizing: border-box;
-}
-
-/* Footer */
-.footer {
-    background: #eee;
-    padding: 1rem;
-    text-align: center;
-    font-size: 0.9rem;
-    color: #666;
-    margin-top: 3rem;
-}
-
-/* 공통 메뉴 레이아웃 */
+/* 메뉴 영역 */
 .nav {
     display: flex;
     align-items: center;
@@ -92,39 +83,28 @@ body {
     text-decoration: none;
 }
 
-/* 로고 링크 */
-.logo-link {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1.5rem;
-}
-
-/* 드롭다운 래퍼 (버튼 + 메뉴 묶음) */
+/* 드롭다운 */
 .dropdown-wrapper {
     position: relative;
 }
 
-/* 메뉴 버튼 (기본) */
 .menu-button {
     padding: 0.5rem 0.75rem;
     border-radius: 4px;
     font-weight: bold;
 }
 
-/* 초록색 회원가입 버튼 */
 .menu-button.green {
     background-color: #b2fd83;
     color: #103254;
 }
 
-/* 드롭다운 공통 */
 .dropdown {
     display: none;
     position: absolute;
     top: 100%;
     right: 0;
-    width: max-content; /* 내부 항목 중 가장 긴 텍스트 기준으로 폭 설정 */
+    width: max-content;
     min-width: 100%;
     background-color: white;
     padding: 0rem;
@@ -139,21 +119,20 @@ body {
 }
 
 .dropdown li a {
-    display: block; /* ✅ 블록 요소로 만들어야 전체 너비 차지 */
-    width: 100%; /* ✅ 부모(li) 기준 너비 100% */
+    display: block;
+    width: 100%;
     padding: 0.5rem 1rem;
     white-space: nowrap;
     color: #103254;
     text-decoration: none;
-    box-sizing: border-box; /* ✅ 패딩 포함해서 너비 계산 (안 밀리게) */
+    box-sizing: border-box;
 }
 
 .dropdown li a:hover {
-    background-color: #f0f0f0; /* 연한 회색 */
-    color: #103254; /* 텍스트 컬러 유지 */
+    background-color: #f0f0f0;
+    color: #103254;
 }
 
-/* 초록 드롭다운 (회원가입) */
 .dropdown.green {
     background-color: #b2fd83;
 }
@@ -168,22 +147,39 @@ body {
     color: #103254;
 }
 
-/* 드롭다운 보여주기 (active) */
 .dropdown-wrapper.active .dropdown {
     display: block;
 }
 
-/*에러 페이지*/
 .menu-button.error {
     background-color: #a8a8a8;
     color: #103254;
     text-decoration: none;
 }
 
+/* 메인 콘텐츠 여백 */
+.main-content {
+    flex: 1;
+    width: 100%;
+    padding: 0 16px;
+    box-sizing: border-box;
+}
+
+/* Footer */
+.footer {
+    background: #eee;
+    padding: 1rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 3rem;
+}
+
+/* 이력서 별 버튼 */
 .resume-card-header {
     position: relative;
     padding-top: 8px;
-    padding-right: 32px; /* 별 버튼이 텍스트 안 가리게 */
+    padding-right: 32px;
 }
 
 .star-button {

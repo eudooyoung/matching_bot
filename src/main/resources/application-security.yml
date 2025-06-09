@@ -60,6 +60,7 @@ security:
       - /resumes/**
       - /company/**
       - /job/**
+      - /member/view/**
       - /api/occupations/**
       - /community/write
       - /community/edit/**
