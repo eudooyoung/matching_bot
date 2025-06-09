@@ -41,6 +41,31 @@
         .search-filters label {
             margin-right: 20px;
         }
+
+        .job-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .star-button {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #ddd;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .star-button.filled {
+            color: #ffd700;
+        }
+
+        .star-button:hover {
+            color: #ffd700;
+        }
     </style>
 </head>
 <body>
@@ -86,7 +111,17 @@
             <div class="col-md-4" th:each="job : ${jobList}">
                 <div class="card h-100">
                     <div class="card-body">
-                        <h5 class="card-title" th:text="${job.title}">채용 제목</h5>
+                        <div class="job-card-header">
+                            <h5 class="card-title" th:text="${job.title}">채용 제목</h5>
+                            <button class="star-button"
+                                    sec:authorize="hasRole('MEMBER')"
+                                    th:data-job-id="${job.id}"
+                                    th:text="${bookmarkedJobIds != null and #lists.contains(bookmarkedJobIds, job.id)} ? '★' : '☆'"
+                                    th:classappend="${bookmarkedJobIds != null and #lists.contains(bookmarkedJobIds, job.id)} ? ' filled' : ''"
+                                    onclick="toggleJobStar(this, event)">☆</button>
+                        </div>
+                        <!-- 디버그 정보 -->
+                        <div style="font-size: 10px; color: gray;" th:text="'Job ID: ' + ${job.id} + ', Bookmarked: ' + ${bookmarkedJobIds != null and #lists.contains(bookmarkedJobIds, job.id)}"></div>
                         <p class="meta-text"><strong>회사명:</strong> <span th:text="${job.company?.name} ?: '미정'"></span></p>
                         <p class="meta-text"><strong>주소:</strong> <span th:text="${job.company?.address} ?: '주소 없음'"></span></p>
                         <p class="card-text"><strong>요구 기술:</strong> <span th:text="${job.requiredSkills} ?: '없음'"></span></p>
@@ -118,6 +153,10 @@
 
 <!-- ✅ 스크립트 -->
 <script>
+    // 디버그: 북마크된 채용공고 ID 목록 출력
+    const bookmarkedJobIds = /*[[${bookmarkedJobIds}]]*/ [];
+    console.log('북마크된 채용공고 IDs:', bookmarkedJobIds);
+
     window.onload = function () {
         const mapBtn = document.getElementById("openMapButton");
         if (mapBtn) {
@@ -154,6 +193,35 @@
             window.location.href = `/search-page?${query}`;
         });
     };
+
+    function toggleJobStar(button, event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const jobId = button.getAttribute('data-job-id');
+
+        fetch('/attached/api/job-bookmark/toggle', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `jobId=${jobId}`
+        })
+            .then(response => response.text())
+            .then(result => {
+                if (result === 'added') {
+                    button.textContent = '★';
+                    button.classList.add('filled');
+                } else {
+                    button.textContent = '☆';
+                    button.classList.remove('filled');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('북마크 처리 중 오류가 발생했습니다.');
+            });
+    }
 </script>
 
 <!-- React Selector 모듈 -->
