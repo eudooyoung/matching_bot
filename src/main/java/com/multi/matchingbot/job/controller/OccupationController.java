@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Map;
@@ -31,5 +32,17 @@ public class OccupationController {
 
         // 여러 개 중 첫 번째 Occupation 반환 (또는 다른 로직 필요)
         return ResponseEntity.ok(Map.of("id", occupations.get(0).getId()));
+    }
+
+    @GetMapping("/name")
+    public ResponseEntity<?> getOccupationName(@RequestParam("id") Long id) {
+        Occupation occupation = occupationRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        return ResponseEntity.ok(Map.of(
+                "jobGroup", occupation.getJobGroupName(),
+                "jobType", occupation.getJobTypeName(),
+                "jobRoleName", occupation.getJobRoleName()
+        ));
     }
 }

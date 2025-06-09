@@ -1,9 +1,9 @@
 package com.multi.matchingbot.common.controller;
 
 import com.multi.matchingbot.common.security.MBotUserDetails;
-import com.multi.matchingbot.member.domain.dto.ResumeDto;
-import com.multi.matchingbot.member.domain.entity.Resume;
-import com.multi.matchingbot.member.service.ResumeService;
+import com.multi.matchingbot.resume.domain.dto.ResumeDto;
+import com.multi.matchingbot.resume.domain.entity.Resume;
+import com.multi.matchingbot.resume.service.ResumeService;
 import com.multi.matchingbot.notification.service.NotificationService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;

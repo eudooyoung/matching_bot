@@ -1,4 +1,4 @@
-package com.multi.matchingbot.member.repository;
+package com.multi.matchingbot.resume.repository;
 
 import com.multi.matchingbot.member.domain.entity.ResumeViewLog;
 import org.springframework.data.jpa.repository.JpaRepository;

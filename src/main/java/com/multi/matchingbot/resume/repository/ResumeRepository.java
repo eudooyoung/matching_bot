@@ -1,9 +1,11 @@
-package com.multi.matchingbot.member.repository;
+package com.multi.matchingbot.resume.repository;
 
-import com.multi.matchingbot.resume.repository.ResumeRepositoryCustom;
-import com.multi.matchingbot.member.domain.entity.Resume;
+import com.multi.matchingbot.member.domain.entity.Member;
+import com.multi.matchingbot.resume.domain.entity.Resume;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,6 +17,11 @@ public interface ResumeRepository extends JpaRepository<Resume, Long>, ResumeRep
 
     @EntityGraph(attributePaths = "occupation")
     Optional<Resume> findWithOccupationById(Long id);
+
+    @Query("SELECT r FROM Resume r JOIN FETCH r.occupation WHERE r.id = :id AND r.member = :member")
+    Optional<Resume> findWithOccupationByIdAndMember(@Param("id") Long id, @Param("member") Member member);
+
+    Optional<Resume> findByIdAndMember(Long id, Member member);
 
 
 //    // ✅ 조건별 검색 쿼리
@@ -35,4 +42,12 @@ public interface ResumeRepository extends JpaRepository<Resume, Long>, ResumeRep
 //                               @Param("companyName") String companyName);
 
 
+    @Query("""
+                SELECT r FROM Resume r
+                LEFT JOIN FETCH r.member
+                LEFT JOIN FETCH r.occupation
+                LEFT JOIN FETCH r.careers
+                WHERE r.id = :id
+            """)
+    Optional<Resume> findByIdWithAll(@Param("id") Long id);
 }
