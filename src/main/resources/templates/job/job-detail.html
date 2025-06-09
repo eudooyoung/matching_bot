@@ -172,12 +172,12 @@
 
 <script th:src="@{/js/resumeGoBack.js}"></script>
 <script th:inline="javascript">
-    const userRole = /*[[${role != null ? role : "null"}]]*/ null;
-    console.log("userRole:", userRole);
+    const userRole2 = /*[[${role != null ? role : "null"}]]*/ null;
+    console.log("userRole2:", userRole2);
 </script>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-        if (userRole !== "MEMBER") return;
+        if (userRole2 !== "MEMBER") return;
 
         const resumeSelect = document.getElementById("resumeSelect");
         console.log("resumeSelect", resumeSelect);
