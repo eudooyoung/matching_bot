@@ -63,7 +63,7 @@ public class AttachedItemController {
     // 기업 북마크 추가/제거 토글 API
     @PostMapping("/api/company-bookmark/toggle")
     @ResponseBody
-    public ResponseEntity<String> toggleCompanyBookmark(@RequestParam Long companyId,
+    public ResponseEntity<String> toggleCompanyBookmark(@RequestParam("companyId") Long companyId,
                                                         @AuthenticationPrincipal MBotUserDetails userDetails) {
         Long memberId = userDetails.getMemberId();
 
@@ -79,7 +79,7 @@ public class AttachedItemController {
     // 채용공고 북마크 추가/제거 토글 API
     @PostMapping("/api/job-bookmark/toggle")
     @ResponseBody
-    public ResponseEntity<String> toggleJobBookmark(@RequestParam Long jobId,
+    public ResponseEntity<String> toggleJobBookmark(@RequestParam("jobId") Long jobId,
                                                     @AuthenticationPrincipal MBotUserDetails userDetails) {
         Long memberId = userDetails.getMemberId();
 
