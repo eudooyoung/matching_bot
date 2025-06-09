@@ -66,13 +66,23 @@ public class CompanyResumeController {
 
         try {
             Resume resume = resumeService.findById(id);
-            ResumeDto resumeDto = ResumeDto.fromEntity(resume); // 또는 직접 toDto 작성
+            ResumeDto resumeDto = ResumeDto.fromEntity(resume);
             model.addAttribute("resume", resumeDto);
 
-            return "member/resume-view"; // ✅ templates/resume/detail.html 존재해야 함
+            // ✅ role 전달
+            if (user instanceof MBotUserDetails details) {
+                log.info("현재 사용자 ROLE: {}", details.getRole());
+                model.addAttribute("role", details.getRole().name());
+            } else {
+                model.addAttribute("role", null);
+            }
+
+            return "member/resume-view";
+
         } catch (EntityNotFoundException e) {
             log.warn("❌ 해당 이력서를 찾을 수 없음 - ID: {}", id);
-            return "error/404"; // 또는 사용자 정의 에러 페이지
+            return "error/404";
         }
     }
+
 }
