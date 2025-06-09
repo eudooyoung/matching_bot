@@ -1,24 +1,24 @@
 // 전체 선택/해제
 function toggleAll(source) {
-    const checkboxes = document.querySelectorAll('input[name="companyIds"]');
+    const checkboxes = document.querySelectorAll('input[name="jobIds"]');
     checkboxes.forEach(cb => cb.checked = source.checked);
 }
 
 // 선택된 북마크 삭제
 function deleteSelected() {
-    const checked = document.querySelectorAll('input[name="companyIds"]:checked');
+    const checked = document.querySelectorAll('input[name="jobIds"]:checked');
     if (checked.length === 0) {
-        alert("삭제할 기업을 선택하세요.");
+        alert("삭제할 채용공고를 선택하세요.");
         return;
     }
 
-    if (!confirm("선택한 기업을 관심 목록에서 삭제하시겠습니까?")) {
+    if (!confirm("선택한 채용공고를 관심 목록에서 삭제하시겠습니까?")) {
         return;
     }
 
     const ids = Array.from(checked).map(cb => cb.value);
 
-    fetch('/member/api/member/company-bookmark/delete', {
+    fetch('/member/api/member/job-bookmark/delete', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -37,11 +37,11 @@ function deleteSelected() {
 
 // 즐겨찾기 해제 (★ 클릭)
 function deleteBookmark(button) {
-    const companyId = button.getAttribute('data-company-id');
+    const jobId = button.getAttribute('data-job-id');
 
-    if (!confirm("해당 기업을 관심 목록에서 제거하시겠습니까?")) return;
+    if (!confirm("해당 채용공고를 관심 목록에서 제거하시겠습니까?")) return;
 
-    fetch(`/member/api/member/company-bookmark/${companyId}`, {
+    fetch(`/member/api/member/job-bookmark/${jobId}`, {
         method: 'DELETE'
     })
         .then(response => {

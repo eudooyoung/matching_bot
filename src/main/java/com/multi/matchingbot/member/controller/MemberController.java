@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.multi.matchingbot.admin.mapper.MemberAdminMapper;
 import com.multi.matchingbot.common.security.MBotUserDetails;
 import com.multi.matchingbot.company.domain.CompanyUpdateDto;
+import com.multi.matchingbot.job.domain.dto.JobDto;
 import com.multi.matchingbot.member.domain.dto.MemberUpdateDto;
 import com.multi.matchingbot.member.domain.entity.Member;
 import com.multi.matchingbot.member.service.CompanyBookmarkService;
+import com.multi.matchingbot.member.service.JobBookmarkService;
 import com.multi.matchingbot.member.service.MemberService;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,11 +32,13 @@ public class MemberController {
     private final MemberService memberService;
     private final MemberAdminMapper memberAdminMapper;
     private final CompanyBookmarkService companyBookmarkService;
+    private final JobBookmarkService jobBookmarkService;
 
-    public MemberController(MemberService memberService, MemberAdminMapper memberAdminMapper, CompanyBookmarkService companyBookmarkService) {
+    public MemberController(MemberService memberService, MemberAdminMapper memberAdminMapper, CompanyBookmarkService companyBookmarkService, JobBookmarkService jobBookmarkService) {
         this.memberService = memberService;
         this.memberAdminMapper = memberAdminMapper;
         this.companyBookmarkService = companyBookmarkService;
+        this.jobBookmarkService = jobBookmarkService;
     }
 
     // 구직자 마이페이지 진입
@@ -86,6 +90,19 @@ public class MemberController {
         return "member/company-bookmark";
     }
 
+    // 관심 채용공고 관리
+    @GetMapping("/job-bookmark")
+    public String showJobBookmarkPage(@AuthenticationPrincipal MBotUserDetails userDetails, Model model,
+                                      @PageableDefault(size = 10) Pageable pageable){
+        Long memberId = userDetails.getMemberId();
+        model.addAttribute("memberId", memberId);
+
+        Page<JobDto> jobPage = jobBookmarkService.getBookmarkedJobs(memberId, pageable);
+        model.addAttribute("jobPage", jobPage);
+
+        return "member/job-bookmark";
+    }
+
     // 개별 기업 북마크 삭제 API
     @DeleteMapping("/api/member/company-bookmark/{companyId}")
     @ResponseBody
@@ -103,6 +120,26 @@ public class MemberController {
                                                        @AuthenticationPrincipal MBotUserDetails userDetails) {
         Long memberId = userDetails.getMemberId();
         companyBookmarkService.deleteCompanyBookmarks(memberId, companyIds);
+        return ResponseEntity.ok().build();
+    }
+
+    // 개별 채용공고 북마크 삭제 API
+    @DeleteMapping("/api/member/job-bookmark/{jobId}")
+    @ResponseBody
+    public ResponseEntity<Void> deleteJobBookmark(@PathVariable Long jobId,
+                                                  @AuthenticationPrincipal MBotUserDetails userDetails) {
+        Long memberId = userDetails.getMemberId();
+        jobBookmarkService.removeJobBookmark(memberId, jobId);
+        return ResponseEntity.ok().build();
+    }
+
+    // 복수 채용공고 북마크 삭제 API
+    @PostMapping("/api/member/job-bookmark/delete")
+    @ResponseBody
+    public ResponseEntity<Void> deleteJobBookmarks(@RequestBody java.util.List<Long> jobIds,
+                                                   @AuthenticationPrincipal MBotUserDetails userDetails) {
+        Long memberId = userDetails.getMemberId();
+        jobBookmarkService.removeJobBookmarks(memberId, jobIds);
         return ResponseEntity.ok().build();
     }
 }

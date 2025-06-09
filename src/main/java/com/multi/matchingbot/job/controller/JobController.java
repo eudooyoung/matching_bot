@@ -164,7 +164,7 @@ public class JobController {
             model.addAttribute("resume", resume); // ✅ 비회원이면 이 값은 안 들어감
 
             // 구직자인 경우 북마크 상태 전달
-            if ("MEMBER".equals(userDetails.getRole())) {
+            if ("MEMBER".equals(role)) {
                 Long memberId = userDetails.getMemberId();
                 boolean isJobBookmarked = jobBookmarkService.isBookmarked(memberId, id);
                 model.addAttribute("isJobBookmarked", isJobBookmarked);

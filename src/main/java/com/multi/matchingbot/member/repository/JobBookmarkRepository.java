@@ -1,6 +1,9 @@
 package com.multi.matchingbot.member.repository;
 
+import com.multi.matchingbot.job.domain.dto.JobDto;
 import com.multi.matchingbot.member.domain.entity.JobBookmark;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -20,4 +23,13 @@ public interface JobBookmarkRepository extends JpaRepository<JobBookmark, Long> 
 
     @Query("SELECT jb.job.id FROM JobBookmark jb WHERE jb.member.id = :memberId")
     List<Long> findJobIdsByMemberId(@Param("memberId") Long memberId);
+
+    @Query("SELECT new com.multi.matchingbot.job.domain.dto.JobDto(j.id, j.company.id, j.occupation.id, j.skillKeywords, j.traitKeywords, " +
+            "j.title, j.description, j.address, j.mainTask, j.requiredSkills, j.requiredTraits, j.skillKeywords, j.traitKeywords, " +
+            "j.latitude, j.longitude, j.startDate, j.endDate, j.enrollEmail, j.notice, j.createdBy, j.createdAt, j.updatedBy, j.updatedAt, " +
+            "j.company.name) " +
+            "FROM JobBookmark jb " +
+            "JOIN jb.job j " +
+            "WHERE jb.member.id = :memberId")
+    Page<JobDto> findJobDtosByMemberId(@Param("memberId") Long memberId, Pageable pageable);
 }

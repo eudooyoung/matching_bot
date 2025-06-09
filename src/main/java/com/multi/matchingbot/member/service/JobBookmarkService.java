@@ -1,5 +1,6 @@
 package com.multi.matchingbot.member.service;
 
+import com.multi.matchingbot.job.domain.dto.JobDto;
 import com.multi.matchingbot.job.domain.entity.Job;
 import com.multi.matchingbot.job.repository.JobRepository;
 import com.multi.matchingbot.member.domain.entity.JobBookmark;
@@ -7,6 +8,8 @@ import com.multi.matchingbot.member.domain.entity.Member;
 import com.multi.matchingbot.member.repository.JobBookmarkRepository;
 import com.multi.matchingbot.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,5 +50,16 @@ public class JobBookmarkService {
 
     public List<Long> getBookmarkedJobIds(Long memberId) {
         return jobBookmarkRepository.findJobIdsByMemberId(memberId);
+    }
+
+    @Transactional
+    public void removeJobBookmarks(Long memberId, List<Long> jobIds) {
+        for (Long jobId : jobIds) {
+            jobBookmarkRepository.deleteByMemberIdAndJobId(memberId, jobId);
+        }
+    }
+
+    public Page<JobDto> getBookmarkedJobs(Long memberId, Pageable pageable) {
+        return jobBookmarkRepository.findJobDtosByMemberId(memberId, pageable);
     }
 }
