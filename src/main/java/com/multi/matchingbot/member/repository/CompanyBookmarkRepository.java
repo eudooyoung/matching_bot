@@ -31,4 +31,6 @@ public interface CompanyBookmarkRepository extends JpaRepository<CompanyBookmark
     @Modifying
     @Query("DELETE FROM CompanyBookmark cb WHERE cb.member.id = :memberId AND cb.company.id IN :companyIds")
     void deleteByMemberIdAndCompanyIdIn(@Param("memberId") Long memberId, @Param("companyIds") List<Long> companyIds);
+
+    boolean existsByMemberIdAndCompanyId(Long memberId, Long companyId);
 }
