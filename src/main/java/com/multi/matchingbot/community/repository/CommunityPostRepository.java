@@ -12,8 +12,12 @@ import java.util.Optional;
 
 public interface CommunityPostRepository extends JpaRepository<CommunityPost, Long> {
     List<CommunityPost> findByCategoryId(Long categoryId);
-    @Query("SELECT p FROM CommunityPost p LEFT JOIN FETCH p.comments WHERE p.id = :postId")
-    Optional<CommunityPost> findByIdWithComments(@Param("postId") Long postId);
+    @Query("SELECT p FROM CommunityPost p " +
+            "LEFT JOIN FETCH p.comments " +
+            "LEFT JOIN FETCH p.company " +
+            "LEFT JOIN FETCH p.member " +  // 멤버도 Lazy 로딩이면 같이 fetch
+            "WHERE p.id = :id")
+    Optional<CommunityPost> findByIdWithComments(@Param("id") Long id); // ✅ 파라미터 지정
     Page<CommunityPost> findByCategoryId(Long categoryId, Pageable pageable);
     Page<CommunityPost> findAll(Pageable pageable);
 
