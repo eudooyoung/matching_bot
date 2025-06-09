@@ -18,10 +18,16 @@ public class JobService {
 
     private final JobRepository repository;
     private final GeoService geoService;
+    private final JobRepository jobRepository;
 
-    public JobService(JobRepository repository, GeoService geoService) {
+    public JobService(JobRepository repository, GeoService geoService, JobRepository jobRepository) {
         this.repository = repository;
         this.geoService = geoService;
+        this.jobRepository = jobRepository;
+    }
+
+    public List<Job> findAll() {
+        return repository.findAll();
     }
 
     public Page<JobDto> getByCompanyIdPaged(Long companyId, Pageable pageable) {
@@ -76,5 +82,9 @@ public class JobService {
 
     public Page<Job> getPageJobs(Pageable pageable) {
         return repository.findAll(pageable);
+    }
+
+    public List<Job> findByCompanyId(Long memberId) {
+        return jobRepository.findByCompanyId(memberId);
     }
 }
