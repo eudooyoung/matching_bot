@@ -135,4 +135,15 @@ public class NotificationService {
                 .build();
         notificationRepository.save(notification);
     }
+
+    // 전체 읽음 처리
+    @Transactional
+    public void markAllAsRead(Long memberId) {
+        List<Notification> unreadNotifications =
+                notificationRepository.findByMemberIdAndStatus(memberId, NotificationStatus.UNREAD);
+
+        for (Notification notification : unreadNotifications) {
+            notification.setStatus(NotificationStatus.READ);
+        }
+    }
 }

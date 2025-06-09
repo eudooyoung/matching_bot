@@ -63,8 +63,8 @@
                         기간
                     </td>
                     <td th:onclick="'location.href=\'/job/' + ${job.id} + '\''">상세보기</td>
-                    <td sec:authorize="!hasRole('COMPANY')">
-                        <button class="star-button" onclick="toggleStar(this)">☆</button>
+                    <td>
+                        <button class="star-button" onclick="toggleStar(this)" sec:authorize="!hasRole('COMPANY')">☆</button>
                     </td>
                 </tr>
                 </tbody>
