@@ -136,16 +136,26 @@ h2 {
     white-space: pre-line;
 }
 
+.career-summary span {
+    white-space: pre-wrap; /* 줄바꿈 유지 */
+    line-height: 1.6;
+    /*display: block;*/
+    /*max-height: 160px;*/
+    /*overflow-y: auto;*/
+}
+
 @media (max-width: 600px) {
-  .container {
-    padding: 20px 15px;
-  }
-  .career-entry {
-    padding: 12px;
-  }
-  .career-header,
-  .career-period,
-  .career-summary {
-    font-size: 14px;
-  }
+    .container {
+        padding: 20px 15px;
+    }
+
+    .career-entry {
+        padding: 12px;
+    }
+
+    .career-header,
+    .career-period,
+    .career-summary {
+        font-size: 14px;
+    }
 }

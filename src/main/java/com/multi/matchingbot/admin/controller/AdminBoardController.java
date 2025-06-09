@@ -113,4 +113,20 @@ public class AdminBoardController {
         model.addAttribute("resume", resume);
         return "member/member-edit";
     }
+
+    @GetMapping("/jobs")
+    public String jobs(@ModelAttribute AdminSearchCondition condition, Model model) {
+        log.warn("jobSearchParam = [{}]", condition);
+
+        AdminPagedResult<JobAdminView> result = adminPageService.jobs(condition);
+        System.out.println(result.toString());
+
+        model.addAttribute("jobs", result.getPage().getContent());
+        model.addAttribute("page", result.getPage());
+        model.addAttribute("pageNumbers", result.getPageNumbers());
+        model.addAttribute("currentPage", result.getCurrentPage());
+        model.addAttribute("condition", condition);
+
+        return "/admin/board-jobs";
+    }
 }

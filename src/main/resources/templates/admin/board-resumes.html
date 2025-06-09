@@ -21,9 +21,9 @@
                     <button type="button" class="btn btn-delete"
                             onclick="bulkHardDelete('/api/v1/admin/bulk/resumes')">삭제
                     </button>
-                    <button type="button" class="btn btn-extract"
+                   <!-- <button type="button" class="btn btn-extract"
                             onclick="bulkExtract('/admin/bulk/placeholder')">추출
-                    </button>
+                    </button>-->
                 </div>
 
                 <form method="get" th:action="@{/admin/resumes}" class="search-form">
@@ -60,76 +60,78 @@
             </div>
 
             <!-- 회원 테이블 -->
-            <table class="table">
-                <colgroup>
-                    <col style="width: 25px;"/>  <!-- 체크박스 -->
-                    <col style="width: 60px;"/>  <!-- 회원 번호 -->
-                    <col style="width: 120px;"/>  <!-- 제목 -->
-                    <col style="width: 120px;"/> <!-- 역량 키워드 -->
-                    <col style="width: 120px;"/>  <!-- 인재상 키워드 -->
-                    <col style="width: 80px;"/> <!-- 희망 직무 -->
-                    <col style="width: 150px;"/>  <!-- 작성자 -->
-                    <col style="width: 100px;"/>  <!-- 작성일 -->
-                    <col style="width: 150px;"/> <!-- 수정자 -->
-                    <col style="width: 100px;"/>  <!-- 수정일 -->
-                    <col style="width: 40px;"/>  <!-- 평가 -->
-                    <col style="width: 40px;"/>  <!-- 삭제/복구 -->
-                    <col style="width: 40px;"/>  <!-- 삭제/복구 -->
-                </colgroup>
-                <thead style="background-color: #f0f0f0;">
-                <tr>
-                    <th><input type="checkbox" id="check-all"/></th>
-                    <th>이력서 번호</th>
-                    <th>제목</th>
-                    <th>역량 키워드</th>
-                    <th>인재상 키워드</th>
-                    <th>희망 직무</th>
-                    <th>작성자</th>
-                    <th>작성일</th>
-                    <th>수정자</th>
-                    <th>수정일</th>
-                    <th>키워드</th>
-                    <th>추출</th>
-                    <th>삭제</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="resume : ${resumes}">
-                    <td><input type="checkbox" name="checkedIds" th:value="${resume.id}" class="check-row"/>
-                    </td>
-                    <td th:text="${resume.formattedId}">이력서 번호</td>
-                    <td class="text-left-col">
-                        <a th:href="@{|/admin/board/resumes/${resume.id}|}"
-                           th:text="${resume.title}"
-                           th:attr="title=${resume.title}"
-                           class="link-detail">이력서 제목</a>
-                    </td>
-                    <td class="text-left-col" th:text="${resume.skillKeywords}">역량 키워드</td>
-                    <td class="text-left-col" th:text="${resume.traitKeywords}">인재상 키워드</td>
-                    <td class="text-left-col" th:text="${resume.desiredOccupation}">희망 직무</td>
-                    <td th:text="${resume.createdBy}">작성자</td>
-                    <td th:text="${#temporals.format(resume.createdAt, 'yyyy-MM-dd HH:mm:ss')}">작성일</td>
-                    <td th:text="${resume.updatedBy}">수정자</td>
-                    <td th:text="${#temporals.format(resume.updatedAt, 'yyyy-MM-dd HH:mm:ss')}">수정일</td>
-                    <td th:text="${resume.keywordsStatus}">키워드 추출 상태</td>
-                    <td>
-                        <button type="button"
-                                class="btn btn-extract"
-                                th:onclick="|extractKeywords({ id: ${resume.id}, url: '/api/v1/admin/placeholder', onSuccess: () => location.reload() })|">
-                            추출
-                        </button>
-                    </td>
-                    <td>
-                        <button type="button"
-                                class="btn btn-delete"
-                                th:onclick="|deleteItem({ id: ${resume.id}, url: '/api/v1/admin/resumes', onSuccess: () => location.reload() })|">
-                            삭제
-                        </button>
+            <div class="table-wrapper">
+                <table class="table">
+                    <colgroup>
+                        <col style="width: 25px;"/>  <!-- 체크박스 -->
+                        <col style="width: 50px;"/>  <!-- 회원 번호 -->
+                        <col style="width: 120px;"/>  <!-- 제목 -->
+                        <col style="width: 120px;"/> <!-- 역량 키워드 -->
+                        <col style="width: 120px;"/>  <!-- 인재상 키워드 -->
+                        <col style="width: 50px;"/> <!-- 희망 직무 -->
+                        <col style="width: 130px;"/>  <!-- 작성자 -->
+                        <col style="width: 90px;"/>  <!-- 작성일 -->
+                        <col style="width: 130px;"/> <!-- 수정자 -->
+                        <col style="width: 90px;"/>  <!-- 수정일 -->
+<!--                        <col style="width: 40px;"/>  &lt;!&ndash; 평가 &ndash;&gt;-->
+<!--                        <col style="width: 40px;"/>  &lt;!&ndash; 삭제/복구 &ndash;&gt;-->
+                        <col style="width: 40px;"/>  <!-- 삭제/복구 -->
+                    </colgroup>
+                    <thead style="background-color: #f0f0f0;">
+                    <tr>
+                        <th><input type="checkbox" id="check-all"/></th>
+                        <th>이력서 번호</th>
+                        <th>제목</th>
+                        <th>역량 키워드</th>
+                        <th>인재상 키워드</th>
+                        <th>희망 직무</th>
+                        <th>작성자</th>
+                        <th>작성일</th>
+                        <th>수정자</th>
+                        <th>수정일</th>
+<!--                        <th>키워드</th>-->
+<!--                        <th>추출</th>-->
+                        <th>삭제</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="resume : ${resumes}">
+                        <td><input type="checkbox" name="checkedIds" th:value="${resume.id}" class="check-row"/>
+                        </td>
+                        <td th:text="${resume.formattedId}">이력서 번호</td>
+                        <td class="text-left-col">
+                            <a th:href="@{|/admin/board/resumes/${resume.id}|}"
+                               th:text="${resume.title}"
+                               th:attr="title=${resume.title}"
+                               class="link-detail">이력서 제목</a>
+                        </td>
+                        <td class="text-left-col" th:text="${resume.skillKeywords}">역량 키워드</td>
+                        <td class="text-left-col" th:text="${resume.traitKeywords}">인재상 키워드</td>
+                        <td class="text-left-col" th:text="${resume.desiredOccupation}">희망 직무</td>
+                        <td th:text="${resume.createdBy}">작성자</td>
+                        <td th:text="${#temporals.format(resume.createdAt, 'yyyy-MM-dd HH:mm:ss')}">작성일</td>
+                        <td th:text="${resume.updatedBy}">수정자</td>
+                        <td th:text="${#temporals.format(resume.updatedAt, 'yyyy-MM-dd HH:mm:ss')}">수정일</td>
+<!--                        <td th:text="${resume.keywordsStatus}">키워드 추출 상태</td>-->
+                        <!--<td>
+                            <<button type="button"
+                                    class="btn btn-extract"
+                                    th:onclick="|extractKeywords({ id: ${resume.id}, url: '/api/v1/admin/placeholder', onSuccess: () => location.reload() })|">
+                                추출
+                            </button>
+                        </td>-->
+                        <td>
+                            <button type="button"
+                                    class="btn btn-delete"
+                                    th:onclick="|deleteItem({ id: ${resume.id}, url: '/api/v1/admin/resumes/{id}', onSuccess: () => location.reload() })|">
+                                삭제
+                            </button>
 
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
 
             <!-- 페이지네이션 (예시) -->
             <div class="table-pagination" style="margin-top: 1.5rem; text-align: center;">

@@ -1,5 +1,6 @@
 package com.multi.matchingbot.admin.domain;
 
+import com.multi.matchingbot.admin.domain.enums.EndStatus;
 import lombok.Data;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,7 @@ public class AdminSearchCondition {
     private int size = 15;
     private String sortBy = "id";
     private String direction = "DESC";
+    private EndStatus endStatus = EndStatus.ALL;
 
     public Pageable toPageable() {
         Sort.Direction dir = "DESC".equalsIgnoreCase(direction)

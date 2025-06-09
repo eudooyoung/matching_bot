@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8"/>
+    <title>채용 공고 관리</title>
+    <link rel="stylesheet" th:href="@{/css/layout.css}"/>
+    <link rel="stylesheet" th:href="@{/css/admin/boards.css}"/>
+</head>
+<body>
+
+<div class="wrapper">
+    <div th:replace="~{fragments/header :: header(role=${role})}"></div>
+
+    <main class="main-content">
+        <section style="padding: 2rem;">
+            <h2 style="margin-bottom: 1.5rem;">채용 공고 관리</h2>
+
+            <div class="search-bar-wrapper">
+                <div class="bulk-actions">
+                    <button type="button" class="btn btn-delete"
+                            onclick="bulkHardDelete('/api/v1/admin/bulk/jobs')">삭제
+                    </button>
+                </div>
+
+                <form method="get" th:action="@{/admin/board/jobs}" class="search-form">
+                    <div class="search-options">
+                        <select name="sortBy" onchange="this.form.submit()">
+                            <option value="" disabled>정렬 기준</option>
+                            <option value="id" th:selected="${condition.sortBy == 'id'}">공고 번호</option>
+                            <option value="createdAt" th:selected="${condition.sortBy == 'createdAt'}">생성일</option>
+                            <option value="endDate" th:selected="${condition.sortBy == 'endDate'}">마감일</option>
+                        </select>
+
+                        <select name="direction" onchange="this.form.submit()">
+                            <option value="" disabled>정렬 순서</option>
+                            <option value="DESC" th:selected="${condition.direction == 'DESC'}">내림차순</option>
+                            <option value="ASC" th:selected="${condition.direction == 'ASC'}">오름차순</option>
+                        </select>
+
+                        <select name="endStatus" onchange="this.form.submit()">
+                            <option value="" disabled>진행 상태</option>
+                            <option value="ALL" th:selected="${condition.endStatus?.name() == 'ALL'}">전체</option>
+                            <option value="OPEN" th:selected="${condition.endStatus?.name() == 'OPEN'}">진행중</option>
+                            <option value="EXPIRED" th:selected="${condition.endStatus?.name() == 'EXPIRED'}">마감됨
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="search-right" onchange="this.form.submit()">
+                        <input type="text" name="keyword" placeholder="공고 번호, 제목, 기업명 검색"
+                               th:value="${condition.keyword}"/>
+                        <button type="submit" class="btn btn-search">검색</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 테이블 -->
+            <div class="table-wrapper">
+                <table class="table">
+                    <colgroup>
+                        <col style="width: 20px;"/>
+                        <col style="width: 35px;"/>
+                        <col style="width: 100px;"/>
+                        <col style="width: 80px;"/>
+                        <col style="width: 50px;"/>
+                        <!--                        <col style="width: 100px;"/>-->
+                        <!--                        <col style="width: 120px;"/>-->
+                        <!--                        <col style="width: 100px;"/>-->
+                        <!--                        <col style="width: 140px;"/>-->
+                        <col style="width: 130px;"/>
+                        <col style="width: 45px;"/>
+                        <col style="width: 110px;"/>
+                        <col style="width: 80px;"/>
+                        <col style="width: 110px;"/>
+                        <col style="width: 30px;"/>
+                    </colgroup>
+                    <thead style="background-color: #f0f0f0;">
+                    <tr>
+                        <th><input type="checkbox" id="check-all"/></th>
+                        <th>공고 번호</th>
+                        <th>제목</th>
+                        <th>기업명</th>
+                        <th>직무</th>
+                        <th>근무지</th>
+                        <!--                        <th>역량 키워드</th>-->
+                        <!--                        <th>인재상 키워드</th>-->
+                        <!--                        <th>지원문의</th>-->
+                        <!--                        <th>시작일</th>-->
+                        <th>마감일</th>
+                        <th>작성자</th>
+                        <th>생성일</th>
+                        <th>수정자</th>
+                        <th>삭제</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="job : ${jobs}">
+                        <td><input type="checkbox" name="checkedIds" th:value="${job.id}" class="check-row"/></td>
+                        <td th:text="${job.formattedId}">공고 번호</td>
+                        <td class="text-left-col">
+                            <a th:href="@{|/admin/board/jobs/${job.id}|}"
+                               th:text="${job.title}" class="link-detail">제목</a>
+                        </td>
+                        <td class="text-left-col" th:text="${job.companyName}">기업명</td>
+                        <td class="text-left-col" th:text="${job.occupationName}">직무</td>
+                        <td class="text-left-col" th:text="${job.address}">근무지</td>
+                        <!--                        <td class="text-left-col" th:text="${job.skillKeywords}">역량</td>-->
+                        <!--                        <td class="text-left-col" th:text="${job.traitKeywords}">인재상</td>-->
+                        <!--                        <td th:text="${job.enrollEmail}">support@example.com</td>-->
+                        <!--                        <td th:text="${#temporals.format(job.startDate, 'yyyy-MM-dd')}">시작일</td>-->
+                        <td th:text="${#temporals.format(job.endDate, 'yyyy-MM-dd')}">마감일</td>
+                        <td th:text="${job.createdBy}">작성자</td>
+                        <td th:text="${#temporals.format(job.createdAt, 'yyyy-MM-dd HH:mm:ss')}">생성일</td>
+                        <td th:text="${job.updatedBy}">수정자</td>
+                        <td>
+                            <button type="button"
+                                    class="btn btn-delete"
+                                    th:onclick="|deleteItem({ id: ${job.id}, url: '/api/v1/admin/jobs', onSuccess: () => location.reload() })|">
+                                삭제
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-pagination" style="margin-top: 1.5rem; text-align: center;">
+                <a th:if="${page.hasPrevious()}" th:href="@{/admin/board/jobs(page=${currentPage - 1})}">이전</a>
+                <span th:unless="${page.hasPrevious()}" style="visibility: hidden;">이전</span>
+
+                <span th:each="pageNum : ${pageNumbers}" style="margin: 0 5px;">
+                    <a th:href="@{/admin/board/jobs(page=${pageNum})}"
+                       th:text="${pageNum + 1}"
+                       th:classappend="${pageNum == currentPage} ? 'active-page' : ''"></a>
+                </span>
+
+                <a th:if="${page.hasNext()}" th:href="@{/admin/board/jobs(page=${currentPage + 1})}">다음</a>
+                <span th:unless="${page.hasNext()}" style="visibility: hidden;">다음</span>
+            </div>
+        </section>
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</div>
+
+<script th:src="@{/js/auth/fetchWithAuth.js}"></script>
+<script th:src="@{/js/dropdown.js}"></script>
+<script th:src="@{/js/logout.js}"></script>
+<script th:src="@{/js/admin/hardDeleteItem.js}"></script>
+<script th:src="@{/js/admin/bulkHardDelete.js}"></script>
+</body>
+</html>

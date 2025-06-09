@@ -109,6 +109,21 @@
     font-size: 14px;
 }
 
+.table-wrapper {
+    overflow-x: auto; /* ✅ 작아지면 좌우 스크롤 허용 */
+}
+
+/*.table {
+    table-layout: fixed;
+    width: 90%;
+    max-width: 100%; !* ✅ 브라우저 너비 초과 방지 *!
+    margin: 1rem auto;
+    border-collapse: collapse;
+    background-color: white;
+    text-align: center;
+    font-size: 14px;
+}*/
+
 .table th,
 .table td {
     border: 1px solid #ddd;
