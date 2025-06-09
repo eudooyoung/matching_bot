@@ -38,6 +38,24 @@
         .section p {
             margin: 0;
         }
+
+        .star-button {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: gold;
+            cursor: pointer;
+            padding: 0;
+            transition: transform 0.2s;
+        }
+
+        .star-button:hover {
+            transform: scale(1.1);
+        }
+
+        .star-button.filled {
+            color: #FFD700;
+        }
     </style>
 </head>
 <body>
@@ -88,7 +106,16 @@
     </div>
 
     <div class="job-box">
-        <div class="job-title" th:text="${job.title}">채용 제목</div>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+            <div class="job-title" th:text="${job.title}">채용 제목</div>
+            <button class="star-button"
+                    th:if="${role == 'MEMBER'}"
+                    th:data-job-id="${job.id}"
+                    th:text="${isJobBookmarked != null and isJobBookmarked} ? '★' : '☆'"
+                    th:classappend="${isJobBookmarked != null and isJobBookmarked} ? ' filled' : ''"
+                    onclick="toggleJobStar(this)"
+                    style="background: none; border: none; font-size: 24px; color: gold; cursor: pointer; padding: 0;">☆</button>
+        </div>
 
         <div class="section">
             <h4>설명</h4>
@@ -233,6 +260,33 @@
             document.getElementById("similarity-score").textContent = " | 유사도 계산 실패";
         }
     });
+
+    // 채용공고 북마크 토글 함수
+    function toggleJobStar(button) {
+        const jobId = button.getAttribute('data-job-id');
+
+        fetch('/job/api/job-bookmark/toggle', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `jobId=${jobId}`
+        })
+            .then(response => response.text())
+            .then(result => {
+                if (result === 'added') {
+                    button.textContent = '★';
+                    button.classList.add('filled');
+                } else {
+                    button.textContent = '☆';
+                    button.classList.remove('filled');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('북마크 처리 중 오류가 발생했습니다.');
+            });
+    }
 </script>
 
 
