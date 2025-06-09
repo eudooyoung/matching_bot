@@ -6,6 +6,7 @@ import com.multi.matchingbot.company.domain.CompanyUpdateDto;
 import com.multi.matchingbot.member.service.CompanyBookmarkService;
 import com.multi.matchingbot.member.domain.dto.MemberUpdateDto;
 import com.multi.matchingbot.member.domain.entity.Member;
+import com.multi.matchingbot.member.service.CompanyBookmarkService;
 import com.multi.matchingbot.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

@@ -29,6 +29,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -147,28 +148,22 @@ public class JobController {
                                @AuthenticationPrincipal MBotUserDetails userDetails) {
 
         String role = null;
-        Resume resume = null;
+        List<Resume> resumes = Collections.emptyList(); // 기본값
+
         if (userDetails != null) {
             role = userDetails.getRole().name();
 
-            // 이력서 조회
-            List<Resume> resumes = resumeService.findByMemberId(userDetails.getMemberId());
-            if (!resumes.isEmpty()) {
-                resume = resumes.get(0); // 첫 번째 이력서 사용
-            }
-
-            model.addAttribute("resume", resume); // ✅ 비회원이면 이 값은 안 들어감
+            resumes = resumeService.findByMemberId(userDetails.getMemberId());
+            model.addAttribute("resumes", resumes);
         }
         Job job = jobService.findById(id);
         Long postingCompanyId = job.getCompany().getId();
 
         model.addAttribute("job", job);
-        model.addAttribute("resume", resume);
         model.addAttribute("role", role);
         model.addAttribute("companyId", postingCompanyId);
 
         return "job/job-detail";
-
     }
 
     // 관심 이력서 관리(id 포함)

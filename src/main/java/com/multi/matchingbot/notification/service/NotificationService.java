@@ -3,6 +3,7 @@ package com.multi.matchingbot.notification.service;
 import com.multi.matchingbot.job.domain.entity.Job;
 import com.multi.matchingbot.job.repository.JobRepository;
 import com.multi.matchingbot.member.domain.entity.CompanyBookmark;
+import com.multi.matchingbot.member.domain.entity.Member;
 import com.multi.matchingbot.member.repository.CompanyBookmarkRepository;
 import com.multi.matchingbot.notification.domain.dto.NotificationDto;
 import com.multi.matchingbot.notification.domain.entity.Notification;
@@ -121,5 +122,17 @@ public class NotificationService {
                         .content(entity.getContent())
                         .status(entity.getStatus())
                         .build());
+    }
+
+    // 이력서 열람 알림
+    @Transactional
+    public void sendResumeViewedNotification(Long memberId, String companyName, String resumeTitle) {
+        Notification notification = Notification.builder()
+                .member(Member.builder().id(memberId).build())
+                .title("이력서 열람 알림")
+                .content("[" + companyName + "]에서 '" + resumeTitle + "' 이력서를 열람했습니다.")
+                .status(NotificationStatus.UNREAD)
+                .build();
+        notificationRepository.save(notification);
     }
 }

@@ -4,6 +4,10 @@ import com.multi.matchingbot.common.security.MBotUserDetails;
 import com.multi.matchingbot.resume.domain.dto.ResumeDto;
 import com.multi.matchingbot.resume.domain.entity.Resume;
 import com.multi.matchingbot.resume.service.ResumeService;
+import com.multi.matchingbot.member.domain.dto.ResumeDto;
+import com.multi.matchingbot.member.domain.entity.Resume;
+import com.multi.matchingbot.member.service.ResumeService;
+import com.multi.matchingbot.notification.service.NotificationService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +32,7 @@ import java.util.List;
 public class CompanyResumeController {
 
     private final ResumeService resumeService;
+    private final NotificationService notificationService;
 
     @GetMapping
     public String resumeList(@RequestParam(name = "page", defaultValue = "1") int page,
@@ -61,7 +66,8 @@ public class CompanyResumeController {
     @GetMapping("/{id}")
     public String resumeDetail(@PathVariable("id") Long id,
                                Model model,
-                               @AuthenticationPrincipal Object user) {
+                               @AuthenticationPrincipal Object user,
+                               @AuthenticationPrincipal MBotUserDetails userDetails) {
         log.info("📄 resumeDetail() 호출됨 - 이력서 ID: {}", id);
 
         try {
@@ -69,7 +75,21 @@ public class CompanyResumeController {
             ResumeDto resumeDto = ResumeDto.fromEntity(resume); // 또는 직접 toDto 작성
             model.addAttribute("resume", resumeDto);
 
-            return "member/resume-view"; // ✅ templates/resume/detail.html 존재해야 함
+            // 이력서 열람 알림 생성
+            Long resumeOwnerId = resume.getMember().getId(); // 이력서 주인
+            String companyName = userDetails.getCompanyName(); // 로그인한 기업 이름
+            notificationService.sendResumeViewedNotification(resumeOwnerId, companyName, resume.getTitle());
+            // ✅ templates/resume/detail.html 존재해야 함
+            // ✅ role 전달
+            if (user instanceof MBotUserDetails details) {
+                log.info("현재 사용자 ROLE: {}", details.getRole());
+                model.addAttribute("role", details.getRole().name());
+            } else {
+                model.addAttribute("role", null);
+            }
+
+            return "member/resume-view";
+
         } catch (EntityNotFoundException e) {
             log.warn("❌ 해당 이력서를 찾을 수 없음 - ID: {}", id);
             return "error/404"; // 또는 사용자 정의 에러 페이지

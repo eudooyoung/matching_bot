@@ -23,6 +23,7 @@ public class CompanyController {
     @Autowired
     private final CompanyService companyService;
     private final JobService jobService;
+
     @Autowired
     private AttachedItemService attachedItemService;
 

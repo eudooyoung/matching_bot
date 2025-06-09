@@ -1,5 +1,6 @@
 package com.multi.matchingbot.notification.controller;
 
+import com.multi.matchingbot.common.domain.enums.Role;
 import com.multi.matchingbot.common.security.MBotUserDetails;
 import com.multi.matchingbot.notification.domain.dto.NotificationDto;
 import com.multi.matchingbot.notification.domain.entity.Notification;
@@ -65,5 +66,12 @@ public class NotificationController {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
         return notificationService.getPagedReadNotifications(userDetails.getId(), pageable);
+    }
+
+    @GetMapping("/has-unread")
+    @ResponseBody
+    public boolean hasUnread(@AuthenticationPrincipal MBotUserDetails userDetails) {
+        if (userDetails == null || userDetails.getRole() != Role.MEMBER) return false;
+        return notificationService.hasUnread(userDetails.getId());
     }
 }

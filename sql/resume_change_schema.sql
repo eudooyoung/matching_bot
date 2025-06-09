@@ -23,6 +23,9 @@ DROP TABLE IF EXISTS `member`;
 DROP TABLE IF EXISTS `region`;
 DROP TABLE IF EXISTS `refresh_token`;
 DROP TABLE IF EXISTS `resume_view_log`;
+DROP TABLE IF EXISTS `community_category`;
+DROP TABLE IF EXISTS `community_post`;
+DROP TABLE IF EXISTS `community_comment`;
 -- 3. 외래키 제약 조건 다시 활성화
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -315,6 +318,44 @@ CREATE TABLE region (
     region_type_name VARCHAR(15) NOT NULL COMMENT '시/도 명'
 );
 
+CREATE TABLE community_category (
+                                    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                                    name VARCHAR(50) NOT NULL
+);
+
+-- 2. 게시글 테이블 (개인 or 기업 작성 가능)
+CREATE TABLE community_post (
+                                id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                                category_id BIGINT NOT NULL,
+                                member_id BIGINT,
+                                company_id BIGINT,
+                                title VARCHAR(200) NOT NULL,
+                                content TEXT NOT NULL,
+                                views INT NOT NULL DEFAULT 0,
+                                created_by VARCHAR(50) NOT NULL,
+                                created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                updated_by VARCHAR(50),
+                                updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
+                                CONSTRAINT fk_post_category FOREIGN KEY (category_id) REFERENCES community_category(id),
+                                CONSTRAINT fk_post_member FOREIGN KEY (member_id) REFERENCES member(id),
+                                CONSTRAINT fk_post_company FOREIGN KEY (company_id) REFERENCES company(id)
+);
+
+-- 3. 댓글 테이블 (개인 or 기업 작성 가능)
+CREATE TABLE community_comment (
+                                   id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                                   post_id BIGINT NOT NULL,
+                                   member_id BIGINT,
+                                   company_id BIGINT,
+                                   content VARCHAR(500) NOT NULL,
+                                   created_by VARCHAR(50) NOT NULL,
+                                   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                   updated_by VARCHAR(50),
+                                   updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
+                                   CONSTRAINT fk_comment_post FOREIGN KEY (post_id) REFERENCES community_post(id),
+                                   CONSTRAINT fk_comment_member FOREIGN KEY (member_id) REFERENCES member(id),
+                                   CONSTRAINT fk_comment_company FOREIGN KEY (company_id) REFERENCES company(id)
+);
 
 commit;
 show tables;
