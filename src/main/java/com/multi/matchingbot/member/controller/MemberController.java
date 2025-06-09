@@ -18,6 +18,7 @@ import com.multi.matchingbot.admin.mapper.MemberAdminMapper;
 import com.multi.matchingbot.common.security.MBotUserDetails;
 import com.multi.matchingbot.company.domain.CompanyUpdateDto;
 import com.multi.matchingbot.job.domain.dto.JobDto;
+import com.multi.matchingbot.member.domain.dto.MemberProfileUpdateDto;
 import com.multi.matchingbot.member.domain.dto.MemberUpdateDto;
 import com.multi.matchingbot.member.domain.entity.Member;
 import com.multi.matchingbot.member.service.CompanyBookmarkService;
@@ -58,6 +59,15 @@ public class MemberController {
         return "member/edit-profile";
     }
 
+    // 프로필 편집 페이지 (새 경로)
+    @GetMapping("/profile_edit")
+    public String profileEditForm(Model model, @AuthenticationPrincipal MBotUserDetails userDetails) {
+        Long memberId = userDetails.getMemberId();
+        Member member = memberService.findById(memberId);
+        model.addAttribute("member", member);
+        return "member/profile-edit";
+    }
+
     // 개인정보 수정 처리
     @PostMapping("/edit-profile")
     public String updateProfile(@RequestParam("phone1") String phone1,
@@ -74,6 +84,21 @@ public class MemberController {
         }
 
         memberService.update(memberDto, userDetails.getMemberId());
+        return "redirect:/member/mypage";
+    }
+
+    // 프로필 편집 처리 (새 경로)
+    @PostMapping("/profile_edit")
+    public String updateMemberProfile(@ModelAttribute MemberProfileUpdateDto updateDto,
+                                      BindingResult bindingResult,
+                                      @AuthenticationPrincipal MBotUserDetails userDetails) {
+
+        if (bindingResult.hasErrors()) {
+            return "member/profile-edit";
+        }
+
+        updateDto.setId(userDetails.getMemberId());
+        memberService.updateProfile(updateDto, userDetails.getMemberId());
         return "redirect:/member/mypage";
     }
 
