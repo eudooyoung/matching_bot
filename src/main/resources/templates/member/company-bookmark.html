@@ -13,39 +13,10 @@
       color: gold; /* ★ 색상 */
       cursor: pointer;
       padding: 0;
-      transition: transform 0.2s ease;
     }
 
     .bookmark-button:hover {
-      transform: scale(1.2);
-    }
-
-    .bookmark-button.bookmarked {
-      color: #FFD700; /* 진한 금색 */
-      text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
-    }
-
-    .bookmark-button.not-bookmarked {
-      color: #DDD; /* 회색 */
-    }
-
-    .company-name {
-      font-weight: bold;
-      color: #333;
-    }
-
-    .detail-button {
-      background-color: #007bff;
-      color: white;
-      border: none;
-      padding: 5px 10px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 12px;
-    }
-
-    .detail-button:hover {
-      background-color: #0056b3;
+      transform: scale(1.1);
     }
   </style>
 </head>
@@ -58,7 +29,7 @@
 
   <button class="delete-button"
           th:attr="data-member-id=${memberId}"
-          onclick="deleteSelected()">선택 삭제</button>
+          onclick="deleteSelected()">삭제</button>
 
   <table class="company-table">
     <thead>
@@ -66,8 +37,6 @@
       <th><input type="checkbox" onclick="toggleAll(this)"/></th>
       <th style="width: 10%;">번호</th>
       <th>기업 이름</th>
-      <th>연락처</th>
-      <th>이메일</th>
       <th>상세보기</th>
       <th>즐겨찾기</th>
     </tr>
@@ -78,17 +47,12 @@
         <input type="checkbox" name="companyIds" th:value="${company.id}"/>
       </td>
       <td th:text="${iterStat.index + 1}"></td>
-      <td class="company-name" th:text="${company.name}">기업 이름</td>
-      <td th:text="${company.phone}">연락처</td>
-      <td th:text="${company.email}">이메일</td>
+      <td th:text="${company.name}">기업 이름</td>
+      <td th:onclick="">상세보기</td>
       <td>
-        <button class="detail-button" th:onclick="'showCompanyDetail(' + ${company.id} + ')'">상세보기</button>
-      </td>
-      <td>
-        <button class="bookmark-button bookmarked"
-                th:attr="data-company-id=${company.id}"
-                onclick="toggleBookmark(this)"
-                title="북마크 해제">★
+        <button class="bookmark-button"
+                th:data-company-id="${company.id}"
+                onclick="deleteBookmark(this)">★
         </button>
       </td>
     </tr>

@@ -1,20 +1,26 @@
 package com.multi.matchingbot.member.controller;
 
-import com.multi.matchingbot.admin.mapper.MemberAdminMapper;
-import com.multi.matchingbot.common.security.MBotUserDetails;
-import com.multi.matchingbot.company.domain.CompanyUpdateDto;
-import com.multi.matchingbot.member.service.CompanyBookmarkService;
-import com.multi.matchingbot.member.domain.dto.MemberUpdateDto;
-import com.multi.matchingbot.member.domain.entity.Member;
-import com.multi.matchingbot.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.multi.matchingbot.admin.mapper.MemberAdminMapper;
+import com.multi.matchingbot.common.security.MBotUserDetails;
+import com.multi.matchingbot.company.domain.CompanyUpdateDto;
+import com.multi.matchingbot.member.domain.dto.MemberUpdateDto;
+import com.multi.matchingbot.member.domain.entity.Member;
+import com.multi.matchingbot.member.service.CompanyBookmarkService;
+import com.multi.matchingbot.member.service.MemberService;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -78,5 +84,25 @@ public class MemberController {
         model.addAttribute("companyPage", companyPage);
 
         return "member/company-bookmark";
+    }
+
+    // 개별 기업 북마크 삭제 API
+    @DeleteMapping("/api/member/company-bookmark/{companyId}")
+    @ResponseBody
+    public ResponseEntity<Void> deleteCompanyBookmark(@PathVariable Long companyId,
+                                                      @AuthenticationPrincipal MBotUserDetails userDetails) {
+        Long memberId = userDetails.getMemberId();
+        companyBookmarkService.deleteCompanyBookmark(memberId, companyId);
+        return ResponseEntity.ok().build();
+    }
+
+    // 복수 기업 북마크 삭제 API
+    @PostMapping("/api/member/company-bookmark/delete")
+    @ResponseBody
+    public ResponseEntity<Void> deleteCompanyBookmarks(@RequestBody java.util.List<Long> companyIds,
+                                                       @AuthenticationPrincipal MBotUserDetails userDetails) {
+        Long memberId = userDetails.getMemberId();
+        companyBookmarkService.deleteCompanyBookmarks(memberId, companyIds);
+        return ResponseEntity.ok().build();
     }
 }

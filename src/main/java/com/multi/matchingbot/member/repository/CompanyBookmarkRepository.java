@@ -1,11 +1,11 @@
 package com.multi.matchingbot.member.repository;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -24,9 +24,11 @@ public interface CompanyBookmarkRepository extends JpaRepository<CompanyBookmark
             "WHERE cb.member.id = :memberId")
     Page<CompanyUpdateDto> findCompanyUpdateDtosByMemberId(@Param("memberId") Long memberId, Pageable pageable);
 
-    // memberId와 companyId로 북마크 존재 여부 확인
-    boolean existsByMemberIdAndCompanyId(Long memberId, Long companyId);
+    @Modifying
+    @Query("DELETE FROM CompanyBookmark cb WHERE cb.member.id = :memberId AND cb.company.id = :companyId")
+    void deleteByMemberIdAndCompanyId(@Param("memberId") Long memberId, @Param("companyId") Long companyId);
 
-    // memberId와 companyId로 북마크 조회
-    Optional<CompanyBookmark> findByMemberIdAndCompanyId(Long memberId, Long companyId);
+    @Modifying
+    @Query("DELETE FROM CompanyBookmark cb WHERE cb.member.id = :memberId AND cb.company.id IN :companyIds")
+    void deleteByMemberIdAndCompanyIdIn(@Param("memberId") Long memberId, @Param("companyIds") List<Long> companyIds);
 }
