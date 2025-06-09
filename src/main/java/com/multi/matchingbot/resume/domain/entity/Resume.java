@@ -1,8 +1,12 @@
-package com.multi.matchingbot.member.domain.entity;
+package com.multi.matchingbot.resume.domain.entity;
 
+import com.multi.matchingbot.career.domain.Career;
 import com.multi.matchingbot.common.domain.entity.BaseEntity;
 import com.multi.matchingbot.common.domain.enums.Yn;
 import com.multi.matchingbot.job.domain.entity.Occupation;
+import com.multi.matchingbot.member.domain.entity.Member;
+import com.multi.matchingbot.career.domain.CareerType;
+import com.multi.matchingbot.resume.domain.dto.ResumeUpdateDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -41,10 +45,10 @@ public class Resume extends BaseEntity {
     @Column(nullable = false, length = 50)
     private String title;
 
-    @Column(name = "skill_answer", nullable = false, length = 255)
+    @Column(name = "skill_answer", nullable = false, columnDefinition = "TEXT")
     private String skillAnswer;
 
-    @Column(name = "trait_answer", nullable = false, length = 255)
+    @Column(name = "trait_answer", nullable = false, columnDefinition = "TEXT")
     private String traitAnswer;
 
     @Column(name = "skill_keywords", length = 100)
@@ -57,6 +61,10 @@ public class Resume extends BaseEntity {
     @Column(nullable = false, length = 1)
     @Builder.Default
     private Yn keywordsStatus = Yn.N;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private CareerType careerType;
 
     public void updateFrom(Resume updatedResume) {
         this.title = updatedResume.getTitle();
@@ -74,4 +82,15 @@ public class Resume extends BaseEntity {
             this.keywordsStatus = Yn.Y;
         }
     }
+
+    // Resume.java
+    public void updateBasicFields(ResumeUpdateDto dto) {
+        this.title = dto.getTitle();
+        this.careerType = dto.getCareerType();
+        this.skillAnswer = dto.getSkillAnswer();
+        this.traitAnswer = dto.getTraitAnswer();
+        this.skillKeywords = dto.getSkillKeywordsConcat();
+        this.traitKeywords = dto.getTraitKeywordsConcat();
+    }
+
 }

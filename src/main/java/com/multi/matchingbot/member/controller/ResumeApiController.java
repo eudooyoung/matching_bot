@@ -1,7 +1,8 @@
 package com.multi.matchingbot.member.controller;
 
-import com.multi.matchingbot.member.domain.entity.Resume;
-import com.multi.matchingbot.member.service.ResumeService;
+
+import com.multi.matchingbot.resume.domain.entity.Resume;
+import com.multi.matchingbot.resume.service.ResumeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

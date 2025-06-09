@@ -1,10 +1,10 @@
-package com.multi.matchingbot.member.mapper;
+package com.multi.matchingbot.resume.mapper;
 
 import com.multi.matchingbot.common.domain.enums.Yn;
 import com.multi.matchingbot.job.domain.entity.Occupation;
-import com.multi.matchingbot.member.domain.dto.ResumeDto;
+import com.multi.matchingbot.resume.domain.dto.ResumeDto;
 import com.multi.matchingbot.member.domain.entity.Member;
-import com.multi.matchingbot.member.domain.entity.Resume;
+import com.multi.matchingbot.resume.domain.entity.Resume;
 import org.springframework.stereotype.Component;
 
 @Component

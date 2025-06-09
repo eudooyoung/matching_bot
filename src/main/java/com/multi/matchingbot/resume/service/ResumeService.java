@@ -1,12 +1,12 @@
-package com.multi.matchingbot.member.service;
+package com.multi.matchingbot.resume.service;
 
 import com.multi.matchingbot.job.repository.ResumeBookmarkRepository;
-import com.multi.matchingbot.member.domain.dto.ResumeDto;
-import com.multi.matchingbot.member.domain.dto.ResumeViewLogDto;
-import com.multi.matchingbot.member.domain.entity.Resume;
+import com.multi.matchingbot.resume.domain.dto.ResumeDto;
+import com.multi.matchingbot.resume.domain.dto.ResumeViewLogDto;
 import com.multi.matchingbot.member.domain.entity.ResumeViewLog;
-import com.multi.matchingbot.member.repository.ResumeRepository;
-import com.multi.matchingbot.member.repository.ResumeViewLogRepository;
+import com.multi.matchingbot.resume.repository.ResumeRepository;
+import com.multi.matchingbot.resume.repository.ResumeViewLogRepository;
+import com.multi.matchingbot.resume.domain.entity.Resume;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -72,28 +72,6 @@ public class ResumeService {
                 .build();
     }
 
-    @Transactional
-    public void update(Long id, Resume updatedResume) {
-        Resume resume = resumeRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("이력서를 찾을 수 없습니다."));
-
-        resume.updateFrom(updatedResume); // 아래와 같이 정의 필요
-    }
-
-    /*public void updateResume(Long id, Resume updatedResume) {
-        Resume resume = findById(id);
-        resume.setTitle(updatedResume.getTitle());
-        resume.setSkillAnswer(updatedResume.getSkillAnswer());
-        resume.setTraitAnswer(updatedResume.getTraitAnswer());
-
-        // occupation 수정
-        if (updatedResume.getOccupation() != null) {
-            resume.setOccupation(updatedResume.getOccupation());
-        }
-
-        resumeRepository.save(resume);
-    }*/
-
     public List<ResumeViewLogDto> getResumeViewLogs(Long memberId) {
         List<ResumeViewLog> logs = resumeViewLogRepository.findByResume_Member_IdOrderByViewedAtDesc(memberId);
 
@@ -113,6 +91,8 @@ public class ResumeService {
     public List<Long> findBookmarkedResumeIdsByCompanyId(Long companyId) {
         return resumeBookmarkRepository.findResumeIdsByCompanyId(companyId);
     }
+
+
     public Page<ResumeDto> searchResumes(String jobGroup, String jobType, String jobRole, String careerType, String companyName, Pageable pageable) {
         return resumeRepository.searchWithFilters(jobGroup, jobType, jobRole, careerType, companyName, pageable)
                 .map(ResumeDto::fromEntity);
@@ -125,5 +105,6 @@ public class ResumeService {
 //                .map(ResumeDto::fromEntity)
 //                .collect(Collectors.toList());
 //        }
+
 
 }

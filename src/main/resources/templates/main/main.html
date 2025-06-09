@@ -132,14 +132,26 @@
 </div>
 
 <!-- ✅ 스크립트 -->
-<script>
+<script th:inline="javascript">
     window.onload = function () {
         const mapBtn = document.getElementById("openMapButton");
         if (mapBtn) {
             mapBtn.addEventListener("click", function () {
+                const role = /*[[${role}]]*/ "GUEST"; // Thymeleaf로 로그인 여부 전달
+                console.log(role);
+
+                if (!role || role === "GUEST") {
+                    const goLogin = confirm("해당 기능은 로그인 후 이용 가능합니다.\n지금 로그인하시겠습니까?");
+                    if (goLogin) {
+                        window.location.href = "/auth/login"; // 로그인 페이지 경로
+                    }
+                    return;
+                }
+
                 window.open('/map_popup', 'mapPopup', 'width=800,height=600');
             });
         }
+
 
         const searchInput = document.getElementById("search-input");
         const filterSection = document.getElementById("search-filters");
