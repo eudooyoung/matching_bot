@@ -19,22 +19,22 @@
                 <!-- 기본 정보 -->
                 <div class="section">
                     <h4>기본 정보</h4>
-                    <div class="info-line">
+                    <!--<div class="info-line">
                         <span class="info-label">이름:</span>
                         <span th:text="${resume.member.name}">홍길동</span>
-                    </div>
+                    </div>-->
                     <div class="info-line">
                         <span class="info-label">생년월일:</span>
                         <span th:text="${#temporals.format(resume.member.birth, 'yyyy-MM-dd')}">1995-03-01</span>
                     </div>
-                    <div class="info-line">
+                   <!-- <div class="info-line">
                         <span class="info-label">성별:</span>
                         <span th:text="${resume.member.getGenderLabel()}">남성</span>
-                    </div>
-                    <div class="info-line">
+                    </div>-->
+                   <!-- <div class="info-line">
                         <span class="info-label">주소:</span>
                         <span th:text="${resume.member.address}">서울시 마포구</span>
-                    </div>
+                    </div>-->
                     <div class="info-line">
                         <span class="info-label">이메일:</span>
                         <span th:text="${resume.member.email}">test@example.com</span>
