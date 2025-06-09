@@ -106,7 +106,7 @@ public class MemberController {
     // 개별 기업 북마크 삭제 API
     @DeleteMapping("/api/member/company-bookmark/{companyId}")
     @ResponseBody
-    public ResponseEntity<Void> deleteCompanyBookmark(@PathVariable Long companyId,
+    public ResponseEntity<Void> deleteCompanyBookmark(@PathVariable("companyId") Long companyId,
                                                       @AuthenticationPrincipal MBotUserDetails userDetails) {
         Long memberId = userDetails.getMemberId();
         companyBookmarkService.deleteCompanyBookmark(memberId, companyId);
@@ -126,20 +126,20 @@ public class MemberController {
     // 개별 채용공고 북마크 삭제 API
     @DeleteMapping("/api/member/job-bookmark/{jobId}")
     @ResponseBody
-    public ResponseEntity<Void> deleteJobBookmark(@PathVariable Long jobId,
-                                                  @AuthenticationPrincipal MBotUserDetails userDetails) {
+    public ResponseEntity<String> deleteJobBookmark(@PathVariable("jobId") Long jobId,
+                                                    @AuthenticationPrincipal MBotUserDetails userDetails) {
         Long memberId = userDetails.getMemberId();
         jobBookmarkService.removeJobBookmark(memberId, jobId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("삭제되었습니다.");
     }
 
     // 복수 채용공고 북마크 삭제 API
     @PostMapping("/api/member/job-bookmark/delete")
     @ResponseBody
-    public ResponseEntity<Void> deleteJobBookmarks(@RequestBody java.util.List<Long> jobIds,
-                                                   @AuthenticationPrincipal MBotUserDetails userDetails) {
+    public ResponseEntity<String> deleteJobBookmarks(@RequestBody java.util.List<Long> jobIds,
+                                                     @AuthenticationPrincipal MBotUserDetails userDetails) {
         Long memberId = userDetails.getMemberId();
         jobBookmarkService.removeJobBookmarks(memberId, jobIds);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("삭제되었습니다.");
     }
 }

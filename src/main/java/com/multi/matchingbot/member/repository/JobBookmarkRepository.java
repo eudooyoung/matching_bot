@@ -17,7 +17,7 @@ public interface JobBookmarkRepository extends JpaRepository<JobBookmark, Long> 
 
     boolean existsByMemberIdAndJobId(Long memberId, Long jobId);
 
-    @Modifying
+    @Modifying(clearAutomatically = true)
     @Query("DELETE FROM JobBookmark jb WHERE jb.member.id = :memberId AND jb.job.id = :jobId")
     void deleteByMemberIdAndJobId(@Param("memberId") Long memberId, @Param("jobId") Long jobId);
 
