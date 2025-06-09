@@ -75,8 +75,8 @@ public class CompanyResumeController {
             // 이력서 열람 알림 생성
             Long resumeOwnerId = resume.getMember().getId(); // 이력서 주인
             String companyName = userDetails.getCompanyName(); // 로그인한 기업 이름
-            notificationService.sendResumeViewedNotification(resumeOwnerId, companyName, resume.getTitle());
-            // ✅ templates/resume/detail.html 존재해야 함
+            notificationService.sendResumeViewedNotification(resumeOwnerId, companyName, resume.getTitle(), resume.getId());
+
             // ✅ role 전달
             if (user instanceof MBotUserDetails details) {
                 log.info("현재 사용자 ROLE: {}", details.getRole());

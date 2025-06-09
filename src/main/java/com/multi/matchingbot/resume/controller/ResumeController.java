@@ -48,7 +48,7 @@ public class ResumeController {
         /*이력서 열람 알림용*/
         Long resumeOwnerId = resume.getMember().getId(); // 이력서 주인
         String companyName = userDetails.getCompanyName(); // 로그인한 기업 이름
-        notificationService.sendResumeViewedNotification(resumeOwnerId, companyName, resume.getTitle());
+        notificationService.sendResumeViewedNotification(resumeOwnerId, companyName, resume.getTitle(), resume.getId());
         return "resume/detail";
     }
 }

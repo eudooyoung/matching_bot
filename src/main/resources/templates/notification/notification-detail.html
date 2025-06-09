@@ -20,7 +20,7 @@
     <br>
     <div th:if="${notification.targetType != null and notification.targetId != null}">
         <a th:if="${notification.targetType.name() == 'RESUME'}"
-           th:href="@{/member/{id}(id=${notification.targetId})}"
+           th:href="@{/member/resume/{id}(id=${notification.targetId})}"
            class="menu-button">이력서 보러가기</a>
 
         <a th:if="${notification.targetType.name() == 'JOB'}"
