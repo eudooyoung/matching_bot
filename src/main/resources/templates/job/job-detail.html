@@ -51,8 +51,10 @@
          th:data-resume-skill="${resume.skillKeywords}">
     </div>-->
     <div id="similarity-data"
-         th:data-job-skill="${resume != null ? job.skillKeywords : '채용공고 기술 키워드 없음'}"
-         th:data-resume-skill="${resume != null ? resume.skillKeywords : '이력서 기술 키워드 없음'}">
+         th:data-job-skill="${job != null ? job.skillKeywords : '채용공고 기술 키워드 없음'}"
+         th:data-job-trait="${job != null ? job.traitKeywords : '채용공고 성향 키워드 없음'}"
+         data-resume-skill=""
+         data-resume-trait="">
     </div>
 
     <div style="display: flex; align-items: center; gap: 8px;">
@@ -62,7 +64,7 @@
             <div th:if="${role == 'MEMBER'}" style="margin-top: 10px;">
                 <label for="resumeSelect">이력서 선택:</label>
                 <select id="resumeSelect" name="resumeId">
-                    <option disabled selected>이력서를 선택하세요</option>
+                    <option value="" disabled selected>유사도를 적용할 이력서를 선택하세요</option>
                     <option th:each="resume : ${resumes}"
                             th:value="${resume.id}"
                             th:text="${resume.title}">이력서 제목</option>
@@ -173,68 +175,66 @@
     const userRole = /*[[${role != null ? role : "null"}]]*/ null;
     console.log("userRole:", userRole);
 </script>
-
 <script>
-    document.addEventListener("DOMContentLoaded", async () => {
-        if (userRole !== "MEMBER") {
-            console.log("유사도 계산은 일반 회원만 수행됩니다.");
-            return;
-        }
-        console.log("userRole:"+userRole);
+    document.addEventListener("DOMContentLoaded", () => {
+        if (userRole !== "MEMBER") return;
 
-        const el = document.getElementById("similarity-data");
-        const jobSkillRaw = el.dataset.jobSkill;
-        const resumeSkillRaw = el.dataset.resumeSkill;
         const resumeSelect = document.getElementById("resumeSelect");
-        const similarityScore = document.getElementById("similarity-score");
+        console.log("resumeSelect", resumeSelect);
 
-        if (!resumeSelect) {
-            console.warn("이력서 드롭다운 없음");
-            return;
-        }
-
-        console.log("jobSkillRaw", jobSkillRaw);
-        console.log("resumeSkillRaw",resumeSkillRaw);
-
-        // 로그인된 사용자에 resume가 없는 경우
-        if (!resumeSkillRaw || resumeSkillRaw.trim() === "") {
-            document.getElementById("similarity-score").textContent = " | 유사도: - (이력서 없음)";
-            return;
-        }
-
-        // 문자열 → 배열 변환
-        const jobSkills = jobSkillRaw.split(',').map(s => s.trim()).filter(Boolean);
-        const resumeSkills = resumeSkillRaw.split(',').map(s => s.trim()).filter(Boolean);
-
-        console.log("jobSkills:", jobSkills);
-        console.log("resumeSkills:", resumeSkills);
-
-        try {
-            const response = await fetch("http://localhost:8081/calculate-similarity", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    job_skill_keys: jobSkills,
-                    resume_skill_keys: resumeSkills
-                })
-            });
-
-            if (response.ok) {
-                const result = await response.json();
-                const percent = Math.round(result.similarity * 100);
-                document.getElementById("similarity-score").textContent = ` | 유사도: ${percent}%`;
-            } else {
-                document.getElementById("similarity-score").textContent = " | 유사도 불러오기 실패";
+        resumeSelect?.addEventListener("change", async () => {
+            const resumeId = resumeSelect.value;
+            console.log("resumeId", resumeId);
+            if (!resumeId) {
+                console.warn("⛔ resumeId가 비어 있음:", resumeId);
+                return;
             }
-        } catch (e) {
-            console.error("유사도 계산 오류:", e);
-            document.getElementById("similarity-score").textContent = " | 유사도 계산 실패";
-        }
+
+            try {
+                const jobSkillRaw = document.getElementById("similarity-data").dataset.jobSkill;
+                const jobTraitRaw = document.getElementById("similarity-data").dataset.jobTrait;
+                const response = await fetch(`/api/v1/resume/${resumeId}/keywords`);
+                const data = await response.json();
+
+                const container = document.getElementById("similarity-data");
+                container.dataset.resumeSkill = data.skillKeywords.join(',');
+                container.dataset.resumeTrait = data.traitKeywords.join(',');
+
+                const job_skill_keys = jobSkillRaw.split(',').map(s => s.trim()).filter(Boolean);
+                const job_trait_keys = jobTraitRaw.split(',').map(s => s.trim()).filter(Boolean);
+                const resume_skill_keys = data.skillKeywords;
+                const resume_trait_keys = data.traitKeywords;
+
+                console.log("job_skill_keys",job_skill_keys);
+                console.log("resume_skill_keys",resume_skill_keys);
+                console.log("job_trait_keys",job_trait_keys);
+                console.log("resume_trait_keys",resume_trait_keys);
+
+                const simResponse = await fetch("http://localhost:8081/calculate-similarity", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        job_skill_keys,
+                        resume_skill_keys,
+                        job_trait_keys,
+                        resume_trait_keys
+                    })
+                });
+
+                if (simResponse.ok) {
+                    const simResult = await simResponse.json();
+                    const percent = Math.round(simResult.similarity * 100);
+                    document.getElementById("similarity-score").textContent = ` | 유사도: ${percent}%`;
+                } else {
+                    document.getElementById("similarity-score").textContent = " | 유사도 불러오기 실패";
+                }
+            } catch (e) {
+                console.error("유사도 계산 오류:", e);
+                document.getElementById("similarity-score").textContent = " | 유사도 계산 실패";
+            }
+        });
     });
 </script>
-
 
 
 </body>

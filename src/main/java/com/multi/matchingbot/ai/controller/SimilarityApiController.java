@@ -1,4 +1,5 @@
-package com.multi.matchingbot.ai.resumeanalysis;
+/*
+package com.multi.matchingbot.ai.controller;
 
 import com.multi.matchingbot.common.security.MBotUserDetails;
 import com.multi.matchingbot.job.domain.entity.Job;
@@ -7,6 +8,7 @@ import com.multi.matchingbot.member.domain.entity.Resume;
 import com.multi.matchingbot.member.service.ResumeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,7 +18,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/job")
+@RequestMapping("/similarity")
 public class SimilarityApiController {
 
     private final JobService jobService;
@@ -25,6 +27,32 @@ public class SimilarityApiController {
     public SimilarityApiController(JobService jobService, ResumeService resumeService) {
         this.jobService = jobService;
         this.resumeService = resumeService;
+    }
+
+    @GetMapping("/job/{jobId}")
+    public String showJobDetail(@PathVariable Long jobId,
+                                @RequestParam(required = false) Long resumeId,
+                                @AuthenticationPrincipal MBotUserDetails userDetails,
+                                Model model) {
+        Job job = jobService.findById(jobId);
+        model.addAttribute("job", job);
+        model.addAttribute("role", userDetails.getRole());
+        model.addAttribute("companyId", job.getCompany().getId());
+
+        // 전체 이력서 목록
+        if (userDetails != null && userDetails.getRole().equals("MEMBER")) {
+            List<Resume> resumes = resumeService.findByMemberId(userDetails.getMemberId());
+            model.addAttribute("resumes", resumes);
+        }
+
+        // 선택된 resume가 있으면 그 resume도 model에 추가
+        if (resumeId != null) {
+            Resume selectedResume = resumeService.findById(resumeId);
+            model.addAttribute("resume", selectedResume);
+
+        }
+
+        return "job-detail";
     }
 
     @GetMapping("/job/{id}/similarity")
@@ -75,4 +103,4 @@ public class SimilarityApiController {
         }
 
     }
-}
+}*/
