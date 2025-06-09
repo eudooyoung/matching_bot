@@ -1,6 +1,6 @@
 package com.multi.matchingbot.admin.repository;
 
-import com.multi.matchingbot.common.domain.enums.Yn;
+import com.multi.matchingbot.career.domain.CareerType;
 import com.multi.matchingbot.resume.domain.entity.Resume;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,10 +19,13 @@ public interface ResumeAdminRepository extends JpaRepository<Resume, Long> {
                        r.title LIKE %:keyword% OR
                        r.createdBy LIKE %:keyword% OR
                        CAST(r.id AS string) LIKE %:keyword%)
-                AND (:status IS NULL OR r.keywordsStatus = :status)
+                       AND (:careerType IS NULL OR r.careerType = :careerType)
             """)
-    Page<Resume> searchWithCondition(@Param("keyword") String keyword, @Param("status") Yn status, Pageable pageable);
+    Page<Resume> searchWithCondition(@Param("keyword") String keyword, @Param("careerType") CareerType careerType, Pageable pageable);
 
     int countByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
 
 }
+
+
+// AND (:status IS NULL OR r.keywordsStatus = :status) 키워드 상태 추출용 쿼리

@@ -1,6 +1,7 @@
 package com.multi.matchingbot.admin.domain;
 
 import com.multi.matchingbot.admin.domain.enums.EndStatus;
+import com.multi.matchingbot.career.domain.CareerType;
 import lombok.Data;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -12,11 +13,15 @@ public class AdminSearchCondition {
     private String status;      // (가입) 상태
     private String reportStatus;    // 보고서 추출 상태
     private String keywordsStatus;  // 키워드 추출 상태
+    private CareerType careerType;  // 이력서 타입: 신입/경력
+    private EndStatus endStatus = EndStatus.ALL;  // 채용 공고 진행 상태
+    private Long categoryId; // 커뮤니티 카테고리 아이디
+
+
     private int page = 0;
     private int size = 15;
     private String sortBy = "id";
     private String direction = "DESC";
-    private EndStatus endStatus = EndStatus.ALL;
 
     public Pageable toPageable() {
         Sort.Direction dir = "DESC".equalsIgnoreCase(direction)

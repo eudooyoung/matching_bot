@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8"/>
+    <title>커뮤니티 게시글 관리</title>
+    <link rel="stylesheet" th:href="@{/css/layout.css}"/>
+    <link rel="stylesheet" th:href="@{/css/admin/boards.css}"/>
+</head>
+<body>
+
+<div class="wrapper">
+    <div th:replace="~{fragments/header :: header(role=${role})}"></div>
+
+    <main class="main-content">
+        <section style="padding: 2rem;">
+            <h2 style="margin-bottom: 1.5rem;">커뮤니티 게시글 관리</h2>
+
+            <!-- 검색 & 일괄 삭제 -->
+            <div class="search-bar-wrapper">
+                <div class="bulk-actions">
+                    <button type="button" class="btn btn-delete"
+                            onclick="bulkHardDelete('/api/v1/admin/bulk/community')">삭제
+                    </button>
+                </div>
+
+                <form method="get" th:action="@{/admin/board/community}" class="search-form">
+                    <div class="search-options">
+                        <select name="sortBy" onchange="this.form.submit()">
+                            <option value="" disabled>정렬 기준</option>
+                            <option value="id" th:selected="${condition.sortBy == 'id'}">게시글 번호</option>
+                            <option value="createdAt" th:selected="${condition.sortBy == 'createdAt'}">생성일</option>
+                        </select>
+
+                        <select name="direction" onchange="this.form.submit()">
+                            <option value="" disabled>정렬 순서</option>
+                            <option value="DESC" th:selected="${condition.direction == 'DESC'}">내림차순</option>
+                            <option value="ASC" th:selected="${condition.direction == 'ASC'}">오름차순</option>
+                        </select>
+
+
+                        <select name="categoryId" onchange="this.form.submit()">
+                            <option value="">전체 카테고리</option>
+                            <option th:each="c : ${categories}"
+                                    th:value="${c.id}"
+                                    th:text="${c.name}"
+                                    th:selected="${condition.categoryId == c.id}">
+                            </option>
+                        </select>
+
+                    </div>
+
+                    <div class="search-right">
+                        <input type="text" name="keyword" placeholder="제목, 작성자 검색"
+                               th:value="${condition.keyword}"/>
+                        <button type="submit" class="btn btn-search">검색</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 게시글 테이블 -->
+            <div class="table-wrapper">
+                <table class="table">
+                    <colgroup>
+                        <col style="width: 25px;"/>
+                        <col style="width: 40px;"/>
+                        <col style="width: 180px;"/>
+                        <col style="width: 50px;"/> <!--카테고리-->
+                        <col style="width: 60px;"/>
+                        <col style="width: 40px;"/>
+                        <col style="width: 40px;"/> <!--조회수-->
+                        <col style="width: 90px;"/>
+                        <col style="width: 130px;"/>
+                        <col style="width: 90px;"/>
+                        <col style="width: 30px;"/>
+                    </colgroup>
+                    <thead style="background-color: #f0f0f0;">
+                    <tr>
+                        <th><input type="checkbox" id="check-all"/></th>
+                        <th>번호</th>
+                        <th>제목</th>
+                        <th>카테고리</th>
+                        <th>작성자</th>
+                        <th>구분</th>
+                        <th>조회수</th>
+                        <th>생성일</th>
+                        <th>수정자</th>
+                        <th>수정일</th>
+                        <th>삭제</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="post : ${posts}">
+                        <td><input type="checkbox" name="checkedIds" th:value="${post.id}" class="check-row"/></td>
+                        <td th:text="${post.formattedId}">번호</td>
+                        <td class="text-left-col">
+                            <a th:href="@{|/admin/board/community/${post.id}|}"
+                               th:text="${post.title}"
+                               th:attr="title=${post.title}"
+                               class="link-detail">제목</a>
+                        </td>
+                        <td th:text="${post.categoryName}">카테고리</td>
+                        <td th:text="${post.writerName}">작성자</td>
+                        <td th:text="${post.writerType.name()}">구분</td>
+                        <td th:text="${post.views}">조회수</td>
+                        <td th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm:ss')}">작성일</td>
+                        <td th:text="${post.updatedBy}">수정자</td>
+                        <td th:text="${#temporals.format(post.updatedAt, 'yyyy-MM-dd HH:mm:ss')}">수정일</td>
+                        <td>
+                            <button type="button"
+                                    class="btn btn-delete"
+                                    th:onclick="|deleteItem({ id: ${post.id}, url: '/api/v1/admin/community/{id}', onSuccess: () => location.reload() })|">
+                                삭제
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 페이지네이션 -->
+            <div class="table-pagination" style="margin-top: 1.5rem; text-align: center;">
+                <a th:if="${page.hasPrevious()}" th:href="@{/admin/board/community(page=${currentPage - 1})}">이전</a>
+                <span th:unless="${page.hasPrevious()}" style="visibility: hidden;">이전</span>
+
+                <span th:each="pageNum : ${pageNumbers}" style="margin: 0 5px;">
+                    <a th:href="@{/admin/board/community(page=${pageNum})}"
+                       th:text="${pageNum + 1}"
+                       th:classappend="${pageNum == currentPage} ? 'active-page' : ''"></a>
+                </span>
+
+                <a th:if="${page.hasNext()}" th:href="@{/admin/board/community(page=${currentPage + 1})}">다음</a>
+                <span th:unless="${page.hasNext()}" style="visibility: hidden;">다음</span>
+            </div>
+        </section>
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</div>
+
+<script th:src="@{/js/auth/fetchWithAuth.js}"></script>
+<script th:src="@{/js/dropdown.js}"></script>
+<script th:src="@{/js/logout.js}"></script>
+<script th:src="@{/js/admin/hardDeleteItem.js}"></script>
+<script th:src="@{/js/admin/bulkHardDelete.js}"></script>
+</body>
+</html>
