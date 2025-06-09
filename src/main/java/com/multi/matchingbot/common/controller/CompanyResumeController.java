@@ -75,7 +75,7 @@ public class CompanyResumeController {
             // 이력서 열람 알림 생성
             Long resumeOwnerId = resume.getMember().getId(); // 이력서 주인
             String companyName = userDetails.getCompanyName(); // 로그인한 기업 이름
-            notificationService.sendResumeViewedNotification(resumeOwnerId, companyName, resume.getTitle());
+            notificationService.sendResumeViewedNotification(resumeOwnerId, companyName, resume.getTitle(), resume.getId());
 
             return "member/resume-view"; // ✅ templates/resume/detail.html 존재해야 함
         } catch (EntityNotFoundException e) {

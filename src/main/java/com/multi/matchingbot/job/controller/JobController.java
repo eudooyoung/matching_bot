@@ -103,7 +103,8 @@ public class JobController {
         notificationService.sendJobNotificationToBookmarkedMembers(
                 company.getId(),
                 company.getName(),
-                job.getTitle()
+                job.getTitle(),
+                job.getId()
         );
 
         return "redirect:/job/manage-jobs";
