@@ -35,10 +35,12 @@
                                 th:text="${job.title}">공고 제목
                         </option>
                     </select>
-                    <button class="help-icon-button">?</button>
-                    <div class="tooltip-box">
-                        기업의 채용공고를 선택해 현재 이력서와 키워드<br>
-                        매칭률을 계산하여 % 로 나타냅니다.
+                    <div class="help-icon-wrapper">
+                        <button class="help-icon-button">?</button>
+                        <div class="tooltip-box">
+                            기업의 채용공고를 선택해 현재 이력서와 키워드<br>
+                            매칭률을 계산하여 % 로 나타냅니다.
+                        </div>
                     </div>
                 </div>
 
@@ -163,6 +165,8 @@
 </div>
 <script type="module">
     import {initSimilarityFeature} from '/js/member/resume-similarity.js';
+
+
     console.log("들어오나")
 
     const userRole = /*[[${role != null ? role : "null"}]]*/ null;
@@ -170,5 +174,7 @@
     initSimilarityFeature();
 </script>
 <script th:src="@{/js/logout.js}"></script>
+<script th:src="@{/js/dropdown.js}"></script>
+
 </body>
 </html>

@@ -101,7 +101,7 @@ select[disabled] {
     padding: 12px;
     border: 1px solid #ddd;
     border-radius: 6px;
-    margin-bottom: 12px;
+    margin-bottom: 9px;
     background-color: #fafafa;
 }
 
@@ -202,6 +202,11 @@ select[disabled] {
 #email-group, #phone-group {
     flex: 1;
     min-width: 200px;
+}
+
+textarea[name^="careers"][name$="careerSummary"] {
+    min-height: 100px;
+    resize: vertical;
 }
 
 /* 에러 메시지 공통 */

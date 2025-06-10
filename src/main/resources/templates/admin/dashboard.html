@@ -3,53 +3,64 @@
 
     <h2 style="text-align: center">환영합니다, 관리자님</h2>
     <div class="dashboard-wrapper">
+
+        <div class="card-period-tabs chart-sync-tabs">
+            <button class="card-period-tab active" data-period="total">전체</button>
+            <button class="card-period-tab" data-period="today">오늘</button>
+            <button class="card-period-tab" data-period="week">이번 주</button>
+            <button class="card-period-tab" data-period="month">이번 달</button>
+        </div>
         <!-- ✅ 통계 카드 -->
         <section class="stats-grid">
-            <div class="card">
+            <a href="/admin/board/members" class="card clickable-card">
                 <h3>구직 회원 수</h3>
-                <p th:text="${contentStats.memberTotal}">0</p>
-                <ul class="card-sublist">
-                    <li>오늘: <span th:text="${contentStats.memberToday}">0</span></li>
-                    <li>이번 주: <span th:text="${contentStats.memberWeek}">0</span></li>
-                    <li>이번 달: <span th:text="${contentStats.memberMonth}">0</span></li>
+                <ul class="card-sublist" data-role="total">
+                    <li data-period="total">전체: <span th:text="${contentStats.memberTotal}">0</span></li>
+                    <li data-period="today">오늘: <span th:text="${contentStats.memberToday}">0</span></li>
+                    <li data-period="week">이번 주: <span th:text="${contentStats.memberWeek}">0</span></li>
+                    <li data-period="month">이번 달: <span th:text="${contentStats.memberMonth}">0</span></li>
                 </ul>
-            </div>
-            <div class="card">
+            </a>
+
+            <a href="/admin/board/companies" class="card clickable-card">
                 <h3>기업 회원 수</h3>
-                <p th:text="${contentStats.companyTotal}">0</p>
-                <ul class="card-sublist">
-                    <li>오늘: <span th:text="${contentStats.companyToday}">0</span></li>
-                    <li>이번 주: <span th:text="${contentStats.companyWeek}">0</span></li>
-                    <li>이번 달: <span th:text="${contentStats.companyMonth}">0</span></li>
+                <ul class="card-sublist" data-role="total">
+                    <li data-period="total">전체: <span th:text="${contentStats.companyTotal}">0</span></li>
+                    <li data-period="today">오늘: <span th:text="${contentStats.companyToday}">0</span></li>
+                    <li data-period="week">이번 주: <span th:text="${contentStats.companyWeek}">0</span></li>
+                    <li data-period="month">이번 달: <span th:text="${contentStats.companyMonth}">0</span></li>
                 </ul>
-            </div>
-            <div class="card">
+            </a>
+
+            <a href="/admin/board/resumes" class="card clickable-card">
                 <h3>이력서 수</h3>
-                <p th:text="${contentStats.resumeTotal}">0</p>
-                <ul class="card-sublist">
-                    <li>오늘: <span th:text="${contentStats.resumeToday}">0</span></li>
-                    <li>이번 주: <span th:text="${contentStats.resumeWeek}">0</span></li>
-                    <li>이번 달: <span th:text="${contentStats.resumeMonth}">0</span></li>
+                <ul class="card-sublist" data-role="total">
+                    <li data-period="total">전체: <span th:text="${contentStats.resumeTotal}">0</span></li>
+                    <li data-period="today">오늘: <span th:text="${contentStats.resumeToday}">0</span></li>
+                    <li data-period="week">이번 주: <span th:text="${contentStats.resumeWeek}">0</span></li>
+                    <li data-period="month">이번 달: <span th:text="${contentStats.resumeMonth}">0</span></li>
                 </ul>
-            </div>
-            <div class="card">
+            </a>
+
+            <a href="/admin/board/jobs" class="card clickable-card">
                 <h3>채용공고 수</h3>
-                <p th:text="${contentStats.jobTotal}">0</p>
-                <ul class="card-sublist">
-                    <li>오늘: <span th:text="${contentStats.jobToday}">0</span></li>
-                    <li>이번 주: <span th:text="${contentStats.jobWeek}">0</span></li>
-                    <li>이번 달: <span th:text="${contentStats.jobMonth}">0</span></li>
+                <ul class="card-sublist" data-role="total">
+                    <li data-period="total">전체: <span th:text="${contentStats.jobTotal}">0</span></li>
+                    <li data-period="today">오늘: <span th:text="${contentStats.jobToday}">0</span></li>
+                    <li data-period="week">이번 주: <span th:text="${contentStats.jobWeek}">0</span></li>
+                    <li data-period="month">이번 달: <span th:text="${contentStats.jobMonth}">0</span></li>
                 </ul>
-            </div>
-            <div class="card">
+            </a>
+
+            <a href="/admin/board/community" class="card clickable-card">
                 <h3>커뮤니티 글 수</h3>
-                <p th:text="${contentStats.communityPostTotal}">0</p>
-                <ul class="card-sublist">
-                    <li>오늘: <span th:text="${contentStats.communityPostToday}">0</span></li>
-                    <li>이번 주: <span th:text="${contentStats.communityPostWeek}">0</span></li>
-                    <li>이번 달: <span th:text="${contentStats.communityPostMonth}">0</span></li>
+                <ul class="card-sublist" data-role="total">
+                    <li data-period="total">전체: <span th:text="${contentStats.communityPostTotal}">0</span></li>
+                    <li data-period="today">오늘: <span th:text="${contentStats.communityPostToday}">0</span></li>
+                    <li data-period="week">이번 주: <span th:text="${contentStats.communityPostWeek}">0</span></li>
+                    <li data-period="month">이번 달: <span th:text="${contentStats.communityPostMonth}">0</span></li>
                 </ul>
-            </div>
+            </a>
         </section>
 
         <!-- 파이 그래프 -->
@@ -57,12 +68,6 @@
             <div class="chart-box">
                 <div class="chart-header">
                     <h3>구직 & 기업 회원 가입 현황</h3>
-                    <div class="chart-period-tabs" data-chart="user">
-                        <button class="chart-tab active" data-period="total">전체</button>
-                        <button class="chart-tab" data-period="today">오늘</button>
-                        <button class="chart-tab" data-period="week">이번 주</button>
-                        <button class="chart-tab" data-period="month">이번 달</button>
-                    </div>
                 </div>
                 <canvas id="userTypePieChart"></canvas>
             </div>
@@ -70,34 +75,24 @@
             <div class="chart-box">
                 <div class="chart-header">
                     <h3>이력서 & 채용공고 등록 현황</h3>
-                    <div class="chart-period-tabs" data-chart="resume">
-                        <button class="chart-tab active" data-period="total">전체</button>
-                        <button class="chart-tab" data-period="today">오늘</button>
-                        <button class="chart-tab" data-period="week">이번 주</button>
-                        <button class="chart-tab" data-period="month">이번 달</button>
-                    </div>
                 </div>
                 <canvas id="resumeJobPieChart"></canvas>
             </div>
         </section>
 
-        <!-- ✅ 관리 항목 바로가기 -->
-        <section class="board-management section-spacing">
-            <h3>관리 게시판 바로가기</h3>
-            <div class="card-grid">
-                <a href="/admin/board/members" class="card link-card">개인 회원 관리</a>
-                <a href="/admin/board/companies" class="card link-card">기업 회원 관리</a>
-                <a href="/admin/board/resumes" class="card link-card">이력서 관리</a>
-                <a href="/admin/board/jobs" class="card link-card">채용공고 관리</a>
-                <a href="/admin/board/community" class="card link-card">커뮤니티 관리</a>
-            </div>
-        </section>
     </div>
 
     <!-- 차트 스크립트 -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
     <script th:inline="javascript">
+        window.userTypeLabels = [[${userTypeLabels}]];
+        window.resumeJobLabels = [[${resumeJobLabels}]];
+        window.userTypeDataByPeriod = [[${userTypeDataByPeriod}]];
+        window.resumeJobDataByPeriod = [[${resumeJobDataByPeriod}]];
+    </script>
+<!--    <script src="/js/admin/dashboard.js"></script>-->
+    <!--<script th:inline="javascript">
         document.addEventListener("DOMContentLoaded", () => {
             Chart.register(ChartDataLabels);
 
@@ -164,22 +159,48 @@
                 }
             }
 
-            document.querySelectorAll(".chart-period-tabs").forEach(tabGroup => {
-                const chartType = tabGroup.getAttribute("data-chart");
 
-                tabGroup.querySelectorAll(".chart-tab").forEach(btn => {
-                    btn.addEventListener("click", () => {
-                        const period = btn.getAttribute("data-period");
+            const periodButtons = document.querySelectorAll(".chart-sync-tabs .card-period-tab");
+            const allCards = document.querySelectorAll(".stats-grid .card");
 
-                        // 버튼 클래스 초기화
-                        tabGroup.querySelectorAll(".chart-tab").forEach(tab => tab.classList.remove("active"));
-                        btn.classList.add("active");
+            periodButtons.forEach(btn => {
+                btn.addEventListener("click", () => {
+                    const period = btn.getAttribute("data-period");
 
-                        // 해당 차트만 업데이트
-                        updateChart(chartType, period);
+                    // 버튼 스타일
+                    periodButtons.forEach(b => b.classList.remove("active"));
+                    btn.classList.add("active");
+
+                    allCards.forEach(card => {
+                        // 1. 전체 <p> 강조 제거
+                        const totalP = card.querySelector("p");
+                        if (totalP) totalP.classList.remove("active-value");
+
+                        // 2. 모든 li 강조 제거
+                        card.querySelectorAll("ul[data-role='total'] li").forEach(li => li.classList.remove("active-value"));
+
+                        // 3. 강조할 요소 결정
+                        if (period === "total") {
+                            if (totalP) totalP.classList.add("active-value");
+                        } else {
+                            const li = card.querySelector(`ul[data-role='total'] li[data-period='${period}']`);
+                            if (li) li.classList.add("active-value");
+                        }
                     });
+
+                    updateChart("user", period);
+                    updateChart("resume", period);
                 });
             });
+
+            // 페이지 로드 시 기본 강조 → 전체 <p>
+            window.addEventListener("DOMContentLoaded", () => {
+                allCards.forEach(card => {
+                    const totalP = card.querySelector("p");
+                    if (totalP) totalP.classList.add("active-value");
+                });
+            });
+
         });
-    </script>
+    </script>-->
 </div>
