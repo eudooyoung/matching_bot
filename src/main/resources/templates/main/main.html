@@ -135,7 +135,7 @@
                                     onclick="toggleJobStar(this, event)">☆</button>
                         </div>
                         <!-- 디버그 정보 -->
-                        <div style="font-size: 10px; color: gray;" th:text="'Job ID: ' + ${job.id} + ', Bookmarked: ' + ${bookmarkedJobIds != null and #lists.contains(bookmarkedJobIds, job.id)}"></div>
+<!--                        <div style="font-size: 10px; color: gray;" th:text="'Job ID: ' + ${job.id} + ', Bookmarked: ' + ${bookmarkedJobIds != null and #lists.contains(bookmarkedJobIds, job.id)}"></div>-->
                         <p class="meta-text"><strong>회사명:</strong> <span th:text="${job.company?.name} ?: '미정'"></span></p>
                         <p class="meta-text"><strong>주소:</strong> <span th:text="${job.company?.address} ?: '주소 없음'"></span></p>
                         <p class="card-text"><strong>요구 기술:</strong> <span th:text="${job.requiredSkills} ?: '없음'"></span></p>
