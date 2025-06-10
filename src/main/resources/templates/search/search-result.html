@@ -9,13 +9,32 @@
   <link rel="stylesheet" th:href="@{/css/layout.css}" />
 
   <style>
+    body {
+      background-color: #fafafa;
+      font-family: sans-serif;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .card-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
     .job-card {
-      border: 1px solid #ddd;
-      border-radius: 15px;
+      width: calc(33.333% - 20px);
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
       padding: 20px;
-      margin-bottom: 30px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-      background-color: #fff;
       transition: transform 0.2s ease;
     }
 
@@ -25,25 +44,67 @@
     }
 
     .job-title {
-      font-size: 1.4rem;
+      font-size: 1.2rem;
       font-weight: bold;
+      margin-bottom: 10px;
       color: #333;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .job-company {
-      font-size: 1.1rem;
-      color: #666;
+      font-size: 1rem;
+      color: #555;
+      margin-bottom: 8px;
     }
 
     .job-info p {
-      margin-bottom: 6px;
       font-size: 0.95rem;
+      color: #666;
+      margin-bottom: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .btn-link {
+      margin-top: auto;
+      padding: 6px 12px;
+      text-align: center;
+      border: 1px solid #007bff;
+      color: #007bff;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .btn-link:hover {
+      background: #007bff;
+      color: #fff;
     }
 
     .empty-result {
       text-align: center;
-      margin-top: 50px;
+      margin-top: 60px;
       color: #888;
+    }
+
+    .empty-result i {
+      font-size: 2rem;
+      color: #bbb;
+    }
+
+    @media (max-width: 992px) {
+      .job-card {
+        width: calc(50% - 20px);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .job-card {
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -53,30 +114,28 @@
   <div th:replace="~{fragments/header :: header(role=${role})}"></div>
 
   <!-- ✅ Main Content -->
-  <main class="main-content container py-5">
+  <main class="container">
     <h2 class="mb-4 text-center">채용공고 검색 결과</h2>
 
-    <div class="row" th:if="${jobList != null and !#lists.isEmpty(jobList)}">
-      <div class="col-md-6 col-lg-4" th:each="job : ${jobList}">
-        <div class="job-card">
-          <div class="job-title" th:text="${job.title}">[직무명]</div>
-          <div class="job-company mb-2" th:text="${job.companyName}">[회사명]</div>
+    <div class="card-grid" th:if="${jobList != null and !#lists.isEmpty(jobList)}">
+      <div class="job-card" th:each="job : ${jobList}">
+        <div class="job-title" th:text="${job.title}">[직무명]</div>
+        <div class="job-company" th:text="${job.companyName}">[회사명]</div>
 
-          <div class="job-info">
-            <p><strong>직군:</strong> <span th:text="${job.jobGroupName}">직군</span></p>
-            <p><strong>직종:</strong> <span th:text="${job.jobTypeName}">직종</span></p>
-            <p><strong>직무:</strong> <span th:text="${job.jobRoleName}">직무</span></p>
-            <p><strong>주소:</strong> <span th:text="${job.address}">주소</span></p>
-            <p><strong>기술스택:</strong> <span th:text="${job.requiredSkills}">기술</span></p>
-          </div>
-
-          <a th:href="@{'/job/' + ${job.id}}" class="btn btn-primary w-100 mt-3">상세보기</a>
+        <div class="job-info">
+          <p><strong>직군:</strong> <span th:text="${job.jobGroupName}">직군</span></p>
+          <p><strong>직종:</strong> <span th:text="${job.jobTypeName}">직종</span></p>
+          <p><strong>직무:</strong> <span th:text="${job.jobRoleName}">직무</span></p>
+          <p><strong>주소:</strong> <span th:text="${job.address}">주소</span></p>
+          <p><strong>기술스택:</strong> <span th:text="${job.requiredSkills}">기술</span></p>
         </div>
+
+        <a th:href="@{'/job/' + ${job.id}}" class="btn-link mt-3">상세보기</a>
       </div>
     </div>
 
     <div th:if="${jobList != null and #lists.isEmpty(jobList)}" class="empty-result">
-      <i class="bi bi-search" style="font-size: 2rem;"></i>
+      <i class="bi bi-search"></i>
       <p class="mt-3">검색 결과가 없습니다.</p>
     </div>
   </main>
