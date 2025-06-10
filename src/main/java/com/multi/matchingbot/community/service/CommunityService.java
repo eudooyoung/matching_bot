@@ -86,6 +86,11 @@ public class CommunityService {
         CommunityPost post = postRepo.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 게시글이 존재하지 않습니다."));
 
+        if (post.getMember() == null) {
+            log.warn("❌ 게시글에 작성자 정보가 없습니다. postId: {}", postId);
+            throw new IllegalStateException("게시글에 작성자 정보가 없습니다.");
+        }
+
         log.info("🔍 삭제 시도 - 게시글 ID: {}, 요청자 ID: {}, 작성자 ID: {}",
                 postId, member.getId(), post.getMember().getId());
 
@@ -97,6 +102,7 @@ public class CommunityService {
         postRepo.delete(post);
         log.info("✅ 게시글 삭제 성공 - ID: {}", postId);
     }
+
 
 
 

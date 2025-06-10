@@ -12,10 +12,12 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -136,7 +138,10 @@ public class CommunityController {
 
 
     @GetMapping("/edit/{id}")
-    public String editForm(@PathVariable(name = "id") Long id, Model model, Authentication authentication) {
+    public String editForm(@PathVariable(name = "id") Long id,
+                           Model model,
+                           Authentication authentication,
+                           RedirectAttributes redirectAttributes) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
         }
@@ -153,12 +158,16 @@ public class CommunityController {
             isOwner = post.getCompany() != null && post.getCompany().getId().equals(company.getId());
         }
 
-        if (!isOwner) return "redirect:/community/list";
+        if (!isOwner) {
+            redirectAttributes.addFlashAttribute("msg", "⚠ 수정 권한이 없습니다.");
+            return "redirect:/community/detail/" + id;
+        }
 
         model.addAttribute("post", CommunityPostDto.fromEntity(post));
         model.addAttribute("categories", communityService.getAllCategories());
         return "community/community-edit";
     }
+
 
     @PostMapping("/edit/{id}")
     public String update(@PathVariable Long id,
@@ -181,7 +190,9 @@ public class CommunityController {
     }
 
     @PostMapping("/delete/{id}")
-    public String delete(@PathVariable Long id, Authentication authentication) {
+    public String delete(@PathVariable Long id,
+                         Authentication authentication,
+                         RedirectAttributes redirectAttributes) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
         }
@@ -190,13 +201,22 @@ public class CommunityController {
         try {
             Member member = memberService.findByUsername(email);
             communityService.deletePost(id, member);
+        } catch (AccessDeniedException e) {
+            redirectAttributes.addFlashAttribute("msg", "⚠ 삭제 권한이 없습니다.");
+            return "redirect:/community/detail/" + id;
         } catch (EntityNotFoundException e) {
-            Company company = companyService.findByEmail(email);
-            communityService.deletePostByCompany(id, company);
+            try {
+                Company company = companyService.findByEmail(email);
+                communityService.deletePostByCompany(id, company);
+            } catch (AccessDeniedException ex) {
+                redirectAttributes.addFlashAttribute("msg", "⚠ 삭제 권한이 없습니다.");
+                return "redirect:/community/detail/" + id;
+            }
         }
 
         return "redirect:/community/list";
     }
+
 
     @PostMapping("/{id}/comment")
     public String addComment(@PathVariable Long id,
