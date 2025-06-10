@@ -54,7 +54,6 @@ public class MainPageController {
 
 
             if ("COMPANY".equals(userDetails.getRole())) {
-            if (Role.COMPANY.equals(user.getRole())) {
                 log.info("기업 회원이므로 /resumes 리다이렉트");
                 return "redirect:/resumes";
             }
@@ -85,8 +84,8 @@ public class MainPageController {
         model.addAttribute("role", role);
 
         // 로그인한 개인회원의 경우 북마크 상태 확인
-        if (user != null && Role.MEMBER.equals(user.getRole())) {
-            List<Long> bookmarkedJobIds = jobBookmarkService.getBookmarkedJobIds(user.getMemberId());
+        if (userDetails != null && Role.MEMBER.equals(userDetails.getRole())) {
+            List<Long> bookmarkedJobIds = jobBookmarkService.getBookmarkedJobIds(userDetails.getMemberId());
             log.info("북마크된 채용공고 IDs: {}", bookmarkedJobIds);
             model.addAttribute("bookmarkedJobIds", bookmarkedJobIds);
         } else {
