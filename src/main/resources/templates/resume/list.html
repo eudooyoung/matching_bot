@@ -88,7 +88,7 @@
             <div class="resume-card-header">
               <h5 class="card-title" th:text="${resume.memberName} ?: '이름 없음'">지원자 이름</h5>
               <button
-                      class="star-button"
+                      class="stared-button"
                       th:classappend="${resume.bookmarked} ? 'filled' : ''"
                       th:data-resume-id="${resume.id}"
                       onclick="toggleStar(this, event)"

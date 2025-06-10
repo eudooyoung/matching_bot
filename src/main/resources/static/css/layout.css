@@ -182,7 +182,7 @@ body {
     padding-right: 32px;
 }
 
-.star-button {
+.stared-button {
     position: absolute;
     top: 0;
     right: 0;
@@ -193,6 +193,6 @@ body {
     cursor: pointer;
 }
 
-.star-button.filled {
+.stared-button.filled {
     color: gold;
 }
