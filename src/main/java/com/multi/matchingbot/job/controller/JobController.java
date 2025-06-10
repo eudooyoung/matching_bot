@@ -11,14 +11,12 @@ import com.multi.matchingbot.job.repository.JobRepository;
 import com.multi.matchingbot.job.service.JobService;
 import com.multi.matchingbot.job.service.OccupationService;
 import com.multi.matchingbot.job.service.ResumeBookmarkService;
-import com.multi.matchingbot.member.domain.dto.ResumeDto;
-import com.multi.matchingbot.member.domain.entity.Resume;
+
 import com.multi.matchingbot.member.service.JobBookmarkService;
-import com.multi.matchingbot.member.service.ResumeService;
+import com.multi.matchingbot.notification.service.NotificationService;
 import com.multi.matchingbot.resume.domain.dto.ResumeDto;
 import com.multi.matchingbot.resume.domain.entity.Resume;
 import com.multi.matchingbot.resume.service.ResumeService;
-import com.multi.matchingbot.notification.service.NotificationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -161,13 +159,8 @@ public class JobController {
         if (userDetails != null) {
             role = userDetails.getRole().name();
 
-            // 이력서 조회
-            List<Resume> resumes = resumeService.findByMemberId(userDetails.getMemberId());
-            if (!resumes.isEmpty()) {
-                resume = resumes.get(0); // 첫 번째 이력서 사용
-            }
-
-            model.addAttribute("resume", resume); // ✅ 비회원이면 이 값은 안 들어감
+            resumes = resumeService.findByMemberId(userDetails.getMemberId());
+            model.addAttribute("resumes", resumes); // ✅ 비회원이면 이 값은 안 들어감
 
             // 구직자인 경우 북마크 상태 전달
             if ("MEMBER".equals(role)) {
@@ -179,8 +172,6 @@ public class JobController {
             }
         } else {
             model.addAttribute("isJobBookmarked", false);
-            resumes = resumeService.findByMemberId(userDetails.getMemberId());
-            model.addAttribute("resumes", resumes);
         }
 
         Job job = jobService.findById(id);
