@@ -22,4 +22,6 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     void deleteAllByMemberIdAndStatus(Long memberId, NotificationStatus notificationStatus);
 
     Page<Notification> findByMemberIdAndStatus(Long memberId, NotificationStatus status, Pageable pageable);
+
+    List<Notification> findByMemberIdAndStatus(Long memberId, NotificationStatus status);
 }

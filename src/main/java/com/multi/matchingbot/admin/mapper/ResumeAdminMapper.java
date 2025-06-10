@@ -1,8 +1,8 @@
 package com.multi.matchingbot.admin.mapper;
 
-import com.multi.matchingbot.admin.domain.ResumeAdminView;
-import com.multi.matchingbot.member.domain.dto.ResumeDto;
-import com.multi.matchingbot.member.domain.entity.Resume;
+import com.multi.matchingbot.admin.domain.view.ResumeAdminView;
+import com.multi.matchingbot.resume.domain.dto.ResumeDto;
+import com.multi.matchingbot.resume.domain.entity.Resume;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -11,11 +11,12 @@ import org.mapstruct.Mapping;
 public interface ResumeAdminMapper {
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "formattedId", expression = "java(ResumeAdminMapper.formatId(resume.getId()))")
+    @Mapping(target = "formattedId", expression = "java(ResumeAdminMapper.formattedId(resume.getId()))")
     @Mapping(target = "title", source = "title")
     @Mapping(target = "skillKeywords", source = "skillKeywords")
     @Mapping(target = "traitKeywords", source = "traitKeywords")
-    @Mapping(target = "keywordsStatus", source = "keywordsStatus")
+//    @Mapping(target = "keywordsStatus", source = "keywordsStatus")
+    @Mapping(target = "careerType", source = "careerType")
     @Mapping(target = "desiredOccupation", source = "occupation.jobRoleName")
     @Mapping(target = "createdBy", source = "createdBy")
     @Mapping(target = "createdAt", source = "createdAt")
@@ -23,7 +24,7 @@ public interface ResumeAdminMapper {
     @Mapping(target = "updatedAt", source = "updatedAt")
     ResumeAdminView toResumeAdminView(Resume resume);
 
-    static String formatId(Long id) {
+    static String formattedId(Long id) {
         return String.format("R%05d", id);
     }
 

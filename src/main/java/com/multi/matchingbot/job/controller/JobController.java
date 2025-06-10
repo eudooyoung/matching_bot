@@ -11,16 +11,19 @@ import com.multi.matchingbot.job.repository.JobRepository;
 import com.multi.matchingbot.job.service.JobService;
 import com.multi.matchingbot.job.service.OccupationService;
 import com.multi.matchingbot.job.service.ResumeBookmarkService;
-import com.multi.matchingbot.member.domain.dto.ResumeDto;
-import com.multi.matchingbot.member.domain.entity.Resume;
-import com.multi.matchingbot.member.service.ResumeService;
+
+import com.multi.matchingbot.member.service.JobBookmarkService;
 import com.multi.matchingbot.notification.service.NotificationService;
+import com.multi.matchingbot.resume.domain.dto.ResumeDto;
+import com.multi.matchingbot.resume.domain.entity.Resume;
+import com.multi.matchingbot.resume.service.ResumeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -43,9 +46,10 @@ public class JobController {
     private final OccupationService occupationService;
     private final ResumeBookmarkService resumeBookmarkService;
     private final ResumeService resumeService;
+    private final JobBookmarkService jobBookmarkService;
 
     @Autowired
-    public JobController(CompanyService companyService, JobService jobService, NotificationService notificationService, JobRepository jobRepository, OccupationService occupationService, ResumeBookmarkService resumeBookmarkService, ResumeService resumeService) {
+    public JobController(CompanyService companyService, JobService jobService, NotificationService notificationService, JobRepository jobRepository, OccupationService occupationService, ResumeBookmarkService resumeBookmarkService, ResumeService resumeService, JobBookmarkService jobBookmarkService) {
         this.companyService = companyService;
         this.jobService = jobService;
         this.notificationService = notificationService;
@@ -53,6 +57,7 @@ public class JobController {
         this.occupationService = occupationService;
         this.resumeBookmarkService = resumeBookmarkService;
         this.resumeService = resumeService;
+        this.jobBookmarkService = jobBookmarkService;
     }
 
     // 공고 목록
@@ -103,7 +108,8 @@ public class JobController {
         notificationService.sendJobNotificationToBookmarkedMembers(
                 company.getId(),
                 company.getName(),
-                job.getTitle()
+                job.getTitle(),
+                job.getId()
         );
 
         return "redirect:/job/manage-jobs";
@@ -154,8 +160,20 @@ public class JobController {
             role = userDetails.getRole().name();
 
             resumes = resumeService.findByMemberId(userDetails.getMemberId());
-            model.addAttribute("resumes", resumes);
+            model.addAttribute("resumes", resumes); // ✅ 비회원이면 이 값은 안 들어감
+
+            // 구직자인 경우 북마크 상태 전달
+            if ("MEMBER".equals(role)) {
+                Long memberId = userDetails.getMemberId();
+                boolean isJobBookmarked = jobBookmarkService.isBookmarked(memberId, id);
+                model.addAttribute("isJobBookmarked", isJobBookmarked);
+            } else {
+                model.addAttribute("isJobBookmarked", false);
+            }
+        } else {
+            model.addAttribute("isJobBookmarked", false);
         }
+
         Job job = jobService.findById(id);
         Long postingCompanyId = job.getCompany().getId();
 
@@ -164,6 +182,22 @@ public class JobController {
         model.addAttribute("companyId", postingCompanyId);
 
         return "job/job-detail";
+    }
+
+    // 채용공고 북마크 추가/제거 토글 API
+    @PostMapping("/api/job-bookmark/toggle")
+    @ResponseBody
+    public ResponseEntity<String> toggleJobBookmark(@RequestParam("jobId") Long jobId,
+                                                    @AuthenticationPrincipal MBotUserDetails userDetails) {
+        Long memberId = userDetails.getMemberId();
+
+        if (jobBookmarkService.isBookmarked(memberId, jobId)) {
+            jobBookmarkService.removeJobBookmark(memberId, jobId);
+            return ResponseEntity.ok("removed");
+        } else {
+            jobBookmarkService.addJobBookmark(memberId, jobId);
+            return ResponseEntity.ok("added");
+        }
     }
 
     // 관심 이력서 관리(id 포함)

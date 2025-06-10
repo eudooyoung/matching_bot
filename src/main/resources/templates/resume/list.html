@@ -64,6 +64,28 @@
       <button type="button" id="search-button" class="btn btn-primary ms-2">🔍 검색</button>
     </section>
 
+    <!--    &lt;!&ndash; ✅ 신입/경력 필터 영역 &ndash;&gt;-->
+    <!--    <section id="search-filters" class="text-center mb-4" style="display: none;">-->
+    <!--      <label><strong>경력 유형:</strong></label>-->
+    <!--      <div id="react-career-type-selector" class="my-2 d-inline-block"></div>-->
+    <!--      <input type="hidden" id="filter-career-type" />-->
+    <!--    </section>-->
+    <!-- ✅ 필터 영역 -->
+    <section class="search-filters text-center" id="search-filters">
+      <!--      <label><strong>직무 선택:</strong></label>-->
+      <!--      <div id="react-job-category-selector" class="mb-2"></div>-->
+      <!--      <input type="hidden" id="filter-job-group" name="jobGroup"/>-->
+      <!--      <input type="hidden" id="filter-job-type" name="jobType"/>-->
+      <!--      <input type="hidden" id="filter-job-role" name="jobRole"/>-->
+      <label><strong>경력 선택:</strong></label>
+      <!-- 필터 영역 -->
+<!--      <div id="react-career-type-selector"></div>-->
+
+      <!-- form 내부 숨겨진 값 -->
+<!--      <input type="hidden" name="careerType" id="filter-career-type" value="">-->
+
+
+
 <!--    &lt;!&ndash; ✅ 신입/경력 필터 영역 &ndash;&gt;-->
 <!--    <section id="search-filters" class="text-center mb-4" style="display: none;">-->
 <!--      <label><strong>경력 유형:</strong></label>-->
@@ -71,7 +93,7 @@
 <!--      <input type="hidden" id="filter-career-type" />-->
 <!--    </section>-->
     <!-- ✅ 필터 영역 -->
-    <section class="search-filters text-center" id="search-filters">
+<!--    <section class="search-filters text-center" id="search-filters">-->
 <!--      <label><strong>직무 선택:</strong></label>-->
 <!--      <div id="react-job-category-selector" class="mb-2"></div>-->
 <!--      <input type="hidden" id="filter-job-group" name="jobGroup"/>-->
@@ -90,12 +112,12 @@
     <!-- ✅ 이력서 카드 목록 -->
     <div class="row">
       <div class="col-md-4" th:each="resume : ${resumeList}">
-        <div class="card h-100 resume-card" th:onclick="|location.href='@{/resumes/{id}(id=${resume.id})}'|" style="cursor: pointer;">
+        <div class="card h-100 resume-card" th:onclick="|location.href='@{/resume/detail/{id}(id=${resume.id})}'|" style="cursor: pointer;">
           <div class="card-body">
             <div class="resume-card-header">
               <h5 class="card-title" th:text="${resume.memberName} ?: '이름 없음'">지원자 이름</h5>
               <button
-                      class="star-button"
+                      class="stared-button"
                       th:classappend="${resume.bookmarked} ? 'filled' : ''"
                       th:data-resume-id="${resume.id}"
                       onclick="toggleStar(this, event)"
@@ -199,8 +221,8 @@
 <script type="module" src="/js/JobCategorySelector.js"></script>
 <script type="module" src="/js/CareerTypeSelector.js"></script>
 <!--<script type="module" src="/js/CareerTypeSelector.js"></script>-->
-      window.React = React;
-      window.createRoot = createRoot;
+window.React = React;
+window.createRoot = createRoot;
 <!--    </script>-->
 <!--  </main>-->
 

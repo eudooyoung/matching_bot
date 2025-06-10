@@ -1,0 +1,222 @@
+/* insert-resume.css */
+
+/* 전체 컨테이너 */
+.container {
+    max-width: 1000px;
+    margin: 50px auto;
+    padding: 40px 30px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* 제목 */
+h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* fieldset */
+fieldset {
+    border: none;
+    padding: 0;
+    margin-bottom: 24px;
+}
+
+legend {
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: #103254;
+}
+
+/* form 그룹 */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 10px;
+}
+
+.form-group label {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* 수평 정렬 그룹 */
+.inline-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.inline-group .form-group {
+    flex: 1;
+    min-width: 130px;
+}
+
+/* 입력 요소 공통 */
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #fff;
+}
+
+/* textarea 별도 */
+textarea {
+    min-height: 120px;
+    resize: vertical;
+    margin-bottom: 12px;
+    padding: 10px;
+}
+
+/* readonly/disabled */
+input[readonly],
+select[disabled] {
+    background-color: #f9f9f9;
+    color: #555;
+}
+
+/* 경력 섹션 */
+.career-row {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* 경력 항목 */
+.career-entry {
+    position: relative;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-bottom: 9px;
+    background-color: #fafafa;
+}
+
+.career-remove-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    border: none;
+    background: transparent;
+    font-size: 16px;
+    color: #999;
+    cursor: pointer;
+}
+
+.career-remove-btn:hover {
+    color: #333;
+}
+
+/* 버튼 */
+.btn-primary {
+    background-color: #103254;
+    color: #fff;
+    padding: 12px 24px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 20px;
+}
+
+.button-area {
+    text-align: center;
+    margin-top: 30px;
+}
+
+/* 키워드 라벨 + 버튼 그룹 */
+.keyword-label-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+    margin-bottom: 4px;
+}
+
+.keyword-label-group label {
+    font-weight: bold;
+    margin: 0;
+}
+
+.keyword-label-group .btn-warning {
+    padding: 6px 10px;
+    font-size: 13px;
+    line-height: 1.3;
+    white-space: nowrap;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+/* 전화번호 */
+.phone-input {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.phone-segment {
+    flex: 1;
+    min-width: 70px;
+}
+
+/* 라디오 버튼 그룹 */
+.radio-group {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.radio-group label {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    font-weight: 500;
+}
+
+/* 항목별 폭 조정 (인적사항) */
+#name-group, #birth-group, #gender-group {
+    flex: 1;
+    max-width: 120px;
+}
+
+#address-group {
+    flex: 2;
+    min-width: 160px;
+}
+
+#email-group, #phone-group {
+    flex: 1;
+    min-width: 200px;
+}
+
+textarea[name^="careers"][name$="careerSummary"] {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* 에러 메시지 공통 */
+.error-message {
+    color: #d9534f;
+    background-color: #fdf1f0;
+    border: 1px solid #f5c6cb;
+    padding: 10px 12px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    line-height: 1.5;
+}

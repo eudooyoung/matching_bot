@@ -1,7 +1,7 @@
 package com.multi.matchingbot.resume.repository;
 
 
-import com.multi.matchingbot.member.domain.entity.Resume;
+import com.multi.matchingbot.resume.domain.entity.Resume;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

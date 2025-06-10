@@ -1,0 +1,77 @@
+.resume-header {
+    margin-bottom: 24px;
+}
+
+.resume-header h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #103254;
+    margin-bottom: 10px;
+}
+
+.similarity-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+.similarity-control label {
+    font-weight: 500;
+}
+
+.similarity-control select {
+    padding: 6px 10px;
+    font-size: 14px;
+}
+
+/*.similarity-control:hover .tooltip-box {
+    display: block;
+}*/
+
+.help-icon-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.help-icon-button {
+    background-color: transparent;
+    border: none;
+    color: #1d4ed8;
+    font-weight: bold;
+    font-size: 18px;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.help-icon-button:hover {
+    background-color: rgba(29, 78, 216, 0.1); /* 살짝 파란 배경 */
+}
+
+.tooltip-box {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+    position: absolute;
+    top: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 8px 12px;
+    font-size: 12px;
+    border-radius: 6px;
+    white-space: nowrap;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.help-icon-wrapper:hover .tooltip-box {
+    visibility: visible;
+    opacity: 1;
+}

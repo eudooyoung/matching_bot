@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>이력서 보기</title>
+    <link rel="stylesheet" th:href="@{/css/company-job.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}" />
+    <style>
+        .container {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 20px;
+        }
+
+        .job-box {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 30px;
+        }
+
+        .job-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #103254;
+            margin-bottom: 10px;
+        }
+
+        .section {
+            margin-bottom: 16px;
+        }
+
+        .section h4 {
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .section p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header(role=${role})}"></div>
+
+<div class="container">
+
+    <div id="similarity-data"
+         th:data-resume-skill="${resume != null ? resume.skillKeywords : '채용공고 기술 키워드 없음'}"
+         th:data-resume-trait="${resume != null ? resume.traitKeywords : '채용공고 성향 키워드 없음'}"
+         data-job-skill=""
+         data-job-trait="">
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 8px;">
+        <h2>
+            이력서 상세보기
+            <!-- ✅ 드롭다운: role == COMPANY 일 때만 보임 -->
+            <div th:if="${role == 'COMPANY'}" style="margin-top: 10px;">
+                <label for="jobSelect">공고 선택:</label>
+                <select id="jobSelect" name="jobId">
+                    <option value="" disabled selected>매칭률을 적용할 공고를 선택하세요</option>
+                    <option th:each="job : ${jobs}"
+                            th:value="${job.id}"
+                            th:text="${job.title}">공고 제목</option>
+                </select>
+            </div>
+
+            <!-- ✅ 매칭률 표시 텍스트 -->
+            <span id="similarity-score" style="font-size: 1rem; color: #555; margin-left: 10px;">
+                <span th:if="${role == null}">| 비회원은 매칭률이 표시되지 않습니다.</span>
+                <span th:if="${role == 'MEMBER'}">| 일반회원은 매칭률이 표시되지 않습니다.</span>
+                <span th:if="${role == 'ADMIN'}">| 관리자 계정은 매칭률이 표시되지 않습니다.</span>
+                <span th:if="${role == 'COMPANY'}">| 매칭률 계산을 위해 공고를 선택하세요.</span>
+            </span>
+
+        </h2>
+        <div class="tooltip-wrapper">
+            <button class="help-icon-button">?</button>
+            <div class="tooltip-box">
+                기업의 채용공고를 선택해 현재 이력서와 키워드<br>
+                매칭률을 계산하여 % 로 나타냅니다.
+            </div>
+        </div>
+    </div>
+
+    <div class="resume-box">
+        <div class="resume-title" th:text="${resume.title}">이력서 제목</div>
+
+        <div class="section">
+            <h4>기술 답변</h4>
+            <p th:text="${resume.skillAnswer}">기술 기반 자기소개 답변</p>
+        </div>
+
+        <div class="section">
+            <h4>성향 답변</h4>
+            <p th:text="${resume.traitAnswer}">성향 기반 자기소개 답변</p>
+        </div>
+
+        <div class="section">
+            <h4>기술 키워드</h4>
+            <p th:text="${resume.skillKeywords}">기술 키워드</p>
+        </div>
+
+        <div class="section">
+            <h4>성향 키워드</h4>
+            <p th:text="${resume.traitKeywords}">성향 키워드</p>
+        </div>
+
+        <div class="section">
+            <h4>작성 날짜</h4>
+            <p th:text="${resume.createdAt}">작성 날짜</p>
+        </div>
+
+        <div style="margin-top: 30px; text-align: center;">
+            <button type="button" class="nav-button" onclick="history.back()">돌아가기</button>
+        </div>
+    </div>
+</div>
+
+<!-- ✅ Footer -->
+<div th:replace="fragments/footer :: footer"></div>
+
+<!-- ✅ JS -->
+<script th:src="@{/js/dropdown.js}"></script>
+<script th:src="@{/js/logout.js}"></script>
+<script th:src="@{/js/auth/fetchWithAuth.js}"></script>
+<script th:src="@{/js/resumeGoBack.js}"></script>
+<script th:inline="javascript">
+    const userRole = /*[[${role != null ? role : "null"}]]*/ null;
+    console.log("userRole:", userRole);
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        if (userRole !== "COMPANY") return;
+
+        const jobSelect = document.getElementById("jobSelect");
+        console.log("jobSelect", jobSelect);
+
+        jobSelect?.addEventListener("change", async () => {
+            const jobId = jobSelect.value;
+            console.log("jobId", jobId);
+            if (!jobId) {
+                console.warn("⛔ jobId가 비어 있음:", jobId);
+                return;
+            }
+
+            try {
+                const resumeSkillRaw = document.getElementById("similarity-data").dataset.resumeSkill;
+                const resumeTraitRaw = document.getElementById("similarity-data").dataset.resumeTrait;
+                const response = await fetch(`/api/jobs/${jobId}/keywords`);
+                const data = await response.json();
+
+                const container = document.getElementById("similarity-data");
+                container.dataset.jobSkill = data.skillKeywords.join(',');
+                container.dataset.jobTrait = data.traitKeywords.join(',');
+
+                const resume_skill_keys = resumeSkillRaw.split(',').map(s => s.trim()).filter(Boolean);
+                const resume_trait_keys = resumeTraitRaw.split(',').map(s => s.trim()).filter(Boolean);
+                const job_skill_keys = data.skillKeywords;
+                const job_trait_keys = data.traitKeywords;
+
+                console.log("job_skill_keys",job_skill_keys);
+                console.log("resume_skill_keys",resume_skill_keys);
+                console.log("job_trait_keys",job_trait_keys);
+                console.log("resume_trait_keys",resume_trait_keys);
+
+                const simResponse = await fetch("http://localhost:8081/calculate-similarity", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        job_skill_keys,
+                        resume_skill_keys,
+                        job_trait_keys,
+                        resume_trait_keys
+                    })
+                });
+
+                if (simResponse.ok) {
+                    const simResult = await simResponse.json();
+                    const percent = Math.round(simResult.similarity * 100);
+                    document.getElementById("similarity-score").textContent = ` | 매칭률: ${percent}%`;
+                } else {
+                    document.getElementById("similarity-score").textContent = " | 매칭률 불러오기 실패";
+                }
+            } catch (e) {
+                console.error("매칭률 계산 오류:", e);
+                document.getElementById("similarity-score").textContent = " | 매칭률 계산 실패";
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

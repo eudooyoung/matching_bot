@@ -1,6 +1,7 @@
 package com.multi.matchingbot.member.service;
 
 
+import com.multi.matchingbot.member.domain.dto.MemberProfileUpdateDto;
 import com.multi.matchingbot.member.domain.dto.MemberUpdateDto;
 import com.multi.matchingbot.member.domain.entity.Member;
 import com.multi.matchingbot.member.mapper.MemberMapper;
@@ -108,6 +109,21 @@ public class MemberService {
         member.setName(dto.getName());
         member.setAddress(dto.getAddress());
         member.setEmail(dto.getEmail());
+
+        memberRepository.save(member);
+    }
+
+    @Transactional
+    public void updateProfile(MemberProfileUpdateDto dto, Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 회원입니다."));
+
+        member.setName(dto.getName());
+        member.setNickname(dto.getNickname());
+        member.setAddress(dto.getAddress());
+        member.setPhone(dto.getPhone());
+        member.setGender(dto.getGender());
+        member.setBirth(dto.getBirth());
 
         memberRepository.save(member);
     }

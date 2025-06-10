@@ -30,15 +30,22 @@
 
 .card-sublist li {
     margin: 2px 0;
+    font-size: 0.85rem;
+    color: #555;
 }
 
 /* 공통 카드 박스 */
 .card {
-    background: #e8e9ef;
+    background: #e6e9ff;
     border-radius: 8px;
     padding: 0.75rem;
     text-align: center;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.5s ease;
+}
+
+.card:hover {
+    background: #ddddff;
 }
 
 .card h3 {
@@ -49,8 +56,21 @@
 .card p {
     margin: 0.25rem 0;
     font-size: 1.1rem;
+    font-weight: normal; /* 기존 bold 제거 */
+    color: #333;
+}
+
+.card p.active-value {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #2c3e50;
+}
+
+/* 강조용 li.active-value 클래스 추가 */
+.card-sublist li.active-value {
     font-weight: bold;
     color: #2c3e50;
+    font-size: 1.1rem;
 }
 
 /* 링크 형태의 카드 버튼 */
@@ -137,3 +157,44 @@
     color: #555;
     font-size: 0.85rem;
 }
+
+.clickable-card {
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow 0.2s ease;
+}
+
+.clickable-card:hover {
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);
+}
+
+/* 카드 필터 버튼 그룹 (통계 카드 위쪽) */
+.card-period-tabs {
+    display: flex;
+    justify-content: flex-start;
+    gap: 0.25rem;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+/* 카드 필터 버튼 */
+.card-period-tab {
+    padding: 0.4rem 0.8rem;
+    border: none;
+    background: #e0e0e0;
+    font-size: 0.85rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.card-period-tab:hover {
+    background-color: #d0d0d0;
+}
+
+.card-period-tab.active {
+    background: #103254;
+    color: white;
+    font-weight: bold;
+}
+

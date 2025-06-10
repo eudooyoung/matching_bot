@@ -21,6 +21,8 @@ public interface JobMapper {
         dto.setRequiredTraits(entity.getRequiredTraits());
         dto.setSkillKeywords(entity.getSkillKeywords());
         dto.setTraitKeywords(entity.getTraitKeywords());
+        dto.setSkillKeywordsConcat(entity.getSkillKeywords());
+        dto.setTraitKeywordsConcat(entity.getTraitKeywords());
         dto.setStartDate(entity.getStartDate());
         dto.setEndDate(entity.getEndDate());
         dto.setEnrollEmail(entity.getEnrollEmail());

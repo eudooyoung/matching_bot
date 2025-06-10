@@ -8,6 +8,7 @@ import com.multi.matchingbot.member.repository.CompanyBookmarkRepository;
 import com.multi.matchingbot.notification.domain.dto.NotificationDto;
 import com.multi.matchingbot.notification.domain.entity.Notification;
 import com.multi.matchingbot.notification.domain.enums.NotificationStatus;
+import com.multi.matchingbot.notification.domain.enums.NotificationTargetType;
 import com.multi.matchingbot.notification.repository.NotificationRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
@@ -48,7 +49,7 @@ public class NotificationService {
     }
 
     // 채용 공고 등록 알림
-    public void sendJobNotificationToBookmarkedMembers(Long companyId, String companyName, String jobTitle) {
+    public void sendJobNotificationToBookmarkedMembers(Long companyId, String companyName, String jobTitle, Long jobId) {
         List<CompanyBookmark> bookmarks = companyBookmarkRepository.findByCompanyId(companyId);
 
         for (CompanyBookmark bookmark : bookmarks) {
@@ -57,6 +58,8 @@ public class NotificationService {
                     .title("관심 기업 채용공고 등록")
                     .content("[" + companyName + "]에서 '" + jobTitle + "' 채용공고가 등록되었습니다.")
                     .status(NotificationStatus.UNREAD)
+                    .targetId(jobId)
+                    .targetType(NotificationTargetType.JOB)
                     .build();
             notificationRepository.save(notification);
         }
@@ -80,6 +83,8 @@ public class NotificationService {
                         .content(job.getTitle() + " 채용이 곧 마감됩니다. 지금 확인해보세요!")
                         .status(NotificationStatus.UNREAD)
                         .createdAt(LocalDateTime.now())
+                        .targetId(job.getId())
+                        .targetType(NotificationTargetType.JOB)
                         .build();
 
                 notificationRepository.save(notification);
@@ -126,13 +131,26 @@ public class NotificationService {
 
     // 이력서 열람 알림
     @Transactional
-    public void sendResumeViewedNotification(Long memberId, String companyName, String resumeTitle) {
+    public void sendResumeViewedNotification(Long memberId, String companyName, String resumeTitle, Long resumeId) {
         Notification notification = Notification.builder()
                 .member(Member.builder().id(memberId).build())
                 .title("이력서 열람 알림")
                 .content("[" + companyName + "]에서 '" + resumeTitle + "' 이력서를 열람했습니다.")
                 .status(NotificationStatus.UNREAD)
+                .targetId(resumeId)
+                .targetType(NotificationTargetType.RESUME)
                 .build();
         notificationRepository.save(notification);
+    }
+
+    // 전체 읽음 처리
+    @Transactional
+    public void markAllAsRead(Long memberId) {
+        List<Notification> unreadNotifications =
+                notificationRepository.findByMemberIdAndStatus(memberId, NotificationStatus.UNREAD);
+
+        for (Notification notification : unreadNotifications) {
+            notification.setStatus(NotificationStatus.READ);
+        }
     }
 }

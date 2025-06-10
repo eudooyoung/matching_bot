@@ -1,0 +1,161 @@
+/* resume-detail.css */
+.info-label {
+    font-weight: 600;
+    color: #222;
+    min-width: 80px;
+    flex-shrink: 0;
+}
+
+.info-line {
+    margin: 6px 0;
+    padding-left: 8px; /* 살짝 들여쓰기로 정렬 맞춤 */
+    font-size: 15px;
+    color: #444;
+    display: flex;
+}
+
+.answer-box {
+    background-color: #f9f9f9;
+    padding: 12px 16px;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+    white-space: pre-line;
+    font-size: 14px;
+    color: #333;
+    line-height: 1.6;
+    margin-bottom: 16px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 60px auto;
+    padding: 40px 30px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+.resume-box {
+    padding: 0; /* container가 감싸므로 내부 패딩은 제거 */
+}
+
+.section {
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.section h4 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #205075;
+    background-color: #f1f6fa;
+    padding: 6px 12px;
+    border-radius: 4px;
+}
+
+.section p {
+    font-size: 15px;
+    color: #444;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.section.keywords {
+    margin-top: 30px;
+}
+
+.section.keywords .info-line {
+    margin-bottom: 6px;
+    line-height: 1.5;
+}
+
+.career-block {
+    margin-bottom: 20px;
+}
+
+.nav-button {
+    padding: 10px 24px;
+    font-size: 14px;
+    background-color: #103254;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.nav-button:hover {
+    background-color: #0d2a45;
+}
+
+.career-entry {
+    background-color: #f9f9f9;
+    padding: 16px 20px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    border: 1px solid #e2e2e2;
+}
+
+.career-header {
+    font-size: 17px;
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 4px;
+}
+
+.career-header span {
+    font-size: 14px;
+    color: #666;
+    margin-left: 6px;
+}
+
+.career-period {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 6px;
+}
+
+.career-salary {
+    margin-left: 12px;
+    color: #777;
+    font-weight: normal;
+}
+
+.career-summary {
+    font-size: 14px;
+    color: #333;
+    white-space: pre-line;
+}
+
+.career-summary span {
+    white-space: pre-wrap; /* 줄바꿈 유지 */
+    line-height: 1.6;
+    /*display: block;*/
+    /*max-height: 160px;*/
+    /*overflow-y: auto;*/
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 20px 15px;
+    }
+
+    .career-entry {
+        padding: 12px;
+    }
+
+    .career-header,
+    .career-period,
+    .career-summary {
+        font-size: 14px;
+    }
+}

@@ -172,6 +172,31 @@
                 width: 100%;
             }
         }
+
+        .job-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .star-button {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #ddd;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .star-button.filled {
+            color: #ffd700;
+        }
+
+        .star-button:hover {
+            color: #ffd700;
+        }
     </style>
 </head>
 <body>
@@ -201,20 +226,52 @@
             <input type="hidden" id="filter-region-sub" />
         </section>
 
-        <!-- 🧭 필터 버튼 -->
-        <section class="filter-buttons">
-            <button type="button" id="openMapButton">📍 내 주변 채용 공고 보기</button>
-            <button onclick="location.href='/calendar'">📅 채용 공고 달력 보기</button>
-        </section>
+        <!-- ✅ 이력서 선택 드롭다운 (role == MEMBER 일 때만 표시) -->
+        <div class="d-flex align-items-center justify-content-center flex-wrap mb-4" style="gap: 10px;">
+            <!-- 드롭다운 -->
+            <div th:if="${role == 'MEMBER'}" class="d-flex align-items-center">
+                <label for="resumeSelectMain" class="me-2 mb-0"><strong>이력서 선택:</strong></label>
+                <select id="resumeSelectMain" name="resumeId" class="form-select" style="height: 38px; width: auto;">
+                    <option value="" disabled selected>매칭률 필터를 적용할 이력서를 선택하세요</option>
+                    <option th:each="resume : ${resumes}"
+                            th:value="${resume.id}"
+                            th:text="${resume.title}">이력서 제목</option>
+                </select>
+            </div>
 
-        <!-- 📝 채용공고 목록 -->
-        <section class="card-grid" th:if="${role == null or role == 'MEMBER'}">
-            <div class="card" th:each="job : ${jobList}">
-                <h5 class="card-title" th:text="${job.title}">채용 제목</h5>
-                <p class="meta-text"><strong>회사명:</strong> <span th:text="${job.company?.name} ?: '미정'"></span></p>
-                <p class="meta-text"><strong>주소:</strong> <span th:text="${job.company?.address} ?: '주소 없음'"></span></p>
-                <p class="card-text"><strong>요구 기술:</strong> <span th:text="${job.requiredSkills} ?: '없음'"></span></p>
-                <a class="btn-link" th:href="@{'/job/' + ${job.id}}">상세보기</a>
+            <!-- 버튼 1 -->
+            <button type="button" id="openMapButton" class="btn btn-outline-secondary">
+                📍 내 주변 채용 공고 보기
+            </button>
+
+            <!-- 버튼 2 -->
+            <button class="btn btn-outline-success" th:onclick="|location.href='@{/calendar}'|">
+                📅 채용 공고 달력 보기
+            </button>
+        </div>
+
+        <!-- ✅ 채용공고 목록 -->
+        <div class="row" th:if="${role == null or role == 'MEMBER'}">
+            <div class="col-md-4" th:each="job : ${jobList}">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="job-card-header">
+                            <h5 class="card-title" th:text="${job.title}">채용 제목</h5>
+                            <button class="star-button"
+                                    sec:authorize="hasRole('MEMBER')"
+                                    th:data-job-id="${job.id}"
+                                    th:text="${bookmarkedJobIds != null and #lists.contains(bookmarkedJobIds, job.id)} ? '★' : '☆'"
+                                    th:classappend="${bookmarkedJobIds != null and #lists.contains(bookmarkedJobIds, job.id)} ? ' filled' : ''"
+                                    onclick="toggleJobStar(this, event)">☆</button>
+                        </div>
+                        <!-- 디버그 정보 -->
+<!--                        <div style="font-size: 10px; color: gray;" th:text="'Job ID: ' + ${job.id} + ', Bookmarked: ' + ${bookmarkedJobIds != null and #lists.contains(bookmarkedJobIds, job.id)}"></div>-->
+                        <p class="meta-text"><strong>회사명:</strong> <span th:text="${job.company?.name} ?: '미정'"></span></p>
+                        <p class="meta-text"><strong>주소:</strong> <span th:text="${job.company?.address} ?: '주소 없음'"></span></p>
+                        <p class="card-text"><strong>요구 기술:</strong> <span th:text="${job.requiredSkills} ?: '없음'"></span></p>
+                        <a class="btn btn-outline-primary mt-2" th:href="@{'/job/' + ${job.id}}">상세보기</a>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -242,17 +299,22 @@
     <!-- ✅ 푸터 -->
     <div th:replace="fragments/footer :: footer"></div>
 </div>
-
-<!-- ✅ JS -->
 <script th:inline="javascript">
+<!-- ✅ 스크립트 -->
+    // 디버그: 북마크된 채용공고 ID 목록 출력
+    const bookmarkedJobIds = /*[[${bookmarkedJobIds}]]*/ [];
+    console.log('북마크된 채용공고 IDs:', bookmarkedJobIds);
+
     window.onload = function () {
         const mapBtn = document.getElementById("openMapButton");
         if (mapBtn) {
-            mapBtn.addEventListener("click", () => {
-                const role = /*[[${role}]]*/ "GUEST";
+            mapBtn.addEventListener("click", function () {
+                const role = /*[[${role}]]*/ "GUEST"; // Thymeleaf로 로그인 여부 전달
+
                 if (!role || role === "GUEST") {
-                    if (confirm("해당 기능은 로그인 후 이용 가능합니다.\n지금 로그인하시겠습니까?")) {
-                        window.location.href = "/auth/login";
+                    const goLogin = confirm("해당 기능은 로그인 후 이용 가능합니다.\n지금 로그인하시겠습니까?");
+                    if (goLogin) {
+                        window.location.href = "/auth/login"; // 로그인 페이지 경로
                     }
                     return;
                 }
@@ -283,10 +345,95 @@
             window.location.href = `/search-page?${query}`;
         });
     };
+
+    function toggleJobStar(button, event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const jobId = button.getAttribute('data-job-id');
+
+        fetch('/attached/api/job-bookmark/toggle', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `jobId=${jobId}`
+        })
+            .then(response => response.text())
+            .then(result => {
+                if (result === 'added') {
+                    button.textContent = '★';
+                    button.classList.add('filled');
+                } else {
+                    button.textContent = '☆';
+                    button.classList.remove('filled');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('북마크 처리 중 오류가 발생했습니다.');
+            });
+    }
 </script>
 
 <script type="module" src="/js/JobCategorySelector.js"></script>
 <script type="module" src="/js/LocationSelector.js"></script>
+<script th:inline="javascript">
+    const userRole2 = /*[[${role != null ? role : "null"}]]*/ null;
+    console.log("userRole2:", userRole2);
+</script>
+
+<!--// 0609-->
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const resumeSelect = document.getElementById("resumeSelectMain");
+        if (!resumeSelect) return;
+
+        resumeSelect.addEventListener("change", async () => {
+            const resumeId = resumeSelect.value;
+            if (!resumeId) return;
+
+            try {
+                const response = await fetch(`/api/main/sort-jobs-by-resume`, {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({resumeId: resumeId})
+                });
+
+                if (response.ok) {
+                    const sortedJobs = await response.json();
+
+                    // ✅ 정렬된 공고들로 DOM 갱신
+                    const container = document.querySelector(".row");
+                    container.innerHTML = ""; // 기존 공고 제거
+
+                    sortedJobs.forEach(job => {
+                        const card = document.createElement("div");
+                        card.className = "col-md-4";
+                        card.innerHTML = `
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">${job.title}</h5>
+                                <p class="meta-text"><strong>회사명:</strong> ${job.companyName ?? '미정'}</p>
+                                <p class="meta-text"><strong>주소:</strong> ${job.address ?? '주소 없음'}</p>
+                                <p class="card-text"><strong>요구 기술:</strong> ${job.requiredSkills ?? '없음'}</p>
+                                <a class="btn btn-outline-primary mt-2" href="/job/${job.id}">상세보기</a>
+                            </div>
+                        </div>
+                    `;
+                        container.appendChild(card);
+                    });
+
+                } else {
+                    alert("매칭률 정렬에 실패했습니다.");
+                }
+            } catch (e) {
+                console.error("정렬 오류:", e);
+            }
+        });
+    });
+</script>
+
 <script th:src="@{/js/logout.js}"></script>
 </body>
 </html>
