@@ -13,16 +13,24 @@
       border-radius: 12px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.06);
       margin-bottom: 20px;
+      height: 300px; /* 고정 높이 */
+      display: flex;
+      flex-direction: column;
     }
 
-    .card-title {
-      font-size: 1.2rem;
-      font-weight: bold;
+    .card-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
     }
 
-    .card-text {
-      font-size: 1rem;
-      color: #555;
+    .card-title,
+    .card-text,
+    .meta-text span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      display: block;
     }
 
     .meta-text {
@@ -30,18 +38,17 @@
       color: #777;
     }
 
-    .search-filters {
-      display: none;
-      margin-top: 10px;
-      padding: 10px;
-      background-color: #f2f2f2;
-      border-radius: 8px;
+    .card-text {
+      font-size: 1rem;
+      color: #555;
     }
 
-    .search-filters label {
-      margin-right: 20px;
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: bold;
     }
   </style>
+
 </head>
 <body>
 
@@ -143,7 +150,7 @@
 
         <!-- 페이지 번호 5개씩 -->
         <li class="page-item"
-            th:each="i : ${#numbers.sequence(((currentPage - 1) / 5 * 5 + 1), T(java.lang.Math).min(((currentPage - 1) / 5 * 5 + 5), totalPages))}"
+            th:each="i : ${#numbers.sequence(((currentPage - 1) / 10 * 10 + 1), T(java.lang.Math).min(((currentPage - 1) / 10 * 10 + 10), totalPages))}"
             th:classappend="${currentPage == i} ? 'active'">
           <a class="page-link" th:href="@{/resumes(page=${i})}" th:text="${i}">1</a>
         </li>
