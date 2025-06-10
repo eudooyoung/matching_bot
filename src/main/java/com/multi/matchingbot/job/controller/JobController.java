@@ -15,6 +15,9 @@ import com.multi.matchingbot.member.domain.dto.ResumeDto;
 import com.multi.matchingbot.member.domain.entity.Resume;
 import com.multi.matchingbot.member.service.JobBookmarkService;
 import com.multi.matchingbot.member.service.ResumeService;
+import com.multi.matchingbot.resume.domain.dto.ResumeDto;
+import com.multi.matchingbot.resume.domain.entity.Resume;
+import com.multi.matchingbot.resume.service.ResumeService;
 import com.multi.matchingbot.notification.service.NotificationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +34,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -106,7 +110,8 @@ public class JobController {
         notificationService.sendJobNotificationToBookmarkedMembers(
                 company.getId(),
                 company.getName(),
-                job.getTitle()
+                job.getTitle(),
+                job.getId()
         );
 
         return "redirect:/job/manage-jobs";
@@ -151,7 +156,8 @@ public class JobController {
                                @AuthenticationPrincipal MBotUserDetails userDetails) {
 
         String role = null;
-        Resume resume = null;
+        List<Resume> resumes = Collections.emptyList(); // 기본값
+
         if (userDetails != null) {
             role = userDetails.getRole().name();
 
@@ -173,13 +179,14 @@ public class JobController {
             }
         } else {
             model.addAttribute("isJobBookmarked", false);
+            resumes = resumeService.findByMemberId(userDetails.getMemberId());
+            model.addAttribute("resumes", resumes);
         }
 
         Job job = jobService.findById(id);
         Long postingCompanyId = job.getCompany().getId();
 
         model.addAttribute("job", job);
-        model.addAttribute("resume", resume);
         model.addAttribute("role", role);
         model.addAttribute("companyId", postingCompanyId);
 

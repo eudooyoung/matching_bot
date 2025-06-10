@@ -1,6 +1,120 @@
-<!-- templates/fragments/footer.html -->
 <div th:fragment="footer">
   <footer class="footer">
     &copy; 2025 MatchingBot Inc. All rights reserved.
   </footer>
+
+  <div id="chatbot-toggle" style="position: fixed; bottom: 20px; right: 20px; background-color: #103254; color: white; border-radius: 50%; width: 60px; height: 60px; font-size: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 9999;">
+    💬
+  </div>
+
+  <div id="chatbot-modal" style="position: fixed; bottom: 90px; right: 20px; width: 350px; height: 500px; background-color: white; border: 1px solid #ccc; border-radius: 10px; display: none; flex-direction: column; box-shadow: 0 4px 8px rgba(0,0,0,0.2); z-index: 9999;">
+    <div style="background-color: #103254; color: white; padding: 10px; border-top-left-radius: 10px; border-top-right-radius: 10px;">
+      GPT 챗봇
+      <button onclick="document.getElementById('chatbot-modal').style.display='none'" style="float:right; background:none; border:none; color:white;">✖</button>
+    </div>
+    <div id="chat-messages" style="flex:1; padding:10px; overflow-y:auto;"></div>
+    <div style="display:flex; border-top:1px solid #ddd;">
+      <input id="chat-input" type="text" style="flex:1; border:none; padding:10px;" placeholder="메시지를 입력하세요">
+      <button id="chat-send-button" style="background-color:#103254; color:white; border:none; padding:10px;">전송</button>
+    </div>
+  </div>
+
+  <script th:inline="javascript">
+    const userRole = /*[[${role}]]*/ "GUEST";
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const toggleBtn = document.getElementById("chatbot-toggle");
+      const modal = document.getElementById("chatbot-modal");
+      const sendBtn = document.getElementById("chat-send-button");
+      const inputField = document.getElementById("chat-input");
+
+      if (toggleBtn && modal) {
+        toggleBtn.addEventListener("click", () => {
+          const chatMessages = document.getElementById("chat-messages");
+          chatMessages.innerHTML = "";
+
+          if (!userRole || userRole === "GUEST") {
+            const goLogin = confirm("챗봇은 로그인 후 이용 가능합니다.\n지금 로그인하시겠습니까?");
+            if (goLogin) window.location.href = "/auth/login";
+            return;
+          }
+
+          if (userRole === "COMPANY") {
+            appendMessage("bot", "기업회원으로 입장하셨습니다.");
+            appendMessage("bot",  "사용 가능한 명령어: 기업페이지, 커뮤니티");
+          } else if (userRole === "MEMBER") {
+            appendMessage("bot", "일반회원으로 입장하셨습니다.");
+            appendMessage("bot", "사용 가능한 명령어: 커뮤니티, 내주변채용공고, 마이페이지");
+          }
+
+          modal.style.display = modal.style.display === "none" ? "flex" : "none";
+        });
+      }
+
+      if (sendBtn) sendBtn.addEventListener("click", sendMessage);
+
+      inputField.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          sendMessage();
+        }
+      });
+
+      async function sendMessage() {
+        const input = document.getElementById("chat-input");
+        const message = input.value.trim();
+        if (!message) return;
+
+        appendMessage("user", message);
+        input.value = "";
+
+        const container = document.getElementById("chat-messages");
+        const loadingMsg = document.createElement("div");
+        loadingMsg.textContent = "🤖 답변을 생성 중";
+        loadingMsg.style.marginBottom = "8px";
+        container.appendChild(loadingMsg);
+        container.scrollTop = container.scrollHeight;
+
+        let dotCount = 0;
+        const loadingInterval = setInterval(() => {
+          dotCount = (dotCount + 1) % 4;
+          loadingMsg.textContent = "🤖 답변을 생성 중" + ".".repeat(dotCount);
+        }, 500);
+
+        try {
+          const response = await fetch("/api/v1/chatbot/talk", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message })
+          });
+
+          const data = await response.json();
+          clearInterval(loadingInterval);
+
+          const reply = data.reply || "응답 없음";
+          loadingMsg.textContent = "🤖 " + reply;
+
+          if (data.redirect && data.url) {
+            appendMessage("bot", `\"${message}\" 명령어를 인식했습니다. 잠시 후 이동합니다.`);
+            setTimeout(() => window.location.href = data.url, 1500);
+          }
+
+        } catch (error) {
+          clearInterval(loadingInterval);
+          loadingMsg.textContent = "❌ GPT 호출 실패: 서버 오류 또는 네트워크 문제입니다.";
+        }
+      }
+
+      function appendMessage(sender, text) {
+        const container = document.getElementById("chat-messages");
+        const msg = document.createElement("div");
+        msg.textContent = (sender === "user" ? "🙋 " : "🤖 ") + text;
+        msg.style.marginBottom = "8px";
+        container.appendChild(msg);
+        container.scrollTop = container.scrollHeight;
+      }
+    });
+  </script>
 </div>

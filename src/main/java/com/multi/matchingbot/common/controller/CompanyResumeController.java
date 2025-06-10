@@ -1,9 +1,10 @@
 package com.multi.matchingbot.common.controller;
 
 import com.multi.matchingbot.common.security.MBotUserDetails;
-import com.multi.matchingbot.member.domain.dto.ResumeDto;
-import com.multi.matchingbot.member.domain.entity.Resume;
-import com.multi.matchingbot.member.service.ResumeService;
+import com.multi.matchingbot.resume.domain.dto.ResumeDto;
+import com.multi.matchingbot.resume.domain.entity.Resume;
+import com.multi.matchingbot.resume.service.ResumeService;
+import com.multi.matchingbot.notification.service.NotificationService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,7 @@ import java.util.List;
 public class CompanyResumeController {
 
     private final ResumeService resumeService;
+    private final NotificationService notificationService;
 
     @GetMapping
     public String resumeList(@RequestParam(name = "page", defaultValue = "1") int page,
@@ -35,7 +37,14 @@ public class CompanyResumeController {
                              @AuthenticationPrincipal MBotUserDetails userDetails,
                              Model model) {
 
-        log.info("📄 resumeList() 컨트롤러 도달!"); // 로그 추가
+        log.info("📄 resumeList() 컨트롤러 도달!");
+
+        if (userDetails != null) {
+            log.info("현재 사용자 ROLE: {}", userDetails.getRole());
+            model.addAttribute("role", userDetails.getRole().name());  // ✅ role 전달
+        } else {
+            model.addAttribute("role", null);  // 예외적으로 null 처리
+        }
 
         int pageIndex = Math.max(0, page - 1);
         Page<ResumeDto> resumePage = resumeService.getPageResumes(PageRequest.of(pageIndex, size));
@@ -50,10 +59,12 @@ public class CompanyResumeController {
         return "resume/list";
     }
 
+
     @GetMapping("/{id}")
     public String resumeDetail(@PathVariable("id") Long id,
                                Model model,
-                               @AuthenticationPrincipal Object user) {
+                               @AuthenticationPrincipal Object user,
+                               @AuthenticationPrincipal MBotUserDetails userDetails) {
         log.info("📄 resumeDetail() 호출됨 - 이력서 ID: {}", id);
 
         try {
@@ -61,7 +72,22 @@ public class CompanyResumeController {
             ResumeDto resumeDto = ResumeDto.fromEntity(resume); // 또는 직접 toDto 작성
             model.addAttribute("resume", resumeDto);
 
-            return "member/resume-view"; // ✅ templates/resume/detail.html 존재해야 함
+            // 이력서 열람 알림 생성
+            Long resumeOwnerId = resume.getMember().getId(); // 이력서 주인
+            String companyName = userDetails.getCompanyName(); // 로그인한 기업 이름
+            notificationService.sendResumeViewedNotification(resumeOwnerId, companyName, resume.getTitle(), resume.getId());
+
+            // ✅ role 전달
+            if (user instanceof MBotUserDetails details) {
+                log.info("현재 사용자 ROLE: {}", details.getRole());
+                model.addAttribute("role", details.getRole().name());
+            } else {
+                model.addAttribute("role", null);
+            }
+            notificationService.sendResumeViewedNotification(resumeOwnerId, companyName, resume.getTitle(), resume.getId());
+
+            return "member/resume-view";
+
         } catch (EntityNotFoundException e) {
             log.warn("❌ 해당 이력서를 찾을 수 없음 - ID: {}", id);
             return "error/404"; // 또는 사용자 정의 에러 페이지

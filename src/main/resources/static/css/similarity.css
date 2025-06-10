@@ -1,0 +1,52 @@
+.resume-header {
+    margin-bottom: 24px;
+}
+
+.resume-header h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #103254;
+    margin-bottom: 10px;
+}
+
+.similarity-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+.similarity-control label {
+    font-weight: 500;
+}
+
+.similarity-control select {
+    padding: 6px 10px;
+    font-size: 14px;
+}
+
+.help-icon-button {
+    border: none;
+    background-color: #eee;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.tooltip-box {
+    display: none;
+    position: absolute;
+    margin-top: 5px;
+    padding: 8px;
+    background: #f9f9f9;
+    border: 1px solid #ccc;
+    font-size: 13px;
+    color: #333;
+}
+
+.similarity-status {
+    font-size: 14px;
+    color: #555;
+}

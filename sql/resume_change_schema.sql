@@ -3,7 +3,7 @@
 -- use hr;
 use matching_bot;
 
-/*-- 1. 외래키 제약 조건 해제
+-- 1. 외래키 제약 조건 해제
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `attached_item`;
 DROP TABLE IF EXISTS `career`;
@@ -23,8 +23,11 @@ DROP TABLE IF EXISTS `member`;
 DROP TABLE IF EXISTS `region`;
 DROP TABLE IF EXISTS `refresh_token`;
 DROP TABLE IF EXISTS `resume_view_log`;
+DROP TABLE IF EXISTS `community_category`;
+DROP TABLE IF EXISTS `community_post`;
+DROP TABLE IF EXISTS `community_comment`;
 -- 3. 외래키 제약 조건 다시 활성화
-SET FOREIGN_KEY_CHECKS = 1;*/
+SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE member (
     id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '회원 ID',
@@ -63,36 +66,10 @@ CREATE TABLE occupation (
 
 
 -- 기업 회원 테이블 생성 --
-/*create table company(
-	id BIGINT NOT NULL AUTO_INCREMENT,
-	email VARCHAR(50) NOT NULL unique,
-	password VARCHAR(100) NOT NULL,
-	role ENUM('COMPANY') NOT NULL,
-	name VARCHAR(50) NOT NULL,
-	phone VARCHAR(20),
-	business_no BIGINT NOT NULL unique,
-	address VARCHAR(200) NOT NULL,
-	industry VARCHAR(50) NOT NULL,
-	year_found year NOT NULL,
-	headcount INT NOT NULL,
-	annual_revenue BIGINT NOT NULL,
-	operating_income BIGINT NOT NULL,
-	jobs_last_year INT NOT NULL,
-	agree_terms ENUM('Y', 'N') NOT NULL,
-	agree_privacy ENUM('Y', 'N') NOT NULL,
-	agree_finance ENUM('Y', 'N') NOT NULL,
-	agree_marketing ENUM('Y', 'N') NOT NULL,
-	agree_third_party ENUM('Y', 'N') NOT NULL,
-	created_by VARCHAR(50) NOT NULL,
-	created_at DATETIME NOT NULL,
-	updated_by VARCHAR(50),
-	updated_at DATETIME,
-	PRIMARY KEY (id)
-);*/
 
 CREATE TABLE company (
     id BIGINT NOT NULL AUTO_INCREMENT,
-    
+
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(100) NOT NULL,
     role ENUM('COMPANY') NOT NULL DEFAULT 'COMPANY',
@@ -122,7 +99,7 @@ CREATE TABLE company (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_by VARCHAR(50),
     updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
-    
+
     PRIMARY KEY (id)
 );
 
@@ -175,11 +152,12 @@ CREATE TABLE community_category (
     name VARCHAR(50) NOT NULL
 );
 
--- 2. 게시글 테이블 생성
+-- 2. 게시글 테이블 (개인 or 기업 작성 가능)
 CREATE TABLE community_post (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     category_id BIGINT NOT NULL,
-    member_id BIGINT NOT NULL,
+    member_id BIGINT,
+    company_id BIGINT,
     title VARCHAR(200) NOT NULL,
     content TEXT NOT NULL,
     views INT NOT NULL DEFAULT 0,
@@ -188,21 +166,24 @@ CREATE TABLE community_post (
     updated_by VARCHAR(50),
     updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fk_post_category FOREIGN KEY (category_id) REFERENCES community_category(id),
-    CONSTRAINT fk_post_member FOREIGN KEY (member_id) REFERENCES member(id)
+    CONSTRAINT fk_post_member FOREIGN KEY (member_id) REFERENCES member(id),
+    CONSTRAINT fk_post_company FOREIGN KEY (company_id) REFERENCES company(id)
 );
 
--- 3. 댓글 테이블 생성
+-- 3. 댓글 테이블 (개인 or 기업 작성 가능)
 CREATE TABLE community_comment (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     post_id BIGINT NOT NULL,
-    member_id BIGINT NOT NULL,
+    member_id BIGINT,
+    company_id BIGINT,
     content VARCHAR(500) NOT NULL,
     created_by VARCHAR(50) NOT NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_by VARCHAR(50),
     updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fk_comment_post FOREIGN KEY (post_id) REFERENCES community_post(id),
-    CONSTRAINT fk_comment_member FOREIGN KEY (member_id) REFERENCES member(id)
+    CONSTRAINT fk_comment_member FOREIGN KEY (member_id) REFERENCES member(id),
+    CONSTRAINT fk_comment_company FOREIGN KEY (company_id) REFERENCES company(id)
 );
 
 
@@ -238,11 +219,12 @@ CREATE TABLE resume (
     member_id BIGINT NOT NULL,
     occupation_id BIGINT NOT NULL,
     title VARCHAR(50) NOT NULL,
-    skill_answer VARCHAR(255) NOT NULL,
-    trait_answer VARCHAR(255),
-    skill_keywords VARCHAR(100),
-    trait_keywords VARCHAR(100),
+    skill_answer TEXT NOT NULL,
+    trait_answer TEXT,
+    skill_keywords VARCHAR(200),
+    trait_keywords VARCHAR(200),
     keywords_status ENUM('Y', 'N') NOT NULL DEFAULT 'N' COMMENT '키워드 추출 상태',
+    career_type ENUM('NEW', 'EXP'),
     created_by VARCHAR(50) NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_by VARCHAR(50),
@@ -255,7 +237,7 @@ CREATE TABLE resume (
 CREATE TABLE career (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     resume_id BIGINT NOT NULL,
-    career_type VARCHAR(10)  CHECK (career_type IN ('new', 'exp')),
+--     career_type VARCHAR(10)  CHECK (career_type IN ('new', 'exp')),
     company_name VARCHAR(50) NOT NULL,
     department_name VARCHAR(50) NOT NULL,
     position_title VARCHAR(50) NOT NULL ,
@@ -291,7 +273,6 @@ create table resume_bookmark (
 	FOREIGN KEY (company_id) REFERENCES company(id),
 	FOREIGN KEY (resume_id) REFERENCES resume(id)
 );
-
 
 
 -- 관심 기업 테이블
@@ -337,6 +318,44 @@ CREATE TABLE region (
     region_type_name VARCHAR(15) NOT NULL COMMENT '시/도 명'
 );
 
+CREATE TABLE community_category (
+                                    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                                    name VARCHAR(50) NOT NULL
+);
+
+-- 2. 게시글 테이블 (개인 or 기업 작성 가능)
+CREATE TABLE community_post (
+                                id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                                category_id BIGINT NOT NULL,
+                                member_id BIGINT,
+                                company_id BIGINT,
+                                title VARCHAR(200) NOT NULL,
+                                content TEXT NOT NULL,
+                                views INT NOT NULL DEFAULT 0,
+                                created_by VARCHAR(50) NOT NULL,
+                                created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                updated_by VARCHAR(50),
+                                updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
+                                CONSTRAINT fk_post_category FOREIGN KEY (category_id) REFERENCES community_category(id),
+                                CONSTRAINT fk_post_member FOREIGN KEY (member_id) REFERENCES member(id),
+                                CONSTRAINT fk_post_company FOREIGN KEY (company_id) REFERENCES company(id)
+);
+
+-- 3. 댓글 테이블 (개인 or 기업 작성 가능)
+CREATE TABLE community_comment (
+                                   id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                                   post_id BIGINT NOT NULL,
+                                   member_id BIGINT,
+                                   company_id BIGINT,
+                                   content VARCHAR(500) NOT NULL,
+                                   created_by VARCHAR(50) NOT NULL,
+                                   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                   updated_by VARCHAR(50),
+                                   updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
+                                   CONSTRAINT fk_comment_post FOREIGN KEY (post_id) REFERENCES community_post(id),
+                                   CONSTRAINT fk_comment_member FOREIGN KEY (member_id) REFERENCES member(id),
+                                   CONSTRAINT fk_comment_company FOREIGN KEY (company_id) REFERENCES company(id)
+);
 
 commit;
 show tables;

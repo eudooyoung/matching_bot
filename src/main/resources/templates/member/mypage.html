@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>구직자 마이페이지</title>
+    <link rel="stylesheet" th:href="@{/css/mypage.css}"/>
+    <link rel="stylesheet" th:href="@{/css/layout.css}" href="/css/layout.css">
+
+</head>
+<body>
+<div th:replace="fragments/header :: header(role=${role})"></div>
+
+<main class="main-content">
+    <div class="container">
+        <h2>구직자 마이페이지</h2>
+
+        <!-- 프로필 정보 -->
+        <div class="member-info">
+            <div class="profile-circle">
+                <span th:text="${member.name.substring(0,1)}">F</span>
+            </div>
+            <p class="member-name">
+                <span th:text="${member.name}">회원이름</span> 님
+            </p>
+        </div>
+
+        <!-- 기능 아코디언 목록 -->
+        <div class="accordion-box">
+
+            <div class="accordion-item">
+                <div class="accordion-left">
+                    <span class="accordion-title">이력서 관리</span>
+
+                </div>
+                <button class="nav-button" onclick="location.href='/member/manage-resumes'">이동</button>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-left">
+                    <span class="accordion-title">관심 기업 목록</span>
+                </div>
+                <button class="nav-button" onclick="location.href='/member/company-bookmark'">이동</button>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-left">
+                    <span class="accordion-title">관심 공고 목록</span>
+                </div>
+
+                <button class="nav-button" onclick="location.href='/member/job-bookmark'">이동</button>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-left">
+                    <span class="accordion-title">개인 정보 수정</span>
+                </div>
+                <button class="nav-button" onclick="location.href='/member/profile_edit'">이동</button>
+            </div>
+        </div>
+    </div>
+</main>
+<!-- 공통 푸터 -->
+<div th:replace="fragments/footer :: footer"></div>
+
+<script th:src="@{/js/dropdown.js}"></script>
+<script th:src="@{/js/logout.js}"></script>
+</body>
+</html>

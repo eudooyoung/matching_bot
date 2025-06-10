@@ -4,6 +4,7 @@ import com.multi.matchingbot.common.domain.entity.BaseEntity;
 import com.multi.matchingbot.common.domain.enums.Gender;
 import com.multi.matchingbot.common.domain.enums.Role;
 import com.multi.matchingbot.common.domain.enums.Yn;
+import com.multi.matchingbot.resume.domain.entity.Resume;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;

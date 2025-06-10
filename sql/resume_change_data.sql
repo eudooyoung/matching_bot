@@ -1896,210 +1896,504 @@ INSERT INTO job (company_id, occupation_id, title, description, address, main_ta
 
 -- insert career--
 INSERT INTO career (
-    id, resume_id, career_type, company_name, department_name,
-    position_title, start_date, end_date, salary, career_summary,
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
     created_by, created_at, updated_by, updated_at
-) VALUES
-      (1, 11, 'exp', '회사명1', '개발팀', '백엔드 개발자',
-       '2018-12-31', '2020-12-30',
-       38600000, '주요 프로젝트 및 성과 중심 요약 1',
-       '사용자1', CURRENT_TIMESTAMP, '사용자1', CURRENT_TIMESTAMP),
-      (2, 12, 'exp', '회사명2', '개발팀', '백엔드 개발자',
-       '2018-12-31', '2019-12-31',
-       34160000, '주요 프로젝트 및 성과 중심 요약 2',
-       '사용자2', CURRENT_TIMESTAMP, '사용자2', CURRENT_TIMESTAMP),
-      (3, 13, 'exp', '회사명3', '개발팀', '백엔드 개발자',
-       '2016-01-01', '2018-12-31',
-       45790000, '주요 프로젝트 및 성과 중심 요약 3',
-       '사용자3', CURRENT_TIMESTAMP, '사용자3', CURRENT_TIMESTAMP),
-      (4, 14, 'exp', '회사명4', '개발팀', '백엔드 개발자',
-       '2016-12-31', '2019-12-31',
-       28970000, '주요 프로젝트 및 성과 중심 요약 4',
-       '사용자4', CURRENT_TIMESTAMP, '사용자4', CURRENT_TIMESTAMP),
-      (5, 15, 'exp', '회사명5', '개발팀', '백엔드 개발자',
-       '2018-12-31', '2021-12-30',
-       41520000, '주요 프로젝트 및 성과 중심 요약 5',
-       '사용자5', CURRENT_TIMESTAMP, '사용자5', CURRENT_TIMESTAMP),
-      (6, 16, 'exp', '회사명6', '개발팀', '백엔드 개발자',
-       '2017-12-31', '2019-12-31',
-       37150000, '주요 프로젝트 및 성과 중심 요약 6',
-       '사용자6', CURRENT_TIMESTAMP, '사용자6', CURRENT_TIMESTAMP),
-      (7, 17, 'exp', '회사명7', '개발팀', '백엔드 개발자',
-       '2019-12-31', '2022-12-30',
-       40690000, '주요 프로젝트 및 성과 중심 요약 7',
-       '사용자7', CURRENT_TIMESTAMP, '사용자7', CURRENT_TIMESTAMP),
-      (8, 18, 'exp', '회사명8', '개발팀', '백엔드 개발자',
-       '2019-12-31', '2020-12-30',
-       46960000, '주요 프로젝트 및 성과 중심 요약 8',
-       '사용자8', CURRENT_TIMESTAMP, '사용자8', CURRENT_TIMESTAMP),
-      (9, 19, 'exp', '회사명9', '개발팀', '백엔드 개발자',
-       '2017-12-31', '2018-12-31',
-       28590000, '주요 프로젝트 및 성과 중심 요약 9',
-       '사용자9', CURRENT_TIMESTAMP, '사용자9', CURRENT_TIMESTAMP),
-      (10, 20, 'exp', '회사명10', '개발팀', '백엔드 개발자',
-       '2015-01-01', '2017-12-31',
-       40470000, '주요 프로젝트 및 성과 중심 요약 10',
-       '사용자10', CURRENT_TIMESTAMP, '사용자10', CURRENT_TIMESTAMP),
-      (11, 21, 'exp', '회사명11', '개발팀', '백엔드 개발자',
-       '2018-12-31', '2019-12-31',
-       33540000, '주요 프로젝트 및 성과 중심 요약 11',
-       '사용자11', CURRENT_TIMESTAMP, '사용자11', CURRENT_TIMESTAMP),
-      (12, 22, 'exp', '회사명12', '개발팀', '백엔드 개발자',
-       '2016-12-31', '2017-12-31',
-       42350000, '주요 프로젝트 및 성과 중심 요약 12',
-       '사용자12', CURRENT_TIMESTAMP, '사용자12', CURRENT_TIMESTAMP),
-      (13, 23, 'exp', '회사명13', '개발팀', '백엔드 개발자',
-       '2019-12-31', '2021-12-30',
-       49270000, '주요 프로젝트 및 성과 중심 요약 13',
-       '사용자13', CURRENT_TIMESTAMP, '사용자13', CURRENT_TIMESTAMP),
-      (14, 24, 'exp', '회사명14', '개발팀', '백엔드 개발자',
-       '2016-12-31', '2017-12-31',
-       36710000, '주요 프로젝트 및 성과 중심 요약 14',
-       '사용자14', CURRENT_TIMESTAMP, '사용자14', CURRENT_TIMESTAMP),
-      (15, 25, 'exp', '회사명15', '개발팀', '백엔드 개발자',
-       '2018-12-31', '2019-12-31',
-       27700000, '주요 프로젝트 및 성과 중심 요약 15',
-       '사용자15', CURRENT_TIMESTAMP, '사용자15', CURRENT_TIMESTAMP),
-      (16, 26, 'exp', '회사명16', '개발팀', '백엔드 개발자',
-       '2016-01-01', '2017-12-31',
-       27610000, '주요 프로젝트 및 성과 중심 요약 16',
-       '사용자16', CURRENT_TIMESTAMP, '사용자16', CURRENT_TIMESTAMP),
-      (17, 27, 'exp', '회사명17', '개발팀', '백엔드 개발자',
-       '2019-12-31', '2021-12-30',
-       37210000, '주요 프로젝트 및 성과 중심 요약 17',
-       '사용자17', CURRENT_TIMESTAMP, '사용자17', CURRENT_TIMESTAMP),
-      (18, 28, 'exp', '회사명18', '개발팀', '백엔드 개발자',
-       '2019-12-31', '2022-12-30',
-       34140000, '주요 프로젝트 및 성과 중심 요약 18',
-       '사용자18', CURRENT_TIMESTAMP, '사용자18', CURRENT_TIMESTAMP),
-      (19, 29, 'exp', '회사명19', '개발팀', '백엔드 개발자',
-       '2016-01-01', '2017-12-31',
-       30250000, '주요 프로젝트 및 성과 중심 요약 19',
-       '사용자19', CURRENT_TIMESTAMP, '사용자19', CURRENT_TIMESTAMP),
-      (20, 30, 'exp', '회사명20', '개발팀', '백엔드 개발자',
-       '2018-12-31', '2019-12-31',
-       44080000, '주요 프로젝트 및 성과 중심 요약 20',
-       '사용자20', CURRENT_TIMESTAMP, '사용자20', CURRENT_TIMESTAMP),
-      (21, 31, 'exp', '회사명21', '개발팀', '백엔드 개발자',
-       '2019-12-31', '2022-12-30',
-       38790000, '주요 프로젝트 및 성과 중심 요약 21',
-       '사용자21', CURRENT_TIMESTAMP, '사용자21', CURRENT_TIMESTAMP),
-      (22, 32, 'exp', '회사명22', '개발팀', '백엔드 개발자',
-       '2016-01-01', '2018-12-31',
-       38470000, '주요 프로젝트 및 성과 중심 요약 22',
-       '사용자22', CURRENT_TIMESTAMP, '사용자22', CURRENT_TIMESTAMP),
-      (23, 33, 'exp', '회사명23', '개발팀', '백엔드 개발자',
-       '2016-01-01', '2018-12-31',
-       45160000, '주요 프로젝트 및 성과 중심 요약 23',
-       '사용자23', CURRENT_TIMESTAMP, '사용자23', CURRENT_TIMESTAMP),
-      (24, 34, 'exp', '회사명24', '개발팀', '백엔드 개발자',
-       '2016-01-01', '2017-12-31',
-       45940000, '주요 프로젝트 및 성과 중심 요약 24',
-       '사용자24', CURRENT_TIMESTAMP, '사용자24', CURRENT_TIMESTAMP),
-      (25, 35, 'exp', '회사명25', '개발팀', '백엔드 개발자',
-       '2019-12-31', '2020-12-30',
-       26200000, '주요 프로젝트 및 성과 중심 요약 25',
-       '사용자25', CURRENT_TIMESTAMP, '사용자25', CURRENT_TIMESTAMP),
-      (26, 36, 'exp', '회사명26', '개발팀', '백엔드 개발자',
-       '2016-12-31', '2018-12-31',
-       34840000, '주요 프로젝트 및 성과 중심 요약 26',
-       '사용자26', CURRENT_TIMESTAMP, '사용자26', CURRENT_TIMESTAMP),
-      (27, 37, 'exp', '회사명27', '개발팀', '백엔드 개발자',
-       '2018-12-31', '2020-12-30',
-       26940000, '주요 프로젝트 및 성과 중심 요약 27',
-       '사용자27', CURRENT_TIMESTAMP, '사용자27', CURRENT_TIMESTAMP),
-      (28, 38, 'exp', '회사명28', '개발팀', '백엔드 개발자',
-       '2016-12-31', '2019-12-31',
-       49440000, '주요 프로젝트 및 성과 중심 요약 28',
-       '사용자28', CURRENT_TIMESTAMP, '사용자28', CURRENT_TIMESTAMP),
-      (29, 39, 'exp', '회사명29', '개발팀', '백엔드 개발자',
-       '2015-01-01', '2016-01-01',
-       28070000, '주요 프로젝트 및 성과 중심 요약 29',
-       '사용자29', CURRENT_TIMESTAMP, '사용자29', CURRENT_TIMESTAMP),
-      (30, 40, 'exp', '회사명30', '개발팀', '백엔드 개발자',
-       '2019-12-31', '2020-12-30',
-       41540000, '주요 프로젝트 및 성과 중심 요약 30',
-       '사용자30', CURRENT_TIMESTAMP, '사용자30', CURRENT_TIMESTAMP),
-      (31, 41, 'exp', '회사명31', '개발팀', '백엔드 개발자',
-       '2019-12-31', '2022-12-30',
-       40320000, '주요 프로젝트 및 성과 중심 요약 31',
-       '사용자31', CURRENT_TIMESTAMP, '사용자31', CURRENT_TIMESTAMP),
-      (32, 42, 'exp', '회사명32', '개발팀', '백엔드 개발자',
-       '2019-12-31', '2020-12-30',
-       38930000, '주요 프로젝트 및 성과 중심 요약 32',
-       '사용자32', CURRENT_TIMESTAMP, '사용자32', CURRENT_TIMESTAMP),
-      (33, 43, 'exp', '회사명33', '개발팀', '백엔드 개발자',
-       '2017-12-31', '2020-12-30',
-       47220000, '주요 프로젝트 및 성과 중심 요약 33',
-       '사용자33', CURRENT_TIMESTAMP, '사용자33', CURRENT_TIMESTAMP),
-      (34, 44, 'exp', '회사명34', '개발팀', '백엔드 개발자',
-       '2016-12-31', '2017-12-31',
-       42150000, '주요 프로젝트 및 성과 중심 요약 34',
-       '사용자34', CURRENT_TIMESTAMP, '사용자34', CURRENT_TIMESTAMP),
-      (35, 45, 'exp', '회사명35', '개발팀', '백엔드 개발자',
-       '2018-12-31', '2021-12-30',
-       45520000, '주요 프로젝트 및 성과 중심 요약 35',
-       '사용자35', CURRENT_TIMESTAMP, '사용자35', CURRENT_TIMESTAMP),
-      (36, 46, 'exp', '회사명36', '개발팀', '백엔드 개발자',
-       '2016-01-01', '2016-12-31',
-       43730000, '주요 프로젝트 및 성과 중심 요약 36',
-       '사용자36', CURRENT_TIMESTAMP, '사용자36', CURRENT_TIMESTAMP),
-      (37, 47, 'exp', '회사명37', '개발팀', '백엔드 개발자',
-       '2019-12-31', '2020-12-30',
-       46080000, '주요 프로젝트 및 성과 중심 요약 37',
-       '사용자37', CURRENT_TIMESTAMP, '사용자37', CURRENT_TIMESTAMP),
-      (38, 48, 'exp', '회사명38', '개발팀', '백엔드 개발자',
-       '2017-12-31', '2019-12-31',
-       30140000, '주요 프로젝트 및 성과 중심 요약 38',
-       '사용자38', CURRENT_TIMESTAMP, '사용자38', CURRENT_TIMESTAMP),
-      (39, 49, 'exp', '회사명39', '개발팀', '백엔드 개발자',
-       '2018-12-31', '2019-12-31',
-       42890000, '주요 프로젝트 및 성과 중심 요약 39',
-       '사용자39', CURRENT_TIMESTAMP, '사용자39', CURRENT_TIMESTAMP),
-      (40, 50, 'exp', '회사명40', '개발팀', '백엔드 개발자',
-       '2015-01-01', '2016-12-31',
-       45210000, '주요 프로젝트 및 성과 중심 요약 40',
-       '사용자40', CURRENT_TIMESTAMP, '사용자40', CURRENT_TIMESTAMP),
-      (41, 51, 'exp', '회사명41', '개발팀', '백엔드 개발자',
-       '2016-12-31', '2019-12-31',
-       44090000, '주요 프로젝트 및 성과 중심 요약 41',
-       '사용자41', CURRENT_TIMESTAMP, '사용자41', CURRENT_TIMESTAMP),
-      (42, 52, 'exp', '회사명42', '개발팀', '백엔드 개발자',
-       '2019-12-31', '2020-12-30',
-       34600000, '주요 프로젝트 및 성과 중심 요약 42',
-       '사용자42', CURRENT_TIMESTAMP, '사용자42', CURRENT_TIMESTAMP),
-      (43, 53, 'exp', '회사명43', '개발팀', '백엔드 개발자',
-       '2016-12-31', '2019-12-31',
-       33450000, '주요 프로젝트 및 성과 중심 요약 43',
-       '사용자43', CURRENT_TIMESTAMP, '사용자43', CURRENT_TIMESTAMP),
-      (44, 54, 'exp', '회사명44', '개발팀', '백엔드 개발자',
-       '2015-01-01', '2016-01-01',
-       34800000, '주요 프로젝트 및 성과 중심 요약 44',
-       '사용자44', CURRENT_TIMESTAMP, '사용자44', CURRENT_TIMESTAMP),
-      (45, 55, 'exp', '회사명45', '개발팀', '백엔드 개발자',
-       '2018-12-31', '2019-12-31',
-       25650000, '주요 프로젝트 및 성과 중심 요약 45',
-       '사용자45', CURRENT_TIMESTAMP, '사용자45', CURRENT_TIMESTAMP),
-      (46, 56, 'exp', '회사명46', '개발팀', '백엔드 개발자',
-       '2015-01-01', '2016-01-01',
-       41520000, '주요 프로젝트 및 성과 중심 요약 46',
-       '사용자46', CURRENT_TIMESTAMP, '사용자46', CURRENT_TIMESTAMP),
-      (47, 57, 'exp', '회사명47', '개발팀', '백엔드 개발자',
-       '2016-01-01', '2016-12-31',
-       28550000, '주요 프로젝트 및 성과 중심 요약 47',
-       '사용자47', CURRENT_TIMESTAMP, '사용자47', CURRENT_TIMESTAMP),
-      (48, 58, 'exp', '회사명48', '개발팀', '백엔드 개발자',
-       '2019-12-31', '2022-12-30',
-       43700000, '주요 프로젝트 및 성과 중심 요약 48',
-       '사용자48', CURRENT_TIMESTAMP, '사용자48', CURRENT_TIMESTAMP),
-      (49, 59, 'exp', '회사명49', '개발팀', '백엔드 개발자',
-       '2016-01-01', '2018-12-31',
-       34670000, '주요 프로젝트 및 성과 중심 요약 49',
-       '사용자49', CURRENT_TIMESTAMP, '사용자49', CURRENT_TIMESTAMP),
-      (50, 60, 'exp', '회사명50', '개발팀', '백엔드 개발자',
-       '2016-12-31', '2019-12-31',
-       49000000, '주요 프로젝트 및 성과 중심 요약 50',
-       '사용자50', CURRENT_TIMESTAMP, '사용자50', CURRENT_TIMESTAMP);
+) VALUES (
+    1, '회사명1', '데이터팀', '데이터 분석가',
+    '2020-10-01', '2022-12-19', 4908, '데이터 분석가로서 다양한 프로젝트 수행',
+    '사용자1', CURRENT_TIMESTAMP, '사용자1', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    2, '회사명2', '데이터팀', '데이터 분석가',
+    '2021-12-02', '2024-05-27', 3205, '데이터 분석가로서 다양한 프로젝트 수행',
+    '사용자2', CURRENT_TIMESTAMP, '사용자2', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    3, '회사명3', '마케팅팀', '마케팅 전문가',
+    '2021-05-05', '2023-05-29', 5348, '마케팅 전문가로서 다양한 프로젝트 수행',
+    '사용자3', CURRENT_TIMESTAMP, '사용자3', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    4, '회사명4', '디자인팀', 'UI/UX 디자이너',
+    '2016-04-16', '2018-02-27', 4340, 'UI/UX 디자이너로서 다양한 프로젝트 수행',
+    '사용자4', CURRENT_TIMESTAMP, '사용자4', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    5, '회사명5', 'UX팀', '프론트엔드 개발자',
+    '2022-12-04', '2025-07-31', 4866, '프론트엔드 개발자로서 다양한 프로젝트 수행',
+    '사용자5', CURRENT_TIMESTAMP, '사용자5', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    6, '회사명6', 'UX팀', '프론트엔드 개발자',
+    '2021-08-31', '2024-02-26', 4396, '프론트엔드 개발자로서 다양한 프로젝트 수행',
+    '사용자6', CURRENT_TIMESTAMP, '사용자6', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    7, '회사명7', '기획팀', '프로덕트 매니저',
+    '2015-05-26', '2017-05-27', 5867, '프로덕트 매니저로서 다양한 프로젝트 수행',
+    '사용자7', CURRENT_TIMESTAMP, '사용자7', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    8, '회사명8', '디자인팀', 'UI/UX 디자이너',
+    '2016-01-10', '2017-12-19', 3458, 'UI/UX 디자이너로서 다양한 프로젝트 수행',
+    '사용자8', CURRENT_TIMESTAMP, '사용자8', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    9, '회사명9', 'UX팀', '프론트엔드 개발자',
+    '2017-07-11', '2018-08-11', 4845, '프론트엔드 개발자로서 다양한 프로젝트 수행',
+    '사용자9', CURRENT_TIMESTAMP, '사용자9', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    10, '회사명10', '고객지원팀', '고객센터 매니저',
+    '2016-03-14', '2017-12-04', 3009, '고객센터 매니저로서 다양한 프로젝트 수행',
+    '사용자10', CURRENT_TIMESTAMP, '사용자10', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    11, '회사명11', '보안팀', '보안 엔지니어',
+    '2018-05-20', '2019-05-26', 5750, '보안 엔지니어로서 다양한 프로젝트 수행',
+    '사용자11', CURRENT_TIMESTAMP, '사용자11', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    12, '회사명12', 'UX팀', '프론트엔드 개발자',
+    '2015-08-13', '2017-03-08', 4640, '프론트엔드 개발자로서 다양한 프로젝트 수행',
+    '사용자12', CURRENT_TIMESTAMP, '사용자12', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    13, '회사명13', '디자인팀', 'UI/UX 디자이너',
+    '2022-04-06', '2023-08-02', 3122, 'UI/UX 디자이너로서 다양한 프로젝트 수행',
+    '사용자13', CURRENT_TIMESTAMP, '사용자13', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    14, '회사명14', '재무팀', '재무 담당자',
+    '2022-08-19', '2023-12-29', 5992, '재무 담당자로서 다양한 프로젝트 수행',
+    '사용자14', CURRENT_TIMESTAMP, '사용자14', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    15, '회사명15', '보안팀', '보안 엔지니어',
+    '2020-06-01', '2021-06-21', 6615, '보안 엔지니어로서 다양한 프로젝트 수행',
+    '사용자15', CURRENT_TIMESTAMP, '사용자15', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    16, '회사명16', '고객지원팀', '고객센터 매니저',
+    '2017-10-13', '2019-05-29', 5161, '고객센터 매니저로서 다양한 프로젝트 수행',
+    '사용자16', CURRENT_TIMESTAMP, '사용자16', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    17, '회사명17', '플랫폼개발팀', '백엔드 개발자',
+    '2020-05-13', '2023-01-17', 5109, '백엔드 개발자로서 다양한 프로젝트 수행',
+    '사용자17', CURRENT_TIMESTAMP, '사용자17', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    18, '회사명18', '디자인팀', 'UI/UX 디자이너',
+    '2017-10-04', '2019-10-01', 4171, 'UI/UX 디자이너로서 다양한 프로젝트 수행',
+    '사용자18', CURRENT_TIMESTAMP, '사용자18', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    19, '회사명19', '인사팀', 'HR 매니저',
+    '2020-08-27', '2022-07-08', 6437, 'HR 매니저로서 다양한 프로젝트 수행',
+    '사용자19', CURRENT_TIMESTAMP, '사용자19', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    20, '회사명20', 'UX팀', '프론트엔드 개발자',
+    '2021-10-04', '2023-09-07', 6260, '프론트엔드 개발자로서 다양한 프로젝트 수행',
+    '사용자20', CURRENT_TIMESTAMP, '사용자20', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    21, '회사명21', '고객지원팀', '고객센터 매니저',
+    '2021-12-17', '2023-12-09', 6351, '고객센터 매니저로서 다양한 프로젝트 수행',
+    '사용자21', CURRENT_TIMESTAMP, '사용자21', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    22, '회사명22', '고객지원팀', '고객센터 매니저',
+    '2021-01-02', '2022-10-10', 4306, '고객센터 매니저로서 다양한 프로젝트 수행',
+    '사용자22', CURRENT_TIMESTAMP, '사용자22', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    23, '회사명23', '디자인팀', 'UI/UX 디자이너',
+    '2015-10-21', '2018-03-20', 6080, 'UI/UX 디자이너로서 다양한 프로젝트 수행',
+    '사용자23', CURRENT_TIMESTAMP, '사용자23', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    24, '회사명24', '고객지원팀', '고객센터 매니저',
+    '2015-11-02', '2018-05-02', 6522, '고객센터 매니저로서 다양한 프로젝트 수행',
+    '사용자24', CURRENT_TIMESTAMP, '사용자24', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    25, '회사명25', '플랫폼개발팀', '백엔드 개발자',
+    '2019-11-07', '2022-07-18', 4638, '백엔드 개발자로서 다양한 프로젝트 수행',
+    '사용자25', CURRENT_TIMESTAMP, '사용자25', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    26, '회사명26', '플랫폼개발팀', '백엔드 개발자',
+    '2019-11-06', '2021-08-10', 3896, '백엔드 개발자로서 다양한 프로젝트 수행',
+    '사용자26', CURRENT_TIMESTAMP, '사용자26', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    27, '회사명27', '플랫폼개발팀', '백엔드 개발자',
+    '2020-12-01', '2023-03-20', 5529, '백엔드 개발자로서 다양한 프로젝트 수행',
+    '사용자27', CURRENT_TIMESTAMP, '사용자27', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    28, '회사명28', '고객지원팀', '고객센터 매니저',
+    '2016-11-08', '2017-12-05', 5998, '고객센터 매니저로서 다양한 프로젝트 수행',
+    '사용자28', CURRENT_TIMESTAMP, '사용자28', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    29, '회사명29', '기획팀', '프로덕트 매니저',
+    '2022-12-21', '2024-10-30', 6233, '프로덕트 매니저로서 다양한 프로젝트 수행',
+    '사용자29', CURRENT_TIMESTAMP, '사용자29', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    30, '회사명30', '인사팀', 'HR 매니저',
+    '2022-08-14', '2023-09-19', 5165, 'HR 매니저로서 다양한 프로젝트 수행',
+    '사용자30', CURRENT_TIMESTAMP, '사용자30', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    31, '회사명31', '마케팅팀', '마케팅 전문가',
+    '2022-08-12', '2023-12-28', 4221, '마케팅 전문가로서 다양한 프로젝트 수행',
+    '사용자31', CURRENT_TIMESTAMP, '사용자31', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    32, '회사명32', '마케팅팀', '마케팅 전문가',
+    '2022-06-09', '2025-03-04', 5565, '마케팅 전문가로서 다양한 프로젝트 수행',
+    '사용자32', CURRENT_TIMESTAMP, '사용자32', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    33, '회사명33', '디자인팀', 'UI/UX 디자이너',
+    '2016-11-18', '2019-01-13', 3323, 'UI/UX 디자이너로서 다양한 프로젝트 수행',
+    '사용자33', CURRENT_TIMESTAMP, '사용자33', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    34, '회사명34', 'UX팀', '프론트엔드 개발자',
+    '2019-09-07', '2021-02-03', 4740, '프론트엔드 개발자로서 다양한 프로젝트 수행',
+    '사용자34', CURRENT_TIMESTAMP, '사용자34', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    35, '회사명35', '기획팀', '프로덕트 매니저',
+    '2020-02-16', '2021-11-26', 3267, '프로덕트 매니저로서 다양한 프로젝트 수행',
+    '사용자35', CURRENT_TIMESTAMP, '사용자35', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    36, '회사명36', '인사팀', 'HR 매니저',
+    '2016-11-21', '2018-12-03', 6007, 'HR 매니저로서 다양한 프로젝트 수행',
+    '사용자36', CURRENT_TIMESTAMP, '사용자36', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    37, '회사명37', '보안팀', '보안 엔지니어',
+    '2017-03-02', '2018-06-11', 5227, '보안 엔지니어로서 다양한 프로젝트 수행',
+    '사용자37', CURRENT_TIMESTAMP, '사용자37', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    38, '회사명38', 'UX팀', '프론트엔드 개발자',
+    '2022-04-02', '2024-05-20', 5804, '프론트엔드 개발자로서 다양한 프로젝트 수행',
+    '사용자38', CURRENT_TIMESTAMP, '사용자38', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    39, '회사명39', '보안팀', '보안 엔지니어',
+    '2019-06-14', '2020-09-04', 5906, '보안 엔지니어로서 다양한 프로젝트 수행',
+    '사용자39', CURRENT_TIMESTAMP, '사용자39', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    40, '회사명40', 'UX팀', '프론트엔드 개발자',
+    '2020-12-02', '2022-09-21', 6031, '프론트엔드 개발자로서 다양한 프로젝트 수행',
+    '사용자40', CURRENT_TIMESTAMP, '사용자40', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    41, '회사명41', '디자인팀', 'UI/UX 디자이너',
+    '2018-04-20', '2020-04-08', 5071, 'UI/UX 디자이너로서 다양한 프로젝트 수행',
+    '사용자41', CURRENT_TIMESTAMP, '사용자41', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    42, '회사명42', '데이터팀', '데이터 분석가',
+    '2015-07-14', '2016-12-28', 5857, '데이터 분석가로서 다양한 프로젝트 수행',
+    '사용자42', CURRENT_TIMESTAMP, '사용자42', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    43, '회사명43', '고객지원팀', '고객센터 매니저',
+    '2018-05-16', '2021-02-06', 4130, '고객센터 매니저로서 다양한 프로젝트 수행',
+    '사용자43', CURRENT_TIMESTAMP, '사용자43', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    44, '회사명44', '재무팀', '재무 담당자',
+    '2016-12-15', '2019-05-09', 6879, '재무 담당자로서 다양한 프로젝트 수행',
+    '사용자44', CURRENT_TIMESTAMP, '사용자44', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    45, '회사명45', '고객지원팀', '고객센터 매니저',
+    '2018-05-02', '2019-08-17', 4172, '고객센터 매니저로서 다양한 프로젝트 수행',
+    '사용자45', CURRENT_TIMESTAMP, '사용자45', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    46, '회사명46', '마케팅팀', '마케팅 전문가',
+    '2015-05-21', '2018-01-07', 5495, '마케팅 전문가로서 다양한 프로젝트 수행',
+    '사용자46', CURRENT_TIMESTAMP, '사용자46', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    47, '회사명47', '기획팀', '프로덕트 매니저',
+    '2017-12-23', '2020-04-29', 3482, '프로덕트 매니저로서 다양한 프로젝트 수행',
+    '사용자47', CURRENT_TIMESTAMP, '사용자47', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    48, '회사명48', '디자인팀', 'UI/UX 디자이너',
+    '2019-09-13', '2021-07-31', 3034, 'UI/UX 디자이너로서 다양한 프로젝트 수행',
+    '사용자48', CURRENT_TIMESTAMP, '사용자48', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    49, '회사명49', '인사팀', 'HR 매니저',
+    '2017-12-17', '2019-11-28', 6752, 'HR 매니저로서 다양한 프로젝트 수행',
+    '사용자49', CURRENT_TIMESTAMP, '사용자49', CURRENT_TIMESTAMP
+);
+
+INSERT INTO career (
+    resume_id, company_name, department_name, position_title,
+    start_date, end_date, salary, career_summary,
+    created_by, created_at, updated_by, updated_at
+) VALUES (
+    50, '회사명50', '보안팀', '보안 엔지니어',
+    '2020-06-21', '2021-06-22', 3004, '보안 엔지니어로서 다양한 프로젝트 수행',
+    '사용자50', CURRENT_TIMESTAMP, '사용자50', CURRENT_TIMESTAMP
+);
 -- company_log --
 
 INSERT INTO company_log (company_id, log_date) VALUES
@@ -2165,181 +2459,16 @@ INSERT INTO job_bookmark (id, member_id, job_id) VALUES
 (9, 21, 5),
 (10, 6, 6);
 
-/*insert into attached_item (reference_id, item_type, original_name, system_name, path, status, created_by, created_at, updated_by, updated_at)
-values
-    (2, 'COMM', 'CO_file_1.pdf', 'co_2_53532297.pdf', '/files/co/2/', 'Y', 'yeonghyiyang@gmail.com', '2025-05-15 22:21:00', NULL, NULL),
-    (2, 'COMM', 'CO_file_1.pdf', 'co_2_53532297.pdf', '/files/co/2/', 'Y', 'yeonghyiyang@gmail.com', '2025-05-15 22:21:00', NULL, NULL),
-    (6, 'REPORT', 'VL_file_2.pdf', 'vl_6_59c37ce0.pdf', '/files/vl/6/', 'Y', 'ojang@yuhanhoesa.kr', '2025-05-15 09:03:00', NULL, NULL),
-    (9, 'SUMMARY', 'VS_file_3.pdf', 'vs_9_8818dfbc.pdf', '/files/vs/9/', 'Y', 'gimjunseo@jusighoesa.com', '2025-05-15 10:28:00', NULL, NULL),
-    (6, 'COMM', 'CO_file_4.pdf', 'co_6_6c6098e3.pdf', '/files/co/6/', 'Y', 'gimyeongsu@nate.com', '2025-05-15 13:20:00', NULL, NULL),
-    (8, 'COMM', 'CO_file_5.pdf', 'co_8_748b14d9.pdf', '/files/co/8/', 'Y', 'jiweon52@baggimcoe.kr', '2025-05-15 23:52:00', NULL, NULL),
-    (2, 'COMM', 'CO_file_6.jpg', 'co_2_d3b47e7b.jpg', '/files/co/2/', 'Y', 'donghyeon07@jusighoesa.com', '2025-05-15 12:19:00', NULL, NULL),
-    (1, 'COMM', 'CO_file_7.pdf', 'co_1_dc9f817f.pdf', '/files/co/1/', 'Y', 'doyungim@hanmail.net', '2025-05-15 08:50:00', NULL, NULL),
-    (10, 'RESUME', 'RE_file_8.pdf', 're_10_12181820.pdf', '/files/re/10/', 'Y', 'oi@ju.kr', '2025-05-15 08:36:00', NULL, NULL),
-    (8, 'SUMMARY', 'VS_file_9.png', 'vs_8_66cc0d7a.png', '/files/vs/8/', 'Y', 'seoyeoni@bagjang.kr', '2025-05-15 06:57:00', NULL, NULL),
-    (7, 'POSTER', 'PO_file_10.jpg', 'po_7_688febf3.jpg', '/files/po/7/', 'N', 'jangjungsu@naver.com', '2025-05-15 08:32:00', NULL, NULL),
-    (1, 'RESUME', 'RE_file_11.png', 're_1_ef89dc90.png', '/files/re/1/', 'Y', 'ygim@naver.com', '2025-05-15 18:38:00', NULL, NULL),
-    (1, 'SUMMARY', 'VS_file_12.png', 'vs_1_3bb209a1.png', '/files/vs/1/', 'Y', 'jangmiyeong@live.com', '2025-05-15 10:23:00', NULL, NULL),
-    (5, 'COMM', 'CO_file_13.jpg', 'co_5_3ec818db.jpg', '/files/co/5/', 'Y', 'sugjao@naver.com', '2025-05-15 20:47:00', NULL, NULL),
-    (10, 'SUMMARY', 'VS_file_14.pdf', 'vs_10_97ee4ed6.pdf', '/files/vs/10/', 'Y', 'gimmyeongsug@hanmail.net', '2025-05-15 14:37:00', NULL, NULL),
-    (2, 'RESUME', 'RE_file_15.png', 're_2_148d3197.png', '/files/re/2/', 'Y', 'hanmiyeong@yunbag.kr', '2025-05-15 18:24:00', NULL, NULL),
-    (10, 'SUMMARY', 'VS_file_16.pdf', 'vs_10_9edbfd79.pdf', '/files/vs/10/', 'Y', 'noyeongsu@gimsinbag.com', '2025-05-15 12:08:00', NULL, NULL),
-    (1, 'REPORT', 'VL_file_17.pdf', 'vl_1_487cb346.pdf', '/files/vl/1/', 'Y', 'hyeonjeonggim@gweonigwag.org', '2025-05-15 11:42:00', NULL, NULL),
-    (10, 'SUMMARY', 'VS_file_18.png', 'vs_10_1b645919.png', '/files/vs/10/', 'Y', 'yejungim@yu.com', '2025-05-15 02:15:00', NULL, NULL),
-    (4, 'COMM', 'CO_file_19.jpg', 'co_4_322d48ab.jpg', '/files/co/4/', 'Y', 'seoyun55@hanmail.net', '2025-05-15 01:12:00', NULL, NULL),
-    (1, 'REPORT', 'VL_file_20.jpg', 'vl_1_a35e5cde.jpg', '/files/vl/1/', 'Y', 'seoyeon45@daum.net', '2025-05-15 00:07:00', NULL, NULL);*/
 
-INSERT INTO resume_bookmark (company_id, resume_id) VALUES
-(1, 98),
-(1, 8),
-(1, 7),
-(1, 27),
-(1, 72),
-(1, 30),
-(1, 62),
-(1, 69),
-(1, 49),
-(1, 76),
-(1, 1),
-(1, 83),
-(1, 33),
-(1, 63),
-(1, 54),
-(2, 31),
-(2, 83),
-(2, 1),
-(2, 65),
-(2, 91),
-(2, 5),
-(2, 20),
-(2, 80),
-(2, 78),
-(2, 17),
-(2, 23),
-(2, 87),
-(2, 18),
-(2, 92),
-(2, 96),
-(3, 35),
-(3, 33),
-(3, 94),
-(3, 97),
-(3, 53),
-(3, 1),
-(3, 31),
-(3, 100),
-(3, 83),
-(3, 87),
-(3, 21),
-(3, 80),
-(3, 25),
-(3, 55),
-(3, 70),
-(4, 49),
-(4, 1),
-(4, 79),
-(4, 64),
-(4, 6),
-(4, 78),
-(4, 29),
-(4, 22),
-(4, 96),
-(4, 7),
-(4, 27),
-(4, 53),
-(4, 42),
-(4, 82),
-(4, 33),
-(5, 15),
-(5, 40),
-(5, 14),
-(5, 99),
-(5, 12),
-(5, 65),
-(5, 36),
-(5, 73),
-(5, 32),
-(5, 59),
-(5, 22),
-(5, 52),
-(5, 29),
-(5, 63),
-(5, 18),
-(6, 56),
-(6, 66),
-(6, 92),
-(6, 62),
-(6, 27),
-(6, 73),
-(6, 78),
-(6, 13),
-(6, 29),
-(6, 14),
-(6, 68),
-(6, 80),
-(6, 33),
-(6, 51),
-(6, 74),
-(7, 2),
-(7, 64),
-(7, 78),
-(7, 81),
-(7, 26),
-(7, 1),
-(7, 22),
-(7, 12),
-(7, 15),
-(7, 37),
-(7, 8),
-(7, 87),
-(7, 33),
-(7, 52),
-(7, 32),
-(8, 88),
-(8, 40),
-(8, 94),
-(8, 68),
-(8, 72),
-(8, 82),
-(8, 23),
-(8, 83),
-(8, 24),
-(8, 31),
-(8, 76),
-(8, 12),
-(8, 59),
-(8, 67),
-(8, 21),
-(9, 95),
-(9, 90),
-(9, 75),
-(9, 52),
-(9, 19),
-(9, 27),
-(9, 47),
-(9, 5),
-(9, 89),
-(9, 80),
-(9, 12),
-(9, 21),
-(9, 64),
-(9, 86),
-(9, 100),
-(10, 21),
-(10, 18),
-(10, 91),
-(10, 62),
-(10, 73),
-(10, 8),
-(10, 10),
-(10, 9),
-(10, 49),
-(10, 4),
-(10, 100),
-(10, 99),
-(10, 48),
-(10, 81),
-(10, 37);
+-- 1. EXP로 설정
+UPDATE resume
+SET career_type = 'EXP'
+WHERE id IN (SELECT DISTINCT resume_id FROM career);
+
+-- 2. 나머지는 NEW로 설정
+UPDATE resume
+SET career_type = 'NEW'
+WHERE career_type IS NULL OR id NOT IN (SELECT DISTINCT resume_id FROM career);
 
 commit;
 

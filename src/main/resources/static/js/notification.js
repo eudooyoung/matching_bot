@@ -19,13 +19,11 @@ function showTab(tab) {
         readTab.classList.add('active');
         unreadTab.classList.remove('active');
 
-        // 처음 진입하거나 삭제 후 초기화된 경우 로드
         const readContainer = document.getElementById('readNotificationList');
         if (readContainer.children.length === 0) {
             loadReadNotifications();
         }
 
-        // 스크롤 이벤트 등록
         window.addEventListener('scroll', readScrollHandler);
     }
 }
@@ -42,13 +40,10 @@ function deleteAllReadNotifications() {
         .then(response => {
             if (response.ok) {
                 alert('읽은 알림이 모두 삭제되었습니다.');
-
-                // DOM 초기화 및 무한 스크롤 초기화
                 document.getElementById('readNotificationList').innerHTML = '';
                 readPage = 0;
                 readLastPage = false;
-
-                loadReadNotifications(); // 다시 첫 페이지 로딩
+                loadReadNotifications();
             } else {
                 alert('삭제에 실패했습니다.');
             }
@@ -59,12 +54,11 @@ function deleteAllReadNotifications() {
         });
 }
 
-// 무한 스크롤 페이징 상태 변수
+// 무한 스크롤 상태 변수
 let readPage = 0;
 let readLoading = false;
 let readLastPage = false;
 
-// 읽은 탭 스크롤 감지 핸들러
 function readScrollHandler() {
     if (readLoading || readLastPage) return;
 
@@ -77,7 +71,6 @@ function readScrollHandler() {
     }
 }
 
-// 읽은 알림 로딩 함수
 function loadReadNotifications() {
     readLoading = true;
     document.getElementById('readLoading').style.display = 'block';
@@ -100,14 +93,33 @@ function loadReadNotifications() {
             readLoading = false;
             document.getElementById('readLoading').style.display = 'none';
 
-            // 👇 추가된 메시지 표시
             if (readLastPage) {
                 document.getElementById('readEndMessage').style.display = 'block';
             }
-        })
+        });
 }
 
-// 페이지 첫 로드시 기본 탭 실행
+document.getElementById('markAllReadBtn').addEventListener('click', function () {
+    fetch('/notification/mark-all-as-read', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+        .then(res => {
+            if (res.ok) {
+                alert("모든 알림을 읽음 처리했습니다.");
+                location.reload(); // 또는 읽은/읽지 않은 목록을 JS로 분리 렌더링
+            } else {
+                alert("처리에 실패했습니다.");
+            }
+        })
+        .catch(err => {
+            console.error('알림 전체 읽음 처리 실패:', err);
+        });
+});
+
+// 최초 페이지 진입 시 polling도 실행
 document.addEventListener('DOMContentLoaded', () => {
-    showTab('unread'); // 기본으로 '읽지 않음' 탭 활성화
+    showTab('unread');
 });

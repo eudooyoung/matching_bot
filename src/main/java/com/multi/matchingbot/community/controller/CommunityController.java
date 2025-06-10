@@ -4,8 +4,11 @@ import com.multi.matchingbot.community.domain.CommunityCategory;
 import com.multi.matchingbot.community.domain.CommunityCommentDto;
 import com.multi.matchingbot.community.domain.CommunityPostDto;
 import com.multi.matchingbot.community.service.CommunityService;
+import com.multi.matchingbot.company.domain.Company;
+import com.multi.matchingbot.company.service.CompanyService;
 import com.multi.matchingbot.member.domain.entity.Member;
 import com.multi.matchingbot.member.service.MemberService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -24,6 +27,7 @@ public class CommunityController {
 
     private final CommunityService communityService;
     private final MemberService memberService;
+    private final CompanyService companyService;
 
     @GetMapping("")
     public String redirectToList() {
@@ -79,8 +83,18 @@ public class CommunityController {
         // CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         // Member member = userDetails.getMember();
 
-        Member member = memberService.findByUsername(username);
-        communityService.createPost(postDto, member);
+//        Member member = memberService.findByUsername(username);
+//        communityService.createPost(postDto, member);
+//        return "redirect:/community/list";
+        if (authentication.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_COMPANY"))) {
+            Company company = companyService.findByEmail(username);
+            communityService.createPostByCompany(postDto, company); // 별도 서비스 메서드 필요
+        } else {
+            Member member = memberService.findByUsername(username);
+            communityService.createPost(postDto, member);
+        }
+
         return "redirect:/community/list";
     }
 
@@ -90,9 +104,9 @@ public class CommunityController {
 //    }
 
     @GetMapping("/detail/{id}")
-    public String detail(@PathVariable(name = "id") Long id, Model model,Authentication authentication) {
+    public String detail(@PathVariable(name = "id") Long id, Model model, Authentication authentication) {
         var post = communityService.getPostWithComments(id);
-        model.addAttribute("post",CommunityPostDto.fromEntity(post));
+        model.addAttribute("post", CommunityPostDto.fromEntity(post));
         model.addAttribute("categories", communityService.getAllCategories());
 
         model.addAttribute("comment", post.getComments().stream()
@@ -100,14 +114,26 @@ public class CommunityController {
                 .toList());
 
         if (authentication != null) {
-            Member member = memberService.findByUsername(authentication.getName());
-            model.addAttribute("currentUserId", member.getId());
+            String email = authentication.getName();
+
+            // 개인회원 or 기업회원 판단
+            Long currentUserId;
+            try {
+                Member member = memberService.findByUsername(email);
+                currentUserId = member.getId();
+            } catch (EntityNotFoundException e) {
+                Company company = companyService.findByEmail(email);
+                currentUserId = company.getId();  // 주의: companyId임
+            }
+
+            model.addAttribute("currentUserId", currentUserId);
         } else {
             model.addAttribute("currentUserId", null);
         }
 
         return "community/community-detail";
     }
+
 
     @GetMapping("/edit/{id}")
     public String editForm(@PathVariable(name = "id") Long id, Model model, Authentication authentication) {
@@ -116,106 +142,81 @@ public class CommunityController {
         }
 
         var post = communityService.getPostWithComments(id);
-        Member member = memberService.findByUsername(authentication.getName());
+        String email = authentication.getName();
 
-        if (!post.getMember().getId().equals(member.getId())) {
-            return "redirect:/community/list"; // 본인 게시글 아니면 차단
+        boolean isOwner = false;
+        try {
+            Member member = memberService.findByUsername(email);
+            isOwner = post.getMember() != null && post.getMember().getId().equals(member.getId());
+        } catch (EntityNotFoundException e) {
+            Company company = companyService.findByEmail(email);
+            isOwner = post.getCompany() != null && post.getCompany().getId().equals(company.getId());
         }
+
+        if (!isOwner) return "redirect:/community/list";
 
         model.addAttribute("post", CommunityPostDto.fromEntity(post));
         model.addAttribute("categories", communityService.getAllCategories());
-
-        return "community/community-edit"; // ← HTML 템플릿 이름
+        return "community/community-edit";
     }
 
-
     @PostMapping("/edit/{id}")
-    public String update(@PathVariable(name = "id") Long id, @ModelAttribute CommunityPostDto postDto,
+    public String update(@PathVariable Long id,
+                         @ModelAttribute CommunityPostDto postDto,
                          Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
         }
 
+        String email = authentication.getName();
+        try {
+            Member member = memberService.findByUsername(email);
+            communityService.updatePost(id, postDto, member);
+        } catch (EntityNotFoundException e) {
+            Company company = companyService.findByEmail(email);
+            communityService.updatePostByCompany(id, postDto, company);
+        }
 
-
-        Member member = memberService.findByUsername(authentication.getName());
-        communityService.updatePost(id, postDto, member);
         return "redirect:/community/detail/" + id;
     }
 
-
     @PostMapping("/delete/{id}")
-    public String delete(@PathVariable(name = "id") Long id, Authentication authentication) {
-        // 로그인되지 않은 경우 로그인 페이지로 리다이렉트
+    public String delete(@PathVariable Long id, Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
         }
 
+        String email = authentication.getName();
+        try {
+            Member member = memberService.findByUsername(email);
+            communityService.deletePost(id, member);
+        } catch (EntityNotFoundException e) {
+            Company company = companyService.findByEmail(email);
+            communityService.deletePostByCompany(id, company);
+        }
 
-        Member member = memberService.findByUsername(authentication.getName());
-        communityService.deletePost(id, member);
         return "redirect:/community/list";
     }
 
     @PostMapping("/{id}/comment")
-    public String addComment(@PathVariable(name = "id") Long postId,
-                             @RequestParam("content") String content,
+    public String addComment(@PathVariable Long id,
+                             @RequestParam String content,
                              Authentication authentication) {
-
-        // 인증되지 않은 경우 로그인 페이지로 리다이렉트
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
         }
 
-        // 로그인한 사용자 정보로부터 Member 객체 조회
-        Member member = memberService.findByUsername(authentication.getName());
-
-        // 댓글 저장 서비스 호출
-        communityService.addComment(postId, content, member);
-
-        // 댓글 작성 후 해당 게시글 상세 페이지로 리다이렉트
-        return "redirect:/community/detail/" + postId;
-    }
-
-    @PostMapping("/comment/edit")
-    public String updateComment(@RequestParam Long id,
-                                @RequestParam String content,
-                                Authentication authentication) {
-
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return "redirect:/login";
+        String email = authentication.getName();
+        try {
+            Member member = memberService.findByUsername(email);
+            communityService.addComment(id, content, member);
+        } catch (EntityNotFoundException e) {
+            Company company = companyService.findByEmail(email);
+            communityService.addCommentByCompany(id, content, company);
         }
 
-        Member member = memberService.findByUsername(authentication.getName());
-        communityService.updateComment(id, content, member);
-
-        Long postId = communityService.getPostIdByCommentId(id);
-        return "redirect:/community/detail/" + postId;
+        return "redirect:/community/detail/" + id;
     }
-
-
-    @PostMapping("/comment/{id}/delete")
-    public String deleteComment(@PathVariable(name = "id") Long commentId,
-                                Authentication authentication) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return "redirect:/login";
-        }
-
-        Member member = memberService.findByUsername(authentication.getName());
-        Long memberId = member.getId();
-
-        // ✅ 댓글 삭제 전, 해당 댓글이 달린 게시글 ID 조회
-        Long postId = communityService.getPostIdByCommentId(commentId);
-
-        communityService.deleteComment(commentId, memberId);
-        log.info("🔁 댓글 삭제 후 이동할 게시글 ID: {}", postId);
-
-        return "redirect:/community/detail/" + postId;
-
-    }
-
-
-
 
     @PostMapping("/comment/{id}/update")
     public String updateComment(@PathVariable("id") Long id,
@@ -226,11 +227,55 @@ public class CommunityController {
             return "redirect:/login";
         }
 
-        Member member = memberService.findByUsername(authentication.getName());
-        communityService.updateComment(id, content, member);
+        String email = authentication.getName();
+        try {
+            Member member = memberService.findByUsername(email);
+            communityService.updateComment(id, content, member);
+        } catch (EntityNotFoundException e) {
+            Company company = companyService.findByEmail(email);
+            communityService.updateCommentByCompany(id, content, company);
+        }
 
         return "redirect:/community/detail/" + postId;
     }
+
+    @PostMapping("/comment/{id}/delete")
+    public String deleteComment(@PathVariable Long id, Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/login";
+        }
+
+        String email = authentication.getName();
+        Long postId = communityService.getPostIdByCommentId(id);
+
+        try {
+            Member member = memberService.findByUsername(email);
+            communityService.deleteComment(id, member.getId());
+        } catch (EntityNotFoundException e) {
+            Company company = companyService.findByEmail(email);
+            communityService.deleteCommentByCompany(id, company.getId());
+        }
+
+        return "redirect:/community/detail/" + postId;
+    }
+
+
+
+
+//    @PostMapping("/comment/{id}/update")
+//    public String updateComment(@PathVariable("id") Long id,
+//                                @RequestParam("content") String content,
+//                                @RequestParam("postId") Long postId,
+//                                Authentication authentication) {
+//        if (authentication == null || !authentication.isAuthenticated()) {
+//            return "redirect:/login";
+//        }
+//
+//        Member member = memberService.findByUsername(authentication.getName());
+//        communityService.updateComment(id, content, member);
+//
+//        return "redirect:/community/detail/" + postId;
+//    }
 
 
 }

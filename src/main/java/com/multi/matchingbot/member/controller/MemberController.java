@@ -1,5 +1,13 @@
 package com.multi.matchingbot.member.controller;
 
+import com.multi.matchingbot.admin.mapper.MemberAdminMapper;
+import com.multi.matchingbot.common.security.MBotUserDetails;
+import com.multi.matchingbot.company.domain.CompanyUpdateDto;
+import com.multi.matchingbot.member.service.CompanyBookmarkService;
+import com.multi.matchingbot.member.domain.dto.MemberUpdateDto;
+import com.multi.matchingbot.member.domain.entity.Member;
+import com.multi.matchingbot.member.service.CompanyBookmarkService;
+import com.multi.matchingbot.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -48,7 +56,7 @@ public class MemberController {
         Long memberId = userDetails.getId();
         Member member = memberService.findById(memberId);
         model.addAttribute("member", member);
-        return "member/member-mypage";
+        return "member/mypage";
     }
 
     // 개인정보 수정 페이지
@@ -167,4 +175,5 @@ public class MemberController {
         jobBookmarkService.removeJobBookmarks(memberId, jobIds);
         return ResponseEntity.ok("삭제되었습니다.");
     }
+
 }
