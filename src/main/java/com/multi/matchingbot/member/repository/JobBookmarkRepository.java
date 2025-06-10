@@ -25,11 +25,13 @@ public interface JobBookmarkRepository extends JpaRepository<JobBookmark, Long> 
     List<Long> findJobIdsByMemberId(@Param("memberId") Long memberId);
 
     @Query("SELECT new com.multi.matchingbot.job.domain.dto.JobDto(j.id, j.company.id, j.occupation.id, j.skillKeywords, j.traitKeywords, " +
-            "j.title, j.description, j.address, j.mainTask, j.requiredSkills, j.requiredTraits, j.skillKeywords, j.traitKeywords, " +
-            "j.latitude, j.longitude, j.startDate, j.endDate, j.enrollEmail, j.notice, j.createdBy, j.createdAt, j.updatedBy, j.updatedAt, " +
-            "j.company.name) " +
+            "j.title, j.description, j.address, j.mainTask, j.requiredSkills, j.requiredTraits, " +
+            "j.latitude, j.longitude, j.startDate, j.endDate, j.enrollEmail, j.notice, " +
+            "j.createdBy, j.createdAt, j.updatedBy, j.updatedAt, j.company.name) " +
             "FROM JobBookmark jb " +
             "JOIN jb.job j " +
             "WHERE jb.member.id = :memberId")
     Page<JobDto> findJobDtosByMemberId(@Param("memberId") Long memberId, Pageable pageable);
+
+
 }

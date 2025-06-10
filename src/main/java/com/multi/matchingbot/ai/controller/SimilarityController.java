@@ -98,7 +98,7 @@ public class SimilarityController {
 
         } catch (Exception e) {
             Map<String, Object> error = new HashMap<>();
-            error.put("error", "유사도 계산 실패: " + e.getMessage());
+            error.put("error", "매칭률 계산 실패: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
         }
     }*//*
