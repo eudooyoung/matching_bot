@@ -81,6 +81,9 @@ public class JobDto {
 
     private LocalDateTime updatedAt;
 
+    // 북마크 페이지에서 사용하는 회사명 필드
+    private String companyName;
+
     public Job toEntity() {
         Job job = new Job();
         job.setTitle(this.title);

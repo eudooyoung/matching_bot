@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>프로필 편집</title>
+    <link rel="stylesheet" th:href="@{/css/member.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <style>
+        .profile-edit-container {
+            max-width: 600px;
+            margin: 60px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #103254;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .phone-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .phone-group input {
+            flex: 1;
+        }
+
+        .phone-group select {
+            flex: 1;
+        }
+
+        .btn-group {
+            margin-top: 30px;
+            text-align: center;
+            gap: 10px;
+        }
+
+        .submit-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 0 10px;
+        }
+
+        .submit-btn:hover {
+            background-color: #45a049;
+        }
+
+        .cancel-btn {
+            background-color: #f44336;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 0 10px;
+        }
+
+        .cancel-btn:hover {
+            background-color: #da190b;
+        }
+
+        .readonly-field {
+            background-color: #f5f5f5;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header(role=${role})}"></div>
+
+<div class="profile-edit-container">
+    <h2>프로필 편집</h2>
+
+    <form th:action="@{/member/profile_edit}" th:object="${member}" method="post" id="profileForm">
+
+        <!-- 숨겨진 필드로 전화번호 전송 -->
+        <input type="hidden" id="phone" th:field="*{phone}">
+
+        <div class="form-group">
+            <label for="email">이메일</label>
+            <input type="email" id="email" th:field="*{email}" class="readonly-field" readonly>
+            <small style="color: #666;">이메일은 변경할 수 없습니다.</small>
+        </div>
+
+        <div class="form-group">
+            <label for="name">이름</label>
+            <input type="text" id="name" th:field="*{name}" required>
+        </div>
+
+        <div class="form-group">
+            <label>전화번호</label>
+            <div class="phone-group">
+                <select name="phone1" id="phone1">
+                    <option value="010">010</option>
+                    <option value="011">011</option>
+                    <option value="016">016</option>
+                    <option value="017">017</option>
+                    <option value="018">018</option>
+                    <option value="019">019</option>
+                </select>
+                <span>-</span>
+                <input type="text" name="phone2" id="phone2" maxlength="4" placeholder="0000" required>
+                <span>-</span>
+                <input type="text" name="phone3" id="phone3" maxlength="4" placeholder="0000" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="nickname">닉네임</label>
+            <input type="text" id="nickname" th:field="*{nickname}"
+                   placeholder="2~15자의 한글, 영문, 숫자, '_', '-'만 사용 가능">
+        </div>
+
+        <div class="form-group">
+            <label for="address">주소</label>
+            <input type="text" id="address" th:field="*{address}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="birth">생년월일</label>
+            <input type="date" id="birth" name="birth" th:value="${member.birth != null ? #temporals.format(member.birth, 'yyyy-MM-dd') : ''}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="gender">성별</label>
+            <select id="gender" th:field="*{gender}" required>
+                <option value="">선택하세요</option>
+                <option value="M">남성</option>
+                <option value="F">여성</option>
+            </select>
+        </div>
+
+        <div class="btn-group">
+            <button type="submit" class="submit-btn">저장</button>
+            <button type="button" class="cancel-btn" onclick="history.back()">취소</button>
+        </div>
+
+    </form>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script th:src="@{/js/dropdown.js}"></script>
+<script th:src="@{/js/logout.js}"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 기존 전화번호 값 파싱하여 분리
+        const phoneField = document.querySelector('input[name="phone"]');
+        if (phoneField && phoneField.value) {
+            const phone = phoneField.value.replace(/-/g, '');
+            if (phone.length >= 10) {
+                document.getElementById('phone1').value = phone.substring(0, 3);
+                document.getElementById('phone2').value = phone.substring(3, 7);
+                document.getElementById('phone3').value = phone.substring(7);
+            }
+        }
+
+        // 전화번호에서 기존 값 파싱 (th:field로 바인딩된 값에서)
+        const memberPhone = /*[[${member.phone}]]*/ '';
+        if (memberPhone) {
+            const phone = memberPhone.replace(/-/g, '');
+            if (phone.length >= 10) {
+                document.getElementById('phone1').value = phone.substring(0, 3);
+                document.getElementById('phone2').value = phone.substring(3, 7);
+                document.getElementById('phone3').value = phone.substring(7);
+            }
+        }
+
+        // 폼 제출 시 전화번호 합치기 및 유효성 검사
+        const form = document.getElementById('profileForm');
+        form.addEventListener('submit', function(e) {
+            const phone1 = document.getElementById('phone1').value;
+            const phone2 = document.getElementById('phone2').value;
+            const phone3 = document.getElementById('phone3').value;
+
+            // 전화번호 합치기
+            if (phone1 && phone2 && phone3) {
+                document.getElementById('phone').value = phone1 + '-' + phone2 + '-' + phone3;
+            }
+
+            // 생년월일 유효성 검사
+            const birth = document.getElementById('birth').value;
+            if (birth) {
+                const birthDate = new Date(birth);
+                const today = new Date();
+                today.setHours(23, 59, 59, 999); // 오늘 날짜 끝까지 허용
+
+                if (birthDate > today) {
+                    e.preventDefault();
+                    alert('생년월일은 현재 날짜 이전이어야 합니다.');
+                    return false;
+                }
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

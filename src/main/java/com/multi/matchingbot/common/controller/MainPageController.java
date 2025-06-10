@@ -1,5 +1,6 @@
 package com.multi.matchingbot.common.controller;
 
+import com.multi.matchingbot.common.domain.enums.Role;
 import com.multi.matchingbot.common.security.MBotUserDetails;
 import com.multi.matchingbot.job.domain.entity.Job;
 import com.multi.matchingbot.job.service.JobService;
@@ -8,6 +9,7 @@ import com.multi.matchingbot.notification.service.NotificationService;
 import com.multi.matchingbot.resume.domain.entity.Resume;
 import com.multi.matchingbot.resume.mapper.ResumeDetailMapper;
 import com.multi.matchingbot.resume.service.ResumeService;
+import com.multi.matchingbot.member.service.JobBookmarkService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -31,6 +33,7 @@ public class MainPageController {
     private final MemberResumeService memberResumeService;
     private final ResumeDetailMapper resumeDetailMapper;
     private final JobService jobService;
+    private final JobBookmarkService jobBookmarkService;
     private final NotificationService notificationService;
     private final ResumeService resumeService;
 
@@ -51,6 +54,7 @@ public class MainPageController {
 
 
             if ("COMPANY".equals(userDetails.getRole())) {
+            if (Role.COMPANY.equals(user.getRole())) {
                 log.info("기업 회원이므로 /resumes 리다이렉트");
                 return "redirect:/resumes";
             }
@@ -80,6 +84,17 @@ public class MainPageController {
 
         model.addAttribute("role", role);
 
+        // 로그인한 개인회원의 경우 북마크 상태 확인
+        if (user != null && Role.MEMBER.equals(user.getRole())) {
+            List<Long> bookmarkedJobIds = jobBookmarkService.getBookmarkedJobIds(user.getMemberId());
+            log.info("북마크된 채용공고 IDs: {}", bookmarkedJobIds);
+            model.addAttribute("bookmarkedJobIds", bookmarkedJobIds);
+        } else {
+            // 구직자가 아닌 경우 기본값 설정 (안전장치)
+            log.info("비회원 또는 기업회원이므로 빈 북마크 리스트 설정");
+            model.addAttribute("bookmarkedJobIds", java.util.Collections.emptyList());
+        }
+
         return "main/main";
     }
 
@@ -87,25 +102,4 @@ public class MainPageController {
     public String calendarPage() {
         return "main/calendar";
     }
-
-    /*@PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    @GetMapping("/detail/{id}")
-    public String resumeDetail(@PathVariable("id") Long resumeId, Model model, @AuthenticationPrincipal MBotUserDetails userDetails) {
-        Resume resume = memberResumeService.findByIdWithAll(resumeId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이력서 입니다."));
-
-        *//*매칭률 검색용 공고 목록*//*
-        List<Job> jobs = jobService.findByCompanyId(userDetails.getId());
-        model.addAttribute("jobs", jobs);
-
-        *//*이력서 출력용 resumeDto*//*
-        ResumeDetailDto resumeDetailDto = resumeDetailMapper.toDto(resume);
-        model.addAttribute("resume", resumeDetailDto);
-
-        *//*이력서 열람 알림용*//*
-        Long resumeOwnerId = resume.getMember().getId(); // 이력서 주인
-        String companyName = userDetails.getCompanyName(); // 로그인한 기업 이름
-        notificationService.sendResumeViewedNotification(resumeOwnerId, companyName, resume.getTitle());
-        return "resume/detail";
-    }*/
 }

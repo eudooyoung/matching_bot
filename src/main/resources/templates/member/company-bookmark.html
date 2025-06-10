@@ -47,12 +47,11 @@
         <input type="checkbox" name="companyIds" th:value="${company.id}"/>
       </td>
       <td th:text="${iterStat.index + 1}"></td>
-      <td th:text="${companyName}">기업 이름</td>
+      <td th:text="${company.name}">기업 이름</td>
       <td th:onclick="">상세보기</td>
       <td>
         <button class="bookmark-button"
-                th:data-resume-id="${company.id}"
-                th:data-company-id="${memberId}"
+                th:data-company-id="${company.id}"
                 onclick="deleteBookmark(this)">★
         </button>
       </td>
@@ -64,7 +63,7 @@
 
   <div class="pagination">
     <button class="pag-button" th:if="${!companyPage.first}"
-            th:onclick="'location.href=\'/job/company-bookmark?page=' + ${companyPage.number - 1} + '\''">
+            th:onclick="'location.href=\'/member/company-bookmark?page=' + ${companyPage.number - 1} + '\''">
       이전
     </button>
 
@@ -72,7 +71,7 @@
     <span th:text="${companyPage.totalPages}">1</span>
 
     <button class="pag-button" th:if="${!companyPage.last}"
-            th:onclick="'location.href=\'/job/company-bookmark?page=' + ${companyPage.number + 1} + '\''">
+            th:onclick="'location.href=\'/member/company-bookmark?page=' + ${companyPage.number + 1} + '\''">
       다음
     </button>
   </div>
@@ -82,6 +81,7 @@
 
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>
+<script th:src="@{/js/company-bookmark.js}"></script>
 
 </body>
 </html>
