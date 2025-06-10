@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>관심 공고</title>
-  <link rel="stylesheet" th:href="@{/css/company-job.css}">
+  <link rel="stylesheet" th:href="@{/css/member.css}">
   <link rel="stylesheet" th:href="@{/css/layout.css}">
   <style>
     .bookmark-button {
@@ -23,6 +23,67 @@
 <body>
 
 <div th:replace="~{fragments/header :: header(role=${role})}"></div>
+
+<div class="container">
+  <h2>관심 채용공고 관리</h2>
+
+  <button class="delete-button"
+          th:attr="data-member-id=${memberId}"
+          onclick="deleteSelected()">삭제</button>
+
+  <table class="company-table">
+    <thead>
+    <tr>
+      <th><input type="checkbox" onclick="toggleAll(this)"/></th>
+      <th style="width: 10%;">번호</th>
+      <th>채용공고 제목</th>
+      <th>기업명</th>
+      <th>상세보기</th>
+      <th>즐겨찾기</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="job, iterStat : ${jobPage.content}" th:attr="data-job-id=${job.id}">
+      <td>
+        <input type="checkbox" name="jobIds" th:value="${job.id}"/>
+      </td>
+      <td th:text="${iterStat.index + 1}"></td>
+      <td th:text="${job.title}">채용공고 제목</td>
+      <td th:text="${job.companyName}">기업명</td>
+      <td th:onclick="'location.href=\'/job/' + ${job.id} + '\''">상세보기</td>
+      <td>
+        <button class="bookmark-button"
+                th:data-job-id="${job.id}"
+                onclick="deleteBookmark(this)">★
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <button class="mypage-button" onclick="location.href='/member/mypage'">돌아가기</button>
+
+  <div class="pagination">
+    <button class="pag-button" th:if="${!jobPage.first}"
+            th:onclick="'location.href=\'/member/job-bookmark?page=' + ${jobPage.number - 1} + '\''">
+      이전
+    </button>
+
+    <span th:text="${jobPage.number + 1}">1</span> /
+    <span th:text="${jobPage.totalPages}">1</span>
+
+    <button class="pag-button" th:if="${!jobPage.last}"
+            th:onclick="'location.href=\'/member/job-bookmark?page=' + ${jobPage.number + 1} + '\''">
+      다음
+    </button>
+  </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script th:src="@{/js/dropdown.js}"></script>
+<script th:src="@{/js/logout.js}"></script>
+<script th:src="@{/js/job-bookmark.js}"></script>
 
 </body>
 </html>

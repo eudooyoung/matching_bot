@@ -18,6 +18,16 @@
     <strong>내용</strong>
     <p th:text="${notification.content}">내용</p>
     <br>
+    <div th:if="${notification.targetType != null and notification.targetId != null}">
+        <a th:if="${notification.targetType.name() == 'RESUME'}"
+           th:href="@{/member/resume/{id}(id=${notification.targetId})}"
+           class="menu-button">이력서 보러가기</a>
+
+        <a th:if="${notification.targetType.name() == 'JOB'}"
+           th:href="@{/job/{id}(id=${notification.targetId})}"
+           class="menu-button">채용공고 보러가기</a>
+    </div>
+    <br>
     <p><strong>받을 회원:</strong> <span th:text="${companyName}">회원명</span></p>
     <p><strong>보낸 시간:</strong> <span th:text="${notification.createdAt}">보낸 시간</span></p>
     <button class="nav-button" onclick="history.back()">← 돌아가기</button>

@@ -24,6 +24,42 @@ public class JobDto {
     private Long occupationId;
     private String skillKeywordsConcat;
     private String traitKeywordsConcat;
+    private Double similarityScore;
+    private String companyName;
+
+    public JobDto(Long id, Long companyId, Long occupationId,
+                  String skillKeywords, String traitKeywords,
+                  String title, String description, String address,
+                  String mainTask, String requiredSkills, String requiredTraits,
+                  Double latitude, Double longitude,
+                  LocalDate startDate, LocalDate endDate,
+                  String enrollEmail, String notice,
+                  String createdBy, LocalDateTime createdAt,
+                  String updatedBy, LocalDateTime updatedAt,
+                  String companyName) {
+        this.id = id;
+        this.companyId = companyId;
+        this.occupationId = occupationId;
+        this.skillKeywords = skillKeywords;
+        this.traitKeywords = traitKeywords;
+        this.title = title;
+        this.description = description;
+        this.address = address;
+        this.mainTask = mainTask;
+        this.requiredSkills = requiredSkills;
+        this.requiredTraits = requiredTraits;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.enrollEmail = enrollEmail;
+        this.notice = notice;
+        this.createdBy = createdBy;
+        this.createdAt = createdAt;
+        this.updatedBy = updatedBy;
+        this.updatedAt = updatedAt;
+        this.companyName = companyName;
+    }
 
     @NotBlank(message = "제목을 입력해주세요.")
     @Size(max = 100, message = "100자 이하로 입력해주세요.")

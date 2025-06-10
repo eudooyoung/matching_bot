@@ -38,6 +38,24 @@
         .section p {
             margin: 0;
         }
+
+        .star-button {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: gold;
+            cursor: pointer;
+            padding: 0;
+            transition: transform 0.2s;
+        }
+
+        .star-button:hover {
+            transform: scale(1.1);
+        }
+
+        .star-button.filled {
+            color: #FFD700;
+        }
     </style>
 </head>
 <body>
@@ -45,7 +63,7 @@
 <div th:replace="~{fragments/header :: header(role=${role})}"></div>
 
 <div class="container">
-    <!-- 유사도 비교용 키워드 (Spring에서 렌더링) -->
+    <!-- 매칭률 비교용 키워드 (Spring에서 렌더링) -->
     <!--<div id="similarity-data"
          th:data-job-skill="${job.skillKeywords}"
          th:data-resume-skill="${resume.skillKeywords}">
@@ -64,19 +82,19 @@
             <div th:if="${role == 'MEMBER'}" style="margin-top: 10px;">
                 <label for="resumeSelect">이력서 선택:</label>
                 <select id="resumeSelect" name="resumeId">
-                    <option value="" disabled selected>유사도를 적용할 이력서를 선택하세요</option>
+                    <option value="" disabled selected>매칭률을 적용할 이력서를 선택하세요</option>
                     <option th:each="resume : ${resumes}"
                             th:value="${resume.id}"
                             th:text="${resume.title}">이력서 제목</option>
                 </select>
             </div>
 
-            <!-- ✅ 유사도 표시 텍스트 -->
+            <!-- ✅ 매칭률 표시 텍스트 -->
             <span id="similarity-score" style="font-size: 1rem; color: #555; margin-left: 10px;">
-                <span th:if="${role == null}">| 비회원은 유사도가 표시되지 않습니다.</span>
-                <span th:if="${role == 'COMPANY'}">| 기업회원은 유사도가 표시되지 않습니다.</span>
-                <span th:if="${role == 'ADMIN'}">| 관리자 계정은 유사도가 표시되지 않습니다.</span>
-                <span th:if="${role == 'MEMBER'}">| 유사도 계산을 위해 이력서를 선택하세요.</span>
+                <span th:if="${role == null}">| 비회원은 매칭률이 표시되지 않습니다.</span>
+                <span th:if="${role == 'COMPANY'}">| 기업회원은 매칭률이 표시되지 않습니다.</span>
+                <span th:if="${role == 'ADMIN'}">| 관리자 계정은 매칭률이 표시되지 않습니다.</span>
+                <span th:if="${role == 'MEMBER'}">| 매칭률 계산을 위해 이력서를 선택하세요.</span>
             </span>
 
         </h2>
@@ -84,13 +102,22 @@
             <button class="help-icon-button">?</button>
             <div class="tooltip-box">
                 본인의 이력서를 선택해 현재 공고와 키워드<br>
-                유사도를 계산하여 % 로 나타냅니다.
+                매칭률을 계산하여 % 로 나타냅니다.
             </div>
         </div>
     </div>
 
     <div class="job-box">
-        <div class="job-title" th:text="${job.title}">채용 제목</div>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+            <div class="job-title" th:text="${job.title}">채용 제목</div>
+            <button class="star-button"
+                    th:if="${role == 'MEMBER'}"
+                    th:data-job-id="${job.id}"
+                    th:text="${isJobBookmarked != null and isJobBookmarked} ? '★' : '☆'"
+                    th:classappend="${isJobBookmarked != null and isJobBookmarked} ? ' filled' : ''"
+                    onclick="toggleJobStar(this)"
+                    style="background: none; border: none; font-size: 24px; color: gold; cursor: pointer; padding: 0;">☆</button>
+        </div>
 
         <div class="section">
             <h4>설명</h4>
@@ -224,16 +251,43 @@
                 if (simResponse.ok) {
                     const simResult = await simResponse.json();
                     const percent = Math.round(simResult.similarity * 100);
-                    document.getElementById("similarity-score").textContent = ` | 유사도: ${percent}%`;
+                    document.getElementById("similarity-score").textContent = ` | 매칭률: ${percent}%`;
                 } else {
-                    document.getElementById("similarity-score").textContent = " | 유사도 불러오기 실패";
+                    document.getElementById("similarity-score").textContent = " | 매칭률 불러오기 실패";
                 }
             } catch (e) {
-                console.error("유사도 계산 오류:", e);
-                document.getElementById("similarity-score").textContent = " | 유사도 계산 실패";
+                console.error("매칭률 계산 오류:", e);
+                document.getElementById("similarity-score").textContent = " | 매칭률 계산 실패";
             }
         });
     });
+
+    // 채용공고 북마크 토글 함수
+    function toggleJobStar(button) {
+        const jobId = button.getAttribute('data-job-id');
+
+        fetch('/job/api/job-bookmark/toggle', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `jobId=${jobId}`
+        })
+            .then(response => response.text())
+            .then(result => {
+                if (result === 'added') {
+                    button.textContent = '★';
+                    button.classList.add('filled');
+                } else {
+                    button.textContent = '☆';
+                    button.classList.remove('filled');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('북마크 처리 중 오류가 발생했습니다.');
+            });
+    }
 </script>
 
 

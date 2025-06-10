@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -76,6 +79,8 @@ public class JobService {
                 .title(job.getTitle())
                 .description(job.getDescription())
                 .companyId(job.getCompany().getId())
+                .companyName(job.getCompany().getName())
+                .address(job.getAddress())
                 .occupationId(job.getOccupation() != null ? job.getOccupation().getId() : null)
                 .build();
     }
@@ -87,4 +92,17 @@ public class JobService {
     public List<Job> findByCompanyId(Long memberId) {
         return jobRepository.findByCompanyId(memberId);
     }
+
+    // 0609
+    public List<JobDto> findByIdsPreserveOrder(List<Long> sortedIds) {
+        List<Job> jobs = jobRepository.findAllById(sortedIds);
+        Map<Long, Job> jobMap = jobs.stream().collect(Collectors.toMap(Job::getId, Function.identity()));
+
+        return sortedIds.stream()
+                .map(jobMap::get)
+                .filter(Objects::nonNull)
+                .map(JobMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
 }

@@ -4,7 +4,7 @@ window.fetchWithAuth = async function fetchWithAuth(url, options = {}, retry = t
         // 👇 8081로 리디렉션 처리
        /* if (url.startsWith("/calculate-similarity")) {
             url = "http://localhost:8081" + url;
-            console.log("📡 유사도 요청 URL:", url);  // 여기에 로그 추가
+            console.log("📡 매칭률 요청 URL:", url);  // 여기에 로그 추가
         }*/
 
         const defaultOptions = {
