@@ -113,17 +113,6 @@
     overflow-x: auto; /* ✅ 작아지면 좌우 스크롤 허용 */
 }
 
-/*.table {
-    table-layout: fixed;
-    width: 90%;
-    max-width: 100%; !* ✅ 브라우저 너비 초과 방지 *!
-    margin: 1rem auto;
-    border-collapse: collapse;
-    background-color: white;
-    text-align: center;
-    font-size: 14px;
-}*/
-
 .table th,
 .table td {
     border: 1px solid #ddd;
@@ -131,6 +120,19 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+/* 체크박스 셀과 체크박스 크기 조정 */
+.table td:first-child,
+.table th:first-child {
+    padding: 0;
+    /*width: 20px;*/
+}
+
+.table input[type="checkbox"] {
+    transform: scale(0.85); /* 크기 줄이기 */
+    margin: 0 auto;
+    display: block;
 }
 
 .table thead {

@@ -23,12 +23,12 @@
                     <button type="button" class="btn btn-restore"
                             onclick="bulkSoftAction('PATCH', '/api/v1/admin/bulk/companies')">복구
                     </button>
-                    <button type="button" class="btn btn-extract"
+                    <!--<button type="button" class="btn btn-extract"
                             onclick="bulkExtract('EXTRACT', '/admin/bulk/placeholder')">추출
-                    </button>
+                    </button>-->
                 </div>
 
-                <form method="get" th:action="@{/admin/companies}" class="search-form">
+                <form method="get" th:action="@{/admin/board/ companies}" class="search-form">
                     <div class="search-options">
                         <!-- 정렬 기준 -->
                         <select name="sortBy" onchange="this.form.submit()">
@@ -53,12 +53,12 @@
                             <option value="N" th:selected="${condition.status == 'N'}">INACTIVE</option>
                         </select>
 
-                        <select name="reportStatus" onchange="this.form.submit()">
+                        <!--<select name="reportStatus" onchange="this.form.submit()">
                             <option value="" disabled>보고서 상태</option>
                             <option value="">전체</option>
                             <option value="Y" th:selected="${condition.reportStatus == 'Y'}">추출 완료</option>
                             <option value="N" th:selected="${condition.reportStatus == 'N'}">미완료</option>
-                        </select>
+                        </select>-->
                     </div>
 
                     <div class="search-right" onchange="this.form.submit()">
@@ -73,7 +73,7 @@
             <div class="table-wrapper">
                 <table class="table">
                     <colgroup>
-                        <col style="width: 25px;"/>  <!-- 체크박스 -->
+                        <col style="width: 15px;"/>  <!-- 체크박스 -->
                         <col style="width: 50px;"/>  <!-- 회원 번호 -->
                         <col style="width: 85px;"/>  <!-- 회사 이름 -->
                         <col style="width: 160px;"/>  <!-- 이메일 -->
@@ -84,7 +84,7 @@
                         <col style="width: 130px;"/>  <!-- 수정자 -->
                         <col style="width: 95px;"/>  <!-- 수정일 -->
                         <col style="width: 30px;"/>  <!-- 평가 -->
-                        <col style="width: 40px;"/>  <!-- 추출 -->
+<!--                        <col style="width: 40px;"/>  &lt;!&ndash; 추출 &ndash;&gt;-->
                         <col style="width: 45px;"/>  <!-- 가입 상태 -->
                         <col style="width: 40px;"/>  <!-- 삭제/복구 -->
                     </colgroup>
@@ -103,7 +103,7 @@
                         <th>수정자</th>
                         <th>수정일</th>
                         <th>평가</th>
-                        <th>추출</th>
+<!--                        <th>추출</th>-->
                         <th>가입상태</th>
                         <th>삭제</th>
                     </tr>
@@ -137,13 +137,13 @@
                             <a class="link-detail" th:href="@{|/admin/board/companies/${company.id}|}"
                                th:text="${company.reportStatus}">보고서 상태</a>
                         </td>
-                        <td>
+                        <!--<td>
                             <button type="button"
                                     class="btn btn-extract"
-                                    th:onclick="|extractKeywords({ id: ${company.id}, url: '/api/v1/admin/companies', onSuccess: () => location.reload() })|">
+                                    th:onclick="|refreshCompanyReport(${company.id})|" onSuccess: () => location.reload() })|">
                                 추출
                             </button>
-                        </td>
+                        </td>-->
                         <td th:class="${company.getStatusClass()}" th:text="${company.getStatusText()}">가입 상태</td>
                         <td>
                             <button type="button"

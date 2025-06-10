@@ -95,9 +95,11 @@ public class AdminBoardService {
     public AdminPagedResult<CommunityAdminView> posts(AdminSearchCondition condition) {
         Pageable pageable = condition.toPageable();
 
-        Page<CommunityPost> page = communityAdminRepository.searchWithCondition(
+        Page<CommunityPost> page = communityAdminRepository
+                .searchWithCondition(
                 condition.getKeyword(),
                 condition.getCategoryId(),
+                condition.getWriterType(),  // ✅ 추가
                 pageable
         );
 

@@ -70,7 +70,7 @@
             <div class="table-wrapper">
                 <table class="table">
                     <colgroup>
-                        <col style="width: 20px;"/>  <!-- 체크박스 -->
+                        <col style="width: 15px;"/>  <!-- 체크박스 -->
                         <col style="width: 50px;"/>  <!-- 회원 번호 -->
                         <col style="width: 180px;"/>  <!-- 제목 -->
                         <!--                        <col style="width: 120px;"/> &lt;!&ndash; 역량 키워드 &ndash;&gt;-->
@@ -133,7 +133,7 @@
                         <td>
                             <button type="button"
                                     class="btn btn-delete"
-                                    th:onclick="|deleteItem({ id: ${resume.id}, url: '/api/v1/admin/resumes/{id}', onSuccess: () => location.reload() })|">
+                                    th:onclick="|deleteItem({ id: ${resume.id}, url: '/api/v1/admin/resumes', onSuccess: () => location.reload() })|">
                                 삭제
                             </button>
 

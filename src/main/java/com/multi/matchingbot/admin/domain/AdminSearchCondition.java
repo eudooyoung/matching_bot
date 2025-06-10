@@ -2,6 +2,7 @@ package com.multi.matchingbot.admin.domain;
 
 import com.multi.matchingbot.admin.domain.enums.EndStatus;
 import com.multi.matchingbot.career.domain.CareerType;
+import com.multi.matchingbot.common.domain.enums.Role;
 import lombok.Data;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +17,7 @@ public class AdminSearchCondition {
     private CareerType careerType;  // 이력서 타입: 신입/경력
     private EndStatus endStatus = EndStatus.ALL;  // 채용 공고 진행 상태
     private Long categoryId; // 커뮤니티 카테고리 아이디
+    private Role writerType;
 
 
     private int page = 0;

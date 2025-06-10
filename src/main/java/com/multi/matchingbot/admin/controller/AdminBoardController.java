@@ -14,6 +14,7 @@ import com.multi.matchingbot.company.service.CompanyService;
 import com.multi.matchingbot.job.domain.dto.JobDto;
 import com.multi.matchingbot.job.domain.entity.Job;
 import com.multi.matchingbot.job.service.JobService;
+import com.multi.matchingbot.member.domain.entity.Member;
 import com.multi.matchingbot.member.service.MemberService;
 import com.multi.matchingbot.resume.domain.entity.Resume;
 import com.multi.matchingbot.resume.service.ResumeService;
@@ -54,11 +55,11 @@ public class AdminBoardController {
         return "/admin/board-members";
     }
 
-    //    구직자 회원 정보 임시 매핑
     @GetMapping("/members/{memberId}")
     public String adminMemberDetail(@PathVariable(name = "memberId") Long memberId, Model model) {
-        model.addAttribute("memberId", memberService.getMemberById(memberId));
-        return "members/profile";
+        Member member = memberService.findById(memberId);
+        model.addAttribute("member", member);
+        return "member/profile-edit";
     }
 
     /**

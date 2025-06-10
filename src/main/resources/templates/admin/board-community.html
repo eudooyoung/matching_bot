@@ -19,7 +19,7 @@
             <div class="search-bar-wrapper">
                 <div class="bulk-actions">
                     <button type="button" class="btn btn-delete"
-                            onclick="bulkHardDelete('/api/v1/admin/bulk/community')">삭제
+                            onclick="bulkHardDelete('/api/v1/admin/bulk/communityPosts')">삭제
                     </button>
                 </div>
 
@@ -47,6 +47,15 @@
                             </option>
                         </select>
 
+                        <select name="writerType" onchange="this.form.submit()">
+                            <option value="">전체 작성자</option>
+                            <option value="MEMBER" th:selected="${condition.writerType?.name() == 'MEMBER'}">개인회원
+                            </option>
+                            <option value="COMPANY" th:selected="${condition.writerType?.name() == 'COMPANY'}">기업회원
+                            </option>
+                        </select>
+
+
                     </div>
 
                     <div class="search-right">
@@ -61,7 +70,7 @@
             <div class="table-wrapper">
                 <table class="table">
                     <colgroup>
-                        <col style="width: 25px;"/>
+                        <col style="width: 15px;"/>
                         <col style="width: 40px;"/>
                         <col style="width: 180px;"/>
                         <col style="width: 50px;"/> <!--카테고리-->
@@ -108,7 +117,7 @@
                         <td>
                             <button type="button"
                                     class="btn btn-delete"
-                                    th:onclick="|deleteItem({ id: ${post.id}, url: '/api/v1/admin/community/{id}', onSuccess: () => location.reload() })|">
+                                    th:onclick="|deleteItem({ id: ${post.id}, url: '/api/v1/admin/community', onSuccess: () => location.reload() })|">
                                 삭제
                             </button>
                         </td>
