@@ -18,7 +18,12 @@
             <div class="user-box">
         <span>
           <span th:text="${company.name}"></span> 님
-            <button class="star-button" sec:authorize="!hasRole('COMPANY')" onclick="toggleStar(this)">☆</button>
+            <button class="star-button"
+                    sec:authorize="!hasRole('COMPANY')"
+                    th:data-company-id="${companyId}"
+                    th:text="${isCompanyBookmarked != null and isCompanyBookmarked} ? '★' : '☆'"
+                    th:classappend="${isCompanyBookmarked != null and isCompanyBookmarked} ? ' filled' : ''"
+                    onclick="toggleCompanyStar(this)">☆</button>
         </span>
             </div>
             <div class="mypage-box">
@@ -64,7 +69,11 @@
                     </td>
                     <td th:onclick="'location.href=\'/job/' + ${job.id} + '\''">상세보기</td>
                     <td sec:authorize="!hasRole('COMPANY')">
-                        <button class="star-button" onclick="toggleStar(this)" sec:authorize="!hasRole('COMPANY')">☆</button>
+                        <button class="star-button"
+                                th:data-job-id="${job.id}"
+                                th:text="${bookmarkedJobIds != null and #lists.contains(bookmarkedJobIds, job.id)} ? '★' : '☆'"
+                                th:classappend="${bookmarkedJobIds != null and #lists.contains(bookmarkedJobIds, job.id)} ? ' filled' : ''"
+                                onclick="toggleJobStar(this)">☆</button>
                     </td>
                 </tr>
                 </tbody>
@@ -78,14 +87,56 @@
 
 <script>
 
-    function toggleStar(button) {
-        if (button.textContent === '☆') {
-            button.textContent = '★';
-            button.classList.add('filled');
-        } else {
-            button.textContent = '☆';
-            button.classList.remove('filled');
-        }
+    function toggleCompanyStar(button) {
+        const companyId = button.getAttribute('data-company-id');
+
+        fetch('/attached/api/company-bookmark/toggle', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `companyId=${companyId}`
+        })
+            .then(response => response.text())
+            .then(result => {
+                if (result === 'added') {
+                    button.textContent = '★';
+                    button.classList.add('filled');
+                } else {
+                    button.textContent = '☆';
+                    button.classList.remove('filled');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('북마크 처리 중 오류가 발생했습니다.');
+            });
+    }
+
+    function toggleJobStar(button) {
+        const jobId = button.getAttribute('data-job-id');
+
+        fetch('/attached/api/job-bookmark/toggle', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `jobId=${jobId}`
+        })
+            .then(response => response.text())
+            .then(result => {
+                if (result === 'added') {
+                    button.textContent = '★';
+                    button.classList.add('filled');
+                } else {
+                    button.textContent = '☆';
+                    button.classList.remove('filled');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('북마크 처리 중 오류가 발생했습니다.');
+            });
     }
 
     function goToMyPage() {

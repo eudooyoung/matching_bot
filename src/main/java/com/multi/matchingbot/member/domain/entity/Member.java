@@ -63,7 +63,7 @@ public class Member extends BaseEntity {
     private Gender gender;
 
     @NotNull(message = "생년월일은 필수입니다.")
-    @Past(message = "생년월일은 과거 날짜여야 합니다.")
+    @PastOrPresent(message = "생년월일은 현재 날짜 이전이어야 합니다.")
     @Column(nullable = false)
     private LocalDate birth;
 
