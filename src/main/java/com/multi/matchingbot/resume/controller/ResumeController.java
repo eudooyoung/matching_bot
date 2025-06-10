@@ -37,7 +37,7 @@ public class ResumeController {
         Resume resume = memberResumeService.findByIdWithAll(resumeId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이력서 입니다."));
 
-        /*유사도 검색용 공고 목록*/
+        /*매칭률 검색용 공고 목록*/
         List<Job> jobs = jobService.findByCompanyId(userDetails.getId());
         model.addAttribute("jobs", jobs);
 

@@ -24,6 +24,8 @@ public class JobDto {
     private Long occupationId;
     private String skillKeywordsConcat;
     private String traitKeywordsConcat;
+    private Double similarityScore;
+    private String companyName;
 
     @NotBlank(message = "제목을 입력해주세요.")
     @Size(max = 100, message = "100자 이하로 입력해주세요.")

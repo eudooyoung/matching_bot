@@ -29,7 +29,7 @@
                 <div class="similarity-control" sec:authorize="hasRole('COMPANY')">
                     <label for="jobSelect">공고 선택:</label>
                     <select id="jobSelect" name="jobId">
-                        <option value="" disabled selected>유사도를 적용할 공고를 선택하세요</option>
+                        <option value="" disabled selected>매칭률을 적용할 공고를 선택하세요</option>
                         <option th:each="job : ${jobs}"
                                 th:value="${job.id}"
                                 th:text="${job.title}">공고 제목
@@ -38,16 +38,16 @@
                     <button class="help-icon-button">?</button>
                     <div class="tooltip-box">
                         기업의 채용공고를 선택해 현재 이력서와 키워드<br>
-                        유사도를 계산하여 % 로 나타냅니다.
+                        매칭률을 계산하여 % 로 나타냅니다.
                     </div>
                 </div>
 
                 <div class="similarity-status">
                     <span id="similarity-score">
-                        <span sec:authorize="isAnonymous()">| 비회원은 유사도가 표시되지 않습니다.</span>
-                        <span sec:authorize="hasRole('MEMBER')">| 일반회원은 유사도가 표시되지 않습니다.</span>
-                        <span sec:authorize="hasRole('ADMIN')">| 관리자 계정은 유사도가 표시되지 않습니다.</span>
-                        <span sec:authorize="hasRole('COMPANY')">| 유사도 계산을 위해 공고를 선택하세요.</span>
+                        <span sec:authorize="isAnonymous()">| 비회원은 매칭률이 표시되지 않습니다.</span>
+                        <span sec:authorize="hasRole('MEMBER')">| 일반회원은 매칭률이 표시되지 않습니다.</span>
+                        <span sec:authorize="hasRole('ADMIN')">| 관리자 계정은 매칭률이 표시되지 않습니다.</span>
+                        <span sec:authorize="hasRole('COMPANY')">| 매칭률 계산을 위해 공고를 선택하세요.</span>
                     </span>
                 </div>
             </div>

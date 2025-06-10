@@ -26,14 +26,14 @@ export function initSimilarityFeature() {
                 job_trait_keys: jobTrait
             };
 
-            console.log("📦 유사도 요청 데이터:", JSON.stringify(reqBody, null, 2)); // pretty-print
+            console.log("📦 매칭률 요청 데이터:", JSON.stringify(reqBody, null, 2)); // pretty-print
 
             const percent = await calculateSimilarity(reqBody);
-            console.log("✅ 유사도 결과:", percent + "%"); // 유사도 결과 확인용 로그
+            console.log("✅ 매칭률 결과:", percent + "%"); // 매칭률 결과 확인용 로그
             renderSimilarityScore(percent);
 
         } catch (e) {
-            console.error("유사도 계산 오류:", e);
+            console.error("매칭률 계산 오류:", e);
             renderSimilarityScore(null);
         }
     });
@@ -51,12 +51,12 @@ async function calculateSimilarity(body) {
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(body)
     });
-    if (!res.ok) throw new Error("유사도 계산 API 실패");
+    if (!res.ok) throw new Error("매칭률 계산 API 실패");
     const result = await res.json();
     return Math.round(result.similarity * 100);
 }
 
 function renderSimilarityScore(percent) {
     const el = document.getElementById("similarity-score");
-    el.textContent = percent != null ? ` | 유사도: ${percent}%` : " | 유사도 계산 실패";
+    el.textContent = percent != null ? ` | 매칭률: ${percent}%` : " | 매칭률 계산 실패";
 }
