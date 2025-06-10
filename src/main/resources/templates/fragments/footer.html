@@ -1,4 +1,4 @@
-<div th:fragment="footer">
+<div th:fragment="footer" th:attr="data-role=${role}">
   <footer class="footer">
     &copy; 2025 MatchingBot Inc. All rights reserved.
   </footer>
@@ -19,42 +19,55 @@
     </div>
   </div>
 
-  <script th:inline="javascript">
-    const userRole = /*[[${role}]]*/ "GUEST";
-  </script>
+<!--  <script th:inline="javascript">-->
+<!--    const userRole = /*[['${role}']]*/ "GUEST";-->
+<!--  </script>-->
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const toggleBtn = document.getElementById("chatbot-toggle");
       const modal = document.getElementById("chatbot-modal");
+      const chatMessages = document.getElementById("chat-messages");
       const sendBtn = document.getElementById("chat-send-button");
       const inputField = document.getElementById("chat-input");
 
-      if (toggleBtn && modal) {
-        toggleBtn.addEventListener("click", () => {
-          const chatMessages = document.getElementById("chat-messages");
+      // ✅ userRole을 HTML 속성에서 안전하게 가져오기
+      const footer = document.querySelector("div[th\\:fragment='footer'], div[data-role]");
+      const userRole = footer?.dataset?.role || "GUEST";
+      console.log("👤 userRole =", userRole); // 디버깅 확인용
+
+      toggleBtn.addEventListener("click", () => {
+        const isOpening = modal.style.display === "none" || modal.style.display === "";
+        if (isOpening) {
+          modal.style.display = "flex";
           chatMessages.innerHTML = "";
 
-          if (!userRole || userRole === "GUEST") {
-            const goLogin = confirm("챗봇은 로그인 후 이용 가능합니다.\n지금 로그인하시겠습니까?");
-            if (goLogin) window.location.href = "/auth/login";
-            return;
-          }
+          setTimeout(() => {
+            switch (userRole) {
+              case "GUEST":
+                appendMessage("bot", "비회원으로 입장하셨습니다.");
+                appendMessage("bot", "사용 가능한 명령어: 회원가입, 커뮤니티");
+                break;
+              case "COMPANY":
+                appendMessage("bot", "기업회원으로 입장하셨습니다.");
+                appendMessage("bot", "사용 가능한 명령어: 기업페이지, 채용 공고 관리, 관심 이력서 목록, 기업 정보 수정, 커뮤니티");
+                break;
+              case "MEMBER":
+                appendMessage("bot", "일반회원으로 입장하셨습니다.");
+                appendMessage("bot", "사용 가능한 명령어: 커뮤니티, 내주변채용공고, 마이페이지, 이력서 관리, 관심 기업 목록, 관심 공고 목록, 개인 정보 수정 ");
+                break;
+              default:
+                appendMessage("bot", "역할 정보를 가져오지 못했습니다.");
+            }
+          }, 50);
+        } else {
+          modal.style.display = "none";
+        }
+      });
 
-          if (userRole === "COMPANY") {
-            appendMessage("bot", "기업회원으로 입장하셨습니다.");
-            appendMessage("bot",  "사용 가능한 명령어: 기업페이지, 커뮤니티");
-          } else if (userRole === "MEMBER") {
-            appendMessage("bot", "일반회원으로 입장하셨습니다.");
-            appendMessage("bot", "사용 가능한 명령어: 커뮤니티, 내주변채용공고, 마이페이지");
-          }
 
-          modal.style.display = modal.style.display === "none" ? "flex" : "none";
-        });
-      }
-
-      if (sendBtn) sendBtn.addEventListener("click", sendMessage);
-
+      // 전송 버튼 클릭 또는 Enter 입력
+      sendBtn.addEventListener("click", sendMessage);
       inputField.addEventListener("keydown", (event) => {
         if (event.key === "Enter") {
           event.preventDefault();
@@ -62,20 +75,19 @@
         }
       });
 
+      // 메시지 전송 함수
       async function sendMessage() {
-        const input = document.getElementById("chat-input");
-        const message = input.value.trim();
+        const message = inputField.value.trim();
         if (!message) return;
 
         appendMessage("user", message);
-        input.value = "";
+        inputField.value = "";
 
-        const container = document.getElementById("chat-messages");
         const loadingMsg = document.createElement("div");
         loadingMsg.textContent = "🤖 답변을 생성 중";
         loadingMsg.style.marginBottom = "8px";
-        container.appendChild(loadingMsg);
-        container.scrollTop = container.scrollHeight;
+        chatMessages.appendChild(loadingMsg);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
 
         let dotCount = 0;
         const loadingInterval = setInterval(() => {
@@ -92,29 +104,55 @@
 
           const data = await response.json();
           clearInterval(loadingInterval);
+          loadingMsg.remove();
 
           const reply = data.reply || "응답 없음";
-          loadingMsg.textContent = "🤖 " + reply;
+          appendMessage("bot", reply);
 
-          if (data.redirect && data.url) {
-            appendMessage("bot", `\"${message}\" 명령어를 인식했습니다. 잠시 후 이동합니다.`);
-            setTimeout(() => window.location.href = data.url, 1500);
+          if (data.fullReply) {
+            const moreBtn = createMoreButton(data.fullReply);
+            chatMessages.appendChild(moreBtn);
           }
 
+          if (data.redirect && data.url) {
+            appendMessage("bot", "잠시 후 이동합니다.");
+            setTimeout(() => window.location.href = data.url, 1500);
+          }
         } catch (error) {
           clearInterval(loadingInterval);
           loadingMsg.textContent = "❌ GPT 호출 실패: 서버 오류 또는 네트워크 문제입니다.";
         }
       }
 
+      // 메시지 추가 함수
       function appendMessage(sender, text) {
-        const container = document.getElementById("chat-messages");
         const msg = document.createElement("div");
-        msg.textContent = (sender === "user" ? "🙋 " : "🤖 ") + text;
+        msg.innerHTML = (sender === "user" ? "🙋 " : "🤖 ") + text.replace(/\n/g, "<br><br>");
         msg.style.marginBottom = "8px";
-        container.appendChild(msg);
-        container.scrollTop = container.scrollHeight;
+        chatMessages.appendChild(msg);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      // 더보기 버튼 생성 함수
+      function createMoreButton(fullText) {
+        const button = document.createElement("button");
+        button.textContent = "더보기";
+        button.style.marginTop = "6px";
+        button.style.backgroundColor = "#f0f0f0";
+        button.style.border = "none";
+        button.style.padding = "5px 10px";
+        button.style.cursor = "pointer";
+        button.style.borderRadius = "6px";
+        button.style.fontSize = "0.9rem";
+
+        button.addEventListener("click", () => {
+          appendMessage("bot", fullText);
+          button.remove();
+        });
+
+        return button;
       }
     });
   </script>
+
 </div>

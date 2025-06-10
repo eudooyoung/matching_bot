@@ -2,7 +2,7 @@ package com.multi.matchingbot.admin.mapper;
 
 import com.multi.matchingbot.common.domain.enums.Yn;
 import com.multi.matchingbot.company.domain.Company;
-import com.multi.matchingbot.admin.domain.CompanyAdminView;
+import com.multi.matchingbot.admin.domain.view.CompanyAdminView;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -14,7 +14,7 @@ public interface CompanyAdminMapper {
 
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "formattedId", expression = "java(CompanyAdminMapper.formatId(company.getId()))")
+    @Mapping(target = "formattedId", expression = "java(CompanyAdminMapper.formattedId(company.getId()))")
     @Mapping(target = "name", source = "name")
     @Mapping(target = "email", source = "email")
     @Mapping(target = "phone", source = "phone")
@@ -30,7 +30,7 @@ public interface CompanyAdminMapper {
     @Mapping(target = "updatedAt", source = "updatedAt")
     CompanyAdminView toCompanyAdminView(Company company);
 
-    static String formatId(Long id) {
+    static String formattedId(Long id) {
         return String.format("C%05d", id);
     }
 

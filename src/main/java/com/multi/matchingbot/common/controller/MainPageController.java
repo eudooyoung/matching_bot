@@ -4,6 +4,11 @@ import com.multi.matchingbot.common.domain.enums.Role;
 import com.multi.matchingbot.common.security.MBotUserDetails;
 import com.multi.matchingbot.job.domain.entity.Job;
 import com.multi.matchingbot.job.service.JobService;
+import com.multi.matchingbot.member.service.MemberResumeService;
+import com.multi.matchingbot.notification.service.NotificationService;
+import com.multi.matchingbot.resume.domain.entity.Resume;
+import com.multi.matchingbot.resume.mapper.ResumeDetailMapper;
+import com.multi.matchingbot.resume.service.ResumeService;
 import com.multi.matchingbot.member.service.JobBookmarkService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -24,30 +30,37 @@ import java.util.List;
 @RequestMapping("/")
 public class MainPageController {
 
+    private final MemberResumeService memberResumeService;
+    private final ResumeDetailMapper resumeDetailMapper;
     private final JobService jobService;
     private final JobBookmarkService jobBookmarkService;
+    private final NotificationService notificationService;
+    private final ResumeService resumeService;
 
     @GetMapping({"/", "/main"})
     public String mainPage(
             @RequestParam(name = "page", defaultValue = "1") int page,
-            @RequestParam(name = "size", defaultValue = "6") int size,
+            @RequestParam(name = "size", defaultValue = "9") int size,
             Model model,
-            @AuthenticationPrincipal MBotUserDetails user) {
+            @AuthenticationPrincipal MBotUserDetails userDetails) {
 
-        log.info("mainPage 호출됨. 사용자 정보: {}", user);
+        String role = null;
+        List<Resume> resumes = Collections.emptyList(); // 기본값
 
-        if (user != null) {
-            log.info("user.getRole() 값 직접 확인: '{}'", user.getRole());
+        log.info("mainPage 호출됨. 사용자 정보: {}", userDetails);
+
+        if (userDetails != null) {
+            log.info("user.getRole() 값 직접 확인: '{}'", userDetails.getRole());
 
 
-            if (Role.COMPANY.equals(user.getRole())) {
+            if ("COMPANY".equals(userDetails.getRole())) {
                 log.info("기업 회원이므로 /resumes 리다이렉트");
                 return "redirect:/resumes";
             }
 
-            model.addAttribute("role", user.getRole().name()); // 문자열 "MEMBER", "COMPANY", "ADMIN" 등으로 변환
+            model.addAttribute("role", userDetails.getRole().name()); // 문자열 "MEMBER", "COMPANY", "ADMIN" 등으로 변환
 
-//            model.addAttribute("role", user.getRole());
+//            model.addAttribute("role", userDetails.getRole());
         } else {
             log.info("비회원 접근");
             model.addAttribute("role", null);
@@ -61,9 +74,18 @@ public class MainPageController {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", jobPage.getTotalPages());
 
+        if (userDetails != null) {
+            role = userDetails.getRole().name();
+
+            resumes = resumeService.findByMemberId(userDetails.getMemberId());
+            model.addAttribute("resumes", resumes);
+        }
+
+        model.addAttribute("role", role);
+
         // 로그인한 개인회원의 경우 북마크 상태 확인
-        if (user != null && Role.MEMBER.equals(user.getRole())) {
-            List<Long> bookmarkedJobIds = jobBookmarkService.getBookmarkedJobIds(user.getMemberId());
+        if (userDetails != null && Role.MEMBER.equals(userDetails.getRole())) {
+            List<Long> bookmarkedJobIds = jobBookmarkService.getBookmarkedJobIds(userDetails.getMemberId());
             log.info("북마크된 채용공고 IDs: {}", bookmarkedJobIds);
             model.addAttribute("bookmarkedJobIds", bookmarkedJobIds);
         } else {

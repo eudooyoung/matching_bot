@@ -3,43 +3,176 @@
 <head>
     <meta charset="UTF-8"/>
     <title>MatchingBot | 채용공고</title>
-
-    <!-- ✅ Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link rel="stylesheet" th:href="@{/css/layout.css}"/>
 
     <style>
-        .card {
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: sans-serif;
+            background-color: #fafafa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .search-bar,
+        .filter-buttons {
+            text-align: center;
             margin-bottom: 20px;
+        }
+
+        .search-bar input[type="text"] {
+            width: 50%;
+            padding: 8px;
+            font-size: 1rem;
+        }
+
+        .search-bar button {
+            padding: 8px 16px;
+            font-size: 1rem;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        .search-filters {
+            display: none;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #f2f2f2;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .search-filters label {
+            font-weight: bold;
+            margin-right: 20px;
+        }
+
+        .card-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .card {
+            position: relative;
+            width: calc(33.333% - 20px);
+            height: 300px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
         }
 
         .card-title {
             font-size: 1.2rem;
             font-weight: bold;
+            margin-bottom: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
+        .meta-text,
         .card-text {
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: #555;
+            display: -webkit-box;
+            -webkit-line-clamp: 5; /* ✅ 원하는 줄 수 (4~5로 설정 가능) */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
+
 
         .meta-text {
-            font-size: 0.9rem;
             color: #777;
+            margin-bottom: 6px;
         }
 
-        .search-filters {
-            display: none;
-            margin-top: 10px;
-            padding: 10px;
-            background-color: #f2f2f2;
+        .btn-link {
+            margin-top: auto;
+            padding: 6px 12px;
+            text-align: center;
+            border: 1px solid #007bff;
+            color: #007bff;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-link:hover {
+            background: #007bff;
+            color: #fff;
+        }
+
+        .pagination {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 4px;
+        }
+
+        .pagination li a,
+        .pagination li span {
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .pagination .active a {
+            background: #007bff;
+            color: #fff;
+            border-color: #007bff;
+        }
+
+        .pagination .disabled span {
+            color: #aaa;
+            cursor: default;
+        }
+
+        .filter-buttons button {
+            padding: 10px 18px; /* 기존: 14px 24px */
+            font-size: 1rem; /* 기존: 1.1rem */
+            font-weight: bold;
+            background-color: #103254;
+            color: white;
+            border: none;
             border-radius: 8px;
+            cursor: pointer;
+            margin: 0 8px; /* 기존: 0 10px */
+            transition: background-color 0.2s ease-in-out;
         }
 
-        .search-filters label {
-            margin-right: 20px;
+        .filter-buttons button:hover {
+            background-color: #0b243f;
+        }
+
+
+        @media (max-width: 992px) {
+            .card {
+                width: calc(50% - 20px);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                width: 100%;
+            }
         }
 
         .job-card-header {
@@ -50,6 +183,9 @@
         }
 
         .star-button {
+            position: absolute;
+            top: 16px;          /* 위에서 16px */
+            right: 16px;
             background: none;
             border: none;
             font-size: 20px;
@@ -71,102 +207,100 @@
 <body>
 
 <div class="wrapper">
+    <!-- ✅ 헤더 삽입 -->
     <div th:replace="~{fragments/header :: header(role=${role})}"></div>
 
-    <main class="main-content container py-5">
-        <h2 class="text-center mb-4"></h2>
-
-        <!-- ✅ 검색 바 -->
-        <section class="text-center mb-4">
-            <input type="text" id="search-input" placeholder="채용 공고 검색" class="form-control d-inline-block w-50"/>
-            <button type="button" id="search-button" class="btn btn-primary ms-2">🔍 검색</button>
+    <main class="container">
+        <!-- 🔍 검색창 -->
+        <section class="search-bar">
+            <input type="text" id="search-input" placeholder="채용 공고 검색" />
+            <button type="button" id="search-button">🔍 검색</button>
         </section>
 
-        <!-- ✅ 필터 영역 -->
-        <section class="search-filters text-center" id="search-filters">
-            <label><strong>직무 선택:</strong></label>
-            <div id="react-job-category-selector" class="mb-2"></div>
-            <input type="hidden" id="filter-job-group" name="jobGroup"/>
-            <input type="hidden" id="filter-job-type" name="jobType"/>
-            <input type="hidden" id="filter-job-role" name="jobRole"/>
-
-            <label><strong>지역 선택:</strong></label>
-            <div id="react-location-selector" class="mb-2"></div>
-            <input type="hidden" id="filter-region-main" name="region_main"/>
-            <input type="hidden" id="filter-region-sub" name="region_sub"/>
+        <!-- 🧭 필터 버튼 -->
+        <section class="filter-buttons">
+            <button type="button" id="openMapButton">📍 내 주변 채용 공고 보기</button>
+            <button onclick="location.href='/calendar'">📅 채용 공고 달력 보기</button>
         </section>
 
-        <!-- ✅ 필터 버튼 -->
-        <section class="text-center mb-4">
-            <button type="button" id="openMapButton" class="btn btn-outline-secondary me-2">
-                📍 내 주변 채용 공고 보기
-            </button>
-            <button class="btn btn-outline-success" th:onclick="|location.href='@{/calendar}'|">
-                📅 채용 공고 달력 보기
-            </button>
+        <!-- 🎯 필터 영역 -->
+        <section class="search-filters" id="search-filters">
+            <label>직무 선택:</label>
+            <div id="react-job-category-selector"></div>
+            <input type="hidden" id="filter-job-group"/>
+            <input type="hidden" id="filter-job-type"/>
+            <input type="hidden" id="filter-job-role"/>
+
+            <label>지역 선택:</label>
+            <div id="react-location-selector"></div>
+            <input type="hidden" id="filter-region-main"/>
+            <input type="hidden" id="filter-region-sub"/>
         </section>
 
-        <!-- ✅ 채용공고 목록 -->
-        <div class="row" th:if="${role == null or role == 'MEMBER'}">
-            <div class="col-md-4" th:each="job : ${jobList}">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <div class="job-card-header">
-                            <h5 class="card-title" th:text="${job.title}">채용 제목</h5>
-                            <button class="star-button"
-                                    sec:authorize="hasRole('MEMBER')"
-                                    th:data-job-id="${job.id}"
-                                    th:text="${bookmarkedJobIds != null and #lists.contains(bookmarkedJobIds, job.id)} ? '★' : '☆'"
-                                    th:classappend="${bookmarkedJobIds != null and #lists.contains(bookmarkedJobIds, job.id)} ? ' filled' : ''"
-                                    onclick="toggleJobStar(this, event)">☆</button>
-                        </div>
-                        <!-- 디버그 정보 -->
-                        <div style="font-size: 10px; color: gray;" th:text="'Job ID: ' + ${job.id} + ', Bookmarked: ' + ${bookmarkedJobIds != null and #lists.contains(bookmarkedJobIds, job.id)}"></div>
-                        <p class="meta-text"><strong>회사명:</strong> <span th:text="${job.company?.name} ?: '미정'"></span></p>
-                        <p class="meta-text"><strong>주소:</strong> <span th:text="${job.company?.address} ?: '주소 없음'"></span></p>
-                        <p class="card-text"><strong>요구 기술:</strong> <span th:text="${job.requiredSkills} ?: '없음'"></span></p>
-                        <a class="btn btn-outline-primary mt-2" th:href="@{'/job/' + ${job.id}}">상세보기</a>
-                    </div>
-                </div>
+        <!-- ✅ 이력서 선택 드롭다운 (role == MEMBER 일 때만 표시) -->
+        <div class="d-flex align-items-center justify-content-center flex-wrap mb-4" style="gap: 10px;">
+            <!-- 드롭다운 -->
+            <div th:if="${role == 'MEMBER'}" class="d-flex align-items-center">
+                <label for="resumeSelectMain" class="me-2 mb-0"><strong>이력서 선택:</strong></label>
+                <select id="resumeSelectMain" name="resumeId" class="form-select" style="height: 38px; width: auto;">
+                    <option value="" disabled selected>매칭률 필터를 적용할 이력서를 선택하세요</option>
+                    <option th:each="resume : ${resumes}"
+                            th:value="${resume.id}"
+                            th:text="${resume.title}">이력서 제목
+                    </option>
+                </select>
             </div>
         </div>
 
-        <!-- ✅ 페이징 처리 -->
-        <nav class="mt-4">
-            <ul class="pagination justify-content-center">
+        <!-- ✅ 채용공고 목록 -->
+        <div class="card-grid" th:if="${role == null or role == 'MEMBER'}">
+            <div class="card" th:each="job : ${jobList}">
+                <button class="star-button"
+                        sec:authorize="hasRole('MEMBER')"
+                        th:data-job-id="${job.id}"
+                        th:text="${bookmarkedJobIds != null and #lists.contains(bookmarkedJobIds, job.id)} ? '★' : '☆'"
+                        th:classappend="${bookmarkedJobIds != null and #lists.contains(bookmarkedJobIds, job.id)} ? ' filled' : ''"
+                        onclick="toggleJobStar(this, event)">☆
+                </button>
+                <h5 class="card-title" th:text="${job.title}">채용 제목</h5>
+            <!-- 디버그 정보 -->
+            <!--                        <div style="font-size: 10px; color: gray;" th:text="'Job ID: ' + ${job.id} + ', Bookmarked: ' + ${bookmarkedJobIds != null and #lists.contains(bookmarkedJobIds, job.id)}"></div>-->
+            <p class="meta-text"><strong>회사명:</strong> <span th:text="${job.company?.name} ?: '미정'"></span></p>
+            <p class="meta-text"><strong>주소:</strong> <span th:text="${job.company?.address} ?: '주소 없음'"></span></p>
+            <p class="card-text"><strong>요구 기술:</strong> <span th:text="${job.requiredSkills} ?: '없음'"></span></p>
+            <a class="btn-link" th:href="@{'/job/' + ${job.id}}">상세보기</a>
+            </div>
+        </div>
 
-                <!-- 이전 버튼 -->
-                <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
-                    <a class="page-link"
-                       th:if="${currentPage > 1}"
-                       th:href="@{/main(page=${currentPage - 1})}">이전</a>
-                    <span class="page-link" th:if="${currentPage == 1}">이전</span>
+
+        </section>
+
+        <!-- 📄 페이징 -->
+        <nav>
+            <ul class="pagination">
+                <li th:classappend="${currentPage == 1} ? 'disabled'">
+                    <a th:if="${currentPage > 1}" th:href="@{/main(page=${currentPage - 1})}">이전</a>
+                    <span th:if="${currentPage == 1}">이전</span>
                 </li>
 
-                <!-- 페이지 번호 5개씩 -->
-                <li class="page-item"
-                    th:each="i : ${#numbers.sequence(((currentPage - 1) / 5 * 5 + 1), T(java.lang.Math).min(((currentPage - 1) / 5 * 5 + 5), totalPages))}"
+                <li th:each="i : ${#numbers.sequence(((currentPage - 1)/10*10+1), T(java.lang.Math).min(((currentPage - 1)/10*10+10), totalPages))}"
                     th:classappend="${currentPage == i} ? 'active'">
-                    <a class="page-link" th:href="@{/main(page=${i})}" th:text="${i}">1</a>
+                    <a th:href="@{/main(page=${i})}" th:text="${i}">1</a>
                 </li>
 
-                <!-- 다음 버튼 -->
-                <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
-                    <a class="page-link"
-                       th:if="${currentPage < totalPages}"
-                       th:href="@{/main(page=${currentPage + 1})}">다음</a>
-                    <span class="page-link" th:if="${currentPage == totalPages}">다음</span>
+                <li th:classappend="${currentPage == totalPages} ? 'disabled'">
+                    <a th:if="${currentPage < totalPages}" th:href="@{/main(page=${currentPage + 1})}">다음</a>
+                    <span th:if="${currentPage == totalPages}">다음</span>
                 </li>
-
             </ul>
         </nav>
-
     </main>
 
+    <!-- ✅ 푸터 -->
     <div th:replace="fragments/footer :: footer"></div>
 </div>
 <script th:inline="javascript">
-<!-- ✅ 스크립트 -->
+    <!-- ✅ 스크립트 -->
     // 디버그: 북마크된 채용공고 ID 목록 출력
     const bookmarkedJobIds = /*[[${bookmarkedJobIds}]]*/ [];
     console.log('북마크된 채용공고 IDs:', bookmarkedJobIds);
@@ -176,7 +310,6 @@
         if (mapBtn) {
             mapBtn.addEventListener("click", function () {
                 const role = /*[[${role}]]*/ "GUEST"; // Thymeleaf로 로그인 여부 전달
-                console.log(role);
 
                 if (!role || role === "GUEST") {
                     const goLogin = confirm("해당 기능은 로그인 후 이용 가능합니다.\n지금 로그인하시겠습니까?");
@@ -185,11 +318,9 @@
                     }
                     return;
                 }
-
                 window.open('/map_popup', 'mapPopup', 'width=800,height=600');
             });
         }
-
 
         const searchInput = document.getElementById("search-input");
         const filterSection = document.getElementById("search-filters");
@@ -208,12 +339,7 @@
             const regionSub = document.getElementById("filter-region-sub").value;
 
             const query = new URLSearchParams({
-                companyName: companyName || '',
-                regionMain: regionMain || '',
-                regionSub: regionSub || '',
-                jobGroup: jobGroup || '',
-                jobType: jobType || '',
-                jobRole: jobRole || ''
+                companyName, regionMain, regionSub, jobGroup, jobType, jobRole
             }).toString();
 
             window.location.href = `/search-page?${query}`;
@@ -250,18 +376,64 @@
     }
 </script>
 
-<!-- React Selector 모듈 -->
-<script th:src="@{/js/dropdown.js}"></script>
-<script th:src="@{/js/logout.js}"></script>
-<script type="module">
-    import React from "https://cdn.jsdelivr.net/npm/react@18.2.0/+esm";
-    import {createRoot} from "https://cdn.jsdelivr.net/npm/react-dom@18.2.0/client/+esm";
-
-    window.React = React;
-    window.createRoot = createRoot;
-</script>
 <script type="module" src="/js/JobCategorySelector.js"></script>
 <script type="module" src="/js/LocationSelector.js"></script>
+<script th:inline="javascript">
+    const userRole2 = /*[[${role != null ? role : "null"}]]*/ null;
+    console.log("userRole2:", userRole2);
+</script>
 
+<!--// 0609-->
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const resumeSelect = document.getElementById("resumeSelectMain");
+        if (!resumeSelect) return;
+
+        resumeSelect.addEventListener("change", async () => {
+            const resumeId = resumeSelect.value;
+            if (!resumeId) return;
+
+            try {
+                const response = await fetch(`/api/main/sort-jobs-by-resume`, {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({resumeId: resumeId})
+                });
+
+                if (response.ok) {
+                    const sortedJobs = await response.json();
+
+                    // ✅ 정렬된 공고들로 DOM 갱신
+                    const container = document.querySelector(".row");
+                    container.innerHTML = ""; // 기존 공고 제거
+
+                    sortedJobs.forEach(job => {
+                        const card = document.createElement("div");
+                        card.className = "col-md-4";
+                        card.innerHTML = `
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">${job.title}</h5>
+                                <p class="meta-text"><strong>회사명:</strong> ${job.companyName ?? '미정'}</p>
+                                <p class="meta-text"><strong>주소:</strong> ${job.address ?? '주소 없음'}</p>
+                                <p class="card-text"><strong>요구 기술:</strong> ${job.requiredSkills ?? '없음'}</p>
+                                <a class="btn btn-outline-primary mt-2" href="/job/${job.id}">상세보기</a>
+                            </div>
+                        </div>
+                    `;
+                        container.appendChild(card);
+                    });
+
+                } else {
+                    alert("매칭률 정렬에 실패했습니다.");
+                }
+            } catch (e) {
+                console.error("정렬 오류:", e);
+            }
+        });
+    });
+</script>
+
+<script th:src="@{/js/logout.js}"></script>
 </body>
 </html>

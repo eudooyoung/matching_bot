@@ -37,7 +37,9 @@ public class ResumeController {
         Resume resume = memberResumeService.findByIdWithAll(resumeId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이력서 입니다."));
 
-        /*유사도 검색용 공고 목록*/
+        log.warn("이력서 상세 컨트롤러 호출");
+
+        /*매칭률 검색용 공고 목록*/
         List<Job> jobs = jobService.findByCompanyId(userDetails.getId());
         model.addAttribute("jobs", jobs);
 
@@ -48,6 +50,7 @@ public class ResumeController {
         /*이력서 열람 알림용*/
         Long resumeOwnerId = resume.getMember().getId(); // 이력서 주인
         String companyName = userDetails.getCompanyName(); // 로그인한 기업 이름
+        log.info("열람서비스 호출 직전");
         notificationService.sendResumeViewedNotification(resumeOwnerId, companyName, resume.getTitle(), resume.getId());
         return "resume/detail";
     }

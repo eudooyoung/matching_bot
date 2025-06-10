@@ -26,6 +26,7 @@ public class ChatbotRestController {
     private final ChatbotReportService reportService;
     private final ChatbotJobReviewService reviewService;
     private final ChatbotFreeTalkService freeTalkService;
+
     @PostMapping("/evaluate")
     public ResponseEntity<Map<String, Object>> generateCompanyReport(@RequestBody Map<String, Object> input) {
         Map<String, Object> report = reportService.generateReport(input);
@@ -64,54 +65,133 @@ public class ChatbotRestController {
         String message = request.get("message").trim().toLowerCase();
         String role = (user != null) ? user.getRole().name() : "GUEST";
 
-        if ("GUEST".equals(role)) {
-            Map<String, Object> guestResponse = new HashMap<>();
-            guestResponse.put("reply", "로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-            guestResponse.put("redirect", true);
-            guestResponse.put("url", "/auth/login");
-            return ResponseEntity.ok(guestResponse);
-        }
-
         String reply = null;
         String redirectUrl = null;
 
-        switch (message) {
-            case "커뮤니티":
-                reply = "커뮤니티로 이동합니다.";
-                redirectUrl = "/community/list";
-                break;
+        // ✅ 사전 프롬프트 처리
+        if (message.contains("기능") && message.contains("사이트")) {
+            reply = "이 사이트에서는 다음과 같은 기능을 사용할 수 있어요:\n" +
+                    "- 채용공고 탐색 및 위치 기반 지도 보기\n" +
+                    "- 커뮤니티에서 후기 공유\n" +
+                    "- 기업/개인 마이페이지 기능\n" +
+                    "- AI 이력서 분석 및 기업 보고서 제공\n" +
+                    "- 회원가입 없이 커뮤니티 둘러보기 가능";
+        }
+        // ✅ 명령어 분기 및 유사 키워드 처리
+        else {
+            switch (message) {
+                case "회원가입":
+                    reply = "회원가입 페이지로 이동합니다.";
+                    redirectUrl = "/auth/register";
+                    break;
 
-            case "기업페이지":
-                if ("COMPANY".equals(role)) {
-                    reply = "기업 마이페이지로 이동합니다.";
-                    redirectUrl = "/company/mypage";
-                } else {
-                    reply = "기업회원만 접근 가능한 기능입니다.";
-                }
-                break;
+                case "커뮤니티":
+                    reply = "커뮤니티로 이동합니다.";
+                    redirectUrl = "/community/list";
+                    break;
 
-            case "내주변채용공고":
-                if ("MEMBER".equals(role)) {
-                    reply = "내 주변 채용공고로 이동합니다.";
-                    redirectUrl = "/map_popup";
-                } else {
-                    reply = "일반 회원만 접근 가능한 기능입니다.";
-                }
-                break;
+                case "기업페이지":
+                    if ("COMPANY".equals(role)) {
+                        reply = "기업 마이페이지로 이동합니다.";
+                        redirectUrl = "/company/mypage";
+                    } else {
+                        reply = "기업회원만 접근 가능한 기능입니다.";
+                    }
+                    break;
 
-            case "마이페이지":
-                if ("MEMBER".equals(role)) {
-                    reply = "마이페이지로 이동합니다.";
-                    redirectUrl = "/member/mypage";
-                } else {
-                    reply = "일반 회원만 접근 가능한 기능입니다.";
-                }
-                break;
+                case "채용 공고 관리":
+                    if ("COMPANY".equals(role)) {
+                        reply = "채용 공고 관리 페이지로 이동합니다.";
+                        redirectUrl = "/job/manage-jobs";
+                    } else {
+                        reply = "기업회원만 접근 가능한 기능입니다.";
+                    }
+                    break;
 
-            default:
-                reply = freeTalkService.talk(message);
+                case "관심 이력서 목록":
+                    if ("COMPANY".equals(role)) {
+                        reply = "관심 이력서 목록 페이지로 이동합니다.";
+                        redirectUrl = "/job/resume-bookmark";
+                    } else {
+                        reply = "기업회원만 접근 가능한 기능입니다.";
+                    }
+                    break;
+
+                case "기업 정보 수정":
+                    if ("COMPANY".equals(role)) {
+                        reply = "기업 정보 수정 페이지로 이동합니다.";
+                        redirectUrl = "/company/edit-profile";
+                    } else {
+                        reply = "기업회원만 접근 가능한 기능입니다.";
+                    }
+                    break;
+
+                case "내주변채용공고":
+                    if ("MEMBER".equals(role)) {
+                        reply = "내 주변 채용공고로 이동합니다.";
+                        redirectUrl = "/map_popup";
+                    } else {
+                        reply = "일반 회원만 접근 가능한 기능입니다.";
+                    }
+                    break;
+
+                case "이력서 관리":
+                    if ("MEMBER".equals(role)) {
+                        reply = "이력서 관리 페이지로 이동합니다.";
+                        redirectUrl = "/member";
+                    } else {
+                        reply = "일반 회원만 접근 가능한 기능입니다.";
+                    }
+                    break;
+
+                case "관심 기업 목록":
+                    if ("MEMBER".equals(role)) {
+                        reply = "관심 기업 목록 페이지로 이동합니다.";
+                        redirectUrl = "/member/company-bookmark";
+                    } else {
+                        reply = "일반 회원만 접근 가능한 기능입니다.";
+                    }
+                    break;
+
+                case "관심 공고 목록":
+                    if ("MEMBER".equals(role)) {
+                        reply = "관심 공고 목록 페이지로 이동합니다.";
+                        redirectUrl = "/member/job-bookmark";
+                    } else {
+                        reply = "일반 회원만 접근 가능한 기능입니다.";
+                    }
+                    break;
+
+                case "개인 정보 수정":
+                    if ("MEMBER".equals(role)) {
+                        reply = "개인 정보 수정 페이지로 이동합니다.";
+                        redirectUrl = "/member/profile_edit";
+                    } else {
+                        reply = "일반 회원만 접근 가능한 기능입니다.";
+                    }
+                    break;
+                case "마이페이지":
+                    if ("MEMBER".equals(role)) {
+                        reply = "마이페이지로 이동합니다.";
+                        redirectUrl = "/member/mypage";
+                    } else {
+                        reply = "일반 회원만 접근 가능한 기능입니다.";
+                    }
+                    break;
+
+                default:
+                    // ✅ 유사 키워드도 함께 처리
+                    if (message.contains("가입") || message.contains("계정 만들") || message.contains("회원 가입")) {
+                        reply = "회원가입 페이지로 이동합니다.";
+                        redirectUrl = "/auth/register";
+                    } else {
+                        reply = freeTalkService.talk(message);
+                    }
+                    break;
+            }
         }
 
+        // ✅ switch/if-else 외부에서 공통 처리
         Map<String, Object> response = new HashMap<>();
         response.put("reply", reply);
         if (redirectUrl != null) {
@@ -121,10 +201,4 @@ public class ChatbotRestController {
 
         return ResponseEntity.ok(response);
     }
-
-//    @PostConstruct
-//    public void init() {
-//        System.out.println("✅ ChatbotRestController initialized");
-//    }
-
 }

@@ -1,4 +1,4 @@
-package com.multi.matchingbot.admin.domain;
+package com.multi.matchingbot.admin.domain.enums;
 
 public enum BulkActionType {
     DELETE, RESTORE

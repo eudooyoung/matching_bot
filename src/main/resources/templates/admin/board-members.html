@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8"/>
-    <title>MatchingBot</title>
+    <title>개인 회원 관리</title>
     <link rel="stylesheet" th:href="@{/css/layout.css}"/>
     <link rel="stylesheet" th:href="@{/css/admin/boards.css}"/>
     <script src="../../static/js/admin/hardDeleteItem.js"></script>
@@ -30,7 +30,7 @@
 
 
                 <!-- 필터 & 검색 -->
-                <form method="get" th:action="@{/admin/members}" class="search-form">
+                <form method="get" th:action="@{/admin/board/members}" class="search-form">
                     <div class="search-options">
                         <!-- 정렬 기준 -->
                         <select name="sortBy" onchange="this.form.submit()">
@@ -64,81 +64,83 @@
             </div>
 
             <!-- 회원 테이블 -->
-            <table class="table">
-                <colgroup>
-                    <col style="width: 25px;"/>  <!-- 체크박스 -->
-                    <col style="width: 60px;"/>  <!-- 회원 번호 -->
-                    <col style="width: 60px;"/>  <!-- 이름 -->
-                    <col style="width: 160px;"/> <!-- 이메일 -->
-                    <col style="width: 40px;"/>  <!-- 성별 -->
-                    <col style="width: 80px;"/> <!-- 연락처 -->
-                    <col style="width: 40px;"/>  <!-- 약관 -->
-                    <col style="width: 40px;"/>  <!-- 개인정보 -->
-                    <col style="width: 120px;"/> <!-- 가입일 -->
-                    <col style="width: 160px;"/>  <!-- 수정자 -->
-                    <col style="width: 120px;"/><!-- 수정일 -->
-                    <col style="width: 50px;"/>  <!-- 상태 -->
-                    <col style="width: 40px;"/>  <!-- 삭제/복구 -->
-                </colgroup>
-                <thead style="background-color: #f0f0f0;">
-                <tr>
-                    <th><input type="checkbox" id="check-all"/></th>
-                    <th>회원 번호</th>
-                    <th>이름</th>
-                    <th>이메일</th>
-                    <th>성별</th>
-                    <th>연락처</th>
-                    <th>약관</th>
-                    <th>개인정보</th>
-                    <th>생성일</th>
-                    <th>수정자</th>
-                    <th>수정일</th>
-                    <th>상태</th>
-                    <th>삭제</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="member : ${members}">
-                    <td><input type="checkbox" name="checkedIds" th:value="${member.id}" class="check-row"
-                               th:data-status="${member.status.name()}"/>
-                    </td>
-                    <td th:text="${member.formattedId}">아이디</td>
-                    <td class="text-left-col" th:text="${member.name}">이름</td>
-                    <td class="text-left-col">
-                        <a th:href="@{|/admin/board/members/${member.id}|}"
-                           th:text="${member.email}"
-                           th:attr="title=${member.email}"
-                           class="link-detail">이메일</a>
-                    </td>
-                    <td th:text="${member.getGenderLabel()}">성별</td>
-                    <td th:text="${member.phone}">010-1234-5678</td>
-                    <td th:text="${member.getPrivacyLabel()}">동의</td>
-                    <td th:text="${member.getServiceLabel()}">동의</td>
-                    <td th:text="${#temporals.format(member.createdAt, 'yyyy-MM-dd HH:mm:ss')}">가입일</td>
-                    <td class="text-left-col" th:attr="title=${member.email}" th:text="${member.updatedBy}">수정자</td>
-                    <td th:text="${#temporals.format(member.updatedAt, 'yyyy-MM-dd HH:mm:ss')}">2025-04-10</td>
-                    <td th:class="${member.getStatusClass()}"
-                        th:text="${member.getStatusText()}">
-                        상태
-                    </td>
-                    <td>
-                        <button type="button"
-                                class="btn btn-delete"
-                                th:if="${member.status.name() == 'Y'}"
-                                th:onclick="|deactivateItem({ id: ${member.id}, url: '/api/v1/admin/members', onSuccess: () => location.reload() })|">
-                            삭제
-                        </button>
+            <div class="table-wrapper">
+                <table class="table">
+                    <colgroup>
+                        <col style="width: 25px;"/>  <!-- 체크박스 -->
+                        <col style="width: 50px;"/>  <!-- 회원 번호 -->
+                        <col style="width: 60px;"/>  <!-- 이름 -->
+                        <col style="width: 160px;"/> <!-- 이메일 -->
+                        <col style="width: 40px;"/>  <!-- 성별 -->
+                        <col style="width: 80px;"/> <!-- 연락처 -->
+                        <col style="width: 40px;"/>  <!-- 약관 -->
+                        <col style="width: 40px;"/>  <!-- 개인정보 -->
+                        <col style="width: 90px;"/> <!-- 가입일 -->
+                        <col style="width: 130px;"/>  <!-- 수정자 -->
+                        <col style="width: 90px;"/><!-- 수정일 -->
+                        <col style="width: 50px;"/>  <!-- 상태 -->
+                        <col style="width: 40px;"/>  <!-- 삭제/복구 -->
+                    </colgroup>
+                    <thead style="background-color: #f0f0f0;">
+                    <tr>
+                        <th><input type="checkbox" id="check-all"/></th>
+                        <th>회원 번호</th>
+                        <th>이름</th>
+                        <th>이메일</th>
+                        <th>성별</th>
+                        <th>연락처</th>
+                        <th>약관</th>
+                        <th>개인정보</th>
+                        <th>생성일</th>
+                        <th>수정자</th>
+                        <th>수정일</th>
+                        <th>상태</th>
+                        <th>삭제</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="member : ${members}">
+                        <td><input type="checkbox" name="checkedIds" th:value="${member.id}" class="check-row"
+                                   th:data-status="${member.status.name()}"/>
+                        </td>
+                        <td th:text="${member.formattedId}">아이디</td>
+                        <td class="text-left-col" th:text="${member.name}">이름</td>
+                        <td class="text-left-col">
+                            <a th:href="@{|/admin/board/members/${member.id}|}"
+                               th:text="${member.email}"
+                               th:attr="title=${member.email}"
+                               class="link-detail">이메일</a>
+                        </td>
+                        <td th:text="${member.getGenderLabel()}">성별</td>
+                        <td th:text="${member.phone}">010-1234-5678</td>
+                        <td th:text="${member.getPrivacyLabel()}">동의</td>
+                        <td th:text="${member.getServiceLabel()}">동의</td>
+                        <td th:text="${#temporals.format(member.createdAt, 'yyyy-MM-dd HH:mm:ss')}">가입일</td>
+                        <td class="text-left-col" th:attr="title=${member.email}" th:text="${member.updatedBy}">수정자</td>
+                        <td th:text="${#temporals.format(member.updatedAt, 'yyyy-MM-dd HH:mm:ss')}">2025-04-10</td>
+                        <td th:class="${member.getStatusClass()}"
+                            th:text="${member.getStatusText()}">
+                            상태
+                        </td>
+                        <td>
+                            <button type="button"
+                                    class="btn btn-delete"
+                                    th:if="${member.status.name() == 'Y'}"
+                                    th:onclick="|deactivateItem({ id: ${member.id}, url: '/api/v1/admin/members', onSuccess: () => location.reload() })|">
+                                삭제
+                            </button>
 
-                        <button type="button"
-                                class="btn btn-restore"
-                                th:if="${member.status.name() == 'N'}"
-                                th:onclick="|reactivateItem({ id: ${member.id}, url: '/api/v1/admin/members', onSuccess: () => location.reload() })|">
-                            복구
-                        </button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                            <button type="button"
+                                    class="btn btn-restore"
+                                    th:if="${member.status.name() == 'N'}"
+                                    th:onclick="|reactivateItem({ id: ${member.id}, url: '/api/v1/admin/members', onSuccess: () => location.reload() })|">
+                                복구
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
 
             <!-- 페이지네이션 (예시) -->
             <div class="table-pagination" style="margin-top: 1.5rem; text-align: center;">
@@ -158,7 +160,7 @@
     </main>
 
     <!-- Footer Fragment -->
-    <div th:replace="~{fragments/footer :: footer}"></div>
+    <div th:replace="fragments/footer :: footer"></div>
 </div>
 
 <script th:src="@{/js/dropdown.js}"></script>

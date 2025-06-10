@@ -43,7 +43,9 @@ function addCareerRow() {
         <div class="inline-group">
             <div class="form-group" style="flex: 2;">
                 <label for="careers[${index}].careerSummary">담당 업무 및 성과 요약</label>
-                <input type="text" name="careers[${index}].careerSummary" id="careers[${index}].careerSummary" maxlength="255" />
+<!--                <input type="text" name="careers[${index}].careerSummary" id="careers[${index}].careerSummary" maxlength="255" />-->
+                <textarea name="careers[${index}].careerSummary" id="careers[${index}].careerSummary" rows="3" maxlength="500"></textarea>
+
             </div>
         </div>
     `;

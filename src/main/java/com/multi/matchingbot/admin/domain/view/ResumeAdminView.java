@@ -1,7 +1,7 @@
-package com.multi.matchingbot.admin.domain;
+package com.multi.matchingbot.admin.domain.view;
 
+import com.multi.matchingbot.career.domain.CareerType;
 import com.multi.matchingbot.common.domain.dto.BaseAuditDto;
-import com.multi.matchingbot.common.domain.enums.Yn;
 import lombok.Data;
 
 @Data
@@ -12,5 +12,6 @@ public class ResumeAdminView extends BaseAuditDto {
     private String skillKeywords;
     private String traitKeywords;
     private String desiredOccupation;
-    private Yn keywordsStatus;
+    private CareerType careerType;
+//    private Yn keywordsStatus;
 }

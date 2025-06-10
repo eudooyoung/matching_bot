@@ -186,14 +186,6 @@ public class MemberResumeController {
         return "resume/detail";
     }
 
-    /*@GetMapping("/view/{id}")
-    public String view(@PathVariable("id") Long id, Model model) {
-        Resume resume = resumeService.findByIdWithOccupation(id);
-        ResumeDto resumeDto = ResumeDto.fromEntity(resume);
-        model.addAttribute("resume", resumeDto);
-        return "member/resume-view";
-    }*/
-
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") Long id) {
         resumeAdminService.deleteHard(id);
@@ -207,6 +199,4 @@ public class MemberResumeController {
         }
         return "redirect:/member";
     }
-
-
 }
