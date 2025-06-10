@@ -141,6 +141,8 @@ create table notification(
     PRIMARY KEY (id),
     FOREIGN KEY (member_id) REFERENCES member(id)
 );
+ALTER TABLE notification ADD COLUMN target_id BIGINT;
+ALTER TABLE notification ADD COLUMN target_type VARCHAR(20);
 
 
 -- 1. 카테고리 테이블 생성
@@ -314,6 +316,7 @@ CREATE TABLE region (
     region_type_code BIGINT NOT NULL COMMENT '시/도 코드',
     region_type_name VARCHAR(15) NOT NULL COMMENT '시/도 명'
 );
+
 
 
 commit;
