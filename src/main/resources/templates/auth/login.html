@@ -4,6 +4,19 @@
     <title>로그인</title>
     <link rel="stylesheet" href="/css/layout.css"/>
     <link rel="stylesheet" href="/css/login.css"/>
+    <style>
+        .reset-link {
+            margin-top: 10px;
+            text-align: right;
+        }
+        .reset-link a {
+            text-decoration: none;
+            color: #103254;
+        }
+        .reset-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
 <div class="wrapper">
@@ -26,7 +39,15 @@
                 <input type="password" id="password" name="password"  maxlength="16" required />
                 <button type="submit">로그인</button>
                 <div class="error-msg" id="error-msg" style="color: red; margin-top: 1rem;"></div>
+
+
+                <!-- ✅ 비밀번호 재설정 링크 -->
+                <div class="reset-link">
+                    <a href="/auth/find-password?type=member" style="font-size: 0.9rem; color: #555;">비밀번호를 잊으셨나요?</a>
+                </div>
             </form>
+
+
 
             <!-- 기업 회원 로그인 폼 -->
             <form method="post" class="login-form" id="company-form">
@@ -36,6 +57,11 @@
                 <input type="password" id="password2" name="password" required/>
                 <button type="submit">로그인</button>
                 <div class="error-msg" id="error-msg2" style="color: red; margin-top: 1rem;"></div>
+
+                <!-- ✅ 기업 비밀번호 재설정 링크 -->
+                <div class="reset-link">
+                    <a href="/auth/find-password?type=company" style="font-size: 0.9rem; color: #555;">비밀번호를 잊으셨나요?</a>
+                </div>
             </form>
         </div>
     </main>
