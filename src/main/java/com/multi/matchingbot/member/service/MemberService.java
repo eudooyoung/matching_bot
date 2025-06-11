@@ -118,6 +118,12 @@ public class MemberService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 회원입니다."));
 
+        // ✅ 닉네임 중복 체크 (본인 제외)
+        if (!dto.getNickname().equals(member.getNickname()) &&
+                memberRepository.existsByNickname(dto.getNickname())) {
+            throw new IllegalArgumentException("이미 사용 중인 닉네임입니다.");
+        }
+
         member.setName(dto.getName());
         member.setNickname(dto.getNickname());
         member.setAddress(dto.getAddress());
