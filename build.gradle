@@ -96,3 +96,8 @@ sourceSets {
 tasks.withType(JavaCompile).configureEach {
     options.generatedSourceOutputDirectory = layout.buildDirectory.dir("generated/sources/annotationProcessor/java/main").get().asFile
 }
+
+jar {
+    archiveBaseName.set("matchingbotapp")
+    archiveVersion.set("version") // 버전 제거 (선택)
+}

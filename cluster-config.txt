@@ -1,0 +1,40 @@
+cat <<EOF > cluster-config.yaml
+# eksctl 클러스터 구성 파일
+apiVersion: eksctl.io/v1alpha5  # eksctl에서 사용하는 클러스터 설정의 버전
+kind: ClusterConfig             # 클러스터 구성을 의미함
+ 
+metadata:
+  name: eks-cluster             # 생성될 EKS 클러스터 이름
+  region: us-east-2             # EKS 클러스터를 생성할 AWS 리전 (서울)
+  tags:                         # 클러스터 및 리소스에 자동으로 붙을 태그들
+    eks: "true"
+    eks:cluster-name: "eks-cluster"
+ 
+iam:
+  # 클러스터 제어 플레인에 사용될 IAM 역할 (수동 생성한 역할)
+  serviceRoleARN: arn:aws:iam::118320467932:role/eksClusterRole
+ 
+vpc:
+  id: vpc-08918631be141265b      # 기존에 생성한 VPC ID
+  subnets:                       # 사용할 서브넷 목록 (프라이빗만 명시)
+    private:
+      us-east-2a:
+        id: subnet-0a72a3f1f589a6b51
+      us-east-2c:
+        id: subnet-0dff1ccb83a9e44ff
+ 
+managedNodeGroups:
+  - name: sp-node-group01          # 관리형 노드 그룹 이름
+    instanceType: t3.medium      # EC2 인스턴스 타입
+    desiredCapacity: 2           # 시작할 노드 개수
+    minSize: 2                   # 최소 노드 개수 (오토스케일 시 유지)
+    maxSize: 4                   # 최대 노드 개수 (오토스케일 상한)
+    privateNetworking: true      # 프라이빗 서브넷에만 노드 배치
+    iam:
+      # EC2 인스턴스(NodeGroup)에 붙일 IAM 역할
+      instanceRoleARN: arn:aws:iam::118320467932:role/eksNodeInstanceRole
+    tags:
+      eks: "true"
+      eks:cluster-name: "eks-cluster01"
+      eks:nodegroup-name: "sp-node-group01"
+EOF
