@@ -1,16 +1,16 @@
 package com.multi.matchingbot.member.service;
 
+import com.multi.matchingbot.career.domain.Career;
+import com.multi.matchingbot.career.domain.CareerType;
+import com.multi.matchingbot.career.domain.CareerUpdateDto;
 import com.multi.matchingbot.job.domain.entity.Occupation;
 import com.multi.matchingbot.job.service.OccupationService;
 import com.multi.matchingbot.member.domain.entity.Member;
-import com.multi.matchingbot.resume.repository.ResumeRepository;
-import com.multi.matchingbot.career.domain.CareerType;
-import com.multi.matchingbot.career.domain.CareerUpdateDto;
 import com.multi.matchingbot.resume.domain.dto.ResumeInsertDto;
 import com.multi.matchingbot.resume.domain.dto.ResumeUpdateDto;
-import com.multi.matchingbot.career.domain.Career;
 import com.multi.matchingbot.resume.domain.entity.Resume;
 import com.multi.matchingbot.resume.mapper.ResumeInsertMapper;
+import com.multi.matchingbot.resume.repository.ResumeRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

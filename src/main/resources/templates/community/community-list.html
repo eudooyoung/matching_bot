@@ -143,7 +143,7 @@
         <p class="card-text" th:text="${post.content}">내용 미리보기</p>
         <p class="author-text">
           <strong>작성자:</strong>
-          <span th:text="${post.writerName != null ? post.writerName : post.companyName}">작성자</span>
+          <span th:text="${post.nickname != null ? post.nickname : post.companyName}">작성자</span>
         </p>
       </div>
     </section>
@@ -151,17 +151,18 @@
     <nav>
       <ul class="pagination">
         <li th:classappend="${postPage.first} ? 'disabled'">
-          <a th:href="@{/community/list(page=${postPage.number - 1}, categoryId=${param.categoryId})}">이전</a>
+          <a th:if="${currentPage > 1}" th:href="@{/main(page=${currentPage - 1})}">이전</a>
+          <span th:if="${currentPage == 1}">이전</span>
         </li>
 
-        <li th:each="i : ${#numbers.sequence(0, postPage.totalPages - 1)}"
-            th:classappend="${postPage.number == i} ? 'active'">
-          <a th:href="@{/community/list(page=${i}, categoryId=${param.categoryId})}"
-             th:text="${i + 1}">1</a>
+        <li th:each="i : ${#numbers.sequence(((currentPage - 1)/10*10+1), T(java.lang.Math).min(((currentPage - 1)/10*10+10), totalPages))}"
+            th:classappend="${currentPage == i} ? 'active'">
+          <a th:href="@{/community/list(page=${i})}" th:text="${i}">1</a>
         </li>
 
         <li th:classappend="${postPage.last} ? 'disabled'">
-          <a th:href="@{/community/list(page=${postPage.number + 1}, categoryId=${param.categoryId})}">다음</a>
+          <a th:if="${currentPage < totalPages}" th:href="@{/community/list(page=${currentPage + 1})}">다음</a>
+          <span th:if="${currentPage == totalPages}">다음</span>
         </li>
       </ul>
     </nav>

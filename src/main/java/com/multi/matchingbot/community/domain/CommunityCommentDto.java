@@ -16,19 +16,8 @@ public class CommunityCommentDto {
     private Long memberId;
     private Long companyId;
     private String companyName;
+    private String nickname;
 
-//    public static CommunityCommentDto fromEntity(CommunityComment comment) {
-//        CommunityCommentDto dto = new CommunityCommentDto();
-//        dto.setId(comment.getId());
-//        dto.setContent(comment.getContent());
-//        dto.setWriterName(comment.getMember().getName()); // 또는 getUsername()
-//        dto.setCreatedBy(comment.getCreatedBy());
-//        dto.setCreatedAt(comment.getCreatedAt());
-//        dto.setMemberId(comment.getMember().getId());
-//
-//        return dto;
-//
-//    }
 public static CommunityCommentDto fromEntity(CommunityComment comment) {
     CommunityCommentDto dto = new CommunityCommentDto();
     dto.setId(comment.getId());
@@ -38,7 +27,9 @@ public static CommunityCommentDto fromEntity(CommunityComment comment) {
 
     if (comment.getMember() != null) {
         dto.setMemberId(comment.getMember().getId());
-        dto.setWriterName(comment.getMember().getName());
+
+        dto.setNickname(comment.getMember().getNickname());
+
     } else if (comment.getCompany() != null) {
         dto.setCompanyId(comment.getCompany().getId());
         dto.setCompanyName(comment.getCompany().getName());
