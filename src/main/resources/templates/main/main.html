@@ -404,22 +404,23 @@
                     const sortedJobs = await response.json();
 
                     // ✅ 정렬된 공고들로 DOM 갱신
-                    const container = document.querySelector(".row");
+                    const container = document.querySelector(".card-grid");
                     container.innerHTML = ""; // 기존 공고 제거
 
                     sortedJobs.forEach(job => {
                         const card = document.createElement("div");
-                        card.className = "col-md-4";
+                        card.className = "card";
                         card.innerHTML = `
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">${job.title}</h5>
-                                <p class="meta-text"><strong>회사명:</strong> ${job.companyName ?? '미정'}</p>
-                                <p class="meta-text"><strong>주소:</strong> ${job.address ?? '주소 없음'}</p>
-                                <p class="card-text"><strong>요구 기술:</strong> ${job.requiredSkills ?? '없음'}</p>
-                                <a class="btn btn-outline-primary mt-2" href="/job/${job.id}">상세보기</a>
-                            </div>
-                        </div>
+                        <button class="star-button ${job.bookmarked ? 'filled' : ''}"
+                                data-job-id="${job.id}"
+                                onclick="toggleJobStar(this, event)">
+                            ${job.bookmarked ? '★' : '☆'}
+                        </button>
+                        <h5 class="card-title">${job.title}</h5>
+                        <p class="meta-text"><strong>회사명:</strong> ${job.companyName ?? '미정'}</p>
+                        <p class="meta-text"><strong>주소:</strong> ${job.address ?? '주소 없음'}</p>
+                        <p class="card-text"><strong>요구 기술:</strong> ${job.requiredSkills ?? '없음'}</p>
+                        <a class="btn-link" href="/job/${job.id}">상세보기</a>
                     `;
                         container.appendChild(card);
                     });

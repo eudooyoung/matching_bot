@@ -51,10 +51,10 @@ public class Resume extends BaseEntity {
     @Column(name = "trait_answer", nullable = false, columnDefinition = "TEXT")
     private String traitAnswer;
 
-    @Column(name = "skill_keywords", length = 100)
+    @Column(name = "skill_keywords", length = 200)
     private String skillKeywords;
 
-    @Column(name = "trait_keywords", length = 100)
+    @Column(name = "trait_keywords", length = 200)
     private String traitKeywords;
 
     @Enumerated(EnumType.STRING)

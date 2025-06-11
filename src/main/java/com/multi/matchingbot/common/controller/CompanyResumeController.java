@@ -1,8 +1,10 @@
 package com.multi.matchingbot.common.controller;
 
 import com.multi.matchingbot.common.security.MBotUserDetails;
+import com.multi.matchingbot.job.service.JobService;
 import com.multi.matchingbot.resume.domain.dto.ResumeDto;
 import com.multi.matchingbot.resume.domain.entity.Resume;
+import com.multi.matchingbot.job.domain.entity.Job;
 import com.multi.matchingbot.resume.service.ResumeService;
 import com.multi.matchingbot.notification.service.NotificationService;
 import jakarta.persistence.EntityNotFoundException;
@@ -30,6 +32,7 @@ public class CompanyResumeController {
 
     private final ResumeService resumeService;
     private final NotificationService notificationService;
+    private final JobService jobService;
 
     @GetMapping
     public String resumeList(@RequestParam(name = "page", defaultValue = "1") int page,
@@ -38,13 +41,10 @@ public class CompanyResumeController {
                              Model model) {
 
         log.info("📄 resumeList() 컨트롤러 도달!");
+        model.addAttribute("role", userDetails.getRole().name());
 
-        if (userDetails != null) {
-            log.info("현재 사용자 ROLE: {}", userDetails.getRole());
-            model.addAttribute("role", userDetails.getRole().name());  // ✅ role 전달
-        } else {
-            model.addAttribute("role", null);  // 예외적으로 null 처리
-        }
+        Long companyId = userDetails.getCompanyId();
+        List<Job> jobs = jobService.findByCompanyId(companyId);
 
         int pageIndex = Math.max(0, page - 1);
         Page<ResumeDto> resumePage = resumeService.getPageResumes(PageRequest.of(pageIndex, size));
@@ -52,6 +52,7 @@ public class CompanyResumeController {
 
         resumePage.forEach(dto -> dto.setBookmarked(bookmarkedIds.contains(dto.getId())));
 
+        model.addAttribute("jobs", jobs);
         model.addAttribute("resumeList", resumePage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", resumePage.getTotalPages());

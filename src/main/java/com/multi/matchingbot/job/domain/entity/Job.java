@@ -46,10 +46,10 @@ public class Job extends BaseEntity {
     @Column(name = "required_traits", nullable = false, length = 255)
     private String requiredTraits;
 
-    @Column(name = "skill_keywords", length = 100)
+    @Column(name = "skill_keywords", length = 200)
     private String skillKeywords;
 
-    @Column(name = "trait_keywords", length = 100)
+    @Column(name = "trait_keywords", length = 200)
     private String traitKeywords;
 
     @Column(nullable = true)

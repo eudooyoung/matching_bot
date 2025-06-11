@@ -25,7 +25,8 @@ public class ResumeDto {
     private LocalDateTime createdAt;   // 작성일
     private String memberName;         // 작성자 이름 (member 테이블 join 필요)
     private boolean bookmarked;        // 관심 이력서 여부 (join or 별도 체크)
-
+    private Double similarityScore;
+    
     @NotBlank(message = "제목을 입력해주세요.")
     @Size(max = 100, message = "100자 이하로 입력해주세요.")
     private String title;

@@ -72,7 +72,26 @@ public class MemberController {
     public String profileEditForm(Model model, @AuthenticationPrincipal MBotUserDetails userDetails) {
         Long memberId = userDetails.getMemberId();
         Member member = memberService.findById(memberId);
-        model.addAttribute("member", member);
+
+        MemberProfileUpdateDto dto = new MemberProfileUpdateDto();
+        dto.setId(member.getId());
+        dto.setEmail(member.getEmail());
+        dto.setName(member.getName());
+        dto.setNickname(member.getNickname());
+        dto.setPhone(member.getPhone());
+        dto.setGender(member.getGender());
+        dto.setBirth(member.getBirth());
+
+        // address → addressRegion, addressDetail 나누기 (예시: "서울시 강남구 역삼동 123-4")
+        if (member.getAddress() != null) {
+            String[] parts = member.getAddress().split(" ", 2);
+            dto.setAddress(parts[0]); // addressRegion 대체
+            if (parts.length > 1) {
+                dto.setAddressDetail(parts[1]);
+            }
+        }
+
+        model.addAttribute("member", dto);
         return "member/profile-edit";
     }
 
