@@ -24,8 +24,9 @@ import java.util.*;
 public class AttachedItemService {
 
     private final ChatbotReportService chatbotReportService;
-    private final ReportImageGenerator reportImageGenerator;
     private final FileService fileService;
+    private final S3FileService s3FileService;
+    private final ReportImageGenerator reportImageGenerator;
     private final AttachedItemRepository attachedItemRepository;
 
     /**
@@ -64,7 +65,7 @@ public class AttachedItemService {
                         .path(path)
                         .build();
 
-                AttachedItem saved = fileService.save(meta, image);
+                AttachedItem saved = s3FileService.save(meta, image);
                 savedItems.add(saved);
             }
 
@@ -107,7 +108,7 @@ public class AttachedItemService {
                         .path(path)
                         .build();
 
-                AttachedItem saved = fileService.save(meta, image);
+                AttachedItem saved = s3FileService.save(meta, image);
                 savedItems.add(saved);
             }
 
