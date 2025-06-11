@@ -19,17 +19,23 @@
 
                 <!-- 일괄 버튼 -->
                 <div class="bulk-actions">
-                    <button type="button" class="btn btn-delete"
-                            onclick="bulkSoftAction('DELETE', '/api/v1/admin/bulk/members')">삭제
-                    </button>
-                    <button type="button" class="btn btn-restore"
-                            onclick="bulkSoftAction('PATCH', '/api/v1/admin/bulk/members')">복구
-                    </button>
+                    <div class="bulk-button-group">
+                        <button type="button" class="btn btn-delete"
+                                onclick="bulkSoftAction('DELETE', '/api/v1/admin/bulk/members')">삭제
+                        </button>
+                        <button type="button" class="btn btn-restore"
+                                onclick="bulkSoftAction('PATCH', '/api/v1/admin/bulk/members')">복구
+                        </button>
+                    </div>
+                    <div class="form-error-global" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+
                 </div>
 
 
                 <!-- 필터 & 검색 -->
                 <form method="get" th:action="@{/admin/board/members}" class="search-form">
+
+
                     <div class="search-options">
                         <!-- 정렬 기준 -->
                         <select name="sortBy" onchange="this.form.submit()">
@@ -54,8 +60,11 @@
                         </select>
                     </div>
 
-                    <div class="search-right" onchange="this.form.submit()">
-                        <input type="text" name="keyword" placeholder="회원 번호, 이름, 이메일 검색"
+                    <div class="search-right">
+                        <!--<div th:if="${errorMessage}">
+                            <p th:text="${errorMessage}" class="error-message"></p>
+                        </div>-->
+                        <input type="text" name="keyword" placeholder="회원 번호, 이름, 이메일 검색" maxlength="50"
                                th:value="${condition.keyword}"/>
                         <button type="submit" class="btn btn-search">검색</button>
                     </div>
@@ -98,7 +107,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="member : ${members}">
+                    <tr th:each="member : ${members ?: {}}">
                         <td><input type="checkbox" name="checkedIds" th:value="${member.id}" class="check-row"
                                    th:data-status="${member.status.name()}"/>
                         </td>
@@ -143,17 +152,19 @@
 
             <!-- 페이지네이션 (예시) -->
             <div class="table-pagination" style="margin-top: 1.5rem; text-align: center;">
-                <a th:if="${page.hasPrevious()}" th:href="@{/admin/board/members(page=${currentPage - 1})}">이전</a>
-                <span th:unless="${page.hasPrevious()}" style="visibility: hidden;">이전</span>
+                <a th:if="${page != null and page.hasPrevious()}"
+                   th:href="@{/admin/board/members(page=${currentPage - 1})}">이전</a>
+                <span th:if="${page == null or !page.hasPrevious()}" style="visibility: hidden;">이전</span>
 
-                <span th:each="pageNum : ${pageNumbers}" style="margin: 0 5px;">
+                <span th:each="pageNum : ${pageNumbers ?: {}}" style="margin: 0 5px;">
                     <a th:href="@{/admin/board/members(page=${pageNum})}"
                        th:text="${pageNum + 1}"
                        th:classappend="${pageNum == currentPage} ? 'active-page' : ''"></a>
                 </span>
 
-                <a th:if="${page.hasNext()}" th:href="@{/admin/members(page=${currentPage + 1})}">다음</a>
-                <span th:unless="${page.hasNext()}" style="visibility: hidden;">다음</span>
+                <a th:if="${page != null and page.hasNext()}"
+                   th:href="@{/admin/board/members(page=${currentPage + 1})}">다음</a>
+                <span th:if="${page == null or !page.hasNext()}" style="visibility: hidden;">다음</span>
             </div>
         </section>
     </main>

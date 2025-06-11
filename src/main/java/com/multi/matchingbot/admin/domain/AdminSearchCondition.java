@@ -3,6 +3,7 @@ package com.multi.matchingbot.admin.domain;
 import com.multi.matchingbot.admin.domain.enums.EndStatus;
 import com.multi.matchingbot.career.domain.CareerType;
 import com.multi.matchingbot.common.domain.enums.Role;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -10,7 +11,9 @@ import org.springframework.data.domain.Sort;
 
 @Data
 public class AdminSearchCondition {
+    @Size(max = 50)
     private String keyword;     // 검색어
+
     private String status;      // (가입) 상태
     private String reportStatus;    // 보고서 추출 상태
     private String keywordsStatus;  // 키워드 추출 상태

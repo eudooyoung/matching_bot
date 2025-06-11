@@ -18,9 +18,12 @@
             <!-- 검색 & 일괄 삭제 -->
             <div class="search-bar-wrapper">
                 <div class="bulk-actions">
-                    <button type="button" class="btn btn-delete"
-                            onclick="bulkHardDelete('/api/v1/admin/bulk/communityPosts')">삭제
-                    </button>
+                    <div class="bulk-button-group">
+                        <button type="button" class="btn btn-delete"
+                                onclick="bulkHardDelete('/api/v1/admin/bulk/communityPosts')">삭제
+                        </button>
+                    </div>
+                    <div class="form-error-global" th:if="${errorMessage}" th:text="${errorMessage}"></div>
                 </div>
 
                 <form method="get" th:action="@{/admin/board/community}" class="search-form">
@@ -47,7 +50,7 @@
                             </option>
                         </select>
 
-                        <select name="writerType" onchange="this.form.submit()">
+                        <select name="writerType">
                             <option value="">전체 작성자</option>
                             <option value="MEMBER" th:selected="${condition.writerType?.name() == 'MEMBER'}">개인회원
                             </option>
@@ -59,7 +62,7 @@
                     </div>
 
                     <div class="search-right">
-                        <input type="text" name="keyword" placeholder="제목, 작성자 검색"
+                        <input type="text" name="keyword" placeholder="제목, 작성자, 닉네임 검색"
                                th:value="${condition.keyword}"/>
                         <button type="submit" class="btn btn-search">검색</button>
                     </div>
@@ -98,7 +101,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="post : ${posts}">
+                    <tr th:each="post : ${posts ?: {}}">
                         <td><input type="checkbox" name="checkedIds" th:value="${post.id}" class="check-row"/></td>
                         <td th:text="${post.formattedId}">번호</td>
                         <td class="text-left-col">
@@ -128,17 +131,19 @@
 
             <!-- 페이지네이션 -->
             <div class="table-pagination" style="margin-top: 1.5rem; text-align: center;">
-                <a th:if="${page.hasPrevious()}" th:href="@{/admin/board/community(page=${currentPage - 1})}">이전</a>
-                <span th:unless="${page.hasPrevious()}" style="visibility: hidden;">이전</span>
+                <a th:if="${page != null and page.hasPrevious()}"
+                   th:href="@{/admin/board/community(page=${currentPage - 1})}">이전</a>
+                <span th:if="${page == null or !page.hasPrevious()}" style="visibility: hidden;">이전</span>
 
-                <span th:each="pageNum : ${pageNumbers}" style="margin: 0 5px;">
-                    <a th:href="@{/admin/board/community(page=${pageNum})}"
-                       th:text="${pageNum + 1}"
-                       th:classappend="${pageNum == currentPage} ? 'active-page' : ''"></a>
-                </span>
+                <span th:each="pageNum : ${pageNumbers ?: {}}" style="margin: 0 5px;">
+                                                       <a th:href="@{/admin/board/community(page=${pageNum})}"
+                                                          th:text="${pageNum + 1}"
+                                                          th:classappend="${pageNum == currentPage} ? 'active-page' : ''"></a>
+                                                   </span>
 
-                <a th:if="${page.hasNext()}" th:href="@{/admin/board/community(page=${currentPage + 1})}">다음</a>
-                <span th:unless="${page.hasNext()}" style="visibility: hidden;">다음</span>
+                <a th:if="${page != null and page.hasNext()}"
+                   th:href="@{/admin/board/community(page=${currentPage + 1})}">다음</a>
+                <span th:if="${page == null or !page.hasNext()}" style="visibility: hidden;">다음</span>
             </div>
         </section>
     </main>

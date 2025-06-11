@@ -5,9 +5,27 @@
 }
 
 .bulk-actions {
-    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.5rem;
+}
+
+/* 왼쪽 버튼 그룹 */
+.bulk-button-group {
     display: flex;
     gap: 0.5rem;
+}
+
+/* 오른쪽 에러 메시지 */
+.form-error-global {
+    color: red;
+    font-size: 14px;
+    white-space: nowrap;
+    text-align: right;
+    flex: 1 1 auto;
 }
 
 /* ✅ 검색 폼 전체 */
@@ -37,7 +55,7 @@
 
 /* ✅ 오른쪽 검색창 영역 */
 .search-right {
-    flex: 1 1 300px;  /* 유연하게 줄어들고 최소 300px 보장 */
+    flex: 1 1 300px; /* 유연하게 줄어들고 최소 300px 보장 */
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
@@ -193,3 +211,18 @@
     color: #2196f3;
 }
 
+/*
+.error-message {
+    color: red;
+    margin-bottom: 0.5rem;
+    font-size: 14px;
+}
+
+.form-error-global {
+
+    width: 100%;
+    color: red;
+    font-size: 14px;
+    margin-bottom: 0.5rem;
+    padding-left: 2px;
+}*/
