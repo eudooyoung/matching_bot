@@ -10,7 +10,7 @@ resource "aws_instance" "jenkins_server" {
   ami = local.ami_id  # 22 Ubuntu AMI 사용
   instance_type = "t3.medium"  #"t3.medium"   # Jenkins 실행에 적절한 크기
   subnet_id = aws_subnet.sample-subnet-public01.id  # 퍼블릭 서브넷 사용
-  key_name = "web"  # SSH 키페어 입력
+  key_name = "matchingbot-key"  # SSH 키페어 입력
   vpc_security_group_ids = [aws_security_group.sample-sg-jenkins.id]  # Jenkins 보안 그룹 적용
 
   root_block_device {

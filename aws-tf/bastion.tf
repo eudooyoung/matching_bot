@@ -23,7 +23,7 @@ resource "aws_instance" "sample-ec2-bastion" {
   instance_type   = "t2.micro"
   vpc_security_group_ids = [aws_security_group.sample-sg-bastion.id, aws_default_security_group.default.id]
   subnet_id       = aws_subnet.sample-subnet-public01.id
-  key_name        = "web"  # 본인 키페어 이름 입력
+  key_name        = "matchingbot-key"  # 본인 키페어 이름 입력
 
   root_block_device {
     volume_size = 20
