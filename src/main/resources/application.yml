@@ -1,18 +1,35 @@
+# 공통
+
 server:
   port: 8091
 
 spring:
+  profiles:
+    active: prod
 
   config:
     import:
       - classpath:application-security.yml
 
-  datasource:
-    url: jdbc:mysql://localhost:${JDBC_PORT}/${JDBC_DATABASE}?serverTmeZone=Asia/Seoul
-    #    url: jdbc:mysql://localhost:3306/matching_bot
-    username: scott
-    password: tiger
-    driver-class-name: com.mysql.cj.jdbc.Driver
+  cloud:
+    aws:
+      credentials: # IAM으로 생성한 시크릿키 정보를 입력
+        access-key: ${AWS_ACCESS_KEY}
+        secret-key: ${AWS_SECRET_KEY}
+      S3:
+        bucket: matchingbot-company-reports    #${S3_BUCKET_NAME} # bucket 이름
+        base-url: https://matchingbot-company-reports.s3.us-east-2.amazonaws.com/upload/  #url복사해서붙이기
+      region:
+        static: us-east-2  # bucket이 위치한 AWS 리전을 설정
+      stack:
+        auto: false # 자동 스택 생성 기능
+
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY:}
+      model: gpt-4o
+      options:
+        temperature: 0.3
 
   web:
     resources:
@@ -40,26 +57,14 @@ spring:
         highlight_sql: true
     database-platform: org.hibernate.dialect.MySQL8Dialect
 
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
 
   jackson:
-    time-zone: Asia/Seoul
-
-
-#logging:
-#  level:
-#    org.springframework.web: DEBUG
-#    root: DEBUG
-#    org.hibernate.SQL: DEBUG
-
-
-kakao:
-  rest-api-key: "KakaoAK 95f4cb7367a36e2e71328edc2c4b9b07"
-
-
-od:
-  cloud:
-    key: ${OD_CLOUD_KEY}
-
+          time-zone: Asia/Seoul
 
 springdoc:
   api-docs:
@@ -72,3 +77,48 @@ springdoc:
     try-it-out-enabled: true
     syntax-highlight:
       theme: monokai
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  datasource:
+    url: jdbc:mysql://localhost:${JDBC_PORT}/${JDBC_DATABASE}?serverTmeZone=Asia/Seoul
+    #    url: jdbc:mysql://localhost:3306/matching_bot
+    username: scott
+    password: tiger
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+    import:
+      - classpath:application-security.yml
+  datasource:
+    url: ${DB_PROD_URL} #rds 엔드포인트: jdbc:mysql://sample-rds.cyf8tnql7evk.us-east-2.rds.amazonaws.com:3306/scott
+    username: ${DB_PROD_USER}
+    password: ${DB_PROD_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+
+
+
+
+
+
+
+
+#logging:
+#  level:
+#    org.springframework.web: DEBUG
+#    root: DEBUG
+#    org.hibernate.SQL: DEBUG
+
+
+
+
+

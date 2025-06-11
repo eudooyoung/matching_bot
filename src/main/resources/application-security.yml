@@ -1,27 +1,3 @@
-spring:
-  ai:
-    openai:
-      api-key: ${OPENAI_API_KEY:}
-      model: gpt-4o
-      options:
-        temperature: 0.3
-
-#  profiles:
-#    active: local
-  cloud:
-    aws:
-      credentials: # IAM으로 생성한 시크릿키 정보를 입력
-        access-key: ${AWS_ACCESS_KEY}
-        secret-key: ${AWS_SECRET_KEY}
-      S3:
-        bucket: matchingbot-company-reports    #${S3_BUCKET_NAME} # bucket 이름
-        base-url: https://matchingbot-company-reports.s3.us-east-2.amazonaws.com/upload/  #url복사해서붙이기
-      region:
-        static: us-east-2  # bucket이 위치한 AWS 리전을 설정
-      stack:
-        auto: false # 자동 스택 생성 기능
-
-
 
 jwt:
   issuer: ${JWT_ISSUER}
@@ -86,3 +62,11 @@ security:
       - /admin/**
     #      - /company/**
     #      - /job/**
+
+
+kakao:
+  rest-api-key: "KakaoAK 95f4cb7367a36e2e71328edc2c4b9b07"
+
+od:
+  cloud:
+    key: ${OD_CLOUD_KEY}
