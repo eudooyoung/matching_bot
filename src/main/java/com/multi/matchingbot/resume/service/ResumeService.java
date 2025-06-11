@@ -1,12 +1,13 @@
 package com.multi.matchingbot.resume.service;
 
 import com.multi.matchingbot.job.repository.ResumeBookmarkRepository;
+import com.multi.matchingbot.member.domain.entity.ResumeViewLog;
 import com.multi.matchingbot.resume.domain.dto.ResumeDto;
 import com.multi.matchingbot.resume.domain.dto.ResumeViewLogDto;
-import com.multi.matchingbot.member.domain.entity.ResumeViewLog;
+import com.multi.matchingbot.resume.domain.entity.Resume;
+import com.multi.matchingbot.resume.mapper.ResumeMapper;
 import com.multi.matchingbot.resume.repository.ResumeRepository;
 import com.multi.matchingbot.resume.repository.ResumeViewLogRepository;
-import com.multi.matchingbot.resume.domain.entity.Resume;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -96,6 +100,18 @@ public class ResumeService {
     public Page<ResumeDto> searchResumes(String jobGroup, String jobType, String jobRole, String careerType, String companyName, Pageable pageable) {
         return resumeRepository.searchWithFilters(jobGroup, jobType, jobRole, careerType, companyName, pageable)
                 .map(ResumeDto::fromEntity);
+    }
+
+    // 0610
+    public List<ResumeDto> findByIdsPreserveOrder(List<Long> sortedIds) {
+        List<Resume> resumes = resumeRepository.findAllById(sortedIds);
+        Map<Long, Resume> resumeMap = resumes.stream().collect(Collectors.toMap(Resume::getId, Function.identity()));
+
+        return sortedIds.stream()
+                .map(resumeMap::get)
+                .filter(Objects::nonNull)
+                .map(resume -> ResumeMapper.toDto(resume, false))
+                .collect(Collectors.toList());
     }
 
 //    public List<ResumeDto> searchResumes(String jobGroup, String jobType, String jobRole, String careerType, String companyName) {

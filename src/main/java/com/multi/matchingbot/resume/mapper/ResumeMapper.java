@@ -9,38 +9,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public interface ResumeMapper {
-    /*public static ResumeDto toDto(Resume resume, boolean bookmarked) {
-        if (resume == null) return null;
-
-        return ResumeDto.builder()
-                .id(resume.getId())
-                .title(resume.getTitle())
-                .skillAnswer(resume.getSkillAnswer())
-                .traitAnswer(resume.getTraitAnswer())
-                .skillKeywords(resume.getSkillKeywords())
-                .traitKeywords(resume.getTraitKeywords())
-                .keywordsStatus(resume.getKeywordsStatus().name())
-                .createdAt(resume.getCreatedAt())
-                .memberName(resume.getMember() != null ? resume.getMember().getName() : null)
-                .bookmarked(bookmarked)
-                .build();
-    }
-
-    public static Resume toEntity(ResumeDto dto) {
-        if (dto == null) return null;
-
-        Resume resume = new Resume();
-        resume.setId(dto.getId());
-        resume.setTitle(dto.getTitle());
-        resume.setSkillAnswer(dto.getSkillAnswer());
-        resume.setTraitAnswer(dto.getTraitAnswer());
-        resume.setSkillKeywords(dto.getSkillKeywords());
-        resume.setTraitKeywords(dto.getTraitKeywords());
-        resume.setKeywordsStatus(Yn.valueOf(dto.getKeywordsStatus()));
-        resume.setCreatedAt(dto.getCreatedAt());
-        // member, occupation은 필요 시 setter 추가 또는 외부에서 주입
-        return resume;
-    }*/
     static ResumeDto toDto(Resume resume, boolean bookmarked) {
 
         ResumeDto resumeDto = new ResumeDto();
@@ -50,6 +18,8 @@ public interface ResumeMapper {
         resumeDto.setTraitAnswer(resume.getTraitAnswer());
         resumeDto.setSkillKeywords(resume.getSkillKeywords());
         resumeDto.setTraitKeywords(resume.getTraitKeywords());
+        resumeDto.setSkillKeywordsConcat(resume.getSkillKeywords());
+        resumeDto.setTraitKeywordsConcat(resume.getTraitKeywords());
         resumeDto.setKeywordsStatus(String.valueOf(resume.getKeywordsStatus()));
         resumeDto.setCreatedAt(resume.getCreatedAt());
         resumeDto.setMemberName(resume.getMember() != null ? resume.getMember().getName() : null);
