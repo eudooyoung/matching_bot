@@ -17,18 +17,22 @@
 
             <div class="search-bar-wrapper">
                 <div class="bulk-actions">
-                    <button type="button" class="btn btn-delete"
-                            onclick="bulkSoftAction('DELETE', '/api/v1/admin/bulk/companies')">삭제
-                    </button>
-                    <button type="button" class="btn btn-restore"
-                            onclick="bulkSoftAction('PATCH', '/api/v1/admin/bulk/companies')">복구
-                    </button>
-                    <button type="button" class="btn btn-extract"
-                            onclick="bulkExtract('EXTRACT', '/admin/bulk/placeholder')">추출
-                    </button>
+                    <div class="bulk-button-group">
+                        <button type="button" class="btn btn-delete"
+                                onclick="bulkSoftAction('DELETE', '/api/v1/admin/bulk/companies')">삭제
+                        </button>
+                        <button type="button" class="btn btn-restore"
+                                onclick="bulkSoftAction('PATCH', '/api/v1/admin/bulk/companies')">복구
+                        </button>
+                        <!--<button type="button" class="btn btn-extract"
+                                onclick="bulkExtract('EXTRACT', '/admin/bulk/placeholder')">추출
+                        </button>-->
+                    </div>
+                    <div class="form-error-global" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+
                 </div>
 
-                <form method="get" th:action="@{/admin/companies}" class="search-form">
+                <form method="get" th:action="@{/admin/board/companies}" class="search-form">
                     <div class="search-options">
                         <!-- 정렬 기준 -->
                         <select name="sortBy" onchange="this.form.submit()">
@@ -53,15 +57,15 @@
                             <option value="N" th:selected="${condition.status == 'N'}">INACTIVE</option>
                         </select>
 
-                        <select name="reportStatus" onchange="this.form.submit()">
+                        <!--<select name="reportStatus" onchange="this.form.submit()">
                             <option value="" disabled>보고서 상태</option>
                             <option value="">전체</option>
                             <option value="Y" th:selected="${condition.reportStatus == 'Y'}">추출 완료</option>
                             <option value="N" th:selected="${condition.reportStatus == 'N'}">미완료</option>
-                        </select>
+                        </select>-->
                     </div>
 
-                    <div class="search-right" onchange="this.form.submit()">
+                    <div class="search-right">
                         <input type="text" name="keyword" placeholder="회원 번호, 이름, 이메일 검색"
                                th:value="${condition.keyword}"/>
                         <button type="submit" class="btn btn-search">검색</button>
@@ -73,7 +77,7 @@
             <div class="table-wrapper">
                 <table class="table">
                     <colgroup>
-                        <col style="width: 25px;"/>  <!-- 체크박스 -->
+                        <col style="width: 15px;"/>  <!-- 체크박스 -->
                         <col style="width: 50px;"/>  <!-- 회원 번호 -->
                         <col style="width: 85px;"/>  <!-- 회사 이름 -->
                         <col style="width: 160px;"/>  <!-- 이메일 -->
@@ -84,7 +88,7 @@
                         <col style="width: 130px;"/>  <!-- 수정자 -->
                         <col style="width: 95px;"/>  <!-- 수정일 -->
                         <col style="width: 30px;"/>  <!-- 평가 -->
-                        <col style="width: 40px;"/>  <!-- 추출 -->
+                        <!--                        <col style="width: 40px;"/>  &lt;!&ndash; 추출 &ndash;&gt;-->
                         <col style="width: 45px;"/>  <!-- 가입 상태 -->
                         <col style="width: 40px;"/>  <!-- 삭제/복구 -->
                     </colgroup>
@@ -103,13 +107,13 @@
                         <th>수정자</th>
                         <th>수정일</th>
                         <th>평가</th>
-                        <th>추출</th>
+                        <!--                        <th>추출</th>-->
                         <th>가입상태</th>
                         <th>삭제</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="company : ${companies}">
+                    <tr th:each="company : ${companies ?: {}}">
                         <td><input type="checkbox" name="checkedIds" th:value="${company.id}" class="check-row"
                                    th:data-status="${company.status.name()}"/>
                         </td>
@@ -137,13 +141,13 @@
                             <a class="link-detail" th:href="@{|/admin/board/companies/${company.id}|}"
                                th:text="${company.reportStatus}">보고서 상태</a>
                         </td>
-                        <td>
+                        <!--<td>
                             <button type="button"
                                     class="btn btn-extract"
-                                    th:onclick="|extractKeywords({ id: ${company.id}, url: '/api/v1/admin/companies', onSuccess: () => location.reload() })|">
+                                    th:onclick="|refreshCompanyReport(${company.id})|" onSuccess: () => location.reload() })|">
                                 추출
                             </button>
-                        </td>
+                        </td>-->
                         <td th:class="${company.getStatusClass()}" th:text="${company.getStatusText()}">가입 상태</td>
                         <td>
                             <button type="button"
@@ -166,17 +170,19 @@
 
             <!-- 페이지네이션 (예시) -->
             <div class="table-pagination" style="margin-top: 1.5rem; text-align: center;">
-                <a th:if="${page.hasPrevious()}" th:href="@{/admin/board/companies(page=${currentPage - 1})}">이전</a>
-                <span th:unless="${page.hasPrevious()}" style="visibility: hidden;">이전</span>
+                <a th:if="${page != null and page.hasPrevious()}"
+                   th:href="@{/admin/board/companies(page=${currentPage - 1})}">이전</a>
+                <span th:if="${page == null or !page.hasPrevious()}" style="visibility: hidden;">이전</span>
 
-                <span th:each="pageNum : ${pageNumbers}" style="margin: 0 5px;">
-                    <a th:href="@{/admin/board/companies(page=${pageNum})}"
-                       th:text="${pageNum + 1}"
-                       th:classappend="${pageNum == currentPage} ? 'active-page' : ''"></a>
-                </span>
+                <span th:each="pageNum : ${pageNumbers ?: {}}" style="margin: 0 5px;">
+                                           <a th:href="@{/admin/board/companies(page=${pageNum})}"
+                                              th:text="${pageNum + 1}"
+                                              th:classappend="${pageNum == currentPage} ? 'active-page' : ''"></a>
+                                       </span>
 
-                <a th:if="${page.hasNext()}" th:href="@{/admin/companies(page=${currentPage + 1})}">다음</a>
-                <span th:unless="${page.hasNext()}" style="visibility: hidden;">다음</span>
+                <a th:if="${page != null and page.hasNext()}"
+                   th:href="@{/admin/board/companies(page=${currentPage + 1})}">다음</a>
+                <span th:if="${page == null or !page.hasNext()}" style="visibility: hidden;">다음</span>
             </div>
         </section>
     </main>

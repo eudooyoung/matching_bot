@@ -14,6 +14,7 @@ import com.multi.matchingbot.company.service.CompanyService;
 import com.multi.matchingbot.job.domain.dto.JobDto;
 import com.multi.matchingbot.job.domain.entity.Job;
 import com.multi.matchingbot.job.service.JobService;
+import com.multi.matchingbot.member.domain.entity.Member;
 import com.multi.matchingbot.member.service.MemberService;
 import com.multi.matchingbot.resume.domain.entity.Resume;
 import com.multi.matchingbot.resume.service.ResumeService;
@@ -23,6 +24,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,22 +46,46 @@ public class AdminBoardController {
 
     private final CommunityCategoryRepository communityCategoryRepository;
 
+    /**
+     * 개인 회원 관리자 게시판 페이지 매핑
+     *
+     * @param condition     검색 조건
+     * @param bindingResult 유효성 검증 처리용 객체
+     * @param model         디티오 전달용 객체
+     * @return 관리자 페이지 반환
+     */
     @GetMapping("/members")
-    public String members(@ModelAttribute AdminSearchCondition condition, Model model) {
+    public String members(@Validated @ModelAttribute AdminSearchCondition condition,
+                          BindingResult bindingResult, Model model) {
+
+        model.addAttribute("condition", condition);
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("errorMessage", "검색어는 50자 이하로 입력하세요");
+            return "/admin/board-members";
+        }
+
         AdminPagedResult<MemberAdminView> result = adminPageService.members(condition);
         model.addAttribute("members", result.getPage().getContent());
         model.addAttribute("page", result.getPage());
         model.addAttribute("pageNumbers", result.getPageNumbers());
         model.addAttribute("currentPage", result.getCurrentPage());
-        model.addAttribute("condition", condition);
+
         return "/admin/board-members";
     }
 
-    //    구직자 회원 정보 임시 매핑
+    /**
+     * 개인 회원 상세 페이지 이동
+     *
+     * @param memberId
+     * @param model
+     * @return
+     */
     @GetMapping("/members/{memberId}")
     public String adminMemberDetail(@PathVariable(name = "memberId") Long memberId, Model model) {
-        model.addAttribute("memberId", memberService.getMemberById(memberId));
-        return "members/profile";
+        Member member = memberService.findById(memberId);
+        model.addAttribute("member", member);
+        return "member/profile-edit";
     }
 
     /**
@@ -67,14 +94,21 @@ public class AdminBoardController {
      * @return
      */
     @GetMapping("/companies")
-    public String companies(@ModelAttribute AdminSearchCondition condition, Model model) {
-        log.warn("statusParam = [{}]", condition.getStatus());
+    public String companies(@Validated @ModelAttribute AdminSearchCondition condition,
+                            BindingResult bindingResult, Model model) {
+        model.addAttribute("condition", condition);
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("errorMessage", "검색어는 50자 이하로 입력하세요");
+            return "/admin/board-companies";
+        }
+
         AdminPagedResult<CompanyAdminView> result = adminPageService.companies(condition);
         model.addAttribute("companies", result.getPage().getContent());
         model.addAttribute("page", result.getPage());
         model.addAttribute("pageNumbers", result.getPageNumbers());
         model.addAttribute("currentPage", result.getCurrentPage());
-        model.addAttribute("condition", condition);
+
         return "/admin/board-companies";
     }
 
@@ -116,15 +150,21 @@ public class AdminBoardController {
      * @return
      */
     @GetMapping("/resumes")
-    public String resumes(@ModelAttribute AdminSearchCondition condition, Model model) {
-        log.warn("statusParam = [{}]", condition.getKeywordsStatus());
+    public String resumes(@Validated @ModelAttribute AdminSearchCondition condition,
+                          BindingResult bindingResult, Model model) {
+        model.addAttribute("condition", condition);
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("errorMessage", "검색어는 50자 이하로 입력하세요");
+            return "/admin/board-resumes";
+        }
+
         AdminPagedResult<ResumeAdminView> result = adminPageService.resumes(condition);
         model.addAttribute("resumes", result.getPage().getContent());
         model.addAttribute("page", result.getPage());
         model.addAttribute("pageNumbers", result.getPageNumbers());
         model.addAttribute("currentPage", result.getCurrentPage());
-        model.addAttribute("condition", condition);
-        System.out.println("careerType: " + condition.getCareerType());
+
         return "/admin/board-resumes";
     }
 
@@ -150,15 +190,20 @@ public class AdminBoardController {
      * @return
      */
     @GetMapping("/jobs")
-    public String jobs(@ModelAttribute AdminSearchCondition condition, Model model) {
-        log.warn("jobSearchParam = [{}]", condition);
-        AdminPagedResult<JobAdminView> result = adminPageService.jobs(condition);
+    public String jobs(@Validated @ModelAttribute AdminSearchCondition condition,
+                       BindingResult bindingResult, Model model) {
+        model.addAttribute("condition", condition);
 
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("errorMessage", "검색어는 50자 이하로 입력하세요");
+            return "/admin/board-jobs";
+        }
+
+        AdminPagedResult<JobAdminView> result = adminPageService.jobs(condition);
         model.addAttribute("jobs", result.getPage().getContent());
         model.addAttribute("page", result.getPage());
         model.addAttribute("pageNumbers", result.getPageNumbers());
         model.addAttribute("currentPage", result.getCurrentPage());
-        model.addAttribute("condition", condition);
 
         return "/admin/board-jobs";
     }
@@ -187,16 +232,20 @@ public class AdminBoardController {
      * @return
      */
     @GetMapping("/community")
-    public String communityPosts(@ModelAttribute AdminSearchCondition condition, Model model) {
-        AdminPagedResult<CommunityAdminView> result = adminPageService.posts(condition);
+    public String communityPosts(@Validated @ModelAttribute AdminSearchCondition condition,
+                                 BindingResult bindingResult, Model model) {
+        model.addAttribute("condition", condition);
 
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("errorMessage", "검색어는 50자 이하로 입력하세요");
+            return "/admin/board-community";
+        }
+
+        AdminPagedResult<CommunityAdminView> result = adminPageService.posts(condition);
         model.addAttribute("posts", result.getPage().getContent());
         model.addAttribute("page", result.getPage());
         model.addAttribute("pageNumbers", result.getPageNumbers());
         model.addAttribute("currentPage", result.getCurrentPage());
-        model.addAttribute("condition", condition);
-
-        model.addAttribute("categories", communityCategoryRepository.findAll());
 
         return "/admin/board-community";
     }

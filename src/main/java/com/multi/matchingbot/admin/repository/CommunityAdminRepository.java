@@ -1,5 +1,6 @@
 package com.multi.matchingbot.admin.repository;
 
+import com.multi.matchingbot.common.domain.enums.Role;
 import com.multi.matchingbot.community.domain.CommunityPost;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,8 +27,14 @@ public interface CommunityAdminRepository extends JpaRepository<CommunityPost, L
                        c.name LIKE %:keyword% OR
                        CAST(p.id AS string) LIKE %:keyword%)
                   AND (:categoryId IS NULL OR cat.id = :categoryId)
+                     AND (
+                                :#{#writerType?.name()} IS NULL OR
+                                (:#{#writerType?.name()} = 'MEMBER' AND p.member IS NOT NULL) OR
+                                (:#{#writerType?.name()} = 'COMPANY' AND p.company IS NOT NULL)
+                           )
             """)
     Page<CommunityPost> searchWithCondition(@Param("keyword") String keyword,
                                             @Param("categoryId") Long categoryId,
+                                            @Param("writerType") Role writerType,
                                             Pageable pageable);
 }
