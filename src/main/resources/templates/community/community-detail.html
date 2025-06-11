@@ -63,13 +63,21 @@
         }
 
         .comment-form-container {
-            max-width: 700px;
-            border: 1px solid #ccc;
-            border-radius: 16px;
-            padding: 32px;
+            width: 100%;
             background-color: #fff;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
         }
+        .comment-form-container h5 {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 16px;
+            color: #103254;
+        }
+
 
         .no-comments {
             color: #999;
@@ -96,7 +104,7 @@
             <div class="post-title" th:text="${post.title}">제목</div>
             <p class="post-meta">
                 <strong>작성자:</strong>
-                <span th:text="${post.writerName != null ? post.writerName : post.companyName}">작성자</span> |
+                <span th:text="${post.nickname != null ? post.nickname : post.companyName}">작성자</span> |
                 <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}">작성일</span>
             </p>
             <div class="post-content" th:text="${post.content}">내용</div>
@@ -116,7 +124,7 @@
         <div th:if="${post.comments != null and !post.comments.isEmpty()}">
             <div th:each="comment : ${post.comments}" class="comment-box">
                 <div class="comment-meta">
-                    <strong th:text="${comment.writerName != null ? comment.writerName : comment.companyName}">작성자</strong> |
+                    <strong th:text="${comment.nickname != null ? comment.nickname : comment.companyName}">작성자</strong>
                     <span th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}">작성일</span>
                 </div>
                 <div th:id="'comment-content-' + ${comment.id}" th:text="${comment.content}" class="mb-2">댓글 내용</div>
@@ -151,15 +159,15 @@
         </div>
 
         <!-- ✅ 댓글 작성 -->
-        <div sec:authorize="isAuthenticated()" class="mt-5 d-flex justify-content-center">
+        <div sec:authorize="isAuthenticated()" class="mt-5">
             <div class="comment-form-container">
-                <h5 class="text-center mb-3">✍ 댓글 작성</h5>
+                <h5>✍ 댓글 작성</h5>
                 <form th:action="@{'/community/' + ${post.id} + '/comment'}" method="post">
                     <div class="mb-3">
-                        <textarea name="content" rows="5" class="form-control" placeholder="댓글을 입력하세요" required></textarea>
+                        <textarea name="content" rows="4" class="form-control" placeholder="댓글을 입력하세요" required></textarea>
                     </div>
                     <div class="text-end">
-                        <button type="submit" class="btn btn-primary">등록</button>
+                        <button type="submit" class="btn btn-sm btn-primary">등록</button>
                     </div>
                 </form>
             </div>
