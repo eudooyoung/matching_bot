@@ -14,7 +14,7 @@ pipeline {
         IMAGE_NAME = 'matchingbotapp'
         IMAGE_TAG = 'latest'
         AWS_CREDENTIAL_NAME = 'aws_credentials'
-        DEPLOY_HOST = '18.116.1.42' //젠킨스 퍼블릭 아이피
+        DEPLOY_HOST = '18.223.234.101' //젠킨스 퍼블릭 아이피
         JWT_SECRET = credentials('JWT_SECRET')
         JWT_ISSUER = credentials('JWT_ISSUER')
         DB_PROD_URL = credentials('DB_PROD_URL')
@@ -58,18 +58,6 @@ pipeline {
                 }
             }
         }
-        stage('Prepare application-security.yml') {
-            steps {
-                script {
-                    sh '''
-                        sed -i "s#\\\${JWT_SECRET}#${JWT_SECRET}#g" $WORKSPACE/src/main/resources/application-security.yml
-                        sed -i "s#\\\${JWT_ISSUER}#${JWT_ISSUER}#g" $WORKSPACE/src/main/resources/application-security.yml
-                        sed -i "s#\\\${OD_CLOUD_KEY}#${OD_CLOUD_KEY}#g" $WORKSPACE/src/main/resources/application-security.yml
-                    '''
-                }
-            }
-        }
-
        stage('Build Application') {
             steps {
                 sh '''

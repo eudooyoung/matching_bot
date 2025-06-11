@@ -26,7 +26,7 @@ spring:
 
   ai:
     openai:
-      api-key: ${OPENAI_API_KEY:}
+      api-key: ${OPENAI_API_KEY}
       model: gpt-4o
       options:
         temperature: 0.3
