@@ -10,10 +10,9 @@ import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
+import java.io.*;
 import java.util.Map;
 
 @Slf4j
@@ -72,6 +71,12 @@ public class ReportImageGenerator {
             log.info("리포트 이미지 생성 성공 (w={}px, h={}px)", image.getWidth(), image.getHeight());
             return image;
         }
+    }
+
+    public InputStream bufferedImageToInputStream(BufferedImage image, String formatName) throws IOException {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        ImageIO.write(image, formatName, os);
+        return new ByteArrayInputStream(os.toByteArray());
     }
 
 }
