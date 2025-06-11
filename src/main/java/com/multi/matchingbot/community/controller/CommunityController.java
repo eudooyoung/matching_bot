@@ -170,7 +170,7 @@ public class CommunityController {
 
 
     @PostMapping("/edit/{id}")
-    public String update(@PathVariable Long id,
+    public String update(@PathVariable("id") Long id,
                          @ModelAttribute CommunityPostDto postDto,
                          Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -190,7 +190,7 @@ public class CommunityController {
     }
 
     @PostMapping("/delete/{id}")
-    public String delete(@PathVariable Long id,
+    public String delete(@PathVariable("id") Long id,
                          Authentication authentication,
                          RedirectAttributes redirectAttributes) {
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -217,10 +217,9 @@ public class CommunityController {
         return "redirect:/community/list";
     }
 
-
     @PostMapping("/{id}/comment")
-    public String addComment(@PathVariable Long id,
-                             @RequestParam String content,
+    public String addComment(@PathVariable("id") Long id,
+                             @RequestParam("content") String content,
                              Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
@@ -260,7 +259,7 @@ public class CommunityController {
     }
 
     @PostMapping("/comment/{id}/delete")
-    public String deleteComment(@PathVariable Long id, Authentication authentication) {
+    public String deleteComment(@PathVariable("id") Long id, Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
         }

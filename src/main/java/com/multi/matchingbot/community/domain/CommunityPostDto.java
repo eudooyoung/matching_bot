@@ -26,6 +26,7 @@ public class CommunityPostDto {
     private String writerName; // ✅ 추가
     private Long companyId;
     private String companyName;
+    private String nickname;
 
 
     private List<CommunityCommentDto> comments;
@@ -40,13 +41,17 @@ public class CommunityPostDto {
         }
 
         if (post.getMember() != null) {
-            dto.setMemberId(post.getMember().getId());
-            dto.setWriterName(post.getMember().getName());
+
+            dto.setNickname(post.getMember().getNickname());
+
+
         }
 
         if (post.getCompany() != null) {
             dto.setCompanyId(post.getCompany().getId());
             dto.setCompanyName(post.getCompany().getName());
+            dto.setWriterName(post.getCompany().getName());
+
         }
 
 

@@ -1,9 +1,11 @@
 package com.multi.matchingbot.admin.service;
 
 import com.multi.matchingbot.admin.domain.BulkResponseDto;
+import com.multi.matchingbot.admin.mapper.CompanyAdminMapper;
 import com.multi.matchingbot.admin.repository.CompanyAdminRepository;
 import com.multi.matchingbot.common.domain.enums.Yn;
 import com.multi.matchingbot.company.domain.Company;
+import com.multi.matchingbot.company.domain.CompanyUpdateReportDto;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +21,7 @@ import java.util.List;
 public class CompanyAdminService {
 
     private final CompanyAdminRepository companyAdminRepository;
+    private final CompanyAdminMapper companyAdminMapper;
 
     @Transactional
     public void deactivate(Long id) {
@@ -64,5 +67,11 @@ public class CompanyAdminService {
         }
         boolean isSuccess = failed.isEmpty();
         return new BulkResponseDto(isSuccess, failed);
+    }
+
+    public CompanyUpdateReportDto getReportSource(Long companyId) {
+        Company company = companyAdminRepository.findById(companyId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 기업이 존재하지 않습니다."));
+        return companyAdminMapper.toReportDto(company);
     }
 }

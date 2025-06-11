@@ -86,7 +86,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();  // !!!테스트용 주의!!!
+        return NoOpPasswordEncoder.getInstance();  // TODO: !!테스트용 주의!!!
 //        return new BCryptPasswordEncoder();
     }
 

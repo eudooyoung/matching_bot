@@ -2,10 +2,12 @@ package com.multi.matchingbot.chatbot.util;
 
 import com.multi.matchingbot.company.domain.CompanyRegisterDto;
 import com.multi.matchingbot.company.domain.CompanyUpdateReportDto;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 public class ReportDataBuilder {
     public static Map<String, Object> fromCompany(CompanyRegisterDto dto) {
             return buildCommonMap(

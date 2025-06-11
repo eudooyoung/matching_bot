@@ -51,4 +51,9 @@ public class AdminBulkRestController {
         return ResponseEntity.ok(jobAdminService.bulkHardDelete(requestDto.getIds()));
     }
 
+    @DeleteMapping("communityPosts")
+    public ResponseEntity<BulkResponseDto> hardDeleteCommunityPosts(@RequestBody @Valid BulkRequestDto requestDto) {
+        return ResponseEntity.ok(communityAdminService.bulkHardDelete(requestDto.getIds()));
+    }
+
 }

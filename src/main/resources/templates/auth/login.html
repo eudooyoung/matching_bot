@@ -97,7 +97,7 @@
         }
     }
 
-    // 로그인 처리 공통 함수 형찬
+    /*// 로그인 처리 공통 함수 형찬
     function handleLogin(emailId, passwordId, errorMsgId, role) {
         const email = document.getElementById(emailId).value;
         const password = document.getElementById(passwordId).value;
@@ -118,7 +118,7 @@
             .catch(err => {
                 errorBox.innerText = err.message;
             });
-    }
+    }*/
 
     document.getElementById("member-form").addEventListener("submit", function (e) {
         e.preventDefault();
@@ -134,6 +134,7 @@
 </script>
 
 <script th:src="@{/js/dropdown.js}"></script>
+<script th:src="@{/js/auth/loginHandler.js}"></script>
 
 </body>
 </html>

@@ -36,7 +36,7 @@ public class CompanyResumeController {
 
     @GetMapping
     public String resumeList(@RequestParam(name = "page", defaultValue = "1") int page,
-                             @RequestParam(name = "size", defaultValue = "6") int size,
+                             @RequestParam(name = "size", defaultValue = "9") int size,
                              @AuthenticationPrincipal MBotUserDetails userDetails,
                              Model model) {
 

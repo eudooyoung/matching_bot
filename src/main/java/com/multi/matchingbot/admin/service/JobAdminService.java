@@ -31,7 +31,7 @@ public class JobAdminService {
                 deleteHard(id);
             } catch (Exception e) {
                 failed.add(id);
-                log.warn("ID {} 비활성화 실패: {}", id, e.getMessage());
+                log.warn("ID {} 삭제 실패: {}", id, e.getMessage());
             }
         }
         boolean isSuccess = failed.isEmpty();

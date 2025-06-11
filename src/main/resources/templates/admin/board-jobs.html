@@ -17,9 +17,12 @@
 
             <div class="search-bar-wrapper">
                 <div class="bulk-actions">
-                    <button type="button" class="btn btn-delete"
-                            onclick="bulkHardDelete('/api/v1/admin/bulk/jobs')">삭제
-                    </button>
+                    <div class="bulk-button-group">
+                        <button type="button" class="btn btn-delete"
+                                onclick="bulkHardDelete('/api/v1/admin/bulk/jobs')">삭제
+                        </button>
+                    </div>
+                    <div class="form-error-global" th:if="${errorMessage}" th:text="${errorMessage}"></div>
                 </div>
 
                 <form method="get" th:action="@{/admin/board/jobs}" class="search-form">
@@ -46,7 +49,7 @@
                         </select>
                     </div>
 
-                    <div class="search-right" onchange="this.form.submit()">
+                    <div class="search-right">
                         <input type="text" name="keyword" placeholder="공고 번호, 제목, 기업명 검색"
                                th:value="${condition.keyword}"/>
                         <button type="submit" class="btn btn-search">검색</button>
@@ -58,7 +61,7 @@
             <div class="table-wrapper">
                 <table class="table">
                     <colgroup>
-                        <col style="width: 20px;"/>
+                        <col style="width: 15px;"/>
                         <col style="width: 35px;"/>
                         <col style="width: 100px;"/>
                         <col style="width: 80px;"/>
@@ -94,7 +97,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="job : ${jobs}">
+                    <tr th:each="job : ${jobs ?: {}}">
                         <td><input type="checkbox" name="checkedIds" th:value="${job.id}" class="check-row"/></td>
                         <td th:text="${job.formattedId}">공고 번호</td>
                         <td class="text-left-col">
@@ -125,17 +128,19 @@
             </div>
 
             <div class="table-pagination" style="margin-top: 1.5rem; text-align: center;">
-                <a th:if="${page.hasPrevious()}" th:href="@{/admin/board/jobs(page=${currentPage - 1})}">이전</a>
-                <span th:unless="${page.hasPrevious()}" style="visibility: hidden;">이전</span>
+                <a th:if="${page != null and page.hasPrevious()}"
+                   th:href="@{/admin/board/jobs(page=${currentPage - 1})}">이전</a>
+                <span th:if="${page == null or !page.hasPrevious()}" style="visibility: hidden;">이전</span>
 
-                <span th:each="pageNum : ${pageNumbers}" style="margin: 0 5px;">
-                    <a th:href="@{/admin/board/jobs(page=${pageNum})}"
-                       th:text="${pageNum + 1}"
-                       th:classappend="${pageNum == currentPage} ? 'active-page' : ''"></a>
-                </span>
+                <span th:each="pageNum : ${pageNumbers ?: {}}" style="margin: 0 5px;">
+                                <a th:href="@{/admin/board/jobs(page=${pageNum})}"
+                                   th:text="${pageNum + 1}"
+                                   th:classappend="${pageNum == currentPage} ? 'active-page' : ''"></a>
+                            </span>
 
-                <a th:if="${page.hasNext()}" th:href="@{/admin/board/jobs(page=${currentPage + 1})}">다음</a>
-                <span th:unless="${page.hasNext()}" style="visibility: hidden;">다음</span>
+                <a th:if="${page != null and page.hasNext()}"
+                   th:href="@{/admin/board/jobs(page=${currentPage + 1})}">다음</a>
+                <span th:if="${page == null or !page.hasNext()}" style="visibility: hidden;">다음</span>
             </div>
         </section>
     </main>
