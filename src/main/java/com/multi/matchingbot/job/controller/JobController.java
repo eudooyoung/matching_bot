@@ -64,7 +64,7 @@ public class JobController {
     @GetMapping("/manage-jobs")
     public String showManageJobsPage(Model model,
                                      @RequestParam(name = "page", defaultValue = "0") int page,
-                                     @RequestParam(name = "size", defaultValue = "20") int size) {
+                                     @RequestParam(name = "size", defaultValue = "10") int size) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         MBotUserDetails userDetails = (MBotUserDetails) authentication.getPrincipal();
         Long companyId = userDetails.getCompanyId();
