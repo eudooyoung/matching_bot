@@ -44,4 +44,15 @@ public class FindPasswordController {
             return "auth/find-password";
         }
     }
+
+    @GetMapping("/reset-password")
+    public String showResetPasswordPage(@RequestParam String email,
+                                        @RequestParam String userType,
+                                        @RequestParam(required = false) String error,
+                                        Model model) {
+        model.addAttribute("email", email);
+        model.addAttribute("userType", userType);
+        model.addAttribute("error", error);
+        return "auth/reset-password";
+    }
 }
