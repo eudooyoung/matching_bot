@@ -1,270 +1,257 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
 <head>
-  <meta charset="UTF-8"/>
-  <title>MatchingBot | 이력서 목록</title>
-  <link rel="stylesheet" th:href="@{/css/layout.css}"/>
-  <style>
-    body {
-      font-family: sans-serif;
-      background-color: #fafafa;
-    }
+    <meta charset="UTF-8"/>
+    <title>MatchingBot | 이력서 목록</title>
+    <link rel="stylesheet" th:href="@{/css/layout.css}"/>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #fafafa;
+        }
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 40px 20px;
-    }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
 
-    h2 {
-      font-size: 2rem;
-      margin-bottom: 20px;
-      text-align: center;
-    }
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
 
-    .card-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      justify-content: center;
-    }
+        .card-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
 
-    .card {
-      position: relative;
-      width: 300px;
-      height: 300px;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.06);
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      cursor: pointer;
-    }
+        .card {
+            position: relative;
+            width: 300px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+        }
 
-    .card-title {
-      font-size: 1.2rem;
-      font-weight: bold;
-      margin-bottom: 10px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
-    .card-text {
-      font-size: 0.95rem;
-      color: #555;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
+        .card-text {
+            font-size: 0.95rem;
+            color: #555;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
 
-    .meta-text {
-      font-size: 0.9rem;
-      color: #777;
-    }
+        .meta-text {
+            font-size: 0.9rem;
+            color: #777;
+        }
 
-    .stared-button {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      background: none;
-      border: none;
-      font-size: 20px;
-      color: #ddd;
-      cursor: pointer;
-      padding: 0;
-    }
+        .stared-button {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #ddd;
+            cursor: pointer;
+            padding: 0;
+        }
 
-    .stared-button.filled {
-      color: #ffd700;
-    }
+        .stared-button.filled {
+            color: #ffd700;
+        }
 
-    .stared-button:hover {
-      color: #ffd700;
-    }
+        .stared-button:hover {
+            color: #ffd700;
+        }
 
-    .pagination {
-      margin-top: 40px;
-      display: flex;
-      justify-content: center;
-      list-style: none;
-      gap: 4px;
-    }
+        .pagination {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 4px;
+        }
 
-    .pagination li a,
-    .pagination li span {
-      padding: 6px 12px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      text-decoration: none;
-      color: #333;
-    }
+        .pagination li a,
+        .pagination li span {
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #333;
+        }
 
-    .pagination .active a {
-      background: #007bff;
-      color: #fff;
-      border-color: #007bff;
-    }
+        .pagination .active a {
+            background: #007bff;
+            color: #fff;
+            border-color: #007bff;
+        }
 
-    .pagination .disabled span {
-      color: #aaa;
-      cursor: default;
-    }
-  </style>
+        .pagination .disabled span {
+            color: #aaa;
+            cursor: default;
+        }
+    </style>
 </head>
 <body>
 <div class="wrapper">
-  <div th:replace="~{fragments/header :: header(role=${role})}"></div>
+    <div th:replace="~{fragments/header :: header(role=${role})}"></div>
 
-  <main class="container">
+    <main class="container">
 
-    <h2>지원자 이력서 목록</h2>
-    <!-- ✅ 채용공고 선택 드롭다운 (role == COMPANY 일 때만 표시) -->
-    <div class="d-flex align-items-center justify-content-center flex-wrap mb-4" style="gap: 10px;">
-      <!-- 드롭다운 -->
-      <div th:if="${role == 'COMPANY'}" class="d-flex align-items-center">
-        <label for="jobSelectMain" class="me-2 mb-0"><strong>공고 선택:</strong></label>
-        <select id="jobSelectMain" name="jobId" class="form-select" style="height: 38px; width: auto;">
-          <option value="" disabled selected>매칭률 필터를 적용할 공고를 선택하세요</option>
-          <option th:each="job : ${jobs}"
-                  th:value="${job.id}"
-                  th:text="${job.title}">공고 제목
-          </option>
-        </select>
-      </div>
-    </div>
-    <div class="card-grid">
-      <div class="card" th:each="resume, iterStat : ${resumeList}" th:if="${iterStat.index} < 9" th:onclick="|location.href='@{/resume/detail/{id}(id=${resume.id})}'|">
-        <button class="stared-button"
-                th:classappend="${resume.bookmarked} ? 'filled' : ''"
-                th:data-resume-id="${resume.id}"
-                onclick="toggleStar(this, event)"
-                sec:authorize="hasRole('COMPANY')">
-          <span th:text="${resume.bookmarked} ? '★' : '☆'">☆</span>
-        </button>
-        <h5 class="card-title" th:text="${resume.memberName} ?: '이름 없음'"></h5>
-        <p class="card-text"><strong>이력서 제목:</strong> <span th:text="${resume.title} ?: '제목 없음'"></span></p>
-        <p class="card-text"><strong>기술 소개:</strong> <span th:text="${resume.skillAnswer} ?: '기술 소개 없음'"></span></p>
-        <p class="card-text"><strong>성향 소개:</strong> <span th:text="${resume.traitAnswer} ?: '성향 소개 없음'"></span></p>
-        <p class="card-text"><strong>기술 키워드:</strong> <span th:text="${resume.skillKeywords} ?: '기술 키워드 없음'"></span></p>
-        <p class="card-text"><strong>작성일:</strong> <span th:text="${#temporals.format(resume.createdAt, 'yyyy-MM-dd')} ?: '작성일 없음'"></span></p>
-      </div>
-    </div>
+        <h2>지원자 이력서 목록</h2>
+        <div class="d-flex align-items-center justify-content-center flex-wrap mb-4" style="gap: 10px;">
+            <div th:if="${role == 'COMPANY'}" class="d-flex align-items-center">
+                <label for="jobSelectMain" class="me-2 mb-0"><strong>공고 선택:</strong></label>
+                <select id="jobSelectMain" name="jobId" class="form-select" style="height: 38px; width: auto;">
+                    <option value="" disabled selected>매칭률 필터를 적용할 공고를 선택하세요</option>
+                    <option th:each="job : ${jobs}" th:value="${job.id}" th:text="${job.title}">공고 제목</option>
+                </select>
+            </div>
+        </div>
 
-    <nav>
-      <ul class="pagination">
-        <li th:classappend="${currentPage == 1} ? 'disabled'">
-          <a th:if="${currentPage > 1}" th:href="@{/resumes(page=${currentPage - 1})}">이전</a>
-          <span th:if="${currentPage == 1}">이전</span>
-        </li>
+        <div class="card-grid">
+            <div class="card" th:each="resume, iterStat : ${resumeList}" th:if="${iterStat.index} < 9"
+                 th:onclick="|location.href='@{/resume/detail/{id}(id=${resume.id})}'|">
+                <button class="stared-button"
+                        th:classappend="${resume.bookmarked} ? 'filled' : ''"
+                        th:data-resume-id="${resume.id}"
+                        onclick="toggleStar(this, event)"
+                        sec:authorize="hasRole('COMPANY')">
+                    <span th:text="${resume.bookmarked} ? '★' : '☆'">☆</span>
+                </button>
+                <h5 class="card-title" th:text="${resume.memberName} ?: '이름 없음'"></h5>
+                <p class="card-text"><strong>이력서 제목:</strong> <span th:text="${resume.title} ?: '제목 없음'"></span></p>
+                <p class="card-text"><strong>기술 소개:</strong> <span th:text="${resume.skillAnswer} ?: '기술 소개 없음'"></span></p>
+                <p class="card-text"><strong>성향 소개:</strong> <span th:text="${resume.traitAnswer} ?: '성향 소개 없음'"></span></p>
+                <p class="card-text"><strong>기술 키워드:</strong> <span th:text="${resume.skillKeywords} ?: '기술 키워드 없음'"></span></p>
+                <p class="card-text"><strong>작성일:</strong> <span th:text="${#temporals.format(resume.createdAt, 'yyyy-MM-dd')} ?: '작성일 없음'"></span></p>
+            </div>
+        </div>
 
-        <li th:each="i : ${#numbers.sequence(((currentPage - 1)/10*10+1), T(java.lang.Math).min(((currentPage - 1)/10*10+10), totalPages))}"
-            th:classappend="${currentPage == i} ? 'active'">
-          <a th:href="@{/resumes(page=${i})}" th:text="${i}">1</a>
-        </li>
+        <nav>
+            <ul class="pagination">
+                <li th:classappend="${currentPage == 1} ? 'disabled'">
+                    <a th:if="${currentPage > 1}" th:href="@{/resumes(page=${currentPage - 1})}">이전</a>
+                    <span th:if="${currentPage == 1}">이전</span>
+                </li>
+                <li th:each="i : ${#numbers.sequence(((currentPage - 1)/10*10+1), T(java.lang.Math).min(((currentPage - 1)/10*10+10), totalPages))}"
+                    th:classappend="${currentPage == i} ? 'active'">
+                    <a th:href="@{/resumes(page=${i})}" th:text="${i}">1</a>
+                </li>
+                <li th:classappend="${currentPage == totalPages} ? 'disabled'">
+                    <a th:if="${currentPage < totalPages}" th:href="@{/resumes(page=${currentPage + 1})}">다음</a>
+                    <span th:if="${currentPage == totalPages}">다음</span>
+                </li>
+            </ul>
+        </nav>
+    </main>
 
-        <li th:classappend="${currentPage == totalPages} ? 'disabled'">
-          <a th:if="${currentPage < totalPages}" th:href="@{/resumes(page=${currentPage + 1})}">다음</a>
-          <span th:if="${currentPage == totalPages}">다음</span>
-        </li>
-      </ul>
-    </nav>
-  </main>
-
-  <div th:replace="~{fragments/footer :: footer(role=${role})}"></div>
+    <div th:replace="~{fragments/footer :: footer(role=${role})}"></div>
 </div>
 
 <script>
-  function toggleStar(button, event) {
-    event.stopPropagation();
-    const resumeId = button.dataset.resumeId;
+    function toggleStar(button, event) {
+        event.stopPropagation();
+        const resumeId = button.dataset.resumeId;
 
-    fetch(`/job/resume-bookmark/toggle?resumeId=${resumeId}`, {
-      method: 'POST'
-    })
+        fetch(`/job/resume-bookmark/toggle?resumeId=${resumeId}`, {
+            method: 'POST'
+        })
             .then(response => {
-              if (!response.ok) throw new Error("즐겨찾기 실패");
-              return response.json();
+                if (!response.ok) throw new Error("즐겨찾기 실패");
+                return response.json();
             })
             .then(data => {
-              const icon = button.querySelector('span');
+                const icon = button.querySelector('span');
 
-              if (data.bookmarked) {
-                button.classList.add('filled');
-                icon.textContent = '★';
-                alert('이력서가 즐겨찾기 되었습니다.');
-              } else {
-                button.classList.remove('filled');
-                icon.textContent = '☆';
-                alert('즐겨찾기가 해제되었습니다.');
-              }
+                if (data.bookmarked) {
+                    button.classList.add('filled');
+                    icon.textContent = '★';
+                    alert('이력서가 즐겨찾기 되었습니다.');
+                } else {
+                    button.classList.remove('filled');
+                    icon.textContent = '☆';
+                    alert('즐겨찾기가 해제되었습니다.');
+                }
             })
             .catch(error => {
-              console.error(error);
-              alert('오류가 발생했습니다.');
+                console.error(error);
+                alert('오류가 발생했습니다.');
             });
-  }
-
+    }
 </script>
-<!--// 0610-->
+
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const jobSelect = document.getElementById("jobSelectMain");
-    if (!jobSelect) return;
+    document.addEventListener("DOMContentLoaded", () => {
+        const jobSelect = document.getElementById("jobSelectMain");
+        if (!jobSelect) return;
 
-    jobSelect.addEventListener("change", async () => {
-      const jobId = jobSelect.value;
-      if (!jobId) return;
+        jobSelect.addEventListener("change", async () => {
+            const jobId = jobSelect.value;
+            if (!jobId) return;
 
-      try {
-        const response = await fetch(`/api/v1/resume/sort-resumes-by-job`, {
-          method: "POST",
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify({jobId: jobId})
-        });
+            try {
+                const response = await fetch(`/api/v1/resume/sort-resumes-by-job`, {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({jobId: jobId})
+                });
 
-        if (response.ok) {
-          const sortedResumes = await response.json();
+                if (response.ok) {
+                    const sortedResumes = await response.json();
 
-          // ✅ 정렬된 공고들로 DOM 갱신
-          const container = document.querySelector(".row");
-          container.innerHTML = ""; // 기존 공고 제거
+                    const container = document.querySelector(".card-grid");
+                    container.innerHTML = "";
 
-          sortedResumes.forEach(resume => {
-            const card = document.createElement("div");
-            card.className = "col-md-4";
-            card.innerHTML = `
-                        <div class="card h-100 resume-card" style="cursor: pointer;" onclick="location.href='/resume/detail/${resume.id}'">
-                          <div class="card-body">
-                            <div class="resume-card-header">
-                              <h5 class="card-title">${resume.memberName}</h5>
-                              <button class="stared-button ${resume.bookmarked ? 'filled' : ''}"
-                                      data-resume-id="${resume.id}"
-                                      onclick="toggleStar(this, event)">
+                    sortedResumes.forEach(resume => {
+                        const card = document.createElement("div");
+                        card.className = "card";
+                        card.setAttribute("onclick", `location.href='/resume/detail/${resume.id}'`);
+
+                        card.innerHTML = `
+                            <button class="stared-button ${resume.bookmarked ? 'filled' : ''}"
+                                    data-resume-id="${resume.id}"
+                                    onclick="toggleStar(this, event)">
                                 <span>${resume.bookmarked ? '★' : '☆'}</span>
-                              </button>
-                            </div>
-                            <p class="card-text"><strong>이력서 제목:</strong> ${resume.title}</p>
-                            <p class="card-text"><strong>기술 소개:</strong> ${resume.skillAnswer}</p>
-                            <p class="card-text"><strong>성향 소개:</strong> ${resume.traitAnswer}</p>
-                            <p class="card-text"><strong>기술 키워드:</strong> ${resume.skillKeywords}</p>
-                            <p class="card-text"><strong>작성일:</strong> ${resume.createdAt}</p>
-                          </div>
-                        </div>
-            `;
-            container.appendChild(card);
-          });
-
-        } else {
-          alert("매칭률 정렬에 실패했습니다.");
-        }
-      } catch (e) {
-        console.error("정렬 오류:", e);
-      }
+                            </button>
+                            <h5 class="card-title">${resume.memberName || '이름 없음'}</h5>
+                            <p class="card-text"><strong>이력서 제목:</strong> ${resume.title || '제목 없음'}</p>
+                            <p class="card-text"><strong>기술 소개:</strong> ${resume.skillAnswer || '기술 소개 없음'}</p>
+                            <p class="card-text"><strong>성향 소개:</strong> ${resume.traitAnswer || '성향 소개 없음'}</p>
+                            <p class="card-text"><strong>기술 키워드:</strong> ${resume.skillKeywords || '기술 키워드 없음'}</p>
+                            <p class="card-text"><strong>작성일:</strong> ${resume.createdAt || '작성일 없음'}</p>
+                        `;
+                        container.appendChild(card);
+                    });
+                } else {
+                    alert("매칭률 정렬에 실패했습니다.");
+                }
+            } catch (e) {
+                console.error("정렬 오류:", e);
+            }
+        });
     });
-  });
 </script>
 <script th:src="@{/js/logout.js}"></script>
 </body>
