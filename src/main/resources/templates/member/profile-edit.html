@@ -131,9 +131,11 @@
                     <option value="019">019</option>
                 </select>
                 <span>-</span>
-                <input type="text" name="phone2" id="phone2" maxlength="4" placeholder="0000" required>
+                <input type="text" name="phone2" id="phone2" maxlength="4" placeholder="0000" required
+                       pattern="[0-9]*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                 <span>-</span>
-                <input type="text" name="phone3" id="phone3" maxlength="4" placeholder="0000" required>
+                <input type="text" name="phone3" id="phone3" maxlength="4" placeholder="0000" required
+                       pattern="[0-9]*" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
             </div>
         </div>
 
@@ -152,10 +154,10 @@
                    class="address-input" placeholder="상세 주소 (예: 아파트 동/호수 등)" maxlength="50">
         </div>
 
-<!--        <div class="form-group">-->
-<!--            <label for="address">주소</label>-->
-<!--            <input type="text" id="address" th:field="*{address}" required>-->
-<!--        </div>-->
+        <!--        <div class="form-group">-->
+        <!--            <label for="address">주소</label>-->
+        <!--            <input type="text" id="address" th:field="*{address}" required>-->
+        <!--        </div>-->
 
         <div class="form-group">
             <label for="birth">생년월일</label>

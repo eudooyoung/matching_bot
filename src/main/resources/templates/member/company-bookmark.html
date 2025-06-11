@@ -18,6 +18,17 @@
     .bookmark-button:hover {
       transform: scale(1.1);
     }
+
+    .detail-button {
+      cursor: pointer;
+      color: #007bff;
+      text-decoration: underline;
+    }
+
+    .detail-button:hover {
+      color: #0056b3;
+      background-color: #f8f9fa;
+    }
   </style>
 </head>
 <body>
@@ -48,7 +59,7 @@
       </td>
       <td th:text="${iterStat.index + 1}"></td>
       <td th:text="${company.name}">기업 이름</td>
-      <td th:onclick="">상세보기</td>
+      <td class="detail-button" th:onclick="'location.href=\'/attached/company/' + ${company.id} + '\''">상세보기</td>
       <td>
         <button class="bookmark-button"
                 th:data-company-id="${company.id}"
