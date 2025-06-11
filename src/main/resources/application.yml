@@ -78,6 +78,17 @@ springdoc:
     syntax-highlight:
       theme: monokai
 
+kakao:
+  rest-api-key: "KakaoAK 95f4cb7367a36e2e71328edc2c4b9b07"
+
+od:
+  cloud:
+    key: ${OD_CLOUD_KEY}
+
+jwt:
+  issuer: ${JWT_ISSUER}
+  secret: ${JWT_SECRET}
+
 ---
 spring:
   config:
@@ -103,12 +114,6 @@ spring:
     username: ${DB_PROD_USER}
     password: ${DB_PROD_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
-
-
-
-
-
-
 
 
 
