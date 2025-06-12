@@ -18,6 +18,17 @@
     .bookmark-button:hover {
       transform: scale(1.1);
     }
+
+    .detail-button {
+      cursor: pointer;
+      color: #007bff;
+      text-decoration: underline;
+    }
+
+    .detail-button:hover {
+      color: #0056b3;
+      background-color: #f8f9fa;
+    }
   </style>
 </head>
 <body>
@@ -50,7 +61,7 @@
       <td th:text="${iterStat.index + 1}"></td>
       <td th:text="${job.title}">채용공고 제목</td>
       <td th:text="${job.companyName}">기업명</td>
-      <td th:onclick="'location.href=\'/job/' + ${job.id} + '\''">상세보기</td>
+      <td class="detail-button" th:onclick="'location.href=\'/job/' + ${job.id} + '\''">상세보기</td>
       <td>
         <button class="bookmark-button"
                 th:data-job-id="${job.id}"

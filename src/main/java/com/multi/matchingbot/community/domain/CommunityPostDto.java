@@ -27,6 +27,9 @@ public class CommunityPostDto {
     private Long companyId;
     private String companyName;
     private String nickname;
+    private Long writerId;  // 개인/기업 통합된 작성자 ID
+
+
 
 
     private List<CommunityCommentDto> comments;
@@ -34,6 +37,10 @@ public class CommunityPostDto {
     public static CommunityPostDto fromEntity(CommunityPost post) {
         CommunityPostDto dto = new CommunityPostDto();
         dto.setId(post.getId());
+        dto.setTitle(post.getTitle());
+        dto.setContent(post.getContent());
+        dto.setCreatedAt(post.getCreatedAt());
+        dto.setViews(post.getViews());
 
         if (post.getCategory() != null) {
             dto.setCategoryId(post.getCategory().getId());
@@ -41,27 +48,19 @@ public class CommunityPostDto {
         }
 
         if (post.getMember() != null) {
-
+            dto.setMemberId(post.getMember().getId());
             dto.setNickname(post.getMember().getNickname());
-
-
+            dto.setWriterName(post.getMember().getNickname());
+            dto.setWriterId(post.getMember().getId());
         }
 
         if (post.getCompany() != null) {
             dto.setCompanyId(post.getCompany().getId());
             dto.setCompanyName(post.getCompany().getName());
             dto.setWriterName(post.getCompany().getName());
-
+            dto.setWriterId(post.getCompany().getId());
         }
 
-
-        dto.setTitle(post.getTitle());
-        dto.setContent(post.getContent());
-        dto.setViews(post.getViews());
-        dto.setCreatedBy(post.getCreatedBy());
-        dto.setCreatedAt(post.getCreatedAt());
-
-        // ✅ 댓글 리스트 변환 추가
         if (post.getComments() != null) {
             dto.setComments(
                     post.getComments().stream()
@@ -72,5 +71,6 @@ public class CommunityPostDto {
 
         return dto;
     }
+
 
 }

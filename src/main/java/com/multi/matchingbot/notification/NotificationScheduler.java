@@ -15,8 +15,8 @@ public class NotificationScheduler {
         this.notificationService = notificationService;
     }
 
-    // 테스트용
-//    @Scheduled(fixedDelay = 600000) // 1분마다 실행
+    // 테스트용: 마감 임박 알림을 1분마다 전송
+//    @Scheduled(fixedDelay = 60000) // 1분마다 실행
 //    public void sendDeadlineAlert() {
 //        notificationService.sendDeadlineApproachingNotifications();
 //    }

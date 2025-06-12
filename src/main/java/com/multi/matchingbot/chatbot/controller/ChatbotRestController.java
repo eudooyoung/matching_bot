@@ -80,9 +80,14 @@ public class ChatbotRestController {
         // ✅ 명령어 분기 및 유사 키워드 처리
         else {
             switch (message) {
-                case "회원가입":
+                case "개인 회원가입":
                     reply = "회원가입 페이지로 이동합니다.";
-                    redirectUrl = "/auth/register";
+                    redirectUrl = "/member/register";
+                    break;
+
+                case "기업 회원가입":
+                    reply = "회원가입 페이지로 이동합니다.";
+                    redirectUrl = "/company/register";
                     break;
 
                 case "커뮤니티":
