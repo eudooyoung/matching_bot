@@ -86,4 +86,8 @@ public class ResumeBookmarkService {
             return true; // 즐겨찾기 추가
         }
     }
+
+    public List<Long> getBookmarkedResumeIdsForCompany(Long companyId) {
+        return resumeBookmarkRepository.findResumeIdsByCompanyId(companyId);
+    }
 }

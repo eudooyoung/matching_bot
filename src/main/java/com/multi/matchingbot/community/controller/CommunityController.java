@@ -107,6 +107,7 @@ public class CommunityController {
 
     @GetMapping("/detail/{id}")
     public String detail(@PathVariable(name = "id") Long id, Model model, Authentication authentication) {
+        System.out.println("✅ detail 컨트롤러 진입함 /community/detail/" + id);
         var post = communityService.getPostWithComments(id);
         model.addAttribute("post", CommunityPostDto.fromEntity(post));
         model.addAttribute("categories", communityService.getAllCategories());
@@ -118,23 +119,29 @@ public class CommunityController {
         if (authentication != null) {
             String email = authentication.getName();
 
-            // 개인회원 or 기업회원 판단
+            // ✅ 관리자 여부 판단 → 이게 화면에서 버튼 보이게 하는 핵심
+            boolean isAdmin = authentication.getAuthorities().stream()
+                    .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+            model.addAttribute("isAdmin", isAdmin); // ✅ 반드시 필요
+
             Long currentUserId;
             try {
                 Member member = memberService.findByUsername(email);
                 currentUserId = member.getId();
             } catch (EntityNotFoundException e) {
                 Company company = companyService.findByEmail(email);
-                currentUserId = company.getId();  // 주의: companyId임
+                currentUserId = company.getId();
             }
 
             model.addAttribute("currentUserId", currentUserId);
         } else {
             model.addAttribute("currentUserId", null);
+            model.addAttribute("isAdmin", false);
         }
 
         return "community/community-detail";
     }
+
 
 
     @GetMapping("/edit/{id}")
@@ -266,6 +273,13 @@ public class CommunityController {
 
         String email = authentication.getName();
         Long postId = communityService.getPostIdByCommentId(id);
+
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+        if (isAdmin) {
+            communityService.deleteCommentAsAdmin(id); // 별도 메서드 필요
+            return "redirect:/community/detail/" + postId;
+        }
 
         try {
             Member member = memberService.findByUsername(email);

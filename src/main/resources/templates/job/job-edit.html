@@ -93,18 +93,18 @@
         <div th:if="${#fields.hasErrors('mainTask')}" class="error-message" th:errors="*{mainTask}"></div>
 
         <!-- 필요 기술 -->
-        <label>필요 기술</label>
-        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 4px;">
+        <div style="display: inline-flex; align-items: center; gap: 8px; margin-top: 16px;">
+            <label for="requiredSkills" style="margin: 0;">필요 기술</label>
             <button type="button" onclick="extractKeywords('skill')" class="btn btn-warning btn-sm">👇키워드 추출하기👇</button>
         </div>
-        <textarea th:field="*{requiredSkills}" rows="2" required></textarea>
+        <textarea id="requiredSkills" th:field="*{requiredSkills}" rows="2" required style="width: 100%; margin-top: 4px;"></textarea>
 
         <!-- 필요 성향 -->
-        <label>필요 성향</label>
-        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 4px;">
+        <div style="display: inline-flex; align-items: center; gap: 8px; margin-top: 16px;">
+            <label for="requiredTraits" style="margin: 0;">필요 성향</label>
             <button type="button" onclick="extractKeywords('trait')" class="btn btn-warning btn-sm">👇키워드 추출하기👇</button>
         </div>
-        <textarea th:field="*{requiredTraits}" rows="2" required></textarea>
+        <textarea id="requiredTraits" th:field="*{requiredTraits}" rows="2" required style="width: 100%; margin-top: 4px;"></textarea>
 
         <input type="hidden" th:field="*{latitude}" th:value="${latitude != null ? latitude : 37.5665}" />
         <input type="hidden" th:field="*{longitude}" th:value="${longitude != null ? longitude : 126.9780}" />
@@ -336,6 +336,7 @@
         try {
             const response = await fetch("http://localhost:8081/extract", {
                 method: "POST",
+                // mode: "cors",
                 body: formData
             });
 

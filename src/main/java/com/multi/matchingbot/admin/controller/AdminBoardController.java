@@ -23,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -270,7 +271,9 @@ public class AdminBoardController {
     }
 
     @GetMapping("/community/{communityPostId}")
-    public String adminCommunityPostDetail(@PathVariable(name = "communityPostId") Long communityPostId, Model model) {
+    public String adminCommunityPostDetail(@PathVariable(name = "communityPostId") Long communityPostId,
+                                           Model model,
+                                           Authentication authentication) {
         CommunityPost post = communityService.getPostWithComments(communityPostId);
         model.addAttribute("post", CommunityPostDto.fromEntity(post));
         model.addAttribute("categories", communityService.getAllCategories());
@@ -278,6 +281,28 @@ public class AdminBoardController {
                 .map(CommunityCommentDto::fromEntity)
                 .toList());
 
+        // ✅ 관리자 여부 전달
+        boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+        model.addAttribute("isAdmin", isAdmin);
+
+        // ✅ currentUserId 설정
+        if (authentication != null) {
+            String email = authentication.getName();
+            Long currentUserId;
+            try {
+                Member member = memberService.findByUsername(email);
+                currentUserId = member.getId();
+            } catch (Exception e) {
+                Company company = companyService.findByEmail(email);
+                currentUserId = company.getId();
+            }
+            model.addAttribute("currentUserId", currentUserId);
+        } else {
+            model.addAttribute("currentUserId", null);
+        }
+
         return "community/community-detail";
     }
+
 }

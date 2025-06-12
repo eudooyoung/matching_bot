@@ -62,4 +62,8 @@ public class JobBookmarkService {
     public Page<JobDto> getBookmarkedJobs(Long memberId, Pageable pageable) {
         return jobBookmarkRepository.findJobDtosByMemberId(memberId, pageable);
     }
+
+    public List<Long> getBookmarkedJobIdsForMember(Long memberId) {
+        return jobBookmarkRepository.findJobIdsByMemberId(memberId);
+    }
 }

@@ -121,8 +121,11 @@
 
         <!-- ✅ 댓글 목록 -->
         <h4 class="mb-3">💬 댓글</h4>
+
+
         <div th:if="${post.comments != null and !post.comments.isEmpty()}">
             <div th:each="comment : ${post.comments}" class="comment-box">
+
                 <div class="comment-meta">
                     <strong th:text="${comment.nickname != null ? comment.nickname : comment.companyName}">작성자</strong>
                     <span th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}">작성일</span>
@@ -130,16 +133,33 @@
                 <div th:id="'comment-content-' + ${comment.id}" th:text="${comment.content}" class="mb-2">댓글 내용</div>
 
                 <!-- ✅ 댓글 수정/삭제 -->
-                <div class="comment-actions"
-                     th:if="${currentUserId == comment.memberId or currentUserId == comment.companyId}">
+                <div class="comment-actions" sec:authorize="isAuthenticated()">
+
+                <!-- 본인: 수정 + 삭제 -->
+                <div th:if="${currentUserId != null and (currentUserId == comment.memberId or currentUserId == comment.companyId)}">
                     <button type="button" class="btn btn-sm btn-outline-secondary me-2"
                             th:onclick="'showEditForm(' + ${comment.id} + ')'">✏ 수정</button>
                     <form th:action="@{/community/comment/{id}/delete(id=${comment.id})}" method="post" style="display:inline;">
-                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('댓글을 삭제하시겠습니까?')">🗑 삭제</button>
+                        <button type="submit" class="btn btn-sm btn-danger"
+                                onclick="return confirm('댓글을 삭제하시겠습니까?')">🗑 삭제</button>
                     </form>
                 </div>
 
-                <!-- ✅ 댓글 수정 폼 -->
+                <!-- 관리자: 본인이 아닌 댓글도 삭제 가능 -->
+                    <div th:if="${isAdmin != null and isAdmin and (comment.memberId != null or comment.companyId != null)
+            and currentUserId != null and !(currentUserId == comment.memberId or currentUserId == comment.companyId)}">
+                    <form th:action="@{/community/comment/{id}/delete(id=${comment.id})}" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-sm btn-danger"
+                                onclick="return confirm('댓글을 삭제하시겠습니까?')">🗑 삭제</button>
+                    </form>
+                </div>
+
+            </div>
+
+
+
+
+                    <!-- ✅ 댓글 수정 폼 -->
                 <form th:action="@{/community/comment/{id}/update(id=${comment.id})}" method="post"
                       th:id="'comment-edit-form-' + ${comment.id}" style="display:none;" class="mt-2">
                     <input type="hidden" name="postId" th:value="${post.id}" />
@@ -204,3 +224,4 @@
 
 </body>
 </html>
+

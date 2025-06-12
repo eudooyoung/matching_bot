@@ -54,6 +54,7 @@ public class CompanyService {
         company.setEmail(dto.getEmail());
         company.setPhone(dto.getPhone());
         company.setAddress(dto.getAddress());
+        company.setAddressDetail(dto.getAddressDetail());
         company.setIndustry(dto.getIndustry());
         company.setHeadcount(dto.getHeadcount());
         company.setAnnualRevenue(dto.getAnnualRevenue());
