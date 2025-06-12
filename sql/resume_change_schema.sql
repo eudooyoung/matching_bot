@@ -64,41 +64,43 @@ CREATE TABLE occupation (
 
 -- 기업 회원 테이블 생성 --
 
+-- 기업 회원 테이블 생성 --
 CREATE TABLE company (
-    id BIGINT NOT NULL AUTO_INCREMENT,
-    
-    email VARCHAR(100) NOT NULL UNIQUE,
-    password VARCHAR(100) NOT NULL,
-    role ENUM('COMPANY') NOT NULL DEFAULT 'COMPANY',
+ id BIGINT NOT NULL AUTO_INCREMENT,
 
-    name VARCHAR(50) NOT NULL,
-    phone VARCHAR(20),
-    business_no VARCHAR(20) NOT NULL UNIQUE,
-    address VARCHAR(200) NOT NULL,
-    industry VARCHAR(50) NOT NULL,
+ email VARCHAR(100) NOT NULL UNIQUE,
+ password VARCHAR(100) NOT NULL,
+ role ENUM('COMPANY') NOT NULL DEFAULT 'COMPANY',
 
-    year_found year NOT NULL,
-    headcount INT NOT NULL,
-    annual_revenue INT NOT NULL,
-    operating_income INT NOT NULL,
-    jobs_last_year INT NOT NULL,
+ name VARCHAR(50) NOT NULL,
+ phone VARCHAR(20),
+ business_no VARCHAR(20) NOT NULL UNIQUE,
+ address VARCHAR(200) NOT NULL,
+ industry VARCHAR(50) NOT NULL,
 
-    agree_terms ENUM('Y', 'N') NOT NULL CHECK(agree_terms = 'Y'),
-    agree_privacy ENUM('Y', 'N') NOT NULL CHECK(agree_privacy = 'Y'),
-    agree_finance ENUM('Y', 'N') NOT NULL CHECK(agree_finance = 'Y'),
-    agree_marketing ENUM('Y', 'N'),
-    agree_third_party ENUM('Y', 'N'),
+ year_found year NOT NULL,
+ headcount INT NOT NULL,
+ annual_revenue INT NOT NULL,
+ operating_income INT NOT NULL,
+ jobs_last_year INT NOT NULL,
 
-    status ENUM('Y', 'N') NOT NULL DEFAULT 'Y' COMMENT '가입 상태',
-    report_status ENUM('Y', 'N') NOT NULL DEFAULT 'N' COMMENT '평가 보고서 상태',
+ agree_terms ENUM('Y', 'N') NOT NULL CHECK(agree_terms = 'Y'),
+ agree_privacy ENUM('Y', 'N') NOT NULL CHECK(agree_privacy = 'Y'),
+ agree_finance ENUM('Y', 'N') NOT NULL CHECK(agree_finance = 'Y'),
+ agree_marketing ENUM('Y', 'N'),
+ agree_third_party ENUM('Y', 'N'),
 
-    created_by VARCHAR(50),
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_by VARCHAR(50),
-    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
-    
-    PRIMARY KEY (id)
+ status ENUM('Y', 'N') NOT NULL DEFAULT 'Y' COMMENT '가입 상태',
+ report_status ENUM('Y', 'N') NOT NULL DEFAULT 'N' COMMENT '평가 보고서 상태',
+
+ created_by VARCHAR(50),
+ created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+ updated_by VARCHAR(50),
+ updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
+
+ PRIMARY KEY (id)
 );
+ALTER TABLE company ADD COLUMN address_detail VARCHAR(255);
 
 
 -- 채용 공고 테이블 생성 --
@@ -112,8 +114,8 @@ CREATE TABLE job (
     main_task VARCHAR(500) NOT NULL,
     required_skills VARCHAR(500) NOT NULL,
     required_traits VARCHAR(500) NOT NULL,
-    skill_keywords VARCHAR(100),
-    trait_keywords VARCHAR(100),
+    skill_keywords VARCHAR(200),
+    trait_keywords VARCHAR(200),
     latitude DOUBLE NOT NULL DEFAULT 37.5665,        -- ✅ 위도 default 값 추가
     longitude DOUBLE NOT NULL DEFAULT 126.9780,       -- ✅ 경도 default 값 추가
     start_date DATE NOT NULL,

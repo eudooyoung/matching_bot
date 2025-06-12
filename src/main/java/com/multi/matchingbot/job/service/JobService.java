@@ -1,5 +1,6 @@
 package com.multi.matchingbot.job.service;
 
+import com.multi.matchingbot.company.service.CompanyService;
 import com.multi.matchingbot.job.domain.dto.JobDto;
 import com.multi.matchingbot.job.domain.entity.Job;
 import com.multi.matchingbot.job.mapper.JobMapper;
@@ -22,11 +23,13 @@ public class JobService {
     private final JobRepository repository;
     private final GeoService geoService;
     private final JobRepository jobRepository;
+    private final CompanyService companyService;
 
-    public JobService(JobRepository repository, GeoService geoService, JobRepository jobRepository) {
+    public JobService(JobRepository repository, GeoService geoService, JobRepository jobRepository, CompanyService companyService) {
         this.repository = repository;
         this.geoService = geoService;
         this.jobRepository = jobRepository;
+        this.companyService = companyService;
     }
 
     public List<Job> findAll() {
@@ -74,12 +77,14 @@ public class JobService {
     }
 
     private JobDto convertToDto(Job job) {
+        String companyName = companyService.findById(job.getCompanyId()).getName();
+
         return JobDto.builder()
                 .id(job.getId())
                 .title(job.getTitle())
                 .description(job.getDescription())
                 .companyId(job.getCompany().getId())
-                .companyName(job.getCompany().getName())
+                .companyName(companyName)
                 .address(job.getAddress())
                 .occupationId(job.getOccupation() != null ? job.getOccupation().getId() : null)
                 .build();
@@ -90,7 +95,7 @@ public class JobService {
     }
 
     public List<Job> findByCompanyId(Long memberId) {
-        return jobRepository.findByCompanyId(memberId);
+        return jobRepository.findByCompany_Id(memberId);
     }
 
     // 0609
