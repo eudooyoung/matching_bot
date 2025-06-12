@@ -176,7 +176,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         ResponseCookie accessCookie = ResponseCookie.from("accessToken", newAccessToken)
                 .httpOnly(true)
-                .secure(false) // !!!!배포시 true로 전환!!!!!
+                .secure(false) // TODO:!!!!배포시 true로 전환!!!!!
                 .path("/")
                 .maxAge(tokenProvider.getAccessTokenExpireTime())
                 .build();
