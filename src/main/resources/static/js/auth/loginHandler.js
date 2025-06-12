@@ -28,7 +28,7 @@ async function handleLogin(emailId, passwordId, errorMsgId, role) {
         if (!response.ok) {
             const errorJson = await response.json();
             const msg = errorJson.message || "로그인 중 오류가 발생했습니다.";
-            errorBox.innerText = "로그인 실패: " + msg;
+            errorBox.innerText = msg;
             return;
         }
 

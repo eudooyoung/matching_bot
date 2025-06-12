@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     public UserDetails authenticate(String email, String password, Role role) {
         UserDetails userDetails = mBotUserDetailsService.loadUserByTypeAndEmail(role, email);
+
+        if (!userDetails.isEnabled()) {
+            throw new DisabledException("계정이 비활성화되어 있습니다. 관리자에게 문의하세요.");
+        }
 
         if (!passwordEncoder.matches(password, userDetails.getPassword())) {
             throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
@@ -155,7 +160,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public void refreshTokenAndSetCookie(String refreshToken, HttpServletResponse response) {
         // 토큰에서 userId, userType 추출
         String email = tokenProvider.extractUsername(refreshToken);
-        String roleStr =  tokenProvider.parseClaims(refreshToken).get("role", String.class);
+        String roleStr = tokenProvider.parseClaims(refreshToken).get("role", String.class);
         Role role = Role.valueOf(roleStr);
 
         // DB조회

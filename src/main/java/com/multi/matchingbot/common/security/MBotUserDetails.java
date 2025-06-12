@@ -2,6 +2,7 @@ package com.multi.matchingbot.common.security;
 
 
 import com.multi.matchingbot.common.domain.enums.Role;
+import com.multi.matchingbot.common.domain.enums.Yn;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,14 +22,16 @@ public class MBotUserDetails implements UserDetails {
     private final String password;
     private final Role role;
     private final Long id;
+    private final Yn status;
 
-    public MBotUserDetails(String name, String email, String password, Role role, Long id) {
+    public MBotUserDetails(String name, String email, String password, Role role, Long id, Yn status) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.role = role;
         this.id = id;
-        log.warn("MBotUserDetails 생성 완료 - email: {}, role: {},  userId: {}", email, role, id);
+        this.status = status;
+        log.warn("MBotUserDetails 생성 완료 - email: {}, role: {},  userId: {}, status: {}", email, role, id, status);
     }
 
     @Override
@@ -65,7 +68,7 @@ public class MBotUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return Yn.Y.equals(this.status);
     }
 
     public Long getCompanyId() {
