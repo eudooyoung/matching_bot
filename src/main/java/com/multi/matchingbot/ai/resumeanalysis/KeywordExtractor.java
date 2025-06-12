@@ -10,7 +10,7 @@ import java.util.*;
 public class KeywordExtractor {
 
     public List<String> extractKeywords(String text) {
-        String url = "http://localhost:8081"; // FastAPI 서버 주소
+        String url = "http://18.223.234.101:8081"; // FastAPI 서버 주소
 
         // form data 구성
         Map<String, String> body = new HashMap<>();

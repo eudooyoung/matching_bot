@@ -165,7 +165,7 @@
                 console.log("job_trait_keys",job_trait_keys);
                 console.log("resume_trait_keys",resume_trait_keys);
 
-                const simResponse = await fetch("http://localhost:8081/calculate-similarity", {
+                const simResponse = await fetch("http://18.223.234.101:8081/calculate-similarity", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({

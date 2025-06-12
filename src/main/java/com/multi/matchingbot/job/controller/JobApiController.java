@@ -73,7 +73,7 @@ public class JobApiController {
 
         // 3. FastAPI에 POST 요청
         ResponseEntity<Map> response = restTemplate.postForEntity(
-                "http://localhost:8081/calculate-similarity", request, Map.class
+                "http://18.223.234.101:8081/calculate-similarity", request, Map.class
         );
 
         // 4. 응답 그대로 전달
@@ -94,7 +94,7 @@ public class JobApiController {
 
         try {
             ResponseEntity<Map> response = restTemplate.postForEntity(
-                    "http://localhost:8081/extract", request, Map.class);
+                    "http://18.223.234.101:8081/extract", request, Map.class);
 
             return ResponseEntity.ok(response.getBody());
 

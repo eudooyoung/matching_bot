@@ -88,7 +88,7 @@ public class ResumeApiController {
         requestToFastAPI.put("resume_list", resumePayload);
 
         ResponseEntity<List<Map<String, Object>>> fastApiResponse = restTemplate.exchange(
-                "http://localhost:8081/sort-resumes-by-job",
+                "http://18.223.234.101:8081/sort-resumes-by-job",
                 HttpMethod.POST,
                 new HttpEntity<>(requestToFastAPI),
                 new ParameterizedTypeReference<>() {}

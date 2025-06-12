@@ -46,7 +46,7 @@ async function fetchJobKeywords(jobId) {
 }
 
 async function calculateSimilarity(body) {
-    const res = await fetch("http://localhost:8081/calculate-similarity", {
+    const res = await fetch("http://18.223.234.101:8081/calculate-similarity", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(body)

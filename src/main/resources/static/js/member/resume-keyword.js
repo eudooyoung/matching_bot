@@ -104,7 +104,7 @@ export async function extractKeywords(type) {
     formData.append("text", text);
 
     try {
-        const response = await fetch("http://localhost:8081/extract", {
+        const response = await fetch("http://18.223.234.101:8081/extract", {
             method: "POST",
             body: formData
         });

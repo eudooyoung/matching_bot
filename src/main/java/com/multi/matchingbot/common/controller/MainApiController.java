@@ -72,7 +72,7 @@ public class MainApiController {
         requestToFastAPI.put("job_list", jobPayload);
 
         ResponseEntity<List<Map<String, Object>>> fastApiResponse = restTemplate.exchange(
-                "http://localhost:8081/sort-jobs-by-resume",
+                "http://18.223.234.101:8081/sort-jobs-by-resume",
                 HttpMethod.POST,
                 new HttpEntity<>(requestToFastAPI),
                 new ParameterizedTypeReference<>() {}
