@@ -12,7 +12,6 @@ import java.util.List;
 
 @Repository
 public interface JobRepository extends JpaRepository<Job, Long> {
-
     Page<Job> findByCompany_Id(Long companyId, Pageable pageable);
     List<Job> findByEndDateBetween(LocalDate start, LocalDate end);
 
