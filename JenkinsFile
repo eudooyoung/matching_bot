@@ -69,6 +69,15 @@ pipeline {
             //  ./gradlew clean build -x test || true  //테스트무시할떄
 
         }
+        stage('Clean old Docker resources (local)') {
+            steps {
+                sh '''
+                    docker stop ${IMAGE_NAME} || true
+                    docker rm ${IMAGE_NAME} || true
+                    docker rmi ${IMAGE_NAME}:${BUILD_NUMBER} || true
+                '''
+            }
+        }
         stage('Docker Build') {
             steps {
                 script {
