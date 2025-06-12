@@ -1,8 +1,10 @@
 package com.multi.matchingbot.member.controller;
 
 
+import com.multi.matchingbot.common.security.MBotUserDetails;
 import com.multi.matchingbot.job.domain.entity.Job;
 import com.multi.matchingbot.job.service.JobService;
+import com.multi.matchingbot.job.service.ResumeBookmarkService;
 import com.multi.matchingbot.resume.domain.dto.ResumeDto;
 import com.multi.matchingbot.resume.domain.entity.Resume;
 import com.multi.matchingbot.resume.service.ResumeService;
@@ -12,6 +14,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -29,6 +32,7 @@ public class ResumeApiController {
     private final ResumeService resumeService;
     private final JobService jobService;
     private final RestTemplate restTemplate;
+    private final ResumeBookmarkService resumeBookmarkService;
 
     @GetMapping("/{id}/keywords")
     public ResponseEntity<Map<String, Object>> getResumeKeywords(@PathVariable("id") Long id) {
@@ -56,12 +60,16 @@ public class ResumeApiController {
 
     // 0610
     @PostMapping("/sort-resumes-by-job")
-    public ResponseEntity<List<ResumeDto>> sortResumesByJob(@RequestBody Map<String, Object> payload) {
+    public ResponseEntity<List<ResumeDto>> sortResumesByJob(@RequestBody Map<String, Object> payload,
+                                                            @AuthenticationPrincipal MBotUserDetails userDetails) {
         Long jobId = Long.valueOf(payload.get("jobId").toString());
+        Long companyId = userDetails.getId();
 
         Job job = jobService.findById(jobId);
         List<String> jobSkillKeys = Arrays.asList(job.getSkillKeywords().split(","));
         List<String> jobTraitKeys = Arrays.asList(job.getTraitKeywords().split(","));
+
+        List<Long> bookmarkedResumeIds = resumeBookmarkService.getBookmarkedResumeIdsForCompany(companyId);
 
         List<Resume> allResumes = resumeService.findAll();
         List<Map<String, Object>> resumePayload = allResumes.stream().map(resume -> {
@@ -69,6 +77,8 @@ public class ResumeApiController {
             map.put("id", resume.getId());
             map.put("skill_keywords", Arrays.asList(resume.getSkillKeywords().split(",")));
             map.put("trait_keywords", Arrays.asList(resume.getTraitKeywords().split(",")));
+
+            map.put("bookmarked", bookmarkedResumeIds.contains(resume.getId()));
             return map;
         }).collect(Collectors.toList());
 
@@ -101,6 +111,7 @@ public class ResumeApiController {
         List<ResumeDto> sortedResumes = resumeService.findByIdsPreserveOrder(sortedResumeIds);
         for (ResumeDto dto : sortedResumes) {
             dto.setSimilarityScore(resumeScoreMap.get(dto.getId()));
+            dto.setBookmarked(bookmarkedResumeIds.contains(dto.getId()));
         }
 
         return ResponseEntity.ok(sortedResumes);

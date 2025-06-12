@@ -124,11 +124,20 @@
             <div th:if="${role == 'COMPANY'}" class="d-flex align-items-center">
                 <label for="jobSelectMain" class="me-2 mb-0"><strong>공고 선택:</strong></label>
                 <select id="jobSelectMain" name="jobId" class="form-select" style="height: 38px; width: auto;">
-                    <option value="" disabled selected>매칭률 필터를 적용할 공고를 선택하세요</option>
-                    <option th:each="job : ${jobs}" th:value="${job.id}" th:text="${job.title}">공고 제목</option>
+                    <!-- ✅ 선택 해제용 기본 옵션 -->
+                    <option value="">🔄 전체 공고 보기</option>
+
+                    <!-- ✅ 실제 공고 리스트 -->
+                    <option th:each="job : ${jobs}"
+                            th:value="${job.id}"
+                            th:text="${job.title}"
+                            th:selected="${selectedJobId == job.id}">
+                        공고 제목
+                    </option>
                 </select>
             </div>
         </div>
+
 
         <div class="card-grid">
             <div class="card" th:each="resume, iterStat : ${resumeList}" th:if="${iterStat.index} < 9"
@@ -203,55 +212,142 @@
 </script>
 
 <script>
+    let sortedResumes = [];
+    const itemsPerPage = 9;
+    let currentPage = 1;
+
     document.addEventListener("DOMContentLoaded", () => {
         const jobSelect = document.getElementById("jobSelectMain");
+
+        const savedJobId = localStorage.getItem("selectedJobId");
+        if (savedJobId) {
+            jobSelect.value = savedJobId;
+
+            fetchAndRenderResumes(savedJobId);
+        }
+
         if (!jobSelect) return;
 
         jobSelect.addEventListener("change", async () => {
             const jobId = jobSelect.value;
-            if (!jobId) return;
-
-            try {
-                const response = await fetch(`/api/v1/resume/sort-resumes-by-job`, {
-                    method: "POST",
-                    headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify({jobId: jobId})
-                });
-
-                if (response.ok) {
-                    const sortedResumes = await response.json();
-
-                    const container = document.querySelector(".card-grid");
-                    container.innerHTML = "";
-
-                    sortedResumes.forEach(resume => {
-                        const card = document.createElement("div");
-                        card.className = "card";
-                        card.setAttribute("onclick", `location.href='/resume/detail/${resume.id}'`);
-
-                        card.innerHTML = `
-                            <button class="stared-button ${resume.bookmarked ? 'filled' : ''}"
-                                    data-resume-id="${resume.id}"
-                                    onclick="toggleStar(this, event)">
-                                <span>${resume.bookmarked ? '★' : '☆'}</span>
-                            </button>
-                            <h5 class="card-title">${resume.memberName || '이름 없음'}</h5>
-                            <p class="card-text"><strong>이력서 제목:</strong> ${resume.title || '제목 없음'}</p>
-                            <p class="card-text"><strong>기술 소개:</strong> ${resume.skillAnswer || '기술 소개 없음'}</p>
-                            <p class="card-text"><strong>성향 소개:</strong> ${resume.traitAnswer || '성향 소개 없음'}</p>
-                            <p class="card-text"><strong>기술 키워드:</strong> ${resume.skillKeywords || '기술 키워드 없음'}</p>
-                            <p class="card-text"><strong>작성일:</strong> ${resume.createdAt || '작성일 없음'}</p>
-                        `;
-                        container.appendChild(card);
-                    });
-                } else {
-                    alert("매칭률 정렬에 실패했습니다.");
-                }
-            } catch (e) {
-                console.error("정렬 오류:", e);
+            if (!jobId) {
+                // ✅ 선택 해제 시 동작
+                localStorage.removeItem("selectedJobId");
+                window.location.reload(); // 또는 전체 이력서 다시 불러오기
+                return;
             }
+
+            localStorage.setItem("selectedJobId", jobId);
+            await fetchAndRenderResumes(jobId);
         });
     });
+
+    async function fetchAndRenderResumes(jobId) {
+        try {
+            const response = await fetch(`/api/v1/resume/sort-resumes-by-job`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ jobId: jobId })
+            });
+
+            if (response.ok) {
+                sortedResumes = await response.json();
+                renderResumePage(1);
+            } else {
+                alert("매칭률 정렬에 실패했습니다.");
+            }
+        } catch (e) {
+            console.error("정렬 오류:", e);
+        }
+    }
+
+    function renderResumePage(page) {
+        currentPage = page;
+
+        const container = document.querySelector(".card-grid");
+        container.innerHTML = "";
+
+        const start = (page - 1) * itemsPerPage;
+        const end = page * itemsPerPage;
+        const pageItems = sortedResumes.slice(start, end);
+
+        pageItems.forEach(resume => {
+            const card = document.createElement("div");
+            card.className = "card";
+            card.setAttribute("onclick", `location.href='/resume/detail/${resume.id}'`);
+
+            card.innerHTML = `
+                <button class="stared-button ${resume.bookmarked ? 'filled' : ''}"
+                        data-resume-id="${resume.id}"
+                        onclick="toggleStar(this, event)">
+                    <span>${resume.bookmarked ? '★' : '☆'}</span>
+                </button>
+                <h5 class="card-title d-flex justify-content-between align-items-center">
+                    <span>${resume.memberName || '이름 없음'}</span>
+                    <span style="font-size: 0.9rem; color: #007bff;">
+                        ${typeof resume.similarityScore === "number" ? (resume.similarityScore * 100).toFixed(1) + '%' : ''}
+                    </span>
+                </h5>
+                <p class="card-text"><strong>이력서 제목:</strong> ${resume.title || '제목 없음'}</p>
+                <p class="card-text"><strong>기술 소개:</strong> ${resume.skillAnswer || '기술 소개 없음'}</p>
+                <p class="card-text"><strong>성향 소개:</strong> ${resume.traitAnswer || '성향 소개 없음'}</p>
+                <p class="card-text"><strong>기술 키워드:</strong> ${resume.skillKeywords || '기술 키워드 없음'}</p>
+                <p class="card-text"><strong>작성일:</strong> ${resume.createdAt || '작성일 없음'}</p>
+            `;
+            container.appendChild(card);
+        });
+
+        renderPagination(page); // 페이지네이션 다시 렌더링
+    }
+
+    function renderPagination(current) {
+        const paginationContainer = document.querySelector(".pagination");
+        if (!paginationContainer) return;
+
+        paginationContainer.innerHTML = "";
+        const totalPages = Math.ceil(sortedResumes.length / itemsPerPage);
+
+        const groupSize = 10;
+        const currentGroup = Math.floor((current - 1) / groupSize);
+        const startPage = currentGroup * groupSize + 1;
+        const endPage = Math.min(startPage + groupSize - 1, totalPages);
+
+        // 이전 버튼
+        if (startPage > 1) {
+            const prevLi = document.createElement("li");
+            prevLi.innerHTML = `<a href="#">이전</a>`;
+            prevLi.addEventListener("click", (e) => {
+                e.preventDefault();
+                renderResumePage(startPage - 1);
+            });
+            paginationContainer.appendChild(prevLi);
+        }
+
+        // 숫자 페이지 버튼
+        for (let i = startPage; i <= endPage; i++) {
+            const li = document.createElement("li");
+            li.className = (i === current) ? "active" : "";
+            li.innerHTML = `<a href="#">${i}</a>`;
+            li.addEventListener("click", (e) => {
+                e.preventDefault();
+                renderResumePage(i);
+            });
+            paginationContainer.appendChild(li);
+        }
+
+        // 다음 버튼
+        if (endPage < totalPages) {
+            const nextLi = document.createElement("li");
+            nextLi.innerHTML = `<a href="#">다음</a>`;
+            nextLi.addEventListener("click", (e) => {
+                e.preventDefault();
+                renderResumePage(endPage + 1);
+            });
+            paginationContainer.appendChild(nextLi);
+        }
+    }
+
+
 </script>
 <script th:src="@{/js/logout.js}"></script>
 </body>

@@ -144,6 +144,50 @@ h2 {
     /*overflow-y: auto;*/
 }
 
+.help-icon-button {
+    background-color: transparent;
+    border: none;
+    color: #1d4ed8;
+    font-weight: bold;
+    font-size: 18px;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tooltip-wrapper {
+    position: relative;
+}
+
+.tooltip-box {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+    position: absolute;
+    top: 40px;
+    left: 0;
+    background-color: #333;
+    color: #fff;
+    padding: 8px 12px;
+    font-size: 12px;
+    border-radius: 6px;
+    z-index: 10;
+    white-space: nowrap;
+}
+
+.tooltip-wrapper:hover .tooltip-box {
+    visibility: visible;
+    opacity: 1;
+}
+
+.help-icon-button:hover {
+    background-color: rgba(29, 78, 216, 0.1); /* 살짝 파란 배경 */
+}
+
 @media (max-width: 600px) {
     .container {
         padding: 20px 15px;

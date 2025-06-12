@@ -243,14 +243,20 @@
             <div th:if="${role == 'MEMBER'}" class="d-flex align-items-center">
                 <label for="resumeSelectMain" class="me-2 mb-0"><strong>이력서 선택:</strong></label>
                 <select id="resumeSelectMain" name="resumeId" class="form-select" style="height: 38px; width: auto;">
-                    <option value="" disabled selected>매칭률 필터를 적용할 이력서를 선택하세요</option>
+                    <!-- ✅ 선택 해제용 첫 옵션 -->
+                    <option value="">🔄 전체 이력서 보기</option>
+
+                    <!-- ✅ 실제 이력서 목록 -->
                     <option th:each="resume : ${resumes}"
                             th:value="${resume.id}"
-                            th:text="${resume.title}">이력서 제목
+                            th:text="${resume.title}"
+                            th:selected="${selectedResumeId == resume.id}">
+                        이력서 제목
                     </option>
                 </select>
             </div>
         </div>
+
 
         <!-- ✅ 채용공고 목록 -->
         <div class="card-grid" th:if="${role == null or role == 'MEMBER'}">
@@ -383,56 +389,141 @@
     console.log("userRole2:", userRole2);
 </script>
 
-<!--// 0609-->
 <script>
+    let sortedJobs = [];
+    const itemsPerPage = 9;
+    let currentPage = 1;
+
     document.addEventListener("DOMContentLoaded", () => {
         const resumeSelect = document.getElementById("resumeSelectMain");
+
+        const savedResumeId = localStorage.getItem("selectedResumeId");
+        if (savedResumeId) {
+            resumeSelect.value = savedResumeId;
+
+            fetchAndRenderJobs(savedResumeId);
+        }
+
         if (!resumeSelect) return;
 
         resumeSelect.addEventListener("change", async () => {
             const resumeId = resumeSelect.value;
-            if (!resumeId) return;
 
-            try {
-                const response = await fetch(`/api/main/sort-jobs-by-resume`, {
-                    method: "POST",
-                    headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify({resumeId: resumeId})
-                });
-
-                if (response.ok) {
-                    const sortedJobs = await response.json();
-
-                    // ✅ 정렬된 공고들로 DOM 갱신
-                    const container = document.querySelector(".card-grid");
-                    container.innerHTML = ""; // 기존 공고 제거
-
-                    sortedJobs.forEach(job => {
-                        const card = document.createElement("div");
-                        card.className = "card";
-                        card.innerHTML = `
-                        <button class="star-button ${job.bookmarked ? 'filled' : ''}"
-                                data-job-id="${job.id}"
-                                onclick="toggleJobStar(this, event)">
-                            ${job.bookmarked ? '★' : '☆'}
-                        </button>
-                        <h5 class="card-title">${job.title}</h5>
-                        <p class="meta-text"><strong>회사명:</strong> ${job.companyName ?? '미정'}</p>
-                        <p class="meta-text"><strong>주소:</strong> ${job.address ?? '주소 없음'}</p>
-                        <p class="card-text"><strong>요구 기술:</strong> ${job.requiredSkills ?? '없음'}</p>
-                        <a class="btn-link" href="/job/${job.id}">상세보기</a>
-                    `;
-                        container.appendChild(card);
-                    });
-
-                } else {
-                    alert("매칭률 정렬에 실패했습니다.");
-                }
-            } catch (e) {
-                console.error("정렬 오류:", e);
+            if (!resumeId) {
+                localStorage.removeItem("selectedResumeId");
+                window.location.reload(); // 또는 fetchAllJobs()
+                return;
             }
+
+            localStorage.setItem("selectedResumeId", resumeId);
+            await fetchAndRenderJobs(resumeId);
         });
     });
+
+    async function fetchAndRenderJobs(resumeId) {
+        try {
+            const response = await fetch(`/api/main/sort-jobs-by-resume`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ resumeId: resumeId })
+            });
+
+            if (response.ok) {
+                sortedJobs = await response.json();
+                renderJobPage(1);
+            } else {
+                alert("매칭률 정렬에 실패했습니다.");
+            }
+        } catch (e) {
+            console.error("정렬 오류:", e);
+        }
+    }
+
+    function renderJobPage(page) {
+        currentPage = page;
+
+        const container = document.querySelector(".card-grid");
+        container.innerHTML = "";
+
+        const start = (page - 1) * itemsPerPage;
+        const end = page * itemsPerPage;
+        const pageItems = sortedJobs.slice(start, end);
+
+        pageItems.forEach(job => {
+            const card = document.createElement("div");
+            card.className = "card";
+
+            card.innerHTML = `
+                <button class="star-button ${job.bookmarked ? 'filled' : ''}"
+                        data-job-id="${job.id}"
+                        onclick="toggleJobStar(this, event)">
+                    ${job.bookmarked ? '★' : '☆'}
+                </button>
+                <h5 class="card-title d-flex justify-content-between align-items-center">
+                    <span>${job.title || '이름 없음'}</span>
+                    <span style="font-size: 0.9rem; color: #007bff;">
+                        ${typeof job.similarityScore === "number" ? (job.similarityScore * 100).toFixed(1) + '%' : ''}
+                    </span>
+                </h5>
+                <p class="meta-text"><strong>회사명:</strong> ${job.companyName ?? '미정'}</p>
+                <p class="meta-text"><strong>주소:</strong> ${job.address ?? '주소 없음'}</p>
+                <p class="card-text"><strong>요구 기술:</strong> ${job.requiredSkills ?? '없음'}</p>
+                <a class="btn-link" href="/job/${job.id}">상세보기</a>
+            `;
+
+            container.appendChild(card);
+        });
+
+        renderPagination(page); // ✅ 페이지네이션 렌더링
+    }
+    function renderPagination(current) {
+        const paginationContainer = document.querySelector(".pagination");
+        if (!paginationContainer) return;
+
+        paginationContainer.innerHTML = "";
+        const totalPages = Math.ceil(sortedJobs.length / itemsPerPage);
+
+        const groupSize = 10;
+        const currentGroup = Math.floor((current - 1) / groupSize); // ex) 0, 1, 2...
+        const startPage = currentGroup * groupSize + 1;
+        const endPage = Math.min(startPage + groupSize - 1, totalPages);
+
+        // 이전 버튼
+        if (startPage > 1) {
+            const prevLi = document.createElement("li");
+            prevLi.innerHTML = `<a href="#">이전</a>`;
+            prevLi.addEventListener("click", (e) => {
+                e.preventDefault();
+                renderJobPage(startPage - 1); // 그룹 이전의 마지막 페이지로
+            });
+            paginationContainer.appendChild(prevLi);
+        }
+
+        // 숫자 페이지 버튼
+        for (let i = startPage; i <= endPage; i++) {
+            const li = document.createElement("li");
+            li.className = (i === current) ? "active" : "";
+            li.innerHTML = `<a href="#">${i}</a>`;
+            li.addEventListener("click", (e) => {
+                e.preventDefault();
+                renderJobPage(i);
+            });
+            paginationContainer.appendChild(li);
+        }
+
+        // 다음 버튼
+        if (endPage < totalPages) {
+            const nextLi = document.createElement("li");
+            nextLi.innerHTML = `<a href="#">다음</a>`;
+            nextLi.addEventListener("click", (e) => {
+                e.preventDefault();
+                renderJobPage(endPage + 1); // 그룹 다음의 첫 페이지로
+            });
+            paginationContainer.appendChild(nextLi);
+        }
+    }
+
+
 </script>
 
 <script th:src="@{/js/logout.js}"></script>
