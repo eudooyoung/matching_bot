@@ -37,7 +37,7 @@ public class JobService {
     }
 
     public Page<JobDto> getByCompanyIdPaged(Long companyId, Pageable pageable) {
-        return repository.findByCompanyId(companyId, pageable)
+        return repository.findByCompany_Id(companyId, pageable)
                 .map(JobMapper::toDto);
     }
 
