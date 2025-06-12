@@ -57,7 +57,7 @@
         <div class="form-group">
             <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 4px;">
                 <label style="margin-bottom: 0;">필요 기술</label>
-                <button type="button" onclick="extractKeywords('skill')" class="btn btn-warning btn-sm">
+                <button type="button" onclick="extractKeywords('skill')" class="nav-button">
                     👇키워드 추출하기👇
                 </button>
             </div>
@@ -69,7 +69,7 @@
         <div class="form-group">
             <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 4px;">
                 <label style="margin-bottom: 0;">필요 성향</label>
-                <button type="button" onclick="extractKeywords('trait')" class="btn btn-warning btn-sm">
+                <button type="button" onclick="extractKeywords('trait')" class="nav-button">
                     👇키워드 추출하기👇
                 </button>
             </div>
@@ -82,7 +82,7 @@
             <div id="skill-keyword-wrapper" class="keyword-wrapper">
                 <div class="keyword-input">
                     <input type="text" name="skill_keywords[]" placeholder="기술 키워드"/>
-                    <button type="button" onclick="addSkillKeyword()">+</button>
+                    <button type="button" class="nav-button" onclick="addSkillKeyword()">+</button>
                 </div>
             </div>
         </div>
@@ -92,7 +92,7 @@
             <div id="trait-keyword-wrapper" class="keyword-wrapper">
                 <div class="keyword-input">
                     <input type="text" name="trait_keywords[]" placeholder="성향 키워드"/>
-                    <button type="button" onclick="addTraitKeyword()">+</button>
+                    <button type="button" class="nav-button" onclick="addTraitKeyword()">+</button>
                 </div>
             </div>
             <br>

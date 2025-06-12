@@ -95,14 +95,14 @@
         <!-- 필요 기술 -->
         <div style="display: inline-flex; align-items: center; gap: 8px; margin-top: 16px;">
             <label for="requiredSkills" style="margin: 0;">필요 기술</label>
-            <button type="button" onclick="extractKeywords('skill')" class="btn btn-warning btn-sm">👇키워드 추출하기👇</button>
+            <button type="button" onclick="extractKeywords('skill')" class="nav-button">👇키워드 추출하기👇</button>
         </div>
         <textarea id="requiredSkills" th:field="*{requiredSkills}" rows="2" required style="width: 100%; margin-top: 4px;"></textarea>
 
         <!-- 필요 성향 -->
         <div style="display: inline-flex; align-items: center; gap: 8px; margin-top: 16px;">
             <label for="requiredTraits" style="margin: 0;">필요 성향</label>
-            <button type="button" onclick="extractKeywords('trait')" class="btn btn-warning btn-sm">👇키워드 추출하기👇</button>
+            <button type="button" onclick="extractKeywords('trait')" class="nav-button">👇키워드 추출하기👇</button>
         </div>
         <textarea id="requiredTraits" th:field="*{requiredTraits}" rows="2" required style="width: 100%; margin-top: 4px;"></textarea>
 
@@ -121,12 +121,12 @@
             <div class="keyword-input"
                  th:each="keyword : ${job.skillKeywords != null ? #strings.arraySplit(job.skillKeywords, ',') : {}}">
                 <input type="text" name="skill_keywords[]" th:value="${keyword}" placeholder="기술 키워드"/>
-                <button type="button" onclick="removeKeyword(this)">-</button>
+                <button type="button" class="nav-button" onclick="removeKeyword(this)">-</button>
             </div>
             <div class="keyword-input"
                  th:if="${job.skillKeywords == null or #strings.isEmpty(job.skillKeywords)}">
                 <input type="text" name="skill_keywords[]" placeholder="기술 키워드"/>
-                <button type="button" onclick="addSkillKeyword()">+</button>
+                <button type="button" class="nav-button" onclick="addSkillKeyword()">+</button>
             </div>
         </div>
 
@@ -138,6 +138,7 @@
 <!--                <button type="button" onclick="addTraitKeyword()">+</button>-->
 <!--            </div>-->
 <!--        </div>-->
+
         <div id="trait-keyword-wrapper" class="keyword-wrapper">
             <div class="keyword-input"
                  th:each="keyword : ${job.traitKeywords != null ? #strings.arraySplit(job.traitKeywords, ',') : {}}">
