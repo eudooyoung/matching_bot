@@ -64,7 +64,7 @@ public class AdminBoardController {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("errorMessage", "검색어는 50자 이하로 입력하세요");
-            return "/admin/board-members";
+            return "admin/board-members";
         }
 
         AdminPagedResult<MemberAdminView> result = adminPageService.members(condition);
@@ -73,7 +73,7 @@ public class AdminBoardController {
         model.addAttribute("pageNumbers", result.getPageNumbers());
         model.addAttribute("currentPage", result.getCurrentPage());
 
-        return "/admin/board-members";
+        return "admin/board-members";
     }
 
     /**
@@ -120,7 +120,7 @@ public class AdminBoardController {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("errorMessage", "검색어는 50자 이하로 입력하세요");
-            return "/admin/board-companies";
+            return "admin/board-companies";
         }
 
         AdminPagedResult<CompanyAdminView> result = adminPageService.companies(condition);
@@ -129,7 +129,7 @@ public class AdminBoardController {
         model.addAttribute("pageNumbers", result.getPageNumbers());
         model.addAttribute("currentPage", result.getCurrentPage());
 
-        return "/admin/board-companies";
+        return "admin/board-companies";
     }
 
     /**
@@ -176,7 +176,7 @@ public class AdminBoardController {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("errorMessage", "검색어는 50자 이하로 입력하세요");
-            return "/admin/board-resumes";
+            return "admin/board-resumes";
         }
 
         AdminPagedResult<ResumeAdminView> result = adminPageService.resumes(condition);
@@ -185,7 +185,7 @@ public class AdminBoardController {
         model.addAttribute("pageNumbers", result.getPageNumbers());
         model.addAttribute("currentPage", result.getCurrentPage());
 
-        return "/admin/board-resumes";
+        return "admin/board-resumes";
     }
 
     /**
@@ -216,7 +216,7 @@ public class AdminBoardController {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("errorMessage", "검색어는 50자 이하로 입력하세요");
-            return "/admin/board-jobs";
+            return "admin/board-jobs";
         }
 
         AdminPagedResult<JobAdminView> result = adminPageService.jobs(condition);
@@ -225,7 +225,7 @@ public class AdminBoardController {
         model.addAttribute("pageNumbers", result.getPageNumbers());
         model.addAttribute("currentPage", result.getCurrentPage());
 
-        return "/admin/board-jobs";
+        return "admin/board-jobs";
     }
 
     /**
@@ -258,7 +258,7 @@ public class AdminBoardController {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("errorMessage", "검색어는 50자 이하로 입력하세요");
-            return "/admin/board-community";
+            return "admin/board-community";
         }
 
         AdminPagedResult<CommunityAdminView> result = adminPageService.posts(condition);
@@ -267,7 +267,7 @@ public class AdminBoardController {
         model.addAttribute("pageNumbers", result.getPageNumbers());
         model.addAttribute("currentPage", result.getCurrentPage());
 
-        return "/admin/board-community";
+        return "admin/board-community";
     }
 
     @GetMapping("/community/{communityPostId}")
