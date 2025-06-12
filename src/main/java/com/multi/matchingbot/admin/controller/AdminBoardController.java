@@ -14,6 +14,7 @@ import com.multi.matchingbot.company.service.CompanyService;
 import com.multi.matchingbot.job.domain.dto.JobDto;
 import com.multi.matchingbot.job.domain.entity.Job;
 import com.multi.matchingbot.job.service.JobService;
+import com.multi.matchingbot.member.domain.dto.MemberProfileUpdateDto;
 import com.multi.matchingbot.member.domain.entity.Member;
 import com.multi.matchingbot.member.service.MemberService;
 import com.multi.matchingbot.resume.domain.entity.Resume;
@@ -22,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -84,7 +86,25 @@ public class AdminBoardController {
     @GetMapping("/members/{memberId}")
     public String adminMemberDetail(@PathVariable(name = "memberId") Long memberId, Model model) {
         Member member = memberService.findById(memberId);
-        model.addAttribute("member", member);
+        MemberProfileUpdateDto dto = new MemberProfileUpdateDto();
+        dto.setId(member.getId());
+        dto.setEmail(member.getEmail());
+        dto.setName(member.getName());
+        dto.setNickname(member.getNickname());
+        dto.setPhone(member.getPhone());
+        dto.setGender(member.getGender());
+        dto.setBirth(member.getBirth());
+
+        // address → addressRegion, addressDetail 나누기 (예시: "서울시 강남구 역삼동 123-4")
+        if (member.getAddress() != null) {
+            String[] parts = member.getAddress().split(" ", 2);
+            dto.setAddress(parts[0]); // addressRegion 대체
+            if (parts.length > 1) {
+                dto.setAddressDetail(parts[1]);
+            }
+        }
+
+        model.addAttribute("member", dto);
         return "member/profile-edit";
     }
 
@@ -251,7 +271,9 @@ public class AdminBoardController {
     }
 
     @GetMapping("/community/{communityPostId}")
-    public String adminCommunityPostDetail(@PathVariable(name = "communityPostId") Long communityPostId, Model model) {
+    public String adminCommunityPostDetail(@PathVariable(name = "communityPostId") Long communityPostId,
+                                           Model model,
+                                           Authentication authentication) {
         CommunityPost post = communityService.getPostWithComments(communityPostId);
         model.addAttribute("post", CommunityPostDto.fromEntity(post));
         model.addAttribute("categories", communityService.getAllCategories());
@@ -259,6 +281,28 @@ public class AdminBoardController {
                 .map(CommunityCommentDto::fromEntity)
                 .toList());
 
+        // ✅ 관리자 여부 전달
+        boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+        model.addAttribute("isAdmin", isAdmin);
+
+        // ✅ currentUserId 설정
+        if (authentication != null) {
+            String email = authentication.getName();
+            Long currentUserId;
+            try {
+                Member member = memberService.findByUsername(email);
+                currentUserId = member.getId();
+            } catch (Exception e) {
+                Company company = companyService.findByEmail(email);
+                currentUserId = company.getId();
+            }
+            model.addAttribute("currentUserId", currentUserId);
+        } else {
+            model.addAttribute("currentUserId", null);
+        }
+
         return "community/community-detail";
     }
+
 }

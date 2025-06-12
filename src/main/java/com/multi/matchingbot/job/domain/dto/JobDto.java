@@ -26,6 +26,7 @@ public class JobDto {
     private String traitKeywordsConcat;
     private Double similarityScore;
     private String companyName;
+    private boolean bookmarked;
 
     public JobDto(Long id, Long companyId, Long occupationId,
                   String skillKeywords, String traitKeywords,
@@ -138,5 +139,15 @@ public class JobDto {
         Job job = this.toEntity();
         job.setOccupation(occupation);
         return job;
+    }
+
+    public JobDto toDto(Job job) {
+        JobDto dto = new JobDto();
+        dto.setId(job.getId());
+        dto.setTitle(job.getTitle());
+        dto.setCompanyName(job.getCompany().getName());
+        dto.setAddress(job.getAddress());
+        dto.setRequiredSkills(job.getRequiredSkills());
+        return dto;
     }
 }

@@ -87,4 +87,8 @@ public class Job extends BaseEntity {
         this.latitude = updatedJob.getLatitude();
         this.longitude = updatedJob.getLongitude();
     }
+
+    public Long getCompanyId() {
+        return company != null ? company.getId() : null;
+    }
 }

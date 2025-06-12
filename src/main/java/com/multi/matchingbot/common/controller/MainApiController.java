@@ -1,14 +1,17 @@
 package com.multi.matchingbot.common.controller;
 
+import com.multi.matchingbot.common.security.MBotUserDetails;
 import com.multi.matchingbot.job.domain.dto.JobDto;
 import com.multi.matchingbot.job.domain.entity.Job;
 import com.multi.matchingbot.job.service.JobService;
+import com.multi.matchingbot.member.service.JobBookmarkService;
 import com.multi.matchingbot.resume.domain.entity.Resume;
 import com.multi.matchingbot.resume.service.ResumeService;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,52 +31,38 @@ public class MainApiController {
     private final ResumeService resumeService;
     private final JobService jobService;
     private final RestTemplate restTemplate;
+    private final JobBookmarkService jobBookmarkService;
 
-    public MainApiController(ResumeService resumeService, JobService jobService, RestTemplate restTemplate) {
+    public MainApiController(ResumeService resumeService, JobService jobService, RestTemplate restTemplate, JobBookmarkService jobBookmarkService) {
         this.resumeService = resumeService;
         this.jobService = jobService;
         this.restTemplate = restTemplate;
+        this.jobBookmarkService = jobBookmarkService;
     }
-
-    /*@GetMapping("/{id}/keywords")
-    public ResponseEntity<Map<String, Object>> getResumeKeywords(@PathVariable("id") Long id) {
-        Resume resume = resumeService.findById(id);  // resumeId로 조회
-        System.out.println(resume);
-        if (resume == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "Resume not found"));
-        }
-
-        Map<String, Object> result = new HashMap<>();
-        result.put("skillKeywords", parseKeywords(resume.getSkillKeywords()));
-        result.put("traitKeywords", parseKeywords(resume.getTraitKeywords()));
-        System.out.println(result);
-        return ResponseEntity.ok(result);
-    }
-
-    // 문자열 키워드를 쉼표 기준으로 분리하는 유틸
-    private List<String> parseKeywords(String keywordString) {
-        if (keywordString == null || keywordString.trim().isEmpty()) return List.of();
-        return Arrays.stream(keywordString.split(","))
-                .map(String::trim)
-                .filter(s -> !s.isEmpty())
-                .collect(Collectors.toList());
-    }*/
 
     // 0609
     @PostMapping("/sort-jobs-by-resume")
-    public ResponseEntity<List<JobDto>> sortJobsByResume(@RequestBody Map<String, Object> payload) {
+    public ResponseEntity<List<JobDto>> sortJobsByResume(@RequestBody Map<String, Object> payload,
+                                                         @AuthenticationPrincipal MBotUserDetails userDetails) {
         Long resumeId = Long.valueOf(payload.get("resumeId").toString());
+        Long memberId = userDetails.getId();
 
         Resume resume = resumeService.findById(resumeId);
         List<String> resumeSkillKeys = Arrays.asList(resume.getSkillKeywords().split(","));
         List<String> resumeTraitKeys = Arrays.asList(resume.getTraitKeywords().split(","));
 
         List<Job> allJobs = jobService.findAll();
+
+        List<Long> bookmarkedJobIds = jobBookmarkService.getBookmarkedJobIdsForMember(memberId);
+
         List<Map<String, Object>> jobPayload = allJobs.stream().map(job -> {
             Map<String, Object> map = new HashMap<>();
             map.put("id", job.getId());
             map.put("skill_keywords", Arrays.asList(job.getSkillKeywords().split(",")));
             map.put("trait_keywords", Arrays.asList(job.getTraitKeywords().split(",")));
+
+            // ✅ 북마크 여부 추가
+            map.put("bookmarked", bookmarkedJobIds.contains(job.getId()));
             return map;
         }).collect(Collectors.toList());
 
@@ -106,6 +95,15 @@ public class MainApiController {
         List<JobDto> sortedJobs = jobService.findByIdsPreserveOrder(sortedJobIds);
         for (JobDto dto : sortedJobs) {
             dto.setSimilarityScore(jobScoreMap.get(dto.getId()));
+            dto.setBookmarked(bookmarkedJobIds.contains(dto.getId()));
+
+            // ✅ companyName 세팅
+            Job job = jobService.findById(dto.getId()); // job entity 직접 조회
+            if (job.getCompany() != null) {
+                dto.setCompanyName(job.getCompany().getName());
+            } else {
+                dto.setCompanyName("미정");
+            }
         }
 
         return ResponseEntity.ok(sortedJobs);

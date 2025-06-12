@@ -60,7 +60,7 @@ public class CommunityService {
         post.setMember(member);
         post.setTitle(dto.getTitle());
         post.setContent(dto.getContent());
-        post.setCreatedBy(member.getName());
+        post.setCreatedBy("member" + (member.getId())); // ✅ ID 저장
         post.setCreatedAt(java.time.LocalDateTime.now());
 
         postRepo.save(post);
@@ -76,7 +76,8 @@ public class CommunityService {
         post.setTitle(dto.getTitle());
         post.setContent(dto.getContent());
         post.setCategory(category);
-        post.setUpdatedBy(member.getName());
+        post.setUpdatedBy("member" + (member.getId())); // ✅ ID 저장
+
         post.setUpdatedAt(java.time.LocalDateTime.now());
         postRepo.save(post);
     }
@@ -114,7 +115,7 @@ public class CommunityService {
         comment.setPost(post);
         comment.setMember(member);
         comment.setContent(content);
-        comment.setCreatedBy(member.getName());
+        comment.setCreatedBy(String.valueOf(member.getId())); // ✅ ID 저장
         comment.setCreatedAt(java.time.LocalDateTime.now());
 
         commentRepo.save(comment);
@@ -270,4 +271,8 @@ public class CommunityService {
         commentRepo.delete(comment);
     }
 
+    public void deleteCommentAsAdmin(Long commentId) {
+        commentRepo.deleteById(commentId);
+    }
 }
+

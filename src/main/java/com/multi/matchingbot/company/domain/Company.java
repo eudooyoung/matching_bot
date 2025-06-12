@@ -50,6 +50,7 @@ public class Company extends BaseEntity {
 
     @Column(nullable = false, length = 200)
     private String address;
+    private String addressDetail;
 
     @Column(nullable = false, length = 50)
     private String industry;
