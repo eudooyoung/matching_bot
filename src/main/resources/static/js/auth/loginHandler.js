@@ -3,7 +3,7 @@ function isLoginPage(url) {
 }
 
 function isRegisterPage(url) {
-    return url.includes("/auth/register") || url.includes("/auth/register-company");
+    return url.includes("/member/register") || url.includes("/company/register");
 }
 
 function storePreviousUrl() {
