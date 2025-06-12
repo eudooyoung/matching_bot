@@ -336,6 +336,7 @@
         try {
             const response = await fetch("http://localhost:8081/extract", {
                 method: "POST",
+                // mode: "cors",
                 body: formData
             });
 
