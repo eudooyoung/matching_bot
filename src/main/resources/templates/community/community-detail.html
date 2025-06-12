@@ -131,13 +131,16 @@
 
                 <!-- ✅ 댓글 수정/삭제 -->
                 <div class="comment-actions"
-                     th:if="${currentUserId == comment.memberId or currentUserId == comment.companyId}">
+                     sec:authorize="isAuthenticated()"
+                <div th:if="${currentUserId == comment.memberId or currentUserId == comment.companyId or isAdmin}">
+
                     <button type="button" class="btn btn-sm btn-outline-secondary me-2"
                             th:onclick="'showEditForm(' + ${comment.id} + ')'">✏ 수정</button>
                     <form th:action="@{/community/comment/{id}/delete(id=${comment.id})}" method="post" style="display:inline;">
                         <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('댓글을 삭제하시겠습니까?')">🗑 삭제</button>
                     </form>
                 </div>
+
 
                 <!-- ✅ 댓글 수정 폼 -->
                 <form th:action="@{/community/comment/{id}/update(id=${comment.id})}" method="post"
@@ -204,3 +207,4 @@
 
 </body>
 </html>
+

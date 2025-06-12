@@ -270,4 +270,8 @@ public class CommunityService {
         commentRepo.delete(comment);
     }
 
+    public void deleteCommentAsAdmin(Long commentId) {
+        commentRepo.deleteById(commentId);
+    }
 }
+
