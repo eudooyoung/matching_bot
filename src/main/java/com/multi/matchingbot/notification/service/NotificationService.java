@@ -92,6 +92,20 @@ public class NotificationService {
         }
     }
 
+    // 이력서 열람 알림
+    @Transactional
+    public void sendResumeViewedNotification(Long memberId, String companyName, String resumeTitle, Long resumeId) {
+        Notification notification = Notification.builder()
+                .member(Member.builder().id(memberId).build())
+                .title("이력서 열람 알림")
+                .content("[" + companyName + "]에서 '" + resumeTitle + "' 이력서를 열람했습니다.")
+                .status(NotificationStatus.UNREAD)
+                .targetId(resumeId)
+                .targetType(NotificationTargetType.RESUME)
+                .build();
+        notificationRepository.save(notification);
+    }
+
     // 테스트 용도
 //    @Transactional
 //    public void deleteReadNotificationsOlderThan(Duration duration) {
@@ -127,20 +141,6 @@ public class NotificationService {
                         .content(entity.getContent())
                         .status(entity.getStatus())
                         .build());
-    }
-
-    // 이력서 열람 알림
-    @Transactional
-    public void sendResumeViewedNotification(Long memberId, String companyName, String resumeTitle, Long resumeId) {
-        Notification notification = Notification.builder()
-                .member(Member.builder().id(memberId).build())
-                .title("이력서 열람 알림")
-                .content("[" + companyName + "]에서 '" + resumeTitle + "' 이력서를 열람했습니다.")
-                .status(NotificationStatus.UNREAD)
-                .targetId(resumeId)
-                .targetType(NotificationTargetType.RESUME)
-                .build();
-        notificationRepository.save(notification);
     }
 
     // 전체 읽음 처리
