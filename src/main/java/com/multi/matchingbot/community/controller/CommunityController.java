@@ -118,6 +118,11 @@ public class CommunityController {
         if (authentication != null) {
             String email = authentication.getName();
 
+            // ✅ 관리자 여부 판단
+            boolean isAdmin = authentication.getAuthorities().stream()
+                    .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+            model.addAttribute("isAdmin", isAdmin); // ✅ 추가됨
+
             // 개인회원 or 기업회원 판단
             Long currentUserId;
             try {
@@ -131,6 +136,7 @@ public class CommunityController {
             model.addAttribute("currentUserId", currentUserId);
         } else {
             model.addAttribute("currentUserId", null);
+            model.addAttribute("isAdmin", false); //
         }
 
         return "community/community-detail";
@@ -266,6 +272,13 @@ public class CommunityController {
 
         String email = authentication.getName();
         Long postId = communityService.getPostIdByCommentId(id);
+
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+        if (isAdmin) {
+            communityService.deleteCommentAsAdmin(id); // 별도 메서드 필요
+            return "redirect:/community/detail/" + postId;
+        }
 
         try {
             Member member = memberService.findByUsername(email);
