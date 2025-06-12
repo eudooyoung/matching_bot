@@ -96,25 +96,27 @@
                     <div class="inline-group">
                         <div class="form-group" id="email-group">
                             <label for="email">이메일*</label>
-                            <input type="email" id="email" th:field="*{email}" required/>
+                            <input type="email" id="email" th:field="*{email}" required readonly/>
                         </div>
 
                         <div class="form-group" id="phone-group">
                             <label>휴대폰 번호*</label>
                             <div class="phone-input">
-                                <select th:field="*{phone1}" name="phone1" class="phone-segment" required>
-                                    <option value="">선택</option>
-                                    <option value="010">010</option>
-                                    <option value="011">011</option>
-                                    <option value="016">016</option>
-                                    <option value="017">017</option>
-                                    <option value="018">018</option>
-                                    <option value="019">019</option>
-                                </select>
+                                <input type="tel" th:field="*{phone1}" name="phone1" class="phone-segment" maxlength="4"
+                                       pattern="\d{3,4}" title="숫자 3~4자리를 입력하세요" required readonly/>
+<!--                                <select th:field="*{phone1}" name="phone1" class="phone-segment" required readonly/>-->
+<!--                                    <option value="">선택</option>-->
+<!--                                    <option value="010">010</option>-->
+<!--                                    <option value="011">011</option>-->
+<!--                                    <option value="016">016</option>-->
+<!--                                    <option value="017">017</option>-->
+<!--                                    <option value="018">018</option>-->
+<!--                                    <option value="019">019</option>-->
+<!--                                </select>-->
                                 <input type="tel" th:field="*{phone2}" name="phone2" class="phone-segment" maxlength="4"
-                                       pattern="\d{3,4}" title="숫자 3~4자리를 입력하세요" required>
+                                       pattern="\d{3,4}" title="숫자 3~4자리를 입력하세요" required readonly/>
                                 <input type="tel" th:field="*{phone3}" name="phone3" class="phone-segment" maxlength="4"
-                                       pattern="\d{4}" title="숫자 4자리를 입력하세요" required>
+                                       pattern="\d{4}" title="숫자 4자리를 입력하세요" required readonly/>
                             </div>
                         </div>
                     </div>
