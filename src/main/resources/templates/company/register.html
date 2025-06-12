@@ -85,17 +85,23 @@
                     </select>
                 </div>
 
+
+                <!-- 직원수 -->
                 <label for="headcount">* 직원수</label>
-                <input type="text" th:field="*{headcount}" id="headcount" name="headcount">
+                <input type="number" th:field="*{headcount}" id="headcount" name="headcount" min="0" step="1" required>
 
+                <!-- 연매출 (억) -->
                 <label for="annualRevenue">* 연매출 (억)</label>
-                <input type="text" th:field="*{annualRevenue}" id="annualRevenue" name="annualRevenue">
+                <input type="number" th:field="*{annualRevenue}" id="annualRevenue" name="annualRevenue" min="0" step="0.01" required>
 
+                <!-- 영업이익 (억) -->
                 <label for="operatingIncome">* 영업이익 (억)</label>
-                <input type="text" th:field="*{operatingIncome}" id="operatingIncome" name="operatingIncome">
+                <input type="number" th:field="*{operatingIncome}" id="operatingIncome" name="operatingIncome" min="0" step="0.01" required>
 
+                <!-- 최근 1년 채용공고 수 -->
                 <label for="jobsLastYear">* 최근 1년 채용공고 수</label>
-                <input type="text" th:field="*{jobsLastYear}" id="jobsLastYear" name="jobsLastYear">
+                <input type="number" th:field="*{jobsLastYear}" id="jobsLastYear" name="jobsLastYear" min="0" step="1" required>
+
 
                 <div class="section-title">* 약관동의</div>
                 <div class="agreement-box">

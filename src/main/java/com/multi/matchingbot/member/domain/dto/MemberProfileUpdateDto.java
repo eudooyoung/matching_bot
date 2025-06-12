@@ -27,8 +27,8 @@ import java.time.LocalDate;
 public class MemberProfileUpdateDto {
 
     private Long id;
-    private Boolean agreeLocation;
-    private Boolean agreeMarketing;
+    private String  agreeLocation;
+    private String  agreeMarketing;
     private String email; // 읽기 전용
 
     @NotBlank(message = "이름은 필수입니다.")

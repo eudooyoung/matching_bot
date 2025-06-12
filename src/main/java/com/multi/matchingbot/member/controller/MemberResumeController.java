@@ -156,6 +156,7 @@ public class MemberResumeController {
         }
 
         Member member = memberService.findById(userDetails.getId());
+        dto.mergePhone();
         memberResumeService.updateResume(dto, member);
 
         return "redirect:/member/manage-resumes";
@@ -189,7 +190,7 @@ public class MemberResumeController {
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") Long id) {
         resumeAdminService.deleteHard(id);
-        return "redirect:/member";
+        return "redirect:/member/manage-resumes";
     }
 
     @PostMapping("/delete-bulk")
@@ -197,6 +198,6 @@ public class MemberResumeController {
         if (ids != null && !ids.isEmpty()) {
             resumeService.deleteAllByIds(ids);
         }
-        return "redirect:/member";
+        return "redirect:/member/manage-resumes";
     }
 }

@@ -116,7 +116,7 @@ public class MemberController {
 
     // 프로필 편집 처리 (새 경로)
     @PostMapping("/profile_edit")
-    public String updateMemberProfile(@ModelAttribute MemberProfileUpdateDto updateDto,
+    public String updateMemberProfile(@ModelAttribute("member") MemberProfileUpdateDto updateDto,
                                       BindingResult bindingResult,
                                       @AuthenticationPrincipal MBotUserDetails userDetails) {
 
