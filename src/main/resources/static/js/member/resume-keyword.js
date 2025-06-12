@@ -109,6 +109,13 @@ export async function extractKeywords(type) {
             body: formData
         });
 
+        /*const response = await fetchWithAuth("/api/jobs/extract", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({text})
+        });*/
+
+
         const result = await response.json();
         let keywords = result.keywords || [];
         keywords = keywords.slice(0, 15);

@@ -156,6 +156,7 @@ public class MemberResumeController {
         }
 
         Member member = memberService.findById(userDetails.getId());
+        dto.mergePhone();
         memberResumeService.updateResume(dto, member);
 
         return "redirect:/member/manage-resumes";

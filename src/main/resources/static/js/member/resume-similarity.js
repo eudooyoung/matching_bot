@@ -51,6 +51,11 @@ async function calculateSimilarity(body) {
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(body)
     });
+    /*const res = await fetchWithAuth("/api/jobs/similarity", {
+        method: "POST",
+        body: JSON.stringify(body)
+    });*/
+
     if (!res.ok) throw new Error("매칭률 계산 API 실패");
     const result = await res.json();
     return Math.round(result.similarity * 100);

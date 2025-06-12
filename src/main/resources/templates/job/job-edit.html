@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <title>공고 수정하기</title>
     <link rel="stylesheet" th:href="@{/css/company-job.css}">
     <link rel="stylesheet" th:href="@{/css/job-new.css}">
@@ -13,7 +13,7 @@
             max-width: 1000px;
             border: 1px solid #ccc;
             border-radius: 8px;
-            box-shadow: 0 0 8px rgba(0,0,0,0.05);
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
         }
 
         .form-box label {
@@ -68,16 +68,17 @@
         }
     </script>
 
-    <form th:action="@{/job/{id}/edit(id=${job.id})}" method="post" th:object="${job}" onsubmit="return validateForm();">
-        <input type="hidden" name="skillKeywordsConcat" id="skillKeywordsConcat" />
-        <input type="hidden" name="traitKeywordsConcat" id="traitKeywordsConcat" />
+    <form th:action="@{/job/{id}/edit(id=${job.id})}" method="post" th:object="${job}"
+          onsubmit="return validateForm();">
+        <input type="hidden" name="skillKeywordsConcat" id="skillKeywordsConcat"/>
+        <input type="hidden" name="traitKeywordsConcat" id="traitKeywordsConcat"/>
 
         <label>관심 직무</label>
-        <input type="hidden" th:field="*{occupationId}" id="occupationId" />
+        <input type="hidden" th:field="*{occupationId}" id="occupationId"/>
         <div id="react-job-category-selector" th:attr="data-initial-id=${job.occupationId}"></div>
 
         <label>제목</label>
-        <input type="text" th:field="*{title}" required />
+        <input type="text" th:field="*{title}" required/>
         <div th:if="${#fields.hasErrors('title')}" class="error-message" th:errors="*{title}"></div>
 
         <label>설명</label>
@@ -85,7 +86,7 @@
         <div th:if="${#fields.hasErrors('description')}" class="error-message" th:errors="*{description}"></div>
 
         <label>근무지</label>
-        <input type="text" th:field="*{address}" required />
+        <input type="text" th:field="*{address}" required/>
         <div th:if="${#fields.hasErrors('address')}" class="error-message" th:errors="*{address}"></div>
 
         <label>주요 업무</label>
@@ -106,17 +107,17 @@
         </div>
         <textarea th:field="*{requiredTraits}" rows="2" required></textarea>
 
-        <input type="hidden" th:field="*{latitude}" th:value="${latitude != null ? latitude : 37.5665}" />
-        <input type="hidden" th:field="*{longitude}" th:value="${longitude != null ? longitude : 126.9780}" />
+        <input type="hidden" th:field="*{latitude}" th:value="${latitude != null ? latitude : 37.5665}"/>
+        <input type="hidden" th:field="*{longitude}" th:value="${longitude != null ? longitude : 126.9780}"/>
 
         <!-- 기술 키워드 -->
         <label>기술 키워드</label>
-<!--        <div id="skill-keyword-wrapper" class="keyword-wrapper">-->
-<!--            <div class="keyword-input">-->
-<!--                <input type="text" name="skill_keywords[]" placeholder="기술 키워드" />-->
-<!--                <button type="button" onclick="addSkillKeyword()">+</button>-->
-<!--            </div>-->
-<!--        </div>-->
+        <!--        <div id="skill-keyword-wrapper" class="keyword-wrapper">-->
+        <!--            <div class="keyword-input">-->
+        <!--                <input type="text" name="skill_keywords[]" placeholder="기술 키워드" />-->
+        <!--                <button type="button" onclick="addSkillKeyword()">+</button>-->
+        <!--            </div>-->
+        <!--        </div>-->
         <div id="skill-keyword-wrapper" class="keyword-wrapper">
             <div class="keyword-input"
                  th:each="keyword : ${job.skillKeywords != null ? #strings.arraySplit(job.skillKeywords, ',') : {}}">
@@ -132,12 +133,12 @@
 
         <!-- 성향 키워드 -->
         <label>성향 키워드</label>
-<!--        <div id="trait-keyword-wrapper" class="keyword-wrapper">-->
-<!--            <div class="keyword-input">-->
-<!--                <input type="text" name="trait_keywords[]" placeholder="성향 키워드" />-->
-<!--                <button type="button" onclick="addTraitKeyword()">+</button>-->
-<!--            </div>-->
-<!--        </div>-->
+        <!--        <div id="trait-keyword-wrapper" class="keyword-wrapper">-->
+        <!--            <div class="keyword-input">-->
+        <!--                <input type="text" name="trait_keywords[]" placeholder="성향 키워드" />-->
+        <!--                <button type="button" onclick="addTraitKeyword()">+</button>-->
+        <!--            </div>-->
+        <!--        </div>-->
         <div id="trait-keyword-wrapper" class="keyword-wrapper">
             <div class="keyword-input"
                  th:each="keyword : ${job.traitKeywords != null ? #strings.arraySplit(job.traitKeywords, ',') : {}}">
@@ -155,18 +156,20 @@
             <label style="display: block; font-weight: bold;">채용 기간</label>
             <div style="display: flex; gap: 20px;">
                 <div style="flex: 1;">
-                    <input type="date" onclick="this.showPicker()" th:field="*{startDate}" class="form-control" style="width: 100%; cursor: pointer;" required />
+                    <input type="date" onclick="this.showPicker()" th:field="*{startDate}" class="form-control"
+                           style="width: 100%; cursor: pointer;" required/>
                     <div th:if="${#fields.hasErrors('startDate')}" class="error-message" th:errors="*{startDate}"></div>
                 </div>
                 <div style="flex: 1;">
-                    <input type="date" onclick="this.showPicker()" th:field="*{endDate}" class="form-control" style="width: 100%; cursor: pointer;" required />
+                    <input type="date" onclick="this.showPicker()" th:field="*{endDate}" class="form-control"
+                           style="width: 100%; cursor: pointer;" required/>
                     <div th:if="${#fields.hasErrors('endDate')}" class="error-message" th:errors="*{endDate}"></div>
                 </div>
             </div>
         </div>
 
         <label>지원 이메일</label>
-        <input type="email" th:field="*{enrollEmail}" required />
+        <input type="email" th:field="*{enrollEmail}" required/>
         <div th:if="${#fields.hasErrors('enrollEmail')}" class="error-message" th:errors="*{enrollEmail}"></div>
 
         <label>유의사항</label>
@@ -188,7 +191,7 @@
 <!-- React 로딩 및 Occupation ID 세팅 -->
 <script type="module">
     import React from "https://cdn.jsdelivr.net/npm/react@18.2.0/+esm";
-    import { createRoot } from "https://cdn.jsdelivr.net/npm/react-dom@18.2.0/client/+esm";
+    import {createRoot} from "https://cdn.jsdelivr.net/npm/react-dom@18.2.0/client/+esm";
 
     window.React = React;
     window.createRoot = createRoot;
@@ -339,6 +342,12 @@
                 body: formData
             });
 
+           /* const response = await fetchWithAuth("/api/jobs/extract", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({text})
+            });*/
+
             const result = await response.json();
             let keywords = result.keywords || [];
 
@@ -395,5 +404,7 @@
         }
     });
 </script>
+<script th:src="@{/js/auth/fetchWithAuth.js}"></script>
+
 </body>
 </html>
