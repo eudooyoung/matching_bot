@@ -37,7 +37,26 @@ public class ReportImageGenerator {
         // html -> pdf
         ByteArrayOutputStream pdfOutPut = new ByteArrayOutputStream();
         PdfRendererBuilder builder = new PdfRendererBuilder();
-        File fontFile = new File(getClass().getClassLoader().getResource("fonts/NanumGothic.ttf").toURI());
+
+        // 로컬용
+        /* File fontFile = new File(getClass().getClassLoader().getResource("fonts/NanumGothic.ttf").toURI());*/
+
+        // jar 내부용
+        InputStream fontStream = getClass().getClassLoader().getResourceAsStream("fonts/NanumGothic.ttf");
+        if (fontStream == null) {
+            throw new IllegalStateException("폰트 파일을 찾을 수 없습니다.");
+        }
+
+        File tempFontFile = File.createTempFile("NanumGothic", ".ttf");
+        tempFontFile.deleteOnExit();
+
+        try (OutputStream out = new FileOutputStream(tempFontFile)) {
+            fontStream.transferTo(out);
+        }
+
+        File fontFile = tempFontFile;
+
+
         System.out.println("✅ 폰트 파일 존재? " + fontFile.exists());
         System.out.println("✅ 경로: " + fontFile.getAbsolutePath());
         builder.useFont(fontFile, "NanumGothic");
