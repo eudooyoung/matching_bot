@@ -12,7 +12,8 @@ import java.util.List;
 
 @Repository
 public interface JobRepository extends JpaRepository<Job, Long> {
-    Page<Job> findByCompanyId(Long companyId, Pageable pageable);
+
+    Page<Job> findByCompany_Id(Long companyId, Pageable pageable);
     List<Job> findByEndDateBetween(LocalDate start, LocalDate end);
 
     @EntityGraph(attributePaths = {"company"})
