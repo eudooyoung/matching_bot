@@ -137,7 +137,7 @@ pipeline {
                             docker pull ${ECR_REPO_URI}:${BUILD_NUMBER} &&
                             docker stop ${IMAGE_NAME} || true &&
                             docker rm ${IMAGE_NAME} || true &&
-                            docker run -d -p 80:8090 --name ${IMAGE_NAME} ${ECR_REPO_URI}:${BUILD_NUMBER}
+                            docker run -d -p 80:8091 --name ${IMAGE_NAME} ${ECR_REPO_URI}:${BUILD_NUMBER}
                         '
                     """
                 }
