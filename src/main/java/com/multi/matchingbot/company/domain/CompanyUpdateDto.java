@@ -28,6 +28,7 @@ public class CompanyUpdateDto {
     @NotBlank(message = "주소는 필수 입력값입니다.")
     @Size(max = 200)
     private String address;
+    private String addressDetail;
 
     @NotBlank(message = "산업군은 필수 입력값입니다.")
     @Size(max = 50)
