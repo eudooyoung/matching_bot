@@ -151,5 +151,37 @@ pipeline {
                 }
             }
         }
+       stage('Clean old ECR images') {
+           steps {
+               withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws_credentials']]) {
+                   script {
+                       sh '''
+                           echo '🧹 ECR 이미지 정리 (최신 2개 유지)'
+
+                           aws ecr list-images \
+                               --region "$AWS_REGION" \
+                               --repository-name docker_repo \
+                               --query 'imageIds[*].imageTag' \
+                               --output text | tr '\\t' '\\n' | sort -n | head -n -2 > old_tags.txt
+
+                           if [ -s old_tags.txt ]; then
+                               echo "🗑 삭제할 태그:"
+                               cat old_tags.txt
+
+                               TAGS_TO_DELETE=$(cat old_tags.txt | sed 's/^/imageTag=/' | paste -sd ' ' -)
+
+                               aws ecr batch-delete-image \
+                                   --region "$AWS_REGION" \
+                                   --repository-name docker_repo \
+                                   --image-ids $TAGS_TO_DELETE || true
+                           else
+                               echo "✅ 삭제할 이미지 없음 (2개 이하 존재)"
+                           fi
+                       '''
+                   }
+               }
+           }
+       }
+
     }
 }
