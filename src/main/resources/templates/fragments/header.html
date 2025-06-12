@@ -17,6 +17,7 @@
         <!-- 관리자 -->
         <div sec:authorize="hasRole('ADMIN')" class="nav">
             <a href="javascript:void(0)" class="nav-link" onclick="logout()">로그아웃</a>
+            <a th:href="@{/community/list}" class="nav-link">커뮤니티</a>
             <div class="dropdown-wrapper">
                 <button class="menu-button" onclick="toggleDropdown(this)">Menu</button>
                 <ul class="dropdown">
