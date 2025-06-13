@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -82,6 +83,17 @@ public class ErrorController {
     @ExceptionHandler(NoResourceFoundException.class)
     public void handleNoResourceFoundException(NoResourceFoundException ex) throws NoResourceFoundException {
         throw ex; // DispatcherServlet에게 다시 넘겨서 404.html 보여주도록 유도
+    }
+
+    @ExceptionHandler(DisabledException.class)
+    public ResponseEntity<ApiErrorResponse> handleDisabledException(DisabledException ex) {
+        log.warn("비활성화된 계정으로 로그인 시도: {}", ex.getMessage());
+        ApiErrorResponse error = ApiErrorResponse.builder()
+                .status(HttpStatus.UNAUTHORIZED.value())
+                .message("계정이 비활성화되어 있습니다. 관리자에게 문의하세요.")
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
     }
 
 }

@@ -39,7 +39,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin/board")
 public class AdminBoardController {
 
-    private final AdminBoardService adminPageService;
+    private final AdminBoardService adminBoardService;
     private final JobService jobService;
     private final CompanyService companyService;
     private final MemberService memberService;
@@ -67,7 +67,7 @@ public class AdminBoardController {
             return "admin/board-members";
         }
 
-        AdminPagedResult<MemberAdminView> result = adminPageService.members(condition);
+        AdminPagedResult<MemberAdminView> result = adminBoardService.members(condition);
         model.addAttribute("members", result.getPage().getContent());
         model.addAttribute("page", result.getPage());
         model.addAttribute("pageNumbers", result.getPageNumbers());
@@ -123,7 +123,7 @@ public class AdminBoardController {
             return "admin/board-companies";
         }
 
-        AdminPagedResult<CompanyAdminView> result = adminPageService.companies(condition);
+        AdminPagedResult<CompanyAdminView> result = adminBoardService.companies(condition);
         model.addAttribute("companies", result.getPage().getContent());
         model.addAttribute("page", result.getPage());
         model.addAttribute("pageNumbers", result.getPageNumbers());
@@ -179,7 +179,7 @@ public class AdminBoardController {
             return "admin/board-resumes";
         }
 
-        AdminPagedResult<ResumeAdminView> result = adminPageService.resumes(condition);
+        AdminPagedResult<ResumeAdminView> result = adminBoardService.resumes(condition);
         model.addAttribute("resumes", result.getPage().getContent());
         model.addAttribute("page", result.getPage());
         model.addAttribute("pageNumbers", result.getPageNumbers());
@@ -219,7 +219,7 @@ public class AdminBoardController {
             return "admin/board-jobs";
         }
 
-        AdminPagedResult<JobAdminView> result = adminPageService.jobs(condition);
+        AdminPagedResult<JobAdminView> result = adminBoardService.jobs(condition);
         model.addAttribute("jobs", result.getPage().getContent());
         model.addAttribute("page", result.getPage());
         model.addAttribute("pageNumbers", result.getPageNumbers());
@@ -261,7 +261,7 @@ public class AdminBoardController {
             return "admin/board-community";
         }
 
-        AdminPagedResult<CommunityAdminView> result = adminPageService.posts(condition);
+        AdminPagedResult<CommunityAdminView> result = adminBoardService.posts(condition);
         model.addAttribute("posts", result.getPage().getContent());
         model.addAttribute("page", result.getPage());
         model.addAttribute("pageNumbers", result.getPageNumbers());
