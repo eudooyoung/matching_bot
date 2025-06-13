@@ -88,3 +88,15 @@ Thumbs.db
 # ✅ IntelliJ build output
 #########################
 /out/
+
+# Terraform
+aws-tf/
+*.tfstate
+*.tfstate.backup
+.terraform/
+crash.log
+*.tfvars
+*.tfvars.json
+*.exe
+
+

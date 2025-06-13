@@ -72,7 +72,8 @@ public class MBotUserDetailsService implements UserDetailsService {
                 member.getEmail(),
                 member.getPassword(),
                 member.getRole(),
-                member.getId()
+                member.getId(),
+                member.getStatus()
         );
     }
 
@@ -88,7 +89,8 @@ public class MBotUserDetailsService implements UserDetailsService {
                 company.getEmail(),
                 company.getPassword(),
                 company.getRole(),
-                company.getId()
+                company.getId(),
+                company.getStatus()
         );
     }
 
