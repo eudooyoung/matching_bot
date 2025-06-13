@@ -126,14 +126,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         // 쿠키 생성
         ResponseCookie accessCookie = ResponseCookie.from("accessToken", accessToken)
                 .httpOnly(true)
-                .secure(false) // TODO: 배포 시 true로 전환
+                .secure(false) // TODO: https 배포 시 true로 전환
                 .path("/")
                 .maxAge(tokenProvider.getAccessTokenExpireTime())
                 .build();
 
         ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", refreshToken)
                 .httpOnly(true)
-                .secure(false)  // TODO: 배포 시 true로 전환
+                .secure(false)  // TODO: https 배포 시 true로 전환
                 .path("/")
                 .maxAge(tokenProvider.getRefreshTokenExpireTime())
                 .build();
@@ -181,7 +181,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         ResponseCookie accessCookie = ResponseCookie.from("accessToken", newAccessToken)
                 .httpOnly(true)
-                .secure(false) // TODO:!!!!배포시 true로 전환!!!!!
+                .secure(false) // TODO: https 배포시 true로 전환
                 .path("/")
                 .maxAge(tokenProvider.getAccessTokenExpireTime())
                 .build();
