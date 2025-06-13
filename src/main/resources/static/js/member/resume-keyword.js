@@ -127,7 +127,7 @@ export async function extractKeywords(type) {
             const inputDiv = document.createElement('div');
             inputDiv.className = 'keyword-input';
             inputDiv.innerHTML = `
-                <input type="text" name="${inputName}" value="${kw}" maxlength="5"/>
+                <input type="text" name="${inputName}" value="${kw}" maxlength="10"/>
                 <button type="button" onclick="removeKeyword(this)">-</button>
             `;
             wrapper.appendChild(inputDiv);
@@ -137,7 +137,7 @@ export async function extractKeywords(type) {
             const plusDiv = document.createElement('div');
             plusDiv.className = 'keyword-input';
             plusDiv.innerHTML = `
-                <input type="text" name="${inputName}" placeholder="${type === 'skill' ? '기술 키워드' : '성향 키워드'}" maxlength="5"/>
+                <input type="text" name="${inputName}" placeholder="${type === 'skill' ? '기술 키워드' : '성향 키워드'}" maxlength="10"/>
                 <button type="button" onclick="${type === 'skill' ? 'addSkillKeyword()' : 'addTraitKeyword()'}">+</button>
             `;
             wrapper.appendChild(plusDiv);
@@ -177,7 +177,7 @@ export function attachKeywordSubmitHandler() {
                 const plusDiv = document.createElement("div");
                 plusDiv.className = "keyword-input";
                 plusDiv.innerHTML = `
-                    <input type="text" name="${inputName}" placeholder="${inputName.includes("skill") ? "기술 키워드" : "성향 키워드"}" maxlength="5"/>
+                    <input type="text" name="${inputName}" placeholder="${inputName.includes("skill") ? "기술 키워드" : "성향 키워드"}" maxlength="10"/>
                     <button type="button" onclick="${inputName.includes("skill") ? "addSkillKeyword()" : "addTraitKeyword()"}">+</button>
                 `;
                 wrapper.appendChild(plusDiv);
