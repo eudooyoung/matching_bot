@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -64,9 +65,16 @@ public class ChatbotRestController {
                                          @AuthenticationPrincipal MBotUserDetails user) {
         String message = request.get("message").trim().toLowerCase();
         String role = (user != null) ? user.getRole().name() : "GUEST";
+        System.out.println("✅ GPT 요청 메시지: " + message); // 디버깅용
 
         String reply = null;
         String redirectUrl = null;
+
+        // ✅ 무의미하거나 너무 짧은 메시지 필터링
+        List<String> bannedWords = List.of("서", "법", "팁", "정보");
+        if (message.length() < 2 || bannedWords.contains(message)) {
+            reply = "\"" + message + "\"는 너무 짧거나 모호합니다. 좀 더 자세히 입력해 주세요.";
+        }
 
         // ✅ 사전 프롬프트 처리
         if (message.contains("기능") && message.contains("사이트")) {
