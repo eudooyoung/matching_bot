@@ -160,7 +160,7 @@ export function attachKeywordSubmitHandler() {
                 const div = document.createElement("div");
                 div.className = "keyword-input";
                 div.innerHTML = `
-                    <input type="text" name="${inputName}" value="${kw}" maxlength="5"/>
+                    <input type="text" name="${inputName}" value="${kw}" maxlength="10"/>
                     <button type="button" onclick="removeKeyword(this)">-</button>
                 `;
                 wrapper.appendChild(div);
