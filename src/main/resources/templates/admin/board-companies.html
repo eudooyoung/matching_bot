@@ -13,9 +13,11 @@
 
     <main class="main-content">
         <section style="padding: 2rem;">
-            <h2 style="margin-bottom: 1.5rem;">기업 회원 관리</h2>
 
             <div class="search-bar-wrapper">
+                <h2 style="margin-bottom: 1.5rem;">
+                    <a href="/admin/board/companies">기업 회원 관리</a>
+                </h2>
                 <div class="bulk-actions">
                     <div class="bulk-button-group">
                         <button type="button" class="btn btn-delete"
@@ -171,17 +173,35 @@
             <!-- 페이지네이션 (예시) -->
             <div class="table-pagination" style="margin-top: 1.5rem; text-align: center;">
                 <a th:if="${page != null and page.hasPrevious()}"
-                   th:href="@{/admin/board/companies(page=${currentPage - 1})}">이전</a>
+                   th:href="@{/admin/board/companies(
+                              page=${currentPage - 1},
+                             sortBy=${condition.sortBy},
+                             direction=${condition.direction},
+                             status=${condition.status},
+                             keyword=${condition.keyword}
+                              )}">이전</a>
                 <span th:if="${page == null or !page.hasPrevious()}" style="visibility: hidden;">이전</span>
 
                 <span th:each="pageNum : ${pageNumbers ?: {}}" style="margin: 0 5px;">
-                                           <a th:href="@{/admin/board/companies(page=${pageNum})}"
+                                           <a th:href="@{/admin/board/companies(
+                                              page=${pageNum},
+                                              sortBy=${condition.sortBy},
+                                              direction=${condition.direction},
+                                              status=${condition.status},
+                                              keyword=${condition.keyword}
+                                           )}"
                                               th:text="${pageNum + 1}"
                                               th:classappend="${pageNum == currentPage} ? 'active-page' : ''"></a>
                                        </span>
 
                 <a th:if="${page != null and page.hasNext()}"
-                   th:href="@{/admin/board/companies(page=${currentPage + 1})}">다음</a>
+                   th:href="@{/admin/board/companies(
+                              page=${currentPage + 1},
+                              sortBy=${condition.sortBy},
+                              direction=${condition.direction},
+                              status=${condition.status},
+                              keyword=${condition.keyword}
+                              )}">다음</a>
                 <span th:if="${page == null or !page.hasNext()}" style="visibility: hidden;">다음</span>
             </div>
         </section>
