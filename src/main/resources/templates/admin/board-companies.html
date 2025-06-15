@@ -219,12 +219,7 @@
     <!-- Footer Fragment -->
     <div th:replace="fragments/footer :: footer"></div>
 </div>
-<script>
-    async function showLoadingAndRunBulk(url) {
-        document.getElementById("loadingOverlay").style.display = "flex";
-        await bulkRefresh(url);
-    }
-</script>
+
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>
 <script th:src="@{/js/auth/fetchWithAuth.js}"></script>
@@ -233,5 +228,6 @@
 <script th:src="@{/js/admin/bulksSoftAction.js}"></script>
 <script th:src="@{/js/admin/refreshReport.js}"></script>
 <script th:src="@{/js/admin/bulkRefresh.js}"></script>
+<script th:src="@{/js/showToast.js}"></script>
 </body>
 </html>

@@ -59,7 +59,20 @@ body {
     margin-top: 3rem;
 }
 
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 4px;
+    color: #fff;
+    font-weight: bold;
+    z-index: 9999;
+}
 
+.toast-info {
+    background: #2196F3; /* 파랑 */
+}
 
 
 

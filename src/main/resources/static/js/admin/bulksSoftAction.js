@@ -12,7 +12,7 @@ async function bulkSoftAction(method, url) {
 
     const statuses = new Set(selected.map(cb => cb.dataset.status));
     if (statuses.size > 1) {
-        alert("서로 다른 상태의 항목이 포함되어 있어 처리할 수 없습니다.");
+        showToast("서로 다른 상태의 항목이 포함되어 있어 처리할 수 없습니다.");
         return;
     }
 
