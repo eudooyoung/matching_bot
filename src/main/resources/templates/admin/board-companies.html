@@ -5,11 +5,20 @@
     <title>MatchingBot</title>
     <link rel="stylesheet" th:href="@{/css/layout.css}"/>
     <link rel="stylesheet" th:href="@{/css/admin/boards.css}"/>
+    <link rel="stylesheet" th:href="@{/css/spinner-chatbot.css}"/>
 </head>
 <body>
 
 <div class="wrapper">
     <div th:replace="~{fragments/header :: header(role=${role})}"></div>
+
+    <div id="loadingOverlay" class="overlay" style="display: none;">
+        <div class="spinner"></div>
+        <p>
+            기업 리포트를 생성중입니다. <br>
+            잠시만 기다려 주세요...
+        </p>
+    </div>
 
     <main class="main-content">
         <section style="padding: 2rem;">
@@ -26,9 +35,9 @@
                         <button type="button" class="btn btn-restore"
                                 onclick="bulkSoftAction('PATCH', '/api/v1/admin/bulk/companies')">복구
                         </button>
-                        <!--<button type="button" class="btn btn-extract"
-                                onclick="bulkExtract('EXTRACT', '/admin/bulk/placeholder')">추출
-                        </button>-->
+                        <button type="button" class="btn btn-extract"
+                                onclick="showLoadingAndRunBulk('/api/v1/admin/bulk/companies')">생성
+                        </button>
                     </div>
                     <div class="form-error-global" th:if="${errorMessage}" th:text="${errorMessage}"></div>
 
@@ -59,12 +68,12 @@
                             <option value="N" th:selected="${condition.status == 'N'}">INACTIVE</option>
                         </select>
 
-                        <!--<select name="reportStatus" onchange="this.form.submit()">
+                        <select name="reportStatus" onchange="this.form.submit()">
                             <option value="" disabled>보고서 상태</option>
                             <option value="">전체</option>
-                            <option value="Y" th:selected="${condition.reportStatus == 'Y'}">추출 완료</option>
+                            <option value="Y" th:selected="${condition.reportStatus == 'Y'}">생성 완료</option>
                             <option value="N" th:selected="${condition.reportStatus == 'N'}">미완료</option>
-                        </select>-->
+                        </select>
                     </div>
 
                     <div class="search-right">
@@ -90,7 +99,7 @@
                         <col style="width: 130px;"/>  <!-- 수정자 -->
                         <col style="width: 95px;"/>  <!-- 수정일 -->
                         <col style="width: 30px;"/>  <!-- 평가 -->
-                        <!--                        <col style="width: 40px;"/>  &lt;!&ndash; 추출 &ndash;&gt;-->
+                        <col style="width: 40px;"/>  <!-- 추출 -->
                         <col style="width: 45px;"/>  <!-- 가입 상태 -->
                         <col style="width: 40px;"/>  <!-- 삭제/복구 -->
                     </colgroup>
@@ -109,7 +118,7 @@
                         <th>수정자</th>
                         <th>수정일</th>
                         <th>평가</th>
-                        <!--                        <th>추출</th>-->
+                        <th>생성</th>
                         <th>가입상태</th>
                         <th>삭제</th>
                     </tr>
@@ -143,13 +152,13 @@
                             <a class="link-detail" th:href="@{|/admin/board/companies/${company.id}|}"
                                th:text="${company.reportStatus}">보고서 상태</a>
                         </td>
-                        <!--<td>
+                        <td>
                             <button type="button"
                                     class="btn btn-extract"
-                                    th:onclick="|refreshCompanyReport(${company.id})|" onSuccess: () => location.reload() })|">
-                                추출
+                                    th:onclick="|refreshReport({ id: ${company.id}, url: '/api/v1/admin/companies', onSuccess: () => location.reload() })|">
+                                생성
                             </button>
-                        </td>-->
+                        </td>
                         <td th:class="${company.getStatusClass()}" th:text="${company.getStatusText()}">가입 상태</td>
                         <td>
                             <button type="button"
@@ -217,5 +226,7 @@
 <script th:src="@{/js/admin/softDeleteItem.js}"></script>
 <script th:src="@{/js/admin/restoreItem.js}"></script>
 <script th:src="@{/js/admin/bulksSoftAction.js}"></script>
+<script th:src="@{/js/admin/refreshReport.js}"></script>
+<script th:src="@{/js/admin/bulkRefresh.js}"></script>
 </body>
 </html>

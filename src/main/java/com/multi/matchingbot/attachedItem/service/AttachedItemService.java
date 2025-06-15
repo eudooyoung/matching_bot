@@ -1,5 +1,7 @@
 package com.multi.matchingbot.attachedItem.service;
 
+import com.multi.matchingbot.admin.domain.BulkResponseDto;
+import com.multi.matchingbot.admin.service.CompanyAdminService;
 import com.multi.matchingbot.attachedItem.AttachedItemRepository;
 import com.multi.matchingbot.attachedItem.ReportImageGenerator;
 import com.multi.matchingbot.attachedItem.domain.AttachedItem;
@@ -13,6 +15,7 @@ import com.multi.matchingbot.company.domain.CompanyRegisterDto;
 import com.multi.matchingbot.company.domain.CompanyUpdateReportDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.awt.image.BufferedImage;
@@ -23,6 +26,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class AttachedItemService {
 
+    private final CompanyAdminService companyAdminService;
     private final ChatbotReportService chatbotReportService;
     private final FileService fileService;
     private final S3FileService s3FileService;
@@ -130,5 +134,31 @@ public class AttachedItemService {
 
     public Optional<AttachedItem> findSummaryForCompany(Long companyId) {
         return attachedItemRepository.findByReferenceIdAndItemTypeAndStatus(companyId, ItemType.SUMMARY, Yn.Y);
+    }
+
+    @Async
+        public void saveReportImageAsync(CompanyRegisterDto dto, Long companyId) {
+            saveReportImage(dto, companyId);
+        }
+
+    @Async
+    public void saveReportImageAsync(CompanyUpdateReportDto dto, Long companyId) {
+        saveReportImage(dto, companyId);
+    }
+
+
+    public BulkResponseDto bulkSaveReportImage(List<Long> companyIds) {
+        List<Long> failed = new ArrayList<>();
+        for (Long id : companyIds) {
+            try {
+                CompanyUpdateReportDto dto = companyAdminService.getReportSource(id);
+                saveReportImage(dto, id);
+            } catch (Exception e) {
+                failed.add(id);
+                log.warn("ID {} 보고서 생성 실패: {}", id, e.getMessage());
+            }
+        }
+        boolean isSuccess = failed.isEmpty();
+        return new BulkResponseDto(isSuccess, failed);
     }
 }
