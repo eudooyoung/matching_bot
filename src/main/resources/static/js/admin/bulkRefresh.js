@@ -2,7 +2,7 @@ async function showLoadingAndRunBulk(url) {
   const selected = Array.from(document.querySelectorAll(".check-row:checked")).map(cb => cb.value);
 
   if (selected.length === 0) {
-    showToast("추출할 항목을 선택하세요.");
+    alert("추출할 항목을 선택하세요.");
     return;
   }
 
@@ -20,7 +20,7 @@ async function showLoadingAndRunBulk(url) {
     if (!res.ok) throw new Error("서버 오류");
     location.reload();
   } catch (e) {
-    showToast(`요청 실패: ${e.message}`);
+    alert(`요청 실패: ${e.message}`);
     document.getElementById("loadingOverlay").style.display = "none";
   }
 }

@@ -109,7 +109,7 @@
             })
             .catch(error => {
                 console.error('Error:', error);
-                showToast('북마크 처리 중 오류가 발생했습니다.');
+                alert('북마크 처리 중 오류가 발생했습니다.');
             });
     }
 
@@ -135,7 +135,7 @@
             })
             .catch(error => {
                 console.error('Error:', error);
-                showToast('북마크 처리 중 오류가 발생했습니다.');
+                alert('북마크 처리 중 오류가 발생했습니다.');
             });
     }
 
@@ -160,7 +160,6 @@
 <script th:src="@{/js/logout.js}"></script>
 <script th:src="@{/js/auth/fetchWithAuth.js}"></script>
 <script th:src="@{/js/chatbot/loadReportImage.js}"></script>
-<script th:src="@{/js/showToast.js}"></script>
 
 </body>
 </html>
