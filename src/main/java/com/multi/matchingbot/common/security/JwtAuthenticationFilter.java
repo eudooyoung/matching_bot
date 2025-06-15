@@ -97,7 +97,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     response.addHeader("Set-Cookie", accessCookie.toString());
                     authenticateRequest(newAccessToken, request);
                 } else {
-                    log.warn("!!! refresthToken 만료 >>> 비회원 처리");
+                    log.warn("!!! refreshToken 만료 >>> 비회원 처리");
                 }
             }
         } catch (TokenException te) {
