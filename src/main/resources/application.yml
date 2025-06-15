@@ -110,7 +110,7 @@ spring:
     import:
       - classpath:application-security.yml
   datasource:
-    url: ${DB_PROD_URL} #rds 엔드포인트: jdbc:mysql://sample-rds.cyf8tnql7evk.us-east-2.rds.amazonaws.com:3306/scott
+    url: ${DB_PROD_URL}?serverTmeZone=Asia/Seoul #rds 엔드포인트: jdbc:mysql://sample-rds.cyf8tnql7evk.us-east-2.rds.amazonaws.com:3306/scott
     username: ${DB_PROD_USER}
     password: ${DB_PROD_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
