@@ -16,7 +16,7 @@ public enum ReportType {
     SUMMARY("chatbot/evaluation-summary",
             ItemType.SUMMARY,
             "report-summary",
-            1350);
+            1500);
 
     /**
      * 타입 분기 변수

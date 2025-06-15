@@ -14,15 +14,6 @@
 <div class="wrapper">
     <div th:replace="~{fragments/header :: header(role=${role})}"></div>
 
-    <!-- 로딩 오버레이 -->
-    <div id="loadingOverlay" class="overlay" style="display: none;">
-        <div class="spinner"></div>
-        <p>
-            AI가 기업 정보를 분석하고 있습니다.<br>
-            잠시만 기다려 주세요...
-        </p>
-    </div>
-
     <main class="main-content">
         <div class="container">
             <div class="form-title-row">
@@ -169,12 +160,6 @@
     <div th:replace="~{fragments/footer :: footer}"></div>
 </div>
 
-<script>
-    function showLoadingAndSubmit(form) {
-        document.getElementById("loadingOverlay").style.display = "flex";
-        form.submit();
-    }
-</script>
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>
 <script th:src="@{/js/register/postcode.js}"></script>

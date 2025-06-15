@@ -196,3 +196,18 @@ body {
 .stared-button.filled {
     color: gold;
 }
+
+.toast {
+    position: fixed;
+    top: 30px; /* 약간 아래로 내림 */
+    left: 50%; /* 화면 중앙 기준 */
+    transform: translateX(-50%); /* 가로 가운데 정렬 */
+    padding: 14px 24px;
+    border-radius: 8px;
+    color: #fff;
+    font-weight: 500;
+    background: #7a8096;
+    z-index: 9999;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
