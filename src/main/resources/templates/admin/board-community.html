@@ -113,11 +113,11 @@
                                class="link-detail">제목</a>
                         </td>
                         <td th:text="${post.categoryName}">카테고리</td>
-                        <td th:text="${post.writerName}">작성자</td>
+                        <td class="text-left-col" th:text="${post.writerName}">작성자</td>
                         <td th:text="${post.writerType.name()}">구분</td>
                         <td th:text="${post.views}">조회수</td>
                         <td th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm:ss')}">작성일</td>
-                        <td th:text="${post.updatedBy}">수정자</td>
+                        <td class="text-left-col" th:text="${post.updatedBy}">수정자</td>
                         <td th:text="${#temporals.format(post.updatedAt, 'yyyy-MM-dd HH:mm:ss')}">수정일</td>
                         <td>
                             <button type="button"
