@@ -10,8 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.concurrent.CompletableFuture;
-
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/admin/bulk")
 @RestController
@@ -46,9 +44,9 @@ public class AdminBulkRestController {
     }
 
     @PostMapping("companies")
-    public CompletableFuture<ResponseEntity<BulkResponseDto>> refreshReports(@RequestBody @Valid BulkRequestDto requestDto) {
-        return attachedItemService.bulkSaveReportImageAsync(requestDto.getIds())
-                .thenApply(ResponseEntity::ok);
+    public ResponseEntity<BulkResponseDto> refreshReports(@RequestBody @Valid BulkRequestDto requestDto) {
+        BulkResponseDto response = attachedItemService.bulkSaveReportImage(requestDto.getIds());
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("resumes")

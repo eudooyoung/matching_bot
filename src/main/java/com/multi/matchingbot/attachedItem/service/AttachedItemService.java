@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 
 import java.awt.image.BufferedImage;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Service
@@ -142,8 +141,8 @@ public class AttachedItemService {
         saveReportImage(dto, companyId);
     }
 
-    @Async
-    public CompletableFuture<BulkResponseDto> bulkSaveReportImageAsync(List<Long> companyIds) {
+
+    public BulkResponseDto bulkSaveReportImage(List<Long> companyIds) {
         List<Long> failed = new ArrayList<>();
         for (Long id : companyIds) {
             try {
@@ -155,6 +154,6 @@ public class AttachedItemService {
             }
         }
         boolean isSuccess = failed.isEmpty();
-        return CompletableFuture.completedFuture(new BulkResponseDto(isSuccess, failed));
+        return new BulkResponseDto(isSuccess, failed);
     }
 }
