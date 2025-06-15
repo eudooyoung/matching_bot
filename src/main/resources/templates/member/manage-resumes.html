@@ -20,8 +20,8 @@
 
       <!-- 상단 버튼 -->
       <div class="resume-actions" style="margin-bottom: 20px;">
-        <button type="submit" class="btn-danger">선택 삭제</button>
-        <button type="button" class="btn-primary" onclick="location.href='/member/insert-resume'">이력서 등록하기</button>
+        <button type="submit" class="delete-button">선택 삭제</button>
+        <button type="button" class="nav-button" onclick="location.href='/member/insert-resume'">이력서 등록하기</button>
 <!--        <button type="button" class="btn-secondary" onclick="location.href='/member/history'">이력서 열람 기록</button> 사용 안함-->
       </div>
 
@@ -51,7 +51,7 @@
           <td th:text="${resume.member.name}">작성자</td>
           <td th:text="${resume.title}">이력서 제목</td>
           <td th:text="${#temporals.format(resume.createdAt, 'yyyy.MM.dd')}">작성일</td>
-          <td><a th:href="@{/member/resume/{id}(id=${resume.id})}">보기</a></td>
+          <td><a th:href="@{/member/resume/{id}(id=${resume.id})}">상세보기</a></td>
           <td><a th:href="@{/member/update-resume/{id}(id=${resume.id})}">수정</a></td>
           <td>
             <a th:href="@{/member/delete/{id}(id=${resume.id})}"
@@ -61,6 +61,9 @@
         </tbody>
       </table>
     </form>
+
+    <button class="mypage-button" onclick="location.href='/member/mypage'">돌아가기</button>
+
   </div>
 </main>
 
@@ -74,7 +77,9 @@
     checkboxes.forEach(cb => cb.checked = source.checked);
   }
 </script>
+
 <script th:src="@{/js/dropdown.js}"></script>
 <script th:src="@{/js/logout.js}"></script>
+
 </body>
 </html>

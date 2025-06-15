@@ -357,6 +357,15 @@ select {
     background-color: #103254;
 }
 
+.keyword-button {
+    background-color: #103254;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
 .horizontal-group {
     display: flex;
     flex-direction: column;

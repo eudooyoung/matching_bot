@@ -121,12 +121,12 @@
             <div class="keyword-input"
                  th:each="keyword : ${job.skillKeywords != null ? #strings.arraySplit(job.skillKeywords, ',') : {}}">
                 <input type="text" name="skill_keywords[]" th:value="${keyword}" placeholder="기술 키워드"/>
-                <button type="button" class="nav-button" onclick="removeKeyword(this)">-</button>
+                <button type="button" class="submit-button" onclick="removeKeyword(this)">-</button>
             </div>
             <div class="keyword-input"
                  th:if="${job.skillKeywords == null or #strings.isEmpty(job.skillKeywords)}">
                 <input type="text" name="skill_keywords[]" placeholder="기술 키워드"/>
-                <button type="button" class="nav-button" onclick="addSkillKeyword()">+</button>
+                <button type="button" class="submit-button" onclick="addSkillKeyword()">+</button>
             </div>
         </div>
 
@@ -143,12 +143,12 @@
             <div class="keyword-input"
                  th:each="keyword : ${job.traitKeywords != null ? #strings.arraySplit(job.traitKeywords, ',') : {}}">
                 <input type="text" name="trait_keywords[]" th:value="${keyword}" placeholder="성향 키워드"/>
-                <button type="button" onclick="removeKeyword(this)">-</button>
+                <button type="button" th:class="submit-button" onclick="removeKeyword(this)">-</button>
             </div>
             <div class="keyword-input"
                  th:if="${job.traitKeywords == null or #strings.isEmpty(job.traitKeywords)}">
                 <input type="text" name="trait_keywords[]" placeholder="성향 키워드"/>
-                <button type="button" onclick="addTraitKeyword()">+</button>
+                <button type="button" th:class="submit-button" onclick="addTraitKeyword()">+</button>
             </div>
         </div>
 
