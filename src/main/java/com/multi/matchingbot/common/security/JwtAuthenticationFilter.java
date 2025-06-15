@@ -89,7 +89,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                     ResponseCookie accessCookie = ResponseCookie.from("accessToken", newAccessToken)
                             .httpOnly(true)
-                            .secure(false) // TODO:!!!!배포시 true로 전환!!!!!
+                            .secure(false) // TODO:!!!!https 배포시 true로 전환!!!!!
                             .path("/")
                             .maxAge(tokenProvider.getAccessTokenExpireTime())
                             .build();
