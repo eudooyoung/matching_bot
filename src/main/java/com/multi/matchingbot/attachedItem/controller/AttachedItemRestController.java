@@ -39,7 +39,7 @@ public class AttachedItemRestController {
         }
 
         // AI 평가 리포트 생성 및 저장
-        attachedItemService.saveReportImage(dto, companyId);
+        attachedItemService.saveReportImageAsync(dto, companyId);
 
         return ResponseEntity.ok().build();
     }

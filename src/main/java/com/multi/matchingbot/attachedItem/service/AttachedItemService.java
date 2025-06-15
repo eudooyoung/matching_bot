@@ -137,6 +137,11 @@ public class AttachedItemService {
     }
 
     @Async
+        public void saveReportImageAsync(CompanyRegisterDto dto, Long companyId) {
+            saveReportImage(dto, companyId);
+        }
+
+    @Async
     public void saveReportImageAsync(CompanyUpdateReportDto dto, Long companyId) {
         saveReportImage(dto, companyId);
     }
