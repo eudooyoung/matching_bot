@@ -5,16 +5,6 @@ const currentYear = new Date().getFullYear();
 const yearEl = document.getElementById("establishedYear");
 const monthEl = document.getElementById("establishedMonth");
 const dayEl = document.getElementById("establishedDay");
-/*
-for (let i = currentYear; i >= 1900; i--) {
-    yearEl.innerHTML += `<option value="${i}">${i}년</option>`;
-}
-for (let i = 1; i <= 12; i++) {
-    monthEl.innerHTML += `<option value="${i}">${i}월</option>`;
-}
-for (let i = 1; i <= 31; i++) {
-    dayEl.innerHTML += `<option value="${i}">${i}일</option>`;
-}*/
 
 // 전체 동의 체크
 const agreeAll = document.querySelector("input[name='agree_all']");
@@ -39,7 +29,7 @@ function businessNumber() {
     let num = document.getElementById('businessNo').value;
 
     if (num === '1234567890') {
-        document.getElementById('regimessage').innerHTML = "<br>사업자 회원가입이 가능합니다. (테스트)";
+        document.getElementById('regimessage').innerHTML = "<br>사업자 회원가입이 가능합니다.";
         return;
     }
 
@@ -80,8 +70,8 @@ function businessRegi() {
     const num = document.getElementById("businessNo").value;
     // TODO: 배포시 주석 혹은 삭제
     if (num === '1234567890') {
-        alert("사업자 인증에 성공했습니다. (테스트)");
-        showLoadingAndSubmit(form);
+        alert("사업자 인증에 성공했습니다.");
+        form.submit();
         return;
     }
 
@@ -97,7 +87,7 @@ function businessRegi() {
             // TODO: 배포시 활성화
             /*if (valid === '01') {
                 alert("사업자 인증에 성공했습니다.");
-                showLoadingAndSubmit(form);
+                form.submit();
             } else {
                 alert("사업자가 아닙니다.");
             }*/

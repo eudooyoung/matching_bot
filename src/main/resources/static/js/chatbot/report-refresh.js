@@ -39,8 +39,6 @@ function submitWithAI() {
 
 // 실제 AI 갱신 요청 로직
 async function handleAIRefresh() {
-    const overlay = document.getElementById("loadingOverlay");
-
     const getValue = name => document.querySelector(`input[name="${name}"]`)?.value || '';
     const toNumber = val => Number(val) || 0;
 
@@ -60,37 +58,36 @@ async function handleAIRefresh() {
 
     if (missing.length > 0) {
         alert("다음 항목은 필수 입력입니다: " + missing.join(", "));
-        if (overlay) overlay.style.display = "none";
         return;
     }
 
     const companyId = document.getElementById("refreshReportBtn")?.dataset.companyId;
     if (!companyId) {
         alert("회사 ID가 유효하지 않습니다.");
-        if (overlay) overlay.style.display = "none";
         return;
     }
 
     try {
-        console.log("유효성 검증 완료. Ai 요청 시작")
-        const response = await fetchWithAuth(`/api/v1/attached/${companyId}/refresh-report`, {
+        fetchWithAuth(`/api/v1/attached/${companyId}/refresh-report`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(requiredFields)
+        }).then(response => {
+            if (response.ok) {
+                console.log("AI 평가 요청 성공");
+            } else {
+                console.warn("AI 평가 요청 실패");
+            }
+        }).catch(e => {
+            console.error("AI 평가 오류:", e);
         });
 
-        if (response.ok) {
-            alert("AI 평가가 성공적으로 갱신되었습니다.");
-            document.getElementById("companyEditForm").submit();
-        } else {
-            alert("갱신 중 오류가 발생했습니다.");
-            if (overlay) overlay.style.display = "none";
-        }
+        // ✅ 요청 보내자마자 바로 저장
+        document.getElementById("companyEditForm").submit();
     } catch (e) {
         console.error("AI 평가 오류:", e);
         alert("네트워크 오류가 발생했습니다.");
-        if (overlay) overlay.style.display = "none";
     }
 }

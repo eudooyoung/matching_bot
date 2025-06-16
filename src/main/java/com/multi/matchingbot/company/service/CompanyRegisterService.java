@@ -63,7 +63,7 @@ public class CompanyRegisterService {
         Company savedCompany = companyRegisterRepository.save(company);
 
         /*기업 평가 보고서 로직*/
-        attachedItemService.saveReportImage(dto, savedCompany.getId());
+        attachedItemService.saveReportImageAsync(dto, savedCompany.getId());
 
     }
 }
