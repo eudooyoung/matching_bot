@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>프로필 편집</title>
@@ -45,48 +45,29 @@
             flex: 1;
         }
 
-        .btn-group {
-            margin-top: 30px;
+        .button-area {
             text-align: center;
-            gap: 10px;
+            margin-top: 30px;
         }
 
-        .submit-btn, .cancel-btn {
-            padding: 12px 30px;
+        .submit-button {
+            padding: 10px 30px;
+            font-size: 16px;
+            background-color: #103254;
+            color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 16px;
-            margin: 0 10px;
         }
 
-        .submit-btn {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        .submit-btn:hover {
-            background-color: #45a049;
-        }
-
-        .cancel-btn {
-            background-color: #f44336;
-            color: white;
-        }
-
-        .cancel-btn:hover {
-            background-color: #da190b;
-        }
-
-        .readonly-field {
-            background-color: #f5f5f5;
-            color: #666;
+        .submit-button:hover {
+            background-color: #103254;
         }
 
         .address-btn {
             margin-top: 5px;
             padding: 8px 16px;
-            background-color: #2196F3;
+            background-color: #103254;
             color: #fff;
             border: none;
             border-radius: 5px;
@@ -94,7 +75,7 @@
         }
 
         .address-btn:hover {
-            background-color: #0b7dda;
+            background-color: #103254;
         }
     </style>
 </head>
@@ -186,10 +167,12 @@
             <option value="N" th:selected="${member.agreeMarketing == 'N'}">비동의</option>
         </select>
 
+        <div class="button-area">
+            <button type="submit" class="submit-button" sec:authorize="hasRole('MEMBER')">수정하기</button>
+        </div>
 
-        <div class="btn-group">
-            <button type="submit" class="submit-btn">저장</button>
-            <button type="button" class="cancel-btn" onclick="history.back()">취소</button>
+        <div class="button-area">
+            <button type="button" class="submit-button" sec:authorize="hasRole('ADMIN')" onclick="history.back()">돌아가기</button>
         </div>
 
     </form>
