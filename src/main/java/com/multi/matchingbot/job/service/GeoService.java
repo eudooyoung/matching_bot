@@ -10,7 +10,6 @@ import java.util.Map;
 
 @Service
 public class GeoService {
-
     private final WebClient webClient;
 
     public GeoService(@Value("${kakao.rest-api-key}") String kakaoApiKey) {
