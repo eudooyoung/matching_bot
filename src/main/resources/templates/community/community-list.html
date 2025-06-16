@@ -151,7 +151,7 @@
     <nav>
       <ul class="pagination">
         <li th:classappend="${postPage.first} ? 'disabled'">
-          <a th:if="${currentPage > 1}" th:href="@{/main(page=${currentPage - 1})}">이전</a>
+          <a th:if="${currentPage > 1}" th:href="@{/community/list(page=${currentPage - 1})}">이전</a>
           <span th:if="${currentPage == 1}">이전</span>
         </li>
 
