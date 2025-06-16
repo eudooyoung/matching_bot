@@ -58,17 +58,6 @@ public class SearchPostingRepositoryImpl implements SearchPostingRepository {
                 "WHERE 1=1";
 
 
-
-//        if (keyword != null && !keyword.isEmpty()) {
-//            jpql += " AND (m.title LIKE CONCAT('%', :keyword, '%') OR m.requiredSkills LIKE CONCAT('%', :keyword, '%'))";
-//        }
-//
-//        if (title != null && !title.isEmpty()) {
-//            jpql += " AND m.category = :title";
-//        }
-
-
-
         if (jobGroup != null && !jobGroup.isEmpty()) {
             jpql += " AND o.jobGroupName = :jobGroup";
         }
@@ -94,12 +83,6 @@ public class SearchPostingRepositoryImpl implements SearchPostingRepository {
 
         TypedQuery<Job> query = em.createQuery(jpql, Job.class);
 
-//        if (keyword != null && !keyword.isEmpty()) {
-//            query.setParameter("keyword", keyword);
-//        }
-//        if (title != null && !title.isEmpty()) {
-//            query.setParameter("title", title);
-//        }
         if (regionMain != null && !regionMain.isEmpty()) {
             query.setParameter("regionMain", regionMain);
         }

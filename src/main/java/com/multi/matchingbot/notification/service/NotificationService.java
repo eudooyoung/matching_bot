@@ -106,13 +106,6 @@ public class NotificationService {
         notificationRepository.save(notification);
     }
 
-    // 테스트 용도
-//    @Transactional
-//    public void deleteReadNotificationsOlderThan(Duration duration) {
-//        LocalDateTime threshold = LocalDateTime.now().minus(duration);
-//        notificationRepository.deleteByStatusAndCreatedAtBefore(NotificationStatus.READ, threshold);
-//    }
-
     // 시간 지나면 알림 삭제
     @Transactional
     public void deleteOldReadNotifications() {
