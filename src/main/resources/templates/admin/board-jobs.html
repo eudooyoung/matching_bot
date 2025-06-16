@@ -114,9 +114,9 @@
                         <!--                        <td th:text="${job.enrollEmail}">support@example.com</td>-->
                         <!--                        <td th:text="${#temporals.format(job.startDate, 'yyyy-MM-dd')}">시작일</td>-->
                         <td th:text="${#temporals.format(job.endDate, 'yyyy-MM-dd')}">마감일</td>
-                        <td th:text="${job.createdBy}">작성자</td>
+                        <td class="text-left-col" th:text="${job.createdBy}">작성자</td>
                         <td th:text="${#temporals.format(job.createdAt, 'yyyy-MM-dd HH:mm:ss')}">생성일</td>
-                        <td th:text="${job.updatedBy}">수정자</td>
+                        <td class="text-left-col" th:text="${job.updatedBy}">수정자</td>
                         <td>
                             <button type="button"
                                     class="btn btn-delete"
