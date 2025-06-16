@@ -12,6 +12,10 @@ public interface CommunityAdminMapper {
     @Mapping(target = "writerName", expression = "java(resolveWriterName(post))")
     @Mapping(target = "writerType", expression = "java(resolveWriterType(post))")
     @Mapping(target = "formattedId", expression = "java(CommunityAdminMapper.formattedId(post.getId()))")
+ /*   @Mapping(source = "createdBy", target = "createdBy")
+    @Mapping(source = "createdAt", target = "createdAt")
+    @Mapping(source = "updatedBy", target = "updatedBy")
+    @Mapping(source = "updatedAt", target = "updatedAt")*/
     CommunityAdminView toDto(CommunityPost post);
 
     default String resolveWriterName(CommunityPost post) {

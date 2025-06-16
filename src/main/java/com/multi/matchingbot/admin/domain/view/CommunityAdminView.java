@@ -3,14 +3,14 @@ package com.multi.matchingbot.admin.domain.view;
 import com.multi.matchingbot.common.domain.dto.BaseAuditDto;
 import com.multi.matchingbot.common.domain.enums.Role;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Setter
 public class CommunityAdminView extends BaseAuditDto {
 
     private Long id;

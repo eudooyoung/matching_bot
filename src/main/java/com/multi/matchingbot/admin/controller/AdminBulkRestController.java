@@ -3,6 +3,7 @@ package com.multi.matchingbot.admin.controller;
 import com.multi.matchingbot.admin.domain.BulkRequestDto;
 import com.multi.matchingbot.admin.domain.BulkResponseDto;
 import com.multi.matchingbot.admin.service.*;
+import com.multi.matchingbot.attachedItem.service.AttachedItemService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ public class AdminBulkRestController {
     private final ResumeAdminService resumeAdminService;
     private final JobAdminService jobAdminService;
     private final CommunityAdminService communityAdminService;
+    private final AttachedItemService attachedItemService;
 
     @DeleteMapping("members")
     public ResponseEntity<BulkResponseDto> deactivateMembers(@RequestBody BulkRequestDto requestDto) {
@@ -39,6 +41,12 @@ public class AdminBulkRestController {
     @PatchMapping("companies")
     public ResponseEntity<BulkResponseDto> restoreCompanies(@RequestBody @Valid BulkRequestDto requestDto) {
         return ResponseEntity.ok(companyAdminService.reactivateBulk(requestDto.getIds()));
+    }
+
+    @PostMapping("companies")
+    public ResponseEntity<BulkResponseDto> refreshReports(@RequestBody @Valid BulkRequestDto requestDto) {
+        BulkResponseDto response = attachedItemService.bulkSaveReportImage(requestDto.getIds());
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("resumes")

@@ -77,10 +77,10 @@ public class AdminRestController {
      * @param companyId
      * @return
      */
-    @PostMapping("/company/{companyId}/refresh-report")
-    public ResponseEntity<Void> refreshCompanyReport(@PathVariable Long companyId) {
+    @PostMapping("/companies/{companyId}/refresh-report")
+    public ResponseEntity<Void> refreshCompanyReport(@PathVariable("companyId") Long companyId) {
         CompanyUpdateReportDto dto = companyAdminService.getReportSource(companyId);
-        attachedItemService.saveReportImage(dto, companyId);
+        attachedItemService.saveReportImageAsync(dto, companyId);
         return ResponseEntity.ok().build();
     }
 

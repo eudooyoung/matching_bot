@@ -1,158 +1,176 @@
 <div th:fragment="footer" th:attr="data-role=${role}">
-  <footer class="footer">
-    &copy; 2025 MatchingBot Inc. All rights reserved.
-  </footer>
+    <footer class="footer">
+        &copy; 2025 MatchingBot Inc. All rights reserved.
+    </footer>
 
-  <div id="chatbot-toggle" style="position: fixed; bottom: 20px; right: 20px; background-color: #103254; color: white; border-radius: 50%; width: 60px; height: 60px; font-size: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 9999;">
-    💬
-  </div>
-
-  <div id="chatbot-modal" style="position: fixed; bottom: 90px; right: 20px; width: 350px; height: 500px; background-color: white; border: 1px solid #ccc; border-radius: 10px; display: none; flex-direction: column; box-shadow: 0 4px 8px rgba(0,0,0,0.2); z-index: 9999;">
-    <div style="background-color: #103254; color: white; padding: 10px; border-top-left-radius: 10px; border-top-right-radius: 10px;">
-      GPT 챗봇
-      <button onclick="document.getElementById('chatbot-modal').style.display='none'" style="float:right; background:none; border:none; color:white;">✖</button>
+    <!-- 챗봇 토글 버튼 -->
+    <div id="chatbot-toggle" style="position: fixed; bottom: 20px; right: 20px; background-color: #103254; color: white; border-radius: 50%; width: 60px; height: 60px; font-size: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 9999;">
+        💬
     </div>
-    <div id="chat-messages" style="flex:1; padding:10px; overflow-y:auto;"></div>
-    <div style="display:flex; border-top:1px solid #ddd;">
-      <input id="chat-input" type="text" style="flex:1; border:none; padding:10px;" placeholder="메시지를 입력하세요">
-      <button id="chat-send-button" style="background-color:#103254; color:white; border:none; padding:10px;">전송</button>
+
+    <!-- 챗봇 모달 -->
+    <div id="chatbot-modal" style="position: fixed; bottom: 90px; right: 20px; width: 350px; height: 500px; background-color: white; border: 1px solid #ccc; border-radius: 10px; display: none; flex-direction: column; box-shadow: 0 4px 8px rgba(0,0,0,0.2); z-index: 9999;">
+        <div style="background-color: #103254; color: white; padding: 10px; border-top-left-radius: 10px; border-top-right-radius: 10px;">
+            GPT 챗봇
+            <button onclick="document.getElementById('chatbot-modal').style.display='none'" style="float:right; background:none; border:none; color:white;">✖</button>
+        </div>
+        <div id="chat-messages" style="flex:1; padding:10px; overflow-y:auto;"></div>
+        <div style="display:flex; border-top:1px solid #ddd;">
+            <input id="chat-input" type="text" style="flex:1; border:none; padding:10px;" placeholder="메시지를 입력하세요">
+            <button id="chat-send-button" style="background-color:#103254; color:white; border:none; padding:10px;">전송</button>
+        </div>
     </div>
-  </div>
 
-<!--  <script th:inline="javascript">-->
-<!--    const userRole = /*[['${role}']]*/ "GUEST";-->
-<!--  </script>-->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const toggleBtn = document.getElementById("chatbot-toggle");
+            const modal = document.getElementById("chatbot-modal");
+            const chatMessages = document.getElementById("chat-messages");
+            const sendBtn = document.getElementById("chat-send-button");
+            const inputField = document.getElementById("chat-input");
+            const footer = document.querySelector("div[th\\:fragment='footer'], div[data-role]");
+            const userRole = footer?.dataset?.role || "GUEST";
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const toggleBtn = document.getElementById("chatbot-toggle");
-      const modal = document.getElementById("chatbot-modal");
-      const chatMessages = document.getElementById("chat-messages");
-      const sendBtn = document.getElementById("chat-send-button");
-      const inputField = document.getElementById("chat-input");
+            let isSending = false;
+            let isComposing = false;
 
-      // ✅ userRole을 HTML 속성에서 안전하게 가져오기
-      const footer = document.querySelector("div[th\\:fragment='footer'], div[data-role]");
-      const userRole = footer?.dataset?.role || "GUEST";
-      console.log("👤 userRole =", userRole); // 디버깅 확인용
+            console.log("👤 userRole =", userRole);
 
-      toggleBtn.addEventListener("click", () => {
-        const isOpening = modal.style.display === "none" || modal.style.display === "";
-        if (isOpening) {
-          modal.style.display = "flex";
-          chatMessages.innerHTML = "";
+            // 챗봇 열기/닫기
+            toggleBtn.addEventListener("click", () => {
+                const isOpening = modal.style.display === "none" || modal.style.display === "";
+                if (isOpening) {
+                    modal.style.display = "flex";
+                    chatMessages.innerHTML = "";
+                    setTimeout(showWelcomeMessages, 50);
+                } else {
+                    modal.style.display = "none";
+                }
+            });
 
-          setTimeout(() => {
-            switch (userRole) {
-              case "GUEST":
-                appendMessage("bot", "비회원으로 입장하셨습니다.");
-                appendMessage("bot", "사용 가능한 명령어: 개인 회원가입, 기업 회원가입, 커뮤니티");
-                break;
-              case "COMPANY":
-                appendMessage("bot", "기업회원으로 입장하셨습니다.");
-                appendMessage("bot", "사용 가능한 명령어: 기업페이지, 채용 공고 관리, 관심 이력서 목록, 기업 정보 수정, 커뮤니티");
-                break;
-              case "MEMBER":
-                appendMessage("bot", "일반회원으로 입장하셨습니다.");
-                appendMessage("bot", "사용 가능한 명령어: 커뮤니티, 내주변채용공고, 마이페이지, 이력서 관리, 관심 기업 목록, 관심 공고 목록, 개인 정보 수정 ");
-                break;
-              default:
-                appendMessage("bot", "역할 정보를 가져오지 못했습니다.");
+            function showWelcomeMessages() {
+                switch (userRole) {
+                    case "GUEST":
+                        appendMessage("bot", "비회원으로 입장하셨습니다.");
+                        appendMessage("bot", "사용 가능한 명령어: 개인 회원가입, 기업 회원가입, 커뮤니티");
+                        break;
+                    case "COMPANY":
+                        appendMessage("bot", "기업회원으로 입장하셨습니다.");
+                        appendMessage("bot", "사용 가능한 명령어: 기업페이지, 채용 공고 관리, 관심 이력서 목록, 기업 정보 수정, 커뮤니티");
+                        break;
+                    case "MEMBER":
+                        appendMessage("bot", "일반회원으로 입장하셨습니다.");
+                        appendMessage("bot", "사용 가능한 명령어: 커뮤니티, 내주변채용공고, 마이페이지, 이력서 관리, 관심 기업 목록, 관심 공고 목록, 개인 정보 수정");
+                        break;
+                    default:
+                        appendMessage("bot", "역할 정보를 가져오지 못했습니다.");
+                }
             }
-          }, 50);
-        } else {
-          modal.style.display = "none";
-        }
-      });
 
+            // 한글 IME 조합 방지
+            inputField.addEventListener("compositionstart", () => isComposing = true);
+            inputField.addEventListener("compositionend", () => isComposing = false);
 
-      // 전송 버튼 클릭 또는 Enter 입력
-      sendBtn.addEventListener("click", sendMessage);
-      inputField.addEventListener("keydown", (event) => {
-        if (event.key === "Enter") {
-          event.preventDefault();
-          sendMessage();
-        }
-      });
+            // Enter 키 입력 처리
+            inputField.addEventListener("keydown", (event) => {
+                if (event.key === "Enter" && !isComposing) {
+                    event.preventDefault();
+                    sendMessage();
+                }
+            });
 
-      // 메시지 전송 함수
-      async function sendMessage() {
-        const message = inputField.value.trim();
-        if (!message) return;
+            // 전송 버튼 클릭
+            sendBtn.addEventListener("click", sendMessage);
 
-        appendMessage("user", message);
-        inputField.value = "";
+            // 메시지 전송 함수
+            async function sendMessage() {
+                if (isSending) return;
 
-        const loadingMsg = document.createElement("div");
-        loadingMsg.textContent = "🤖 답변을 생성 중";
-        loadingMsg.style.marginBottom = "8px";
-        chatMessages.appendChild(loadingMsg);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+                let message = inputField.value.trim().replace(/\n/g, " ");
+                const bannedWords = ["서", "법", "팁", "글", "정보"];
 
-        let dotCount = 0;
-        const loadingInterval = setInterval(() => {
-          dotCount = (dotCount + 1) % 4;
-          loadingMsg.textContent = "🤖 답변을 생성 중" + ".".repeat(dotCount);
-        }, 500);
+                if (!message || message.length < 2 || bannedWords.includes(message)) {
+                    appendMessage("bot", `"${message}"만으로는 도와드리기 어려워요. 조금 더 구체적으로 입력해 주세요.`);
+                    inputField.value = "";
+                    return;
+                }
 
-        try {
-          const response = await fetch("/api/v1/chatbot/talk", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ message })
-          });
+                isSending = true;
+                appendMessage("user", message);
+                inputField.value = "";
 
-          const data = await response.json();
-          clearInterval(loadingInterval);
-          loadingMsg.remove();
+                const loadingMsg = document.createElement("div");
+                loadingMsg.textContent = "🤖 답변을 생성 중";
+                loadingMsg.style.marginBottom = "8px";
+                chatMessages.appendChild(loadingMsg);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
 
-          const reply = data.reply || "응답 없음";
-          appendMessage("bot", reply);
+                let dotCount = 0;
+                const loadingInterval = setInterval(() => {
+                    dotCount = (dotCount + 1) % 4;
+                    loadingMsg.textContent = "🤖 답변을 생성 중" + ".".repeat(dotCount);
+                }, 500);
 
-          if (data.fullReply) {
-            const moreBtn = createMoreButton(data.fullReply);
-            chatMessages.appendChild(moreBtn);
-          }
+                try {
+                    const response = await fetch("/api/v1/chatbot/talk", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ message })
+                    });
 
-          if (data.redirect && data.url) {
-            appendMessage("bot", "잠시 후 이동합니다.");
-            setTimeout(() => window.location.href = data.url, 1500);
-          }
-        } catch (error) {
-          clearInterval(loadingInterval);
-          loadingMsg.textContent = "❌ GPT 호출 실패: 서버 오류 또는 네트워크 문제입니다.";
-        }
-      }
+                    const data = await response.json();
+                    clearInterval(loadingInterval);
+                    loadingMsg.remove();
 
-      // 메시지 추가 함수
-      function appendMessage(sender, text) {
-        const msg = document.createElement("div");
-        msg.innerHTML = (sender === "user" ? "🙋 " : "🤖 ") + text.replace(/\n/g, "<br><br>");
-        msg.style.marginBottom = "8px";
-        chatMessages.appendChild(msg);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-      }
+                    const reply = data.reply || "응답 없음";
+                    appendMessage("bot", reply);
 
-      // 더보기 버튼 생성 함수
-      function createMoreButton(fullText) {
-        const button = document.createElement("button");
-        button.textContent = "더보기";
-        button.style.marginTop = "6px";
-        button.style.backgroundColor = "#f0f0f0";
-        button.style.border = "none";
-        button.style.padding = "5px 10px";
-        button.style.cursor = "pointer";
-        button.style.borderRadius = "6px";
-        button.style.fontSize = "0.9rem";
+                    if (data.fullReply && data.fullReply.length - reply.length > 100) {
+                        const moreBtn = createMoreButton(data.fullReply);
+                        chatMessages.appendChild(moreBtn);
+                    }
 
-        button.addEventListener("click", () => {
-          appendMessage("bot", fullText);
-          button.remove();
+                    if (data.redirect && data.url) {
+                        appendMessage("bot", "잠시 후 이동합니다.");
+                        setTimeout(() => window.location.href = data.url, 1500);
+                    }
+                } catch (error) {
+                    clearInterval(loadingInterval);
+                    loadingMsg.textContent = "❌ GPT 호출 실패: 서버 오류 또는 네트워크 문제입니다.";
+                } finally {
+                    isSending = false;
+                }
+            }
+
+            // 메시지 출력 함수
+            function appendMessage(sender, text) {
+                const msg = document.createElement("div");
+                msg.innerHTML = (sender === "user" ? "🙋 " : "🤖 ") + text.replace(/\n/g, "<br>");
+                msg.style.marginBottom = "8px";
+                chatMessages.appendChild(msg);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            // 더보기 버튼 생성
+            function createMoreButton(fullText) {
+                const button = document.createElement("button");
+                button.textContent = "더보기";
+                button.style.marginTop = "6px";
+                button.style.backgroundColor = "#f0f0f0";
+                button.style.border = "none";
+                button.style.padding = "5px 10px";
+                button.style.cursor = "pointer";
+                button.style.borderRadius = "6px";
+                button.style.fontSize = "0.9rem";
+
+                button.addEventListener("click", () => {
+                    appendMessage("bot", fullText);
+                    button.remove();
+                });
+
+                return button;
+            }
         });
-
-        return button;
-      }
-    });
-  </script>
-
+    </script>
 </div>
+
