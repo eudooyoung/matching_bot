@@ -8,8 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
-import software.amazon.awssdk.services.s3.model.PutObjectAclRequest;
 
 import java.io.InputStream;
 
@@ -36,13 +34,13 @@ public class AwsS3Utils {
 
             s3Operations.upload(bucket, s3Key, inputStream, metadata);
 
-            PutObjectAclRequest aclRequest = PutObjectAclRequest.builder()
+           /* PutObjectAclRequest aclRequest = PutObjectAclRequest.builder()
                     .bucket(bucket)
                     .key(s3Key)
-                    .acl(ObjectCannedACL.PUBLIC_READ)
+//                    .acl(ObjectCannedACL.PUBLIC_READ)
                     .build();
 
-            s3Client.putObjectAcl(aclRequest);
+            s3Client.putObjectAcl(aclRequest);*/
             log.info("✅ S3 업로드 완료: {}", s3Key);
 
             return fileName;
@@ -71,6 +69,6 @@ public class AwsS3Utils {
      * 버킷 URL 반환 (ex: matchingbot-company-reports.s3.ap-northeast-2.amazonaws.com)
      */
     public String getBucketUrl() {
-        return bucket + ".s3.us-east-2.amazonaws.com";
+        return bucket + ".s3.ap-northeast-2.amazonaws.com";
     }
 }
